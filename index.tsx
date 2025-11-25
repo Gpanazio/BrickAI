@@ -199,8 +199,9 @@ const WorkCard = ({ work, index }) => {
         const screenCenter = viewportHeight / 2;
         const distanceFromCenter = cardCenter - screenCenter;
         
-        // Speed factor: 0.1 means move 10px for every 100px of scroll
-        const parallaxSpeed = 0.15; 
+        // Speed factor: Adjusted to 0.06 to prevent clipping with scale(1.2)
+        // while maintaining a subtle depth effect.
+        const parallaxSpeed = 0.06; 
         const yOffset = distanceFromCenter * parallaxSpeed;
 
         // Apply transform. Scale is needed to prevent edges from showing.
