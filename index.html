@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brick AI | From Set to Server</title>
-    <meta name="description" content="A new generative division by Brick. Solving the impossible since 2014.">
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -43,75 +46,53 @@
             }
         }
     </script>
+
+    <!-- React Dependencies (CDN) -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    
+    <!-- Babel for JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
     <style>
         body {
             background-color: #050505;
             color: #E5E5E5;
             overflow-x: hidden;
+            cursor: none; /* Hide default cursor */
         }
         
-        /* --- Premium Monolith Structure --- */
+        /* Structure & Animations */
         .monolith-structure {
             background: linear-gradient(to bottom, #0a0a0a, #000000);
             border: 1px solid #1a1a1a;
             box-shadow: inset 0 0 40px rgba(0,0,0,0.9);
+            /* Static solid object, no 3D transforms needed on the box itself anymore */
         }
 
-        /* --- Guide Light Layers --- */
         .centered-layer { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none; }
         
-        .aura-atmos { 
-            width: 120px; height: 120px; 
-            background: radial-gradient(circle at center, rgba(153, 27, 27, 0.08) 0%, transparent 70%); 
-            filter: blur(20px); 
-        }
-        .light-atmos { 
-            width: 80px; height: 80px; 
-            background: radial-gradient(circle at center, rgba(220, 38, 38, 0.6) 0%, rgba(153, 0, 0, 0.1) 50%, transparent 70%); 
-            filter: blur(15px); 
-        }
-        .core-atmos { 
-            width: 16px; height: 16px; 
-            background-color: #dc2626; 
-            filter: blur(6px); 
-            opacity: 0.8; 
-        }
+        .aura-atmos { width: 120px; height: 120px; background: radial-gradient(circle at center, rgba(153, 27, 27, 0.08) 0%, transparent 70%); filter: blur(20px); }
+        .light-atmos { width: 80px; height: 80px; background: radial-gradient(circle at center, rgba(220, 38, 38, 0.6) 0%, rgba(153, 0, 0, 0.1) 50%, transparent 70%); filter: blur(15px); }
+        .core-atmos { width: 16px; height: 16px; background-color: #dc2626; filter: blur(6px); opacity: 0.8; }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: #050505;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #333;
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #DC2626;
-        }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #050505; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #DC2626; }
         
-        /* Monolith Texture Animation */
         .monolith-texture {
-            background-image: url('04.png');
+            background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564'); /* Fallback Texture */
             background-size: cover;
             background-position: center;
             opacity: 0;
             transform: scale(1.2) translateY(8%);
-            transition: 
-                opacity 2s ease-out 0.2s, 
-                transform 2.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
+            transition: opacity 2s ease-out 0.2s, transform 2.5s cubic-bezier(0.22, 1, 0.36, 1) 0.2s;
             will-change: opacity, transform;
         }
         
-        /* Reveal texture when parent (.reveal) is active */
-        .reveal.active .monolith-texture {
-            opacity: 0.4;
-            transform: scale(1) translateY(0);
-        }
+        .reveal.active .monolith-texture { opacity: 0.4; transform: scale(1) translateY(0); }
         
-        /* Scroll Reveal Base Class */
         .reveal {
             opacity: 0;
             transform: translateY(40px);
@@ -119,24 +100,367 @@
             will-change: opacity, transform;
         }
         
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
     </style>
-<script type="importmap">
-{
-  "imports": {
-    "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
 </head>
 <body>
     <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
+
+    <!-- REACT APPLICATION CODE -->
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+        const { createRoot } = ReactDOM;
+
+        // --- DATA ---
+        const WORKS = [
+            {
+                subtitle: "FULL GENERATIVE",
+                title: "PROJECT: DREAMSCAPE",
+                desc: "When the location doesn't exist. 100% Neural Rendering.",
+                gradient: "from-neutral-900 to-neutral-800",
+                image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"
+            },
+            {
+                subtitle: "HYBRID EXTENSION",
+                title: "PROJECT: SHIFT",
+                desc: "Expanding the set beyond physical limits. Seamless VFX.",
+                gradient: "from-neutral-900 via-brick-red/10 to-neutral-900",
+                image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop"
+            },
+            {
+                subtitle: "STYLE TRANSFER",
+                title: "PROJECT: ANIMA",
+                desc: "Turning live action into branded art using custom models.",
+                gradient: "from-neutral-900 to-neutral-950",
+                image: "https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=2668&auto=format&fit=crop"
+            }
+        ];
+        const CLIENTS = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO"];
+
+        // --- HOOKS ---
+        const useScrollReveal = () => {
+            useEffect(() => {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) entry.target.classList.add('active');
+                    });
+                }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
+
+                document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+                return () => observer.disconnect();
+            }, []);
+        };
+
+        // --- COMPONENTS ---
+
+        const CustomCursor = () => {
+            const cursorRef = useRef(null);
+            const dotRef = useRef(null);
+            const mouse = useRef({ x: -100, y: -100 });
+            const delayedMouse = useRef({ x: -100, y: -100 });
+            const [isHovering, setIsHovering] = useState(false);
+
+            useEffect(() => {
+                const onMouseMove = (e) => {
+                    const { clientX, clientY } = e;
+                    mouse.current = { x: clientX, y: clientY };
+                    if (dotRef.current) {
+                        dotRef.current.style.transform = `translate3d(${clientX}px, ${clientY}px, 0) translate(-50%, -50%)`;
+                    }
+                };
+
+                const onMouseOver = (e) => {
+                    const target = e.target;
+                    const isClickable = target.tagName === 'A' || target.tagName === 'BUTTON' || target.closest('a') || target.closest('button');
+                    setIsHovering(!!isClickable);
+                };
+
+                window.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseover', onMouseOver);
+
+                let rafId;
+                const animate = () => {
+                    const { x: targetX, y: targetY } = mouse.current;
+                    const { x: currentX, y: currentY } = delayedMouse.current;
+                    // Interpolação Linear (Lerp) para suavidade
+                    const newX = currentX + (targetX - currentX) * 0.15;
+                    const newY = currentY + (targetY - currentY) * 0.15;
+                    delayedMouse.current = { x: newX, y: newY };
+
+                    if (cursorRef.current) {
+                        cursorRef.current.style.transform = `translate3d(${newX}px, ${newY}px, 0)`;
+                    }
+                    rafId = requestAnimationFrame(animate);
+                };
+                animate();
+
+                return () => {
+                    window.removeEventListener('mousemove', onMouseMove);
+                    document.removeEventListener('mouseover', onMouseOver);
+                    cancelAnimationFrame(rafId);
+                };
+            }, []);
+
+            return (
+                <React.Fragment>
+                    <div ref={dotRef} className="fixed top-0 left-0 w-2 h-2 bg-brick-red rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform" style={{ transform: 'translate(-100px, -100px)' }} />
+                    <div ref={cursorRef} className={`fixed top-0 left-0 border border-white/30 rounded-full pointer-events-none z-[9998] transition-all duration-300 ease-out flex items-center justify-center will-change-transform ${isHovering ? 'w-12 h-12 bg-white/10 border-brick-red' : 'w-8 h-8'}`} style={{ marginTop: -16, marginLeft: -16, transform: 'translate(-100px, -100px)' }} />
+                </React.Fragment>
+            );
+        };
+
+        const Header = () => (
+            <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center bg-gradient-to-b from-brick-black/90 to-transparent backdrop-blur-sm pointer-events-none">
+                <div className="pointer-events-auto flex items-center gap-2 group cursor-none select-none">
+                    <div className="font-black text-xl tracking-tighter text-white flex items-center gap-1">
+                        BRICK
+                    </div>
+                    <div className="flex items-baseline">
+                        <span className="text-brick-red font-bold text-xl md:text-2xl animate-blink relative -top-[1px] mx-[2px]">_</span>
+                        <span className="text-brick-gray font-semibold text-sm md:text-base tracking-widest group-hover:text-white transition-colors duration-500">AI</span>
+                    </div>
+                </div>
+                <a href="mailto:contact@brick.ai" className="pointer-events-auto bg-white/5 border border-white/10 backdrop-blur-md px-6 py-2 text-xs md:text-sm font-medium tracking-widest transition-all duration-300 hover:bg-white hover:text-brick-black hover:border-white cursor-none">CONTACT</a>
+            </header>
+        );
+
+        const Hero = () => {
+            const radiationRef = useRef(null);
+            
+            // Refs para animação suave
+            const targetPos = useRef({ x: 0, y: 0 });
+            const currentPos = useRef({ x: 0, y: 0 });
+            const isHovering = useRef(false);
+
+            const handleMouseMove = (e) => {
+                if (!radiationRef.current) return;
+                const rect = e.currentTarget.getBoundingClientRect();
+                
+                // Calcula a posição alvo relativa ao centro
+                const x = e.clientX - (rect.left + rect.width / 2);
+                const y = e.clientY - (rect.top + rect.height / 2);
+                
+                targetPos.current = { x, y };
+                isHovering.current = true;
+            };
+
+            const handleMouseLeave = () => {
+                isHovering.current = false;
+                targetPos.current = { x: 0, y: 0 };
+            };
+
+            // Loop de Animação da Luz
+            useEffect(() => {
+                let rafId;
+                
+                const animate = () => {
+                    const ease = 0.08; // Fator de suavidade (menor = mais lento/fluido)
+                    
+                    currentPos.current.x += (targetPos.current.x - currentPos.current.x) * ease;
+                    currentPos.current.y += (targetPos.current.y - currentPos.current.y) * ease;
+
+                    if (radiationRef.current) {
+                        const { x, y } = currentPos.current;
+                        
+                        // Escala e Opacidade dinâmicas
+                        const scale = isHovering.current ? 1.4 : 0.8;
+                        const opacity = isHovering.current ? 1 : 0;
+
+                        radiationRef.current.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+                        radiationRef.current.style.opacity = opacity;
+                    }
+                    
+                    rafId = requestAnimationFrame(animate);
+                };
+                
+                animate();
+                
+                return () => cancelAnimationFrame(rafId);
+            }, []);
+
+            return (
+                <section className="relative min-h-screen w-full flex flex-col items-center justify-start pt-28 md:pt-32 pb-20 overflow-hidden">
+                    <div className="reveal relative z-10 w-full flex justify-center mb-12 md:mb-16">
+                        <div 
+                            className="monolith-structure w-[140px] md:w-[160px] h-[40vh] md:h-[45vh] rounded-[2px] flex items-center justify-center overflow-hidden group shadow-2xl relative"
+                            onMouseMove={handleMouseMove} 
+                            onMouseLeave={handleMouseLeave}
+                        >
+                            <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none"></div>
+                            
+                            <div className="centered-layer aura-atmos pointer-events-none opacity-50"></div>
+                            <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-50"></div>
+                            <div className="centered-layer core-atmos pointer-events-none"></div>
+
+                            {/* CAMADA DE RADIAÇÃO (Luz Suave) */}
+                            <div 
+                                ref={radiationRef}
+                                className="absolute w-[300px] h-[300px] -ml-[150px] -mt-[150px] top-1/2 left-1/2 pointer-events-none transition-opacity duration-700 ease-out"
+                                style={{
+                                    /* Gradiente muito suave e fraco (0.15 a 0.01) */
+                                    background: 'radial-gradient(circle, rgba(220,38,38,0.15) 0%, rgba(220,38,38,0.01) 60%, transparent 80%)',
+                                    filter: 'blur(40px)',
+                                    zIndex: 5,
+                                    opacity: 0,
+                                    willChange: 'transform, opacity'
+                                }}
+                            ></div>
+
+                            <div className="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10"></div>
+                        </div>
+                    </div>
+                    <div className="reveal delay-200 text-center z-20 max-w-6xl px-4 flex flex-col items-center pointer-events-none">
+                        <h1 className="text-5xl md:text-8xl lg:text-9xl font-black tracking-tighter text-white leading-[0.85] mb-6 md:mb-10 drop-shadow-2xl">FROM SET TO SERVER.</h1>
+                        <p className="text-lg md:text-2xl lg:text-3xl font-light tracking-[0.3em] text-brick-white/80 mb-2 md:mb-4">10 YEARS OF CRAFT.</p>
+                        <h2 className="text-3xl md:text-6xl lg:text-7xl font-black tracking-tight text-brick-red drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">NOW GENERATIVE.</h2>
+                        <p className="mt-12 text-brick-gray text-xs md:text-sm tracking-[0.2em] uppercase font-medium opacity-60 max-w-md border-t border-white/10 pt-6">A new division by Brick.<br/>From zero to all since 2016.</p>
+                    </div>
+                    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-brick-red/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
+                </section>
+            );
+        };
+
+        const Philosophy = () => (
+            <section className="relative w-full py-32 bg-brick-black z-20 border-t border-white/5">
+                <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent -translate-x-1/2 hidden md:block"></div>
+                <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
+                    <div className="mb-32 reveal flex flex-col items-center">
+                        <div className="w-2 h-2 bg-brick-red rounded-full animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.5)] mb-6"></div>
+                        <span className="text-xs font-mono tracking-[0.3em] text-brick-gray uppercase bg-brick-black px-4">The Belief</span>
+                    </div>
+                    <div className="flex flex-col gap-32 w-full">
+                        <PhilosophyItem title="RAW." text="AI creates infinite pixels and patterns. But it cannot create intent. It is just a resource." />
+                        <PhilosophyItem title="NOISE." text="Without a human hand, generative models are just mathematical coincidence. We provide the vision." />
+                        <PhilosophyItem title="WE DIRECT THE INTELLIGENCE." text="The machine is the brush. The database is the paint. We are still the artists." />
+                    </div>
+                </div>
+            </section>
+        );
+
+        const PhilosophyItem = ({ title, text }) => (
+            <div className="reveal flex flex-col items-center group cursor-default">
+                <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-white mb-6 transition-colors duration-500 group-hover:text-brick-red">{title}</h2>
+                <p className="text-lg md:text-xl text-brick-gray font-light max-w-lg leading-relaxed group-hover:text-white transition-colors duration-300">{text}</p>
+            </div>
+        );
+
+        const WorkCard = ({ work, index }) => {
+            const containerRef = useRef(null);
+            const bgRef = useRef(null);
+
+            useEffect(() => {
+                let animationFrameId;
+                let ticking = false;
+
+                const updateParallax = () => {
+                    if (!containerRef.current || !bgRef.current) return;
+                    const rect = containerRef.current.getBoundingClientRect();
+                    const viewportHeight = window.innerHeight;
+                    if (rect.top < viewportHeight && rect.bottom > 0) {
+                        const cardCenter = rect.top + rect.height / 2;
+                        const screenCenter = viewportHeight / 2;
+                        const distanceFromCenter = cardCenter - screenCenter;
+                        const yOffset = distanceFromCenter * 0.08;
+                        bgRef.current.style.transform = `scale(1.2) translate3d(0, ${yOffset}px, 0)`;
+                    }
+                    ticking = false;
+                };
+
+                const onScroll = () => {
+                    if (!ticking) {
+                        animationFrameId = requestAnimationFrame(updateParallax);
+                        ticking = true;
+                    }
+                }
+                window.addEventListener('scroll', onScroll, { passive: true });
+                updateParallax();
+                return () => {
+                    window.removeEventListener('scroll', onScroll);
+                    cancelAnimationFrame(animationFrameId);
+                };
+            }, []);
+
+            return (
+                <div ref={containerRef} className={`reveal w-full min-h-[40vh] md:min-h-[50vh] relative flex items-center group overflow-hidden border-b border-black cursor-none`} style={{ transitionDelay: `${index * 100}ms` }}>
+                    <div ref={bgRef} className="absolute inset-0 opacity-50 mix-blend-overlay will-change-transform" style={{ backgroundImage: `url('${work.image}')`, backgroundSize: 'cover', backgroundPosition: 'center', transform: 'scale(1.2)' }}></div>
+                    <div className={`absolute inset-0 bg-gradient-to-r ${work.gradient} opacity-50 transition-opacity duration-700 group-hover:opacity-80 z-10`}></div>
+                    <div className="relative z-20 px-6 md:px-12 lg:px-24 w-full flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pointer-events-none">
+                        <div>
+                            <span className="block text-brick-red text-xs font-bold tracking-[0.2em] mb-4">{work.subtitle}</span>
+                            <h3 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white mb-2 group-hover:translate-x-4 transition-transform duration-500">{work.title}</h3>
+                        </div>
+                        <p className="text-brick-gray text-sm md:text-lg max-w-sm text-left md:text-right group-hover:text-white transition-colors duration-300">{work.desc}</p>
+                    </div>
+                </div>
+            );
+        };
+
+        const SelectedWorks = () => (
+            <section className="w-full py-24 bg-brick-black border-t border-white/5">
+                <div className="px-6 md:px-12 lg:px-24 mb-16 reveal">
+                    <h2 className="text-xs font-bold tracking-[0.3em] text-brick-gray uppercase">Selected Works</h2>
+                </div>
+                <div className="flex flex-col w-full gap-0">
+                    {WORKS.map((work, idx) => <WorkCard key={idx} work={work} index={idx} />)}
+                </div>
+            </section>
+        );
+
+        const Legacy = () => (
+            <section className="w-full py-32 px-6 md:px-12 lg:px-24 bg-brick-white text-brick-black relative overflow-hidden">
+                <div className="max-w-6xl mx-auto reveal">
+                    <h2 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-12 leading-[0.85]">BACKED <br className="md:hidden"/> BY BRICK.</h2>
+                    <div className="flex flex-col md:flex-row gap-16 border-t-4 border-brick-black pt-12">
+                        <p className="text-xl md:text-2xl font-medium leading-tight max-w-md">This isn't a beta test. This is a new lens from a production house with 10 years of experience.</p>
+                        <div className="flex-1">
+                            <h4 className="text-xs font-bold tracking-[0.2em] uppercase mb-10 text-neutral-500 border-b border-neutral-300 pb-4 inline-block">Trusted By</h4>
+                            <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-8 gap-x-8">
+                                {CLIENTS.map((client, i) => (
+                                    <div key={i} className="group flex items-center">
+                                        <span className="text-xl md:text-2xl font-black text-neutral-400 group-hover:text-brick-black transition-colors duration-300 cursor-default tracking-tighter uppercase whitespace-nowrap">{client}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+
+        const Footer = () => (
+            <footer className="w-full py-32 px-6 md:px-12 lg:px-24 bg-black border-t border-white/5 relative z-10">
+                <div className="flex flex-col items-center text-center gap-12 reveal">
+                    <h2 className="text-sm md:text-base font-mono text-brick-gray tracking-widest uppercase">Have a complex problem?</h2>
+                    <p className="text-4xl md:text-6xl lg:text-8xl font-black text-white tracking-tighter leading-none max-w-5xl">WE HAVE THE INTELLIGENCE.</p>
+                    <a href="mailto:hello@brick.ai" className="mt-8 bg-brick-red text-white px-12 py-4 text-lg font-bold tracking-widest hover:bg-white hover:text-brick-black transition-all duration-300 rounded-sm cursor-none">TALK TO US</a>
+                </div>
+                <div className="mt-24 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-[0.2em] text-brick-gray/40 font-bold border-t border-white/5 pt-8 w-full">
+                    <span>&copy; 2025 Brick AI.</span>
+                    <span className="hidden md:inline">The Generative Division</span>
+                    <span>All Rights Reserved.</span>
+                </div>
+            </footer>
+        );
+
+        const App = () => {
+            useScrollReveal();
+            return (
+                <div className="min-h-screen bg-brick-black text-brick-white selection:bg-brick-red selection:text-white font-sans cursor-none">
+                    <CustomCursor />
+                    <Header />
+                    <main>
+                        <Hero />
+                        <Philosophy />
+                        <SelectedWorks />
+                        <Legacy />
+                    </main>
+                    <Footer />
+                </div>
+            );
+        };
+
+        const root = createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
 </body>
 </html>
