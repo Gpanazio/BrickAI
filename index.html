@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Brick AI | From Set to Server</title>
+    <meta name="description" content="A new generative division by Brick. Solving the impossible since 2014.">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -67,7 +68,6 @@
             background: linear-gradient(to bottom, #0a0a0a, #000000);
             border: 1px solid #1a1a1a;
             box-shadow: inset 0 0 40px rgba(0,0,0,0.9);
-            /* Static solid object, no 3D transforms needed on the box itself anymore */
         }
 
         .centered-layer { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; pointer-events: none; }
@@ -182,7 +182,6 @@
                 const animate = () => {
                     const { x: targetX, y: targetY } = mouse.current;
                     const { x: currentX, y: currentY } = delayedMouse.current;
-                    // Interpolação Linear (Lerp) para suavidade
                     const newX = currentX + (targetX - currentX) * 0.15;
                     const newY = currentY + (targetY - currentY) * 0.15;
                     delayedMouse.current = { x: newX, y: newY };
@@ -254,7 +253,7 @@
                 let rafId;
                 
                 const animate = () => {
-                    const ease = 0.08; // Fator de suavidade (menor = mais lento/fluido)
+                    const ease = 0.08;
                     
                     currentPos.current.x += (targetPos.current.x - currentPos.current.x) * ease;
                     currentPos.current.y += (targetPos.current.y - currentPos.current.y) * ease;
@@ -266,7 +265,8 @@
                         const scale = isHovering.current ? 1.4 : 0.8;
                         const opacity = isHovering.current ? 1 : 0;
 
-                        radiationRef.current.style.transform = `translate(${x}px, ${y}px) scale(${scale})`;
+                        // Use translate3d para forçar aceleração de hardware e evitar 'flicker'
+                        radiationRef.current.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
                         radiationRef.current.style.opacity = opacity;
                     }
                     
@@ -285,6 +285,7 @@
                             className="monolith-structure w-[140px] md:w-[160px] h-[40vh] md:h-[45vh] rounded-[2px] flex items-center justify-center overflow-hidden group shadow-2xl relative"
                             onMouseMove={handleMouseMove} 
                             onMouseLeave={handleMouseLeave}
+                            style={{ transform: 'translateZ(0)' }}
                         >
                             <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none"></div>
                             
@@ -302,7 +303,11 @@
                                     filter: 'blur(40px)',
                                     zIndex: 5,
                                     opacity: 0,
-                                    willChange: 'transform, opacity'
+                                    willChange: 'transform, opacity',
+                                    backfaceVisibility: 'hidden',
+                                    WebkitBackfaceVisibility: 'hidden',
+                                    perspective: 1000,
+                                    transformStyle: 'preserve-3d'
                                 }}
                             ></div>
 
