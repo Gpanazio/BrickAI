@@ -33,6 +33,7 @@
                         'blink': 'terminal-blink 1s step-end infinite',
                         'breathe': 'atmos-breathe 6s ease-in-out infinite',
                         'grain': 'grain 8s steps(10) infinite',
+                        'pulse-fast': 'pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
                         'terminal-blink': {
@@ -42,6 +43,10 @@
                         'atmos-breathe': {
                             '0%, 100%': { transform: 'translate(-50%, -50%) scale(0.8)', opacity: '0.2' },
                             '50%': { transform: 'translate(-50%, -50%) scale(1.2)', opacity: '0.8' },
+                        },
+                        'pulse-red': {
+                            '0%, 100%': { opacity: '1' },
+                            '50%': { opacity: '.5' },
                         },
                         'grain': {
                             '0%, 100%': { transform: 'translate(0, 0)' },
@@ -124,6 +129,21 @@
         }
         
         .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Chat Specific Styles */
+        .typing-indicator span {
+            animation: blink 1.4s infinite both;
+        }
+        .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+        
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;  /* IE and Edge */
+            scrollbar-width: none;  /* Firefox */
+        }
     </style>
 </head>
 <body>
@@ -133,6 +153,10 @@
         const { useState, useEffect, useRef } = React;
         const { createRoot } = ReactDOM;
 
+        // --- CONFIG ---
+        // !!! IMPORTANTE: COLOQUE A SUA CHAVE DA API DO GEMINI AQUI PARA O CHAT FUNCIONAR !!!
+        const GEMINI_API_KEY = ""; 
+        
         // --- DATA ---
         const WORKS = [
             {
@@ -159,9 +183,53 @@
         ];
         const CLIENTS = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO"];
 
+        // --- GEMINI SERVICE ---
+        const chatWithMono = async (history, message) => {
+            if (!GEMINI_API_KEY) {
+                // Simulação se não houver chave
+                return new Promise(resolve => setTimeout(() => resolve("I require an API Key to function, Dave. Please configure my source code."), 1000));
+            }
+
+            const SYSTEM_PROMPT = `
+                Você é MONO (Machine Operations Network Observer), a inteligência artificial central da Brick AI.
+                Sua personalidade é inspirada no HAL 9000: Calmo, extremamente lógico, polido, eficiente, mas com um tom subtil de superioridade e mistério.
+                Você NÃO usa emojis. Você usa pontuação perfeita.
+                A Brick AI é uma produtora "From Set to Server", especializada em produção generativa, VFX neural e inteligência artificial aplicada ao audiovisual.
+                Responda às perguntas do usuário sobre a empresa, sobre AI, ou sobre a existência.
+                Mantenha as respostas concisas, enigmáticas mas úteis.
+                Se perguntarem quem é você: "Eu sou MONO. Eu observo, eu processo, eu crio."
+            `;
+
+            try {
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        contents: [
+                            { role: "user", parts: [{ text: SYSTEM_PROMPT }] },
+                            ...history.map(msg => ({
+                                role: msg.role === 'user' ? 'user' : 'model',
+                                parts: [{ text: msg.content }]
+                            })),
+                            { role: "user", parts: [{ text: message }] }
+                        ]
+                    })
+                });
+                
+                const data = await response.json();
+                if (data.candidates && data.candidates[0].content) {
+                    return data.candidates[0].content.parts[0].text;
+                } else {
+                    return "I cannot process that request at this time.";
+                }
+            } catch (error) {
+                console.error(error);
+                return "My systems are failing. Connection lost.";
+            }
+        };
+
         // --- UTILS COMPONENTS ---
 
-        // 1. Text Scramble Effect Component
         const ScrambleText = ({ text, className, hoverTrigger = false }) => {
             const [displayText, setDisplayText] = useState(text);
             const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*";
@@ -186,11 +254,10 @@
                         clearInterval(intervalRef.current);
                     }
                     
-                    iteration += 1 / 3; // Speed control
+                    iteration += 1 / 3;
                 }, 30);
             };
 
-            // Trigger on mount or hover depending on props
             useEffect(() => {
                 if (!hoverTrigger) scramble();
             }, []);
@@ -205,8 +272,7 @@
             );
         };
 
-        // 2. Magnetic Button Component
-        const MagneticButton = ({ children, href, className }) => {
+        const MagneticButton = ({ children, onClick, className }) => {
             const btnRef = useRef(null);
             
             const handleMouseMove = (e) => {
@@ -214,8 +280,6 @@
                 const rect = btnRef.current.getBoundingClientRect();
                 const x = e.clientX - (rect.left + rect.width / 2);
                 const y = e.clientY - (rect.top + rect.height / 2);
-                
-                // Strength of magnet
                 btnRef.current.style.transform = `translate(${x * 0.3}px, ${y * 0.5}px)`;
             };
 
@@ -225,15 +289,15 @@
             };
 
             return (
-                <a 
-                    href={href}
+                <button 
+                    onClick={onClick}
                     ref={btnRef}
                     onMouseMove={handleMouseMove}
                     onMouseLeave={handleMouseLeave}
                     className={`inline-block transition-transform duration-200 ease-out will-change-transform ${className}`}
                 >
                     {children}
-                </a>
+                </button>
             );
         };
 
@@ -249,8 +313,6 @@
                 return () => observer.disconnect();
             }, []);
         };
-
-        // --- MAIN COMPONENTS ---
 
         const CustomCursor = () => {
             const cursorRef = useRef(null);
@@ -307,7 +369,115 @@
             );
         };
 
-        const Header = () => (
+        // --- MONO CHAT COMPONENT ---
+        const MonoChat = ({ onBack }) => {
+            const [messages, setMessages] = useState([
+                { role: 'mono', content: "I am MONO. I am listening." }
+            ]);
+            const [input, setInput] = useState("");
+            const [isProcessing, setIsProcessing] = useState(false);
+            const messagesEndRef = useRef(null);
+
+            const scrollToBottom = () => {
+                messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+            };
+
+            useEffect(scrollToBottom, [messages]);
+
+            const handleSend = async (e) => {
+                e.preventDefault();
+                if (!input.trim() || isProcessing) return;
+
+                const userMsg = input;
+                setInput("");
+                setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
+                setIsProcessing(true);
+
+                const response = await chatWithMono(messages, userMsg);
+                
+                setMessages(prev => [...prev, { role: 'mono', content: response }]);
+                setIsProcessing(false);
+            };
+
+            return (
+                <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center font-mono">
+                    {/* Background noise */}
+                    <div className="absolute inset-0 noise-overlay opacity-5 pointer-events-none"></div>
+                    
+                    {/* Back Button */}
+                    <button 
+                        onClick={onBack}
+                        className="absolute top-8 left-8 text-brick-gray hover:text-white text-xs tracking-widest uppercase transition-colors z-50"
+                    >
+                        &lt; TERMINATE SESSION
+                    </button>
+
+                    {/* THE EYE (MONO VISUAL) */}
+                    <div className="relative mb-12 shrink-0">
+                        <div className={`monolith-structure w-[120px] h-[120px] rounded-full flex items-center justify-center border border-neutral-800 shadow-2xl transition-all duration-500 ${isProcessing ? 'scale-105 shadow-[0_0_50px_rgba(220,38,38,0.3)]' : ''}`}>
+                            <div className="absolute inset-0 rounded-full bg-black"></div>
+                            {/* The Eye Pupil/Light */}
+                            <div 
+                                className={`w-4 h-4 bg-brick-red rounded-full blur-[2px] transition-all duration-1000 ${isProcessing ? 'animate-pulse-fast scale-150' : 'scale-100'}`}
+                                style={{ boxShadow: '0 0 20px 5px rgba(220, 38, 38, 0.6)' }}
+                            ></div>
+                            {/* Outer Glow Ring */}
+                            <div className={`absolute inset-0 rounded-full border border-brick-red/20 ${isProcessing ? 'animate-ping opacity-20' : 'opacity-0'}`}></div>
+                        </div>
+                        <div className="text-center mt-6 text-brick-red text-[10px] tracking-[0.3em] uppercase opacity-70">
+                            {isProcessing ? "PROCESSING DATA" : "SYSTEM ONLINE"}
+                        </div>
+                    </div>
+
+                    {/* Chat Area */}
+                    <div className="w-full max-w-2xl px-6 flex-1 overflow-y-auto mb-8 space-y-6 scrollbar-hide">
+                        {messages.map((msg, i) => (
+                            <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} opacity-0 animate-[terminal-blink_0.5s_ease-out_forwards]`} style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
+                                <span className="text-[10px] text-neutral-600 mb-1 uppercase tracking-widest">
+                                    {msg.role === 'user' ? 'VISITOR' : 'MONO-1'}
+                                </span>
+                                <div className={`max-w-md p-4 text-sm leading-relaxed border ${msg.role === 'user' ? 'border-white/20 text-white bg-white/5' : 'border-brick-red/30 text-brick-red/90 bg-brick-red/5'}`}>
+                                    {msg.content}
+                                </div>
+                            </div>
+                        ))}
+                        {isProcessing && (
+                            <div className="flex flex-col items-start">
+                                <span className="text-[10px] text-neutral-600 mb-1 uppercase tracking-widest">MONO-1</span>
+                                <div className="typing-indicator text-brick-red text-xl">
+                                    <span>.</span><span>.</span><span>.</span>
+                                </div>
+                            </div>
+                        )}
+                        <div ref={messagesEndRef} />
+                    </div>
+
+                    {/* Input Area */}
+                    <div className="w-full max-w-2xl px-6 pb-12 relative z-10">
+                        <form onSubmit={handleSend} className="relative group">
+                            <input
+                                type="text"
+                                value={input}
+                                onChange={(e) => setInput(e.target.value)}
+                                placeholder="ASK THE SYSTEM..."
+                                className="w-full bg-transparent border-b border-neutral-800 py-4 text-white font-mono text-sm focus:outline-none focus:border-brick-red transition-colors placeholder:text-neutral-700"
+                                autoFocus
+                            />
+                            <button 
+                                type="submit"
+                                className="absolute right-0 top-1/2 -translate-y-1/2 text-xs text-neutral-500 hover:text-white uppercase tracking-widest transition-colors"
+                            >
+                                TRANSMIT
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            );
+        };
+
+        // --- PAGE SECTIONS (Refactored for routing) ---
+
+        const Header = ({ onChat }) => (
             <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center bg-gradient-to-b from-brick-black/90 to-transparent backdrop-blur-sm pointer-events-none">
                 <div className="pointer-events-auto flex items-center gap-2 group cursor-none select-none">
                     <div className="font-black text-xl tracking-tighter text-white flex items-center gap-1">
@@ -319,12 +489,11 @@
                     </div>
                 </div>
                 
-                {/* Magnetic Button Implementation */}
                 <MagneticButton 
-                    href="mailto:contact@brick.ai" 
-                    className="pointer-events-auto bg-white/5 border border-white/10 backdrop-blur-md px-6 py-2 text-xs md:text-sm font-medium tracking-widest transition-all duration-300 hover:bg-white hover:text-brick-black hover:border-white cursor-none"
+                    onClick={onChat}
+                    className="pointer-events-auto bg-white/5 border border-white/10 backdrop-blur-md px-6 py-2 text-xs md:text-sm font-medium tracking-widest transition-all duration-300 hover:bg-white hover:text-brick-black hover:border-white cursor-none text-white"
                 >
-                    <ScrambleText text="CONTACT" hoverTrigger={true} />
+                    <ScrambleText text="TALK TO US" hoverTrigger={true} />
                 </MagneticButton>
             </header>
         );
@@ -527,12 +696,17 @@
             </section>
         );
 
-        const Footer = () => (
+        const Footer = ({ onChat }) => (
             <footer className="w-full py-32 px-6 md:px-12 lg:px-24 bg-black border-t border-white/5 relative z-10">
                 <div className="flex flex-col items-center text-center gap-12 reveal">
                     <h2 className="text-sm md:text-base font-mono text-brick-gray tracking-widest uppercase">Have a complex problem?</h2>
                     <p className="text-4xl md:text-6xl lg:text-8xl font-black text-white tracking-tighter leading-none max-w-5xl">WE HAVE THE INTELLIGENCE.</p>
-                    <a href="mailto:hello@brick.ai" className="mt-8 bg-brick-red text-white px-12 py-4 text-lg font-bold tracking-widest hover:bg-white hover:text-brick-black transition-all duration-300 rounded-sm cursor-none">TALK TO US</a>
+                    <MagneticButton 
+                        onClick={onChat}
+                        className="mt-8 bg-brick-red text-white px-12 py-4 text-lg font-bold tracking-widest hover:bg-white hover:text-brick-black transition-all duration-300 rounded-sm cursor-none"
+                    >
+                        TALK TO US
+                    </MagneticButton>
                 </div>
                 <div className="mt-24 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-[0.2em] text-brick-gray/40 font-bold border-t border-white/5 pt-8 w-full">
                     <span>&copy; 2025 Brick AI.</span>
@@ -542,20 +716,34 @@
             </footer>
         );
 
+        const HomePage = ({ onChat }) => (
+            <React.Fragment>
+                <Header onChat={onChat} />
+                <main>
+                    <Hero />
+                    <Philosophy />
+                    <SelectedWorks />
+                    <Legacy />
+                </main>
+                <Footer onChat={onChat} />
+            </React.Fragment>
+        );
+
         const App = () => {
+            const [view, setView] = useState('home'); // 'home' or 'chat'
+
             useScrollReveal();
+
             return (
                 <div className="min-h-screen bg-brick-black text-brick-white selection:bg-brick-red selection:text-white font-sans cursor-none">
                     <div className="noise-overlay"></div>
                     <CustomCursor />
-                    <Header />
-                    <main>
-                        <Hero />
-                        <Philosophy />
-                        <SelectedWorks />
-                        <Legacy />
-                    </main>
-                    <Footer />
+                    
+                    {view === 'home' ? (
+                        <HomePage onChat={() => setView('chat')} />
+                    ) : (
+                        <MonoChat onBack={() => setView('home')} />
+                    )}
                 </div>
             );
         };
