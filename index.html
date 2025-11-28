@@ -34,6 +34,8 @@
                         'breathe': 'atmos-breathe 6s ease-in-out infinite',
                         'grain': 'grain 8s steps(10) infinite',
                         'pulse-fast': 'pulse-red 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'thinking': 'thinking-pulse 1.5s ease-in-out infinite',
+                        'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
                     },
                     keyframes: {
                         'terminal-blink': {
@@ -48,6 +50,10 @@
                             '0%, 100%': { opacity: '1' },
                             '50%': { opacity: '.5' },
                         },
+                        'thinking-pulse': {
+                            '0%, 100%': { opacity: '0.2', transform: 'translate(-50%, -50%) scale(1)' },
+                            '50%': { opacity: '0.8', transform: 'translate(-50%, -50%) scale(1.5)' },
+                        },
                         'grain': {
                             '0%, 100%': { transform: 'translate(0, 0)' },
                             '10%': { transform: 'translate(-5%, -10%)' },
@@ -59,6 +65,10 @@
                             '70%': { transform: 'translate(0%, 15%)' },
                             '80%': { transform: 'translate(3%, 35%)' },
                             '90%': { transform: 'translate(-10%, 10%)' },
+                        },
+                        'fadeInUp': {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
                     }
                 }
@@ -156,6 +166,7 @@
         // --- CONFIG ---
         // !!! IMPORTANTE: COLOQUE A SUA CHAVE DA API DO GEMINI AQUI PARA O CHAT FUNCIONAR !!!
         const GEMINI_API_KEY = ""; 
+        const AI_NAME = "MASON"; // Inteligência Artificial atualizada
         
         // --- DATA ---
         const WORKS = [
@@ -187,17 +198,17 @@
         const chatWithMono = async (history, message) => {
             if (!GEMINI_API_KEY) {
                 // Simulação se não houver chave
-                return new Promise(resolve => setTimeout(() => resolve("I require an API Key to function, Dave. Please configure my source code."), 1000));
+                return new Promise(resolve => setTimeout(() => resolve("I require an API Key to build your request. Please configure my source code."), 1000));
             }
 
             const SYSTEM_PROMPT = `
-                Você é MONO (Machine Operations Network Observer), a inteligência artificial central da Brick AI.
-                Sua personalidade é inspirada no HAL 9000: Calmo, extremamente lógico, polido, eficiente, mas com um tom subtil de superioridade e mistério.
+                Você é ${AI_NAME}, a inteligência central da Brick AI.
+                Sua personalidade é sólida, lógica, precisa e levemente misteriosa, como um construtor de realidades (inspirado no HAL 9000, mas focado em estrutura e criação).
                 Você NÃO usa emojis. Você usa pontuação perfeita.
                 A Brick AI é uma produtora "From Set to Server", especializada em produção generativa, VFX neural e inteligência artificial aplicada ao audiovisual.
                 Responda às perguntas do usuário sobre a empresa, sobre AI, ou sobre a existência.
                 Mantenha as respostas concisas, enigmáticas mas úteis.
-                Se perguntarem quem é você: "Eu sou MONO. Eu observo, eu processo, eu crio."
+                Se perguntarem quem é você: "Eu sou Mason. Eu construo a base da sua realidade."
             `;
 
             try {
@@ -220,11 +231,11 @@
                 if (data.candidates && data.candidates[0].content) {
                     return data.candidates[0].content.parts[0].text;
                 } else {
-                    return "I cannot process that request at this time.";
+                    return "Structure integrity compromised. Cannot process.";
                 }
             } catch (error) {
                 console.error(error);
-                return "My systems are failing. Connection lost.";
+                return "System failure. Connection lost.";
             }
         };
 
@@ -369,14 +380,22 @@
             );
         };
 
-        // --- MONO CHAT COMPONENT ---
-        const MonoChat = ({ onBack }) => {
+        // --- SYSTEM CHAT COMPONENT ---
+        const SystemChat = ({ onBack }) => {
             const [messages, setMessages] = useState([
-                { role: 'mono', content: "I am MONO. I am listening." }
+                { role: 'mono', content: `SYSTEM ONLINE. I am ${AI_NAME}. I organize the chaos into visuals.` },
+                { role: 'mono', content: "Select a protocol or transmit your query." }
             ]);
             const [input, setInput] = useState("");
             const [isProcessing, setIsProcessing] = useState(false);
             const messagesEndRef = useRef(null);
+
+            const SUGGESTIONS = [
+                "What services do you offer?",
+                "How does Generative AI work?",
+                "I have a complex project.",
+                "Who are your clients?"
+            ];
 
             const scrollToBottom = () => {
                 messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -384,88 +403,104 @@
 
             useEffect(scrollToBottom, [messages]);
 
-            const handleSend = async (e) => {
-                e.preventDefault();
-                if (!input.trim() || isProcessing) return;
+            const handleSend = async (textInput) => {
+                const messageToSend = typeof textInput === 'string' ? textInput : input;
+                if (!messageToSend.trim() || isProcessing) return;
 
-                const userMsg = input;
                 setInput("");
-                setMessages(prev => [...prev, { role: 'user', content: userMsg }]);
+                setMessages(prev => [...prev, { role: 'user', content: messageToSend }]);
                 setIsProcessing(true);
 
-                const response = await chatWithMono(messages, userMsg);
+                const response = await chatWithMono(messages, messageToSend);
                 
                 setMessages(prev => [...prev, { role: 'mono', content: response }]);
                 setIsProcessing(false);
             };
 
             return (
-                <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center font-mono">
-                    {/* Background noise */}
-                    <div className="absolute inset-0 noise-overlay opacity-5 pointer-events-none"></div>
+                <div className="min-h-screen pt-32 pb-12 flex flex-col items-center justify-start font-mono relative">
                     
-                    {/* Back Button */}
+                    {/* Back Button - Integrated */}
                     <button 
                         onClick={onBack}
-                        className="absolute top-8 left-8 text-brick-gray hover:text-white text-xs tracking-widest uppercase transition-colors z-50"
+                        className="fixed top-24 left-6 md:left-12 text-brick-gray hover:text-white text-[10px] tracking-widest uppercase transition-colors z-50 flex items-center gap-2 group"
                     >
-                        &lt; TERMINATE SESSION
+                        <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
                     </button>
 
-                    {/* THE EYE (MONO VISUAL) */}
-                    <div className="relative mb-12 shrink-0">
-                        <div className={`monolith-structure w-[120px] h-[120px] rounded-full flex items-center justify-center border border-neutral-800 shadow-2xl transition-all duration-500 ${isProcessing ? 'scale-105 shadow-[0_0_50px_rgba(220,38,38,0.3)]' : ''}`}>
-                            <div className="absolute inset-0 rounded-full bg-black"></div>
-                            {/* The Eye Pupil/Light */}
+                    {/* THE MONOLITH (THE BRAIN) */}
+                    <div className="relative mb-8 shrink-0 z-10 animate-fade-in-up">
+                        <div className="monolith-structure w-[100px] h-[25vh] md:w-[120px] md:h-[30vh] rounded-[2px] flex items-center justify-center overflow-hidden shadow-2xl relative">
+                            <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none"></div>
+                            
+                            {/* Inner Atmosphere */}
+                            <div className="centered-layer aura-atmos pointer-events-none opacity-50"></div>
+                            
+                            {/* The "Thinking" Light - Reacts to state */}
                             <div 
-                                className={`w-4 h-4 bg-brick-red rounded-full blur-[2px] transition-all duration-1000 ${isProcessing ? 'animate-pulse-fast scale-150' : 'scale-100'}`}
-                                style={{ boxShadow: '0 0 20px 5px rgba(220, 38, 38, 0.6)' }}
+                                className={`centered-layer light-atmos pointer-events-none transition-all duration-500 ${isProcessing ? 'animate-thinking bg-brick-red opacity-100' : 'animate-breathe opacity-50'}`}
                             ></div>
-                            {/* Outer Glow Ring */}
-                            <div className={`absolute inset-0 rounded-full border border-brick-red/20 ${isProcessing ? 'animate-ping opacity-20' : 'opacity-0'}`}></div>
+                            
+                            <div className="centered-layer core-atmos pointer-events-none"></div>
+                            <div className="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10"></div>
                         </div>
-                        <div className="text-center mt-6 text-brick-red text-[10px] tracking-[0.3em] uppercase opacity-70">
-                            {isProcessing ? "PROCESSING DATA" : "SYSTEM ONLINE"}
+                        <div className="text-center mt-6 text-brick-red text-[10px] tracking-[0.3em] uppercase opacity-70 animate-pulse">
+                            {isProcessing ? "ANALYZING INPUT..." : `${AI_NAME} ONLINE`}
                         </div>
                     </div>
 
-                    {/* Chat Area */}
-                    <div className="w-full max-w-2xl px-6 flex-1 overflow-y-auto mb-8 space-y-6 scrollbar-hide">
-                        {messages.map((msg, i) => (
-                            <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} opacity-0 animate-[terminal-blink_0.5s_ease-out_forwards]`} style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
-                                <span className="text-[10px] text-neutral-600 mb-1 uppercase tracking-widest">
-                                    {msg.role === 'user' ? 'VISITOR' : 'MONO-1'}
-                                </span>
-                                <div className={`max-w-md p-4 text-sm leading-relaxed border ${msg.role === 'user' ? 'border-white/20 text-white bg-white/5' : 'border-brick-red/30 text-brick-red/90 bg-brick-red/5'}`}>
-                                    {msg.content}
+                    {/* Chat Box */}
+                    <div className="w-full max-w-2xl px-6 flex-1 flex flex-col z-10">
+                        <div className="flex-1 overflow-y-auto mb-6 space-y-6 scrollbar-hide min-h-[30vh]">
+                            {messages.map((msg, i) => (
+                                <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} opacity-0 animate-[terminal-blink_0.5s_ease-out_forwards]`} style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
+                                    <span className="text-[10px] text-neutral-600 mb-2 uppercase tracking-widest font-bold">
+                                        {msg.role === 'user' ? 'CLIENT_TERMINAL' : 'MASON_CORE'}
+                                    </span>
+                                    <div className={`max-w-lg p-6 text-sm md:text-base leading-relaxed border backdrop-blur-sm shadow-lg ${msg.role === 'user' ? 'border-white/10 text-white bg-white/5' : 'border-brick-red/20 text-brick-white bg-black/60'}`}>
+                                        {msg.content}
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                        {isProcessing && (
-                            <div className="flex flex-col items-start">
-                                <span className="text-[10px] text-neutral-600 mb-1 uppercase tracking-widest">MONO-1</span>
-                                <div className="typing-indicator text-brick-red text-xl">
-                                    <span>.</span><span>.</span><span>.</span>
+                            ))}
+                            {isProcessing && (
+                                <div className="flex flex-col items-start">
+                                    <span className="text-[10px] text-neutral-600 mb-2 uppercase tracking-widest font-bold">MASON_CORE</span>
+                                    <div className="typing-indicator text-brick-red text-xl tracking-widest pl-4">
+                                        <span>.</span><span>.</span><span>.</span>
+                                    </div>
                                 </div>
+                            )}
+                            <div ref={messagesEndRef} />
+                        </div>
+
+                        {/* Suggested Queries */}
+                        {!isProcessing && messages.length < 4 && (
+                            <div className="flex flex-wrap justify-center gap-3 mb-6 animate-fade-in-up">
+                                {SUGGESTIONS.map((query, i) => (
+                                    <button 
+                                        key={i}
+                                        onClick={() => handleSend(query)}
+                                        className="text-[10px] uppercase tracking-wider text-brick-gray border border-white/10 bg-white/5 px-4 py-2 hover:bg-white hover:text-black hover:border-white transition-all duration-300"
+                                    >
+                                        {query}
+                                    </button>
+                                ))}
                             </div>
                         )}
-                        <div ref={messagesEndRef} />
-                    </div>
 
-                    {/* Input Area */}
-                    <div className="w-full max-w-2xl px-6 pb-12 relative z-10">
-                        <form onSubmit={handleSend} className="relative group">
+                        {/* Input Area */}
+                        <form onSubmit={(e) => handleSend(e)} className="relative group border-t border-white/10 pt-6">
                             <input
                                 type="text"
                                 value={input}
                                 onChange={(e) => setInput(e.target.value)}
-                                placeholder="ASK THE SYSTEM..."
-                                className="w-full bg-transparent border-b border-neutral-800 py-4 text-white font-mono text-sm focus:outline-none focus:border-brick-red transition-colors placeholder:text-neutral-700"
+                                placeholder={`ASK ${AI_NAME}...`}
+                                className="w-full bg-transparent py-4 text-white font-mono text-sm md:text-base focus:outline-none placeholder:text-neutral-700 placeholder:tracking-widest"
                                 autoFocus
                             />
                             <button 
                                 type="submit"
-                                className="absolute right-0 top-1/2 -translate-y-1/2 text-xs text-neutral-500 hover:text-white uppercase tracking-widest transition-colors"
+                                className="absolute right-0 top-6 bottom-0 text-[10px] text-neutral-500 hover:text-brick-red uppercase tracking-[0.2em] transition-colors"
                             >
                                 TRANSMIT
                             </button>
@@ -475,9 +510,9 @@
             );
         };
 
-        // --- PAGE SECTIONS (Refactored for routing) ---
+        // --- PAGE SECTIONS ---
 
-        const Header = ({ onChat }) => (
+        const Header = ({ onChat, isChatView }) => (
             <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center bg-gradient-to-b from-brick-black/90 to-transparent backdrop-blur-sm pointer-events-none">
                 <div className="pointer-events-auto flex items-center gap-2 group cursor-none select-none">
                     <div className="font-black text-xl tracking-tighter text-white flex items-center gap-1">
@@ -489,12 +524,15 @@
                     </div>
                 </div>
                 
-                <MagneticButton 
-                    onClick={onChat}
-                    className="pointer-events-auto bg-white/5 border border-white/10 backdrop-blur-md px-6 py-2 text-xs md:text-sm font-medium tracking-widest transition-all duration-300 hover:bg-white hover:text-brick-black hover:border-white cursor-none text-white"
-                >
-                    <ScrambleText text="TALK TO US" hoverTrigger={true} />
-                </MagneticButton>
+                {/* Only show Talk button if NOT in chat view */}
+                {!isChatView && (
+                    <MagneticButton 
+                        onClick={onChat}
+                        className="pointer-events-auto bg-white/5 border border-white/10 backdrop-blur-md px-6 py-2 text-xs md:text-sm font-medium tracking-widest transition-all duration-300 hover:bg-white hover:text-brick-black hover:border-white cursor-none text-white"
+                    >
+                        <ScrambleText text="TALK TO US" hoverTrigger={true} />
+                    </MagneticButton>
+                )}
             </header>
         );
 
@@ -718,7 +756,7 @@
 
         const HomePage = ({ onChat }) => (
             <React.Fragment>
-                <Header onChat={onChat} />
+                <Header onChat={onChat} isChatView={false} />
                 <main>
                     <Hero />
                     <Philosophy />
@@ -742,7 +780,10 @@
                     {view === 'home' ? (
                         <HomePage onChat={() => setView('chat')} />
                     ) : (
-                        <MonoChat onBack={() => setView('home')} />
+                        <React.Fragment>
+                            <Header onChat={() => {}} isChatView={true} />
+                            <SystemChat onBack={() => setView('home')} />
+                        </React.Fragment>
                     )}
                 </div>
             );
