@@ -172,10 +172,11 @@
         const WORKS = [
             {
                 subtitle: "FULL GENERATIVE",
-                title: "PROJECT: DREAMSCAPE",
+                title: "INHERITANCE - BENEATH THE WHEEL",
                 desc: "When the location doesn't exist. 100% Neural Rendering.",
                 gradient: "from-neutral-900 to-neutral-800",
-                image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"
+                // ATUALIZADO: Usando o arquivo WEBP correto conforme solicitado.
+                image: "inheritance.webp" 
             },
             {
                 subtitle: "HYBRID EXTENSION",
@@ -345,8 +346,6 @@
 
             return (
                 <React.Fragment>
-                    {/* Apenas o DOT (Bolinha) é renderizado. O Anel foi removido. */}
-                    {/* A opacidade é controlada: Visível apenas quando 'active' (dentro do monolito) */}
                     <div 
                         ref={dotRef} 
                         className={`fixed top-0 left-0 w-2 h-2 bg-brick-red rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform transition-opacity duration-200 ${active ? 'opacity-100' : 'opacity-0'}`} 
@@ -509,7 +508,6 @@
             
             const targetPos = useRef({ x: 0, y: 0 });
             const currentPos = useRef({ x: 0, y: 0 });
-            // Removemos a lógica de hover de dentro da animação para evitar re-renders ou loop de física
             
             const handleMouseMove = (e) => {
                 // e.currentTarget agora é o "Sensor Layer" estático
@@ -538,7 +536,6 @@
 
                     if (radiationRef.current) {
                         const { x, y } = currentPos.current;
-                        // A radiação (efeito visual) reage ao movimento, mas o tamanho do monolito é controlado por classe CSS
                         const scale = monolithHover ? 1.4 : 0.8;
                         const opacity = monolithHover ? 1 : 0;
                         radiationRef.current.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
@@ -548,7 +545,7 @@
                 };
                 animate();
                 return () => cancelAnimationFrame(rafId);
-            }, [monolithHover]); // Adicionado dependência para garantir atualização correta da radiação
+            }, [monolithHover]);
 
             return (
                 <section className="relative min-h-screen w-full flex flex-col items-center justify-start pt-28 md:pt-32 pb-20 overflow-hidden">
@@ -558,7 +555,6 @@
                         <div className="relative w-[140px] md:w-[160px] h-[40vh] md:h-[45vh]">
                             
                             {/* 1. VISUAL LAYER - O Monolito Animado */}
-                            {/* pointer-events-none garante que o mouse não interaja com o elemento que muda de tamanho (evita piscar) */}
                             <div 
                                 className={`monolith-structure w-full h-full rounded-[2px] flex items-center justify-center overflow-hidden shadow-2xl relative transition-transform duration-1000 ease-out pointer-events-none ${monolithHover ? 'scale-[1.02]' : 'scale-100'}`}
                                 style={{ transform: 'translateZ(0)' }}
@@ -590,8 +586,6 @@
                             </div>
 
                             {/* 2. SENSOR LAYER - A Zona de Interação Invisível */}
-                            {/* Este elemento tem tamanho fixo (absolute inset-0 do container pai) e recebe os eventos */}
-                            {/* cursor-none: Esconde a seta do sistema APENAS aqui dentro */}
                             <div 
                                 className="absolute inset-0 z-20 cursor-none"
                                 onMouseMove={handleMouseMove}
