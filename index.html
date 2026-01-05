@@ -651,8 +651,8 @@
                         const cardCenter = rect.top + rect.height / 2;
                         const screenCenter = viewportHeight / 2;
                         const distanceFromCenter = cardCenter - screenCenter;
-                        const yOffset = distanceFromCenter * 0.08;
-                        bgRef.current.style.transform = `scale(1.2) translate3d(0, ${yOffset}px, 0)`;
+                        const yOffset = distanceFromCenter * 0.04;
+                        bgRef.current.style.transform = `scale(1.1) translate3d(0, ${yOffset}px, 0)`;
                     }
                     ticking = false;
                 };
@@ -672,8 +672,8 @@
             }, []);
 
             return (
-                <div ref={containerRef} className={`reveal w-full min-h-[40vh] md:min-h-[50vh] relative flex items-center group overflow-hidden border-b border-black cursor-default`} style={{ transitionDelay: `${index * 100}ms` }}>
-                    <div ref={bgRef} className="absolute inset-0 opacity-50 mix-blend-overlay will-change-transform" style={{ backgroundImage: `url('${work.image}')`, backgroundSize: 'cover', backgroundPosition: 'center', transform: 'scale(1.2)' }}></div>
+                <div ref={containerRef} className={`reveal w-full min-h-[50vh] md:min-h-[70vh] relative flex items-center group overflow-hidden border-b border-black cursor-default`} style={{ transitionDelay: `${index * 100}ms` }}>
+                    <div ref={bgRef} className="absolute inset-0 opacity-50 mix-blend-overlay will-change-transform" style={{ backgroundImage: `url('${work.image}')`, backgroundSize: 'cover', backgroundPosition: 'center', transform: 'scale(1.1)' }}></div>
                     <div className={`absolute inset-0 bg-gradient-to-r ${work.gradient} opacity-50 transition-opacity duration-700 group-hover:opacity-80 z-10`}></div>
                     <div className="relative z-20 px-6 md:px-12 lg:px-24 w-full flex flex-col md:flex-row justify-between items-start md:items-end gap-6 pointer-events-none">
                         <div>
