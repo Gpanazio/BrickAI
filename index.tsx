@@ -139,9 +139,46 @@ interface Work {
     hasDetail: boolean;
 }
 
+interface Post {
+    id: string;
+    date: string;
+    title: string;
+    excerpt: string;
+    tags: string[];
+    url: string;
+}
+
+// --- DATA: TRANSMISSIONS (BLOG) ---
+const TRANSMISSIONS: Post[] = [
+    {
+        id: "log_001",
+        date: "2025.02.14",
+        title: "THE LATENT SPACE IS A LOCATION",
+        excerpt: "Why we stopped scouting physical ruins and started training LoRAs on brutalist blueprints. Navigating the statistical probability of architecture.",
+        tags: ["THEORY", "NEURAL_RENDERING"],
+        url: "/transmissions/latent-space"
+    },
+    {
+        id: "log_002",
+        date: "2025.01.28",
+        title: "MOTION VECTORS IN STYLE TRANSFER",
+        excerpt: "Solving the flickering problem in diffusion models. How we use optical flow to enforce temporal consistency in 60fps outputs.",
+        tags: ["R&D", "WORKFLOW"],
+        url: "/transmissions/motion-vectors"
+    },
+    {
+        id: "log_003",
+        date: "2025.01.10",
+        title: "INTENTIONAL GLITCH: THE HUMAN SIGNATURE",
+        excerpt: "When perfection is the error. Injecting noise back into the clean output of commercial models to reclaim the 'cinema' feel.",
+        tags: ["PHILOSOPHY", "VFX"],
+        url: "/transmissions/intentional-glitch"
+    }
+];
+
 // --- SEO COMPONENT: STRUCTURED DATA (JSON-LD) ---
 const StructuredData = () => {
-    const schema = {
+    const organizationSchema = {
         "@context": "https://schema.org",
         "@type": "Organization",
         "name": "Brick AI",
@@ -158,27 +195,33 @@ const StructuredData = () => {
             "Neural Radiance Fields (NeRF)",
             "Stable Diffusion Workflows",
             "Cinematography",
-            "VFX Automation",
-            "Film Production",
-            "Creative Direction"
-        ],
-        "foundingDate": "2016",
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "contactType": "production inquiries",
-            "email": "contact@brickai.com"
-        }
+            "VFX Automation"
+        ]
     };
+
+    // Generating BlogPosting schema for each Transmission
+    const blogSchemas = TRANSMISSIONS.map(post => ({
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": post.title,
+        "description": post.excerpt,
+        "author": {
+            "@type": "Organization",
+            "name": "Brick AI"
+        },
+        "datePublished": post.date.replace(/\./g, '-'),
+        "keywords": post.tags.join(", ")
+    }));
 
     return (
         <script
             type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+            dangerouslySetInnerHTML={{ __html: JSON.stringify([organizationSchema, ...blogSchemas]) }}
         />
     );
 };
 
-// --- DATA ---
+// --- DATA: WORKS ---
 const WORKS: Work[] = [
     {
         id: "inheritance",
@@ -687,7 +730,53 @@ const PhilosophyItem = ({ title, text }: { title: string, text: string }) => (
     </div>
 );
 
-// --- COMPONENTES DA HOME (ANTIGOS) ---
+// --- COMPONENT: TRANSMISSIONS (BLOG LIST) ---
+const Transmissions = () => (
+    <section className="w-full py-24 bg-[#0a0a0a] border-t border-white/5">
+        <div className="max-w-4xl mx-auto px-6 reveal">
+            <div className="flex items-center gap-4 mb-16">
+                <div className="w-1.5 h-1.5 bg-[#DC2626]"></div>
+                <h2 className="text-xs font-bold tracking-[0.3em] text-[#9CA3AF] uppercase">Incoming Transmissions</h2>
+            </div>
+            
+            <div className="space-y-px bg-white/10 border border-white/10">
+                {TRANSMISSIONS.map((post) => (
+                    <a 
+                        key={post.id} 
+                        href="#" 
+                        className="block group bg-[#050505] hover:bg-[#0a0a0a] transition-colors p-6 md:p-8"
+                    >
+                        <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-4">
+                            <h3 className="text-xl md:text-2xl font-black text-white tracking-tight group-hover:text-[#DC2626] transition-colors">
+                                {post.title}
+                            </h3>
+                            <span className="font-mono text-[10px] text-[#DC2626] tracking-widest whitespace-nowrap">
+                                {post.date}
+                            </span>
+                        </div>
+                        <p className="text-[#9CA3AF] text-sm font-light max-w-2xl mb-6 leading-relaxed">
+                            {post.excerpt}
+                        </p>
+                        <div className="flex gap-2">
+                            {post.tags.map(tag => (
+                                <span key={tag} className="text-[9px] font-mono border border-white/10 px-2 py-1 text-[#9CA3AF]/60 uppercase tracking-wider">
+                                    {tag}
+                                </span>
+                            ))}
+                        </div>
+                    </a>
+                ))}
+            </div>
+            
+            <div className="mt-8 flex justify-center">
+                <button className="text-[10px] font-mono text-[#9CA3AF] hover:text-white tracking-widest uppercase flex items-center gap-2 group transition-colors">
+                    Access Full Archive <span className="group-hover:translate-x-1 transition-transform">→</span>
+                </button>
+            </div>
+        </div>
+    </section>
+);
+
 const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: (work: Work) => void }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const bgRef = useRef<HTMLDivElement>(null);
@@ -1105,6 +1194,7 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onHome, setMonolithHover, 
             <Hero setMonolithHover={setMonolithHover} monolithHover={monolithHover} />
             <Philosophy />
             <SelectedWorks onSelectProject={onSelectProject} />
+            <Transmissions />
             <Legacy />
         </main>
         <Footer onChat={onChat} />
