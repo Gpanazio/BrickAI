@@ -599,7 +599,6 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, isChatView }: { onCh
             </div>
             {!isChatView && (
                 <div className="flex items-center gap-8 pointer-events-auto">
-                    {/* NEW NAV STYLE: Raw Text Links */}
                     <MagneticButton onClick={onWorks} className="group text-xs md:text-sm font-mono tracking-[0.2em] text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
                         <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
                         WORKS
@@ -610,9 +609,9 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, isChatView }: { onCh
                         TRANSMISSIONS
                     </MagneticButton>
                     
-                    {/* NEW CTA STYLE: Sharp Tactical Box */}
-                    <MagneticButton onClick={onChat} className="ml-4 border border-white/20 bg-transparent px-6 py-2 text-xs md:text-sm font-mono font-bold tracking-[0.15em] transition-all duration-300 hover:bg-white hover:text-black hover:border-white text-white rounded-none">
-                        [ TALK TO US ]
+                    {/* NEW CTA STYLE: Subtle Bracketed Input */}
+                    <MagneticButton onClick={onChat} className="ml-8 text-xs md:text-sm font-mono font-bold tracking-[0.15em] transition-all duration-300 text-white hover:text-[#DC2626] group">
+                        <span className="text-[#9CA3AF] group-hover:text-white transition-colors">[</span> TALK TO US <span className="text-[#9CA3AF] group-hover:text-white transition-colors">]</span>
                     </MagneticButton>
                 </div>
             )}
@@ -743,10 +742,10 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions }: any) =>
     <React.Fragment>
         <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
         
-        {/* BACK BUTTON */}
+        {/* BACK BUTTON UPDATED - Larger & Clearer */}
         <button 
             onClick={onHome}
-            className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-[10px] tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference"
+            className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference"
         >
             <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
         </button>
@@ -1008,10 +1007,10 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject }
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
             
-            {/* ADDED BACK BUTTON */}
+            {/* ADDED BACK BUTTON UPDATED - Larger & Clearer */}
             <button 
                 onClick={onHome}
-                className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-[10px] tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference"
+                className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference"
             >
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
             </button>
@@ -1067,7 +1066,11 @@ const Footer = ({ onChat }: { onChat: () => void }) => (
         <div className="flex flex-col items-center text-center gap-12 reveal">
             <h2 className="text-sm md:text-base font-mono text-[#9CA3AF] tracking-widest uppercase">Have a complex problem?</h2>
             <p className="text-4xl md:text-6xl lg:text-8xl font-black text-white tracking-tighter leading-none max-w-5xl">WE HAVE THE INTELLIGENCE.</p>
-            <MagneticButton onClick={onChat} className="mt-8 bg-[#DC2626] text-white px-12 py-4 text-lg font-bold tracking-widest hover:bg-white hover:text-[#050505] transition-all duration-300 rounded-none border border-white/20">TALK TO US</MagneticButton>
+            
+            {/* UPDATED FOOTER CTA: Matches Header style but larger */}
+            <MagneticButton onClick={onChat} className="mt-8 text-lg md:text-xl font-mono font-bold tracking-[0.15em] transition-all duration-300 text-white hover:text-[#DC2626] group">
+                <span className="text-[#9CA3AF] group-hover:text-white transition-colors">[</span> TALK TO US <span className="text-[#9CA3AF] group-hover:text-white transition-colors">]</span>
+            </MagneticButton>
         </div>
 
         {/* SOCIAL LINKS - SECTION ADDED */}
@@ -1132,9 +1135,10 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
 
     return (
         <div className="min-h-screen pt-32 pb-12 flex flex-col items-center justify-start font-mono relative">
+            {/* BACK BUTTON UPDATED - Larger & Clearer */}
             <button 
                 onClick={onBack}
-                className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-[10px] tracking-widest uppercase transition-colors z-50 flex items-center gap-2 group"
+                className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group"
             >
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
             </button>
