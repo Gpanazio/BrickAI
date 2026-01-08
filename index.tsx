@@ -68,7 +68,7 @@ const GlobalStyles = () => (
             width: 200%;
             height: 200%;
             pointer-events: none;
-            z-index: 9999;
+            z-index: 30; /* Z-INDEX REDUZIDO para permitir que Selected Works fique acima */
             opacity: 0.035; 
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             animation: grain 6s steps(10) infinite;
@@ -710,7 +710,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 };
 
 const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => void }) => (
-    <section id="works" className="w-full pt-24 pb-0 bg-[#050505] border-t border-white/5">
+    <section id="works" className="w-full pt-24 pb-0 bg-[#050505] border-t border-white/5 relative z-40">
         <div className="px-6 md:px-12 lg:px-24 mb-16 reveal">
             <h2 className="text-sm md:text-base font-bold tracking-[0.3em] text-[#9CA3AF] uppercase">Selected Works</h2>
         </div>
