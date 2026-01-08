@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { createRoot } from 'react-dom/client';
 
 // --- STYLES & CONFIG ---
-// Injetando estilos globais para garantir as animações específicas
 const GlobalStyles = () => (
     <style>{`
         /* COLORS & UTILS */
@@ -68,7 +67,7 @@ const GlobalStyles = () => (
             width: 200%;
             height: 200%;
             pointer-events: none;
-            z-index: 30; /* Z-INDEX REDUZIDO para permitir que Selected Works fique acima */
+            z-index: 30; 
             opacity: 0.035; 
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             animation: grain 6s steps(10) infinite;
@@ -130,7 +129,7 @@ interface Work {
     id: string;
     orientation: 'horizontal' | 'vertical';
     subtitle: string;
-    category: string; // Used for filtering
+    category: string; 
     title: string;
     desc: string;
     longDesc?: string;
@@ -139,6 +138,45 @@ interface Work {
     image: string;
     hasDetail: boolean;
 }
+
+// --- SEO COMPONENT: STRUCTURED DATA (JSON-LD) ---
+const StructuredData = () => {
+    const schema = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Brick AI",
+        "url": "https://brickai.com",
+        "logo": "https://brickai.com/logo.png",
+        "sameAs": [
+            "https://www.linkedin.com/company/brick-ai",
+            "https://instagram.com/brickai"
+        ],
+        "slogan": "From Set to Server.",
+        "description": "A generative production house where human artistry directs neural rendering pipelines.",
+        "knowsAbout": [
+            "Generative Artificial Intelligence",
+            "Neural Radiance Fields (NeRF)",
+            "Stable Diffusion Workflows",
+            "Cinematography",
+            "VFX Automation",
+            "Film Production",
+            "Creative Direction"
+        ],
+        "foundingDate": "2016",
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "production inquiries",
+            "email": "contact@brickai.com"
+        }
+    };
+
+    return (
+        <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        />
+    );
+};
 
 // --- DATA ---
 const WORKS: Work[] = [
@@ -149,12 +187,12 @@ const WORKS: Work[] = [
         category: "GENERATIVE",
         title: "INHERITANCE",
         desc: "When the location doesn't exist. 100% Neural Rendering.",
-        longDesc: "Inheritance creates a procedural reality where memory and architecture collide. We trained custom LoRAs on brutalist schematics and organic decay patterns to generate 4,000 frames of non-existent environments. The result is a hallucination of space that reacts to audio frequencies in real-time.",
+        longDesc: "Inheritance is a testament to directed hallucination. Our artists trained custom LoRAs on brutalist architectural blueprints to guide the Stable Diffusion XL model. We curated 4,000 frames where organic decay meets concrete, ensuring temporal consistency through ControlNet depth maps while maintaining the director's original vision of isolation.",
         credits: [
             { role: "Director", name: "Sarah V." },
             { role: "AI Lead", name: "Mason Core" },
             { role: "Sound", name: "Echo Lab" },
-            { role: "Tech", name: "Stable Diffusion XL" }
+            { role: "Tech", name: "Stable Diffusion XL + ComfyUI" }
         ],
         gradient: "from-neutral-900 to-neutral-800",
         image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564",
@@ -167,12 +205,12 @@ const WORKS: Work[] = [
         category: "VFX",
         title: "WE CAN SELL ANYTHING",
         desc: "Expanding the set beyond physical limits. Seamless VFX.",
-        longDesc: "For 'We Can Sell Anything', we developed a proprietary neural extension pipeline. Starting with a minimal physical set, we utilized generative in-painting to expand the environment into infinite, photorealistic landscapes. The transition between practical lighting and AI-generated horizons is mathematically seamless.",
+        longDesc: "For 'We Can Sell Anything', the challenge was to marry physical sets with infinite digital horizons. We utilized a proprietary in-painting pipeline that tracks live-action camera data (Alexa Mini) and feeds it into a generative fill model. The result is a mathematically perfect extension of the set, lighting, and grain, directed precisely by the cinematographer's lens choices.",
         credits: [
             { role: "Director", name: "Marcus L." },
             { role: "VFX Sup", name: "Brick Core" },
             { role: "Agency", name: "Future Brand" },
-            { role: "Tech", name: "Nuke + In-painting" }
+            { role: "Tech", name: "Nuke + Generative Fill" }
         ],
         gradient: "from-neutral-900 via-[#DC2626]/10 to-neutral-900",
         image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop",
@@ -185,7 +223,7 @@ const WORKS: Work[] = [
         category: "STYLE TRANSFER",
         title: "AUTOBOL - REIMAGINED",
         desc: "Turning live action into branded art using custom models.",
-        longDesc: "We took standard broadcast footage of a football match and processed it through a custom-trained style transfer model. The goal was a complete re-interpretation of motion and texture, turning athletes into dynamic kinetic sculptures while maintaining temporal consistency at 60fps.",
+        longDesc: "We reinterpreted standard broadcast footage through a custom-trained style transfer model using Ebsynth and ControlNet. The goal was not random abstraction, but a specific 'kinetic sculpture' aesthetic defined by the art director. The AI acted as the brush, preserving the players' identity and 60fps fluidity while completely transforming the texture of reality.",
         credits: [
             { role: "Creative", name: "Ana S." },
             { role: "AI Artist", name: "Mason Core" },
@@ -203,7 +241,7 @@ const WORKS: Work[] = [
         category: "DATA ART",
         title: "VOID GAZING",
         desc: "Translating cosmic radiation into visible spectrums.",
-        longDesc: "A data-driven installation that visualizes real-time cosmic radiation data from open-source satellite feeds. The AI interprets numerical noise as fluid dynamics, creating a constantly shifting portrait of the invisible universe surrounding us.",
+        longDesc: "A data-driven installation that visualizes real-time cosmic radiation data via the NASA Open API. We wrote Python scripts to parse numerical noise into fluid dynamics parameters within TouchDesigner. The AI then textures this simulation in real-time, effectively allowing the audience to 'see' the invisible universe through a human-curated aesthetic lens.",
         credits: [
             { role: "Concept", name: "Brick Lab" },
             { role: "Code", name: "Mason Core" },
@@ -221,7 +259,7 @@ const WORKS: Work[] = [
         category: "GENERATIVE",
         title: "URBAN REEF",
         desc: "Growing cities like coral. Biological algorithms applied.",
-        longDesc: "What if cities grew like organic organisms? Urban Reef uses biological growth algorithms to procedurally generate infinite cityscapes. The architecture is not designed, but 'grown', following rules of light seeking and structural integrity derived from coral reefs.",
+        longDesc: "Urban Reef explores bio-mimicry in architecture. Using differential growth algorithms in Houdini, we 'grew' city structures that seek light like coral. These procedural meshes were then texturized using AI upscaling, creating a vision of a city that feels grown rather than built, challenging traditional architectural design processes.",
         credits: [
             { role: "Architect", name: "J. Doe" },
             { role: "Sim", name: "Brick Core" },
@@ -239,7 +277,7 @@ const WORKS: Work[] = [
         category: "EXPERIENCE",
         title: "SILENT ECHO",
         desc: "A visual narrative driven entirely by sub-bass frequencies.",
-        longDesc: "Silent Echo is a music video where every visual element is triggered directly by audio analysis of sub-bass frequencies. The environment pulses, distorts, and rebuilds itself in perfect synchronization with the unseen rhythm, creating a synesthetic experience.",
+        longDesc: "In Silent Echo, the music drives the machine. We built a system in Unreal Engine 5 where visual elements are triggered directly by audio analysis. Sub-bass frequencies dictate geometry displacement, while high-hats trigger generative lighting events. It is a synesthetic experience where the artist's sound directly sculpts the digital world.",
         credits: [
             { role: "Band", name: "Low Freq" },
             { role: "Visuals", name: "Brick AI" },
@@ -1066,6 +1104,8 @@ const App = () => {
     return (
         <div className="min-h-screen bg-[#050505] text-[#E5E5E5] selection:bg-[#DC2626] selection:text-white font-sans">
             <GlobalStyles />
+            <StructuredData />
+            
             <div className="noise-overlay"></div>
             <CustomCursor active={monolithHover || selectedProject !== null} />
             
