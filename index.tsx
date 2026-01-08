@@ -598,17 +598,21 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, isChatView }: { onCh
                 </div>
             </div>
             {!isChatView && (
-                <div className="flex items-center gap-4 pointer-events-auto">
-                    <MagneticButton onClick={onWorks} className="bg-white/5 border border-white/10 backdrop-blur-md px-6 py-2 text-xs md:text-sm font-medium tracking-widest transition-all duration-300 hover:bg-[#DC2626] hover:text-white hover:border-[#DC2626] text-white">
+                <div className="flex items-center gap-8 pointer-events-auto">
+                    {/* NEW NAV STYLE: Raw Text Links */}
+                    <MagneticButton onClick={onWorks} className="group text-xs md:text-sm font-mono tracking-[0.2em] text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
+                        <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
                         WORKS
                     </MagneticButton>
 
-                    <MagneticButton onClick={onTransmissions} className="bg-white/5 border border-white/10 backdrop-blur-md px-6 py-2 text-xs md:text-sm font-medium tracking-widest transition-all duration-300 hover:bg-[#DC2626] hover:text-white hover:border-[#DC2626] text-white">
+                    <MagneticButton onClick={onTransmissions} className="group text-xs md:text-sm font-mono tracking-[0.2em] text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
+                        <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
                         TRANSMISSIONS
                     </MagneticButton>
                     
-                    <MagneticButton onClick={onChat} className="bg-white/5 border border-white/10 backdrop-blur-md px-6 py-2 text-xs md:text-sm font-medium tracking-widest transition-all duration-300 hover:bg-[#DC2626] hover:text-white hover:border-[#DC2626] text-white">
-                        TALK TO US
+                    {/* NEW CTA STYLE: Sharp Tactical Box */}
+                    <MagneticButton onClick={onChat} className="ml-4 border border-white/20 bg-transparent px-6 py-2 text-xs md:text-sm font-mono font-bold tracking-[0.15em] transition-all duration-300 hover:bg-white hover:text-black hover:border-white text-white rounded-none">
+                        [ TALK TO US ]
                     </MagneticButton>
                 </div>
             )}
@@ -1063,7 +1067,7 @@ const Footer = ({ onChat }: { onChat: () => void }) => (
         <div className="flex flex-col items-center text-center gap-12 reveal">
             <h2 className="text-sm md:text-base font-mono text-[#9CA3AF] tracking-widest uppercase">Have a complex problem?</h2>
             <p className="text-4xl md:text-6xl lg:text-8xl font-black text-white tracking-tighter leading-none max-w-5xl">WE HAVE THE INTELLIGENCE.</p>
-            <MagneticButton onClick={onChat} className="mt-8 bg-[#DC2626] text-white px-12 py-4 text-lg font-bold tracking-widest hover:bg-white hover:text-[#050505] transition-all duration-300 rounded-sm">TALK TO US</MagneticButton>
+            <MagneticButton onClick={onChat} className="mt-8 bg-[#DC2626] text-white px-12 py-4 text-lg font-bold tracking-widest hover:bg-white hover:text-[#050505] transition-all duration-300 rounded-none border border-white/20">TALK TO US</MagneticButton>
         </div>
 
         {/* SOCIAL LINKS - SECTION ADDED */}
