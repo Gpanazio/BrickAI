@@ -957,10 +957,31 @@ const Footer = ({ onChat }: { onChat: () => void }) => (
             <p className="text-4xl md:text-6xl lg:text-8xl font-black text-white tracking-tighter leading-none max-w-5xl">WE HAVE THE INTELLIGENCE.</p>
             <MagneticButton onClick={onChat} className="mt-8 bg-[#DC2626] text-white px-12 py-4 text-lg font-bold tracking-widest hover:bg-white hover:text-[#050505] transition-all duration-300 rounded-sm">TALK TO US</MagneticButton>
         </div>
-        <div className="mt-24 flex flex-col md:flex-row justify-between items-center text-[10px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold border-t border-white/5 pt-8 w-full">
-            <span>&copy; 2025 Brick AI.</span>
-            <span className="hidden md:inline">The Generative Division</span>
-            <span>All Rights Reserved.</span>
+
+        {/* SOCIAL LINKS - SECTION ADDED */}
+        <div className="mt-32 border-t border-white/5 pt-12 flex flex-col md:flex-row justify-between items-end gap-8 reveal">
+            <div className="flex flex-col gap-4 items-center md:items-start w-full md:w-auto">
+                <span className="text-[10px] font-mono text-[#DC2626] tracking-widest uppercase">Network</span>
+                <div className="flex gap-6">
+                    {['LinkedIn', 'Instagram', 'Twitter'].map((social) => (
+                        <a 
+                            key={social}
+                            href={`https://${social.toLowerCase()}.com/brickai`} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-sm font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors"
+                        >
+                            {social}
+                        </a>
+                    ))}
+                </div>
+            </div>
+            
+            <div className="text-[10px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-center md:text-right w-full md:w-auto">
+                <span className="block mb-2">&copy; 2025 Brick AI.</span>
+                <span className="hidden md:inline">The Generative Division</span>
+                <span className="block mt-1">All Rights Reserved.</span>
+            </div>
         </div>
     </footer>
 );
