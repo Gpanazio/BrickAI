@@ -154,7 +154,7 @@ const TRANSMISSIONS: Post[] = [
         id: "log_001",
         date: "2025.02.14",
         title: "THE LATENT SPACE IS A LOCATION",
-        excerpt: "Why we stopped scouting physical ruins and started training LoRAs on brutalist blueprints. Navigating the statistical probability of architecture.",
+        excerpt: "Why we stopped scouting physical ruins and started training LoRAs on brutalist blueprints. Navigating the statistical probability of architecture requires a new kind of compass.",
         tags: ["THEORY", "NEURAL_RENDERING"],
         url: "/transmissions/latent-space"
     },
@@ -162,7 +162,7 @@ const TRANSMISSIONS: Post[] = [
         id: "log_002",
         date: "2025.01.28",
         title: "MOTION VECTORS IN STYLE TRANSFER",
-        excerpt: "Solving the flickering problem in diffusion models. How we use optical flow to enforce temporal consistency in 60fps outputs.",
+        excerpt: "Solving the flickering problem in diffusion models. How we use optical flow to enforce temporal consistency in 60fps outputs without losing the generative hallucination.",
         tags: ["R&D", "WORKFLOW"],
         url: "/transmissions/motion-vectors"
     },
@@ -170,7 +170,7 @@ const TRANSMISSIONS: Post[] = [
         id: "log_003",
         date: "2025.01.10",
         title: "INTENTIONAL GLITCH: THE HUMAN SIGNATURE",
-        excerpt: "When perfection is the error. Injecting noise back into the clean output of commercial models to reclaim the 'cinema' feel.",
+        excerpt: "When perfection is the error. Injecting noise back into the clean output of commercial models to reclaim the 'cinema' feel. The artifact is the art.",
         tags: ["PHILOSOPHY", "VFX"],
         url: "/transmissions/intentional-glitch"
     }
@@ -585,7 +585,7 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
 };
 
 // --- COMPONENTS: SECTIONS ---
-const Header = ({ onChat, onWorks, onHome, isChatView }: { onChat: () => void, onWorks: () => void, onHome: () => void, isChatView: boolean }) => {
+const Header = ({ onChat, onWorks, onTransmissions, onHome, isChatView }: { onChat: () => void, onWorks: () => void, onTransmissions: () => void, onHome: () => void, isChatView: boolean }) => {
     return (
         <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center bg-gradient-to-b from-[#050505]/90 to-transparent backdrop-blur-sm pointer-events-none">
             <div onClick={onHome} className="pointer-events-auto flex items-center gap-2 group cursor-pointer select-none">
@@ -601,6 +601,10 @@ const Header = ({ onChat, onWorks, onHome, isChatView }: { onChat: () => void, o
                 <div className="flex items-center gap-4 pointer-events-auto">
                     <MagneticButton onClick={onWorks} className="bg-white/5 border border-white/10 backdrop-blur-md px-6 py-2 text-xs md:text-sm font-medium tracking-widest transition-all duration-300 hover:bg-[#DC2626] hover:text-white hover:border-[#DC2626] text-white">
                         WORKS
+                    </MagneticButton>
+
+                    <MagneticButton onClick={onTransmissions} className="bg-white/5 border border-white/10 backdrop-blur-md px-6 py-2 text-xs md:text-sm font-medium tracking-widest transition-all duration-300 hover:bg-[#DC2626] hover:text-white hover:border-[#DC2626] text-white">
+                        TRANSMISSIONS
                     </MagneticButton>
                     
                     <MagneticButton onClick={onChat} className="bg-white/5 border border-white/10 backdrop-blur-md px-6 py-2 text-xs md:text-sm font-medium tracking-widest transition-all duration-300 hover:bg-[#DC2626] hover:text-white hover:border-[#DC2626] text-white">
@@ -730,51 +734,66 @@ const PhilosophyItem = ({ title, text }: { title: string, text: string }) => (
     </div>
 );
 
-// --- COMPONENT: TRANSMISSIONS (BLOG LIST) ---
-const Transmissions = () => (
-    <section className="w-full py-24 bg-[#0a0a0a] border-t border-white/5">
-        <div className="max-w-4xl mx-auto px-6 reveal">
-            <div className="flex items-center gap-4 mb-16">
-                <div className="w-1.5 h-1.5 bg-[#DC2626]"></div>
-                <h2 className="text-xs font-bold tracking-[0.3em] text-[#9CA3AF] uppercase">Incoming Transmissions</h2>
-            </div>
-            
-            <div className="space-y-px bg-white/10 border border-white/10">
-                {TRANSMISSIONS.map((post) => (
-                    <a 
-                        key={post.id} 
-                        href="#" 
-                        className="block group bg-[#050505] hover:bg-[#0a0a0a] transition-colors p-6 md:p-8"
-                    >
-                        <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-4">
-                            <h3 className="text-xl md:text-2xl font-black text-white tracking-tight group-hover:text-[#DC2626] transition-colors">
-                                {post.title}
-                            </h3>
-                            <span className="font-mono text-[10px] text-[#DC2626] tracking-widest whitespace-nowrap">
-                                {post.date}
-                            </span>
-                        </div>
-                        <p className="text-[#9CA3AF] text-sm font-light max-w-2xl mb-6 leading-relaxed">
-                            {post.excerpt}
+// --- COMPONENT: TRANSMISSIONS PAGE (FULL PAGE BLOG) ---
+const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions }: any) => (
+    <React.Fragment>
+        <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
+        
+        {/* BACK BUTTON */}
+        <button 
+            onClick={onHome}
+            className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-[10px] tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference"
+        >
+            <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
+        </button>
+
+        <main className="pt-32 min-h-screen flex flex-col bg-[#0a0a0a]">
+            {/* Header Section */}
+            <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
+                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div>
+                        <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white mb-4">NEURAL_LOGS</h1>
+                        <p className="text-[#9CA3AF] font-mono text-xs md:text-sm tracking-widest max-w-xl">
+                            INCOMING DATA STREAMS... {TRANSMISSIONS.length} RECORDS.
                         </p>
-                        <div className="flex gap-2">
-                            {post.tags.map(tag => (
-                                <span key={tag} className="text-[9px] font-mono border border-white/10 px-2 py-1 text-[#9CA3AF]/60 uppercase tracking-wider">
-                                    {tag}
+                    </div>
+                 </div>
+            </section>
+
+            {/* Transmissions List */}
+            <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 reveal">
+                <div className="space-y-px bg-white/10 border-t border-white/10">
+                    {TRANSMISSIONS.map((post) => (
+                        <a 
+                            key={post.id} 
+                            href="#" 
+                            className="block group bg-[#050505] hover:bg-[#0a0a0a] transition-colors p-8 md:p-12 border-b border-white/10"
+                        >
+                            <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-6">
+                                <h3 className="text-2xl md:text-4xl font-black text-white tracking-tight group-hover:text-[#DC2626] transition-colors">
+                                    {post.title}
+                                </h3>
+                                <span className="font-mono text-xs text-[#DC2626] tracking-widest whitespace-nowrap">
+                                    {post.date}
                                 </span>
-                            ))}
-                        </div>
-                    </a>
-                ))}
-            </div>
-            
-            <div className="mt-8 flex justify-center">
-                <button className="text-[10px] font-mono text-[#9CA3AF] hover:text-white tracking-widest uppercase flex items-center gap-2 group transition-colors">
-                    Access Full Archive <span className="group-hover:translate-x-1 transition-transform">→</span>
-                </button>
-            </div>
-        </div>
-    </section>
+                            </div>
+                            <p className="text-[#9CA3AF] text-base md:text-lg font-light max-w-3xl mb-8 leading-relaxed">
+                                {post.excerpt}
+                            </p>
+                            <div className="flex gap-3">
+                                {post.tags.map(tag => (
+                                    <span key={tag} className="text-[10px] font-mono border border-white/10 px-3 py-1.5 text-[#9CA3AF]/60 uppercase tracking-wider">
+                                        {tag}
+                                    </span>
+                                ))}
+                            </div>
+                        </a>
+                    ))}
+                </div>
+            </section>
+        </main>
+        <Footer onChat={onChat} />
+    </React.Fragment>
 );
 
 const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: (work: Work) => void }) => {
@@ -945,7 +964,7 @@ const WorksFilter = ({ categories, activeCategory, onSelect }: { categories: str
 };
 
 // 3. New Works Page Layout
-const WorksPage = ({ onChat, onWorks, onHome, onSelectProject }: any) => {
+const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject }: any) => {
     const [activeCategory, setActiveCategory] = useState("ALL");
 
     // Extract categories dynamically
@@ -983,7 +1002,7 @@ const WorksPage = ({ onChat, onWorks, onHome, onSelectProject }: any) => {
 
     return (
         <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onHome={onHome} isChatView={false} />
+            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
             
             {/* ADDED BACK BUTTON */}
             <button 
@@ -1187,14 +1206,14 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
     );
 };
 
-const HomePage = ({ onChat, onSelectProject, onWorks, onHome, setMonolithHover, monolithHover }: any) => (
+const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, setMonolithHover, monolithHover }: any) => (
     <React.Fragment>
-        <Header onChat={onChat} onWorks={onWorks} onHome={onHome} isChatView={false} />
+        <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
         <main>
             <Hero setMonolithHover={setMonolithHover} monolithHover={monolithHover} />
             <Philosophy />
             <SelectedWorks onSelectProject={onSelectProject} />
-            <Transmissions />
+            {/* Transmissions removed from home */}
             <Legacy />
         </main>
         <Footer onChat={onChat} />
@@ -1208,6 +1227,7 @@ const App = () => {
 
     const goHome = () => setView('home');
     const goWorks = () => setView('works');
+    const goTransmissions = () => setView('transmissions');
     const goChat = () => setView('chat');
 
     useScrollReveal(view);
@@ -1231,6 +1251,7 @@ const App = () => {
                 <HomePage 
                     onChat={goChat} 
                     onWorks={goWorks}
+                    onTransmissions={goTransmissions}
                     onHome={goHome}
                     onSelectProject={setSelectedProject}
                     setMonolithHover={setMonolithHover} 
@@ -1242,6 +1263,7 @@ const App = () => {
                 <WorksPage 
                     onChat={goChat} 
                     onWorks={goWorks}
+                    onTransmissions={goTransmissions}
                     onHome={goHome}
                     onSelectProject={setSelectedProject}
                     setMonolithHover={setMonolithHover} 
@@ -1249,9 +1271,18 @@ const App = () => {
                 />
             )}
 
+            {view === 'transmissions' && (
+                <TransmissionsPage 
+                    onChat={goChat} 
+                    onWorks={goWorks}
+                    onTransmissions={goTransmissions}
+                    onHome={goHome}
+                />
+            )}
+
             {view === 'chat' && (
                 <React.Fragment>
-                    <Header onChat={goChat} onWorks={goWorks} onHome={goHome} isChatView={true} />
+                    <Header onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} isChatView={true} />
                     <SystemChat onBack={goHome} />
                 </React.Fragment>
             )}
