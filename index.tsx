@@ -857,6 +857,15 @@ const WorksPage = ({ onChat, onWorks, onHome, onSelectProject }: any) => {
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onHome={onHome} isChatView={false} />
+            
+            {/* ADDED BACK BUTTON */}
+            <button 
+                onClick={onHome}
+                className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-[10px] tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference"
+            >
+                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
+            </button>
+
             <main className="pt-32 min-h-screen flex flex-col">
                 
                 {/* Header Section */}
