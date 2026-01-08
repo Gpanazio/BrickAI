@@ -20,11 +20,6 @@ interface Work {
     hasDetail: boolean;
 }
 
-interface ChatMessage {
-    role: 'user' | 'mono';
-    content: string;
-}
-
 // --- DATA ---
 const WORKS: Work[] = [
     // --- DESTAQUES DA HOME (TOP 3) ---
@@ -137,7 +132,7 @@ const WORKS: Work[] = [
 const CLIENTS = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO", "L'ORÉAL"];
 
 // --- GEMINI SERVICE ---
-const chatWithMono = async (history: ChatMessage[], message: string) => {
+const chatWithMono = async (history: any[], message: string) => {
     if (!apiKey) {
         return new Promise<string>(resolve => setTimeout(() => resolve("ACCESS DENIED. I require an API Key to build your request. Please configure my source code."), 1000));
     }
@@ -184,15 +179,13 @@ const chatWithMono = async (history: ChatMessage[], message: string) => {
 const ScrambleText = ({ text, className, hoverTrigger = false }: { text: string, className?: string, hoverTrigger?: boolean }) => {
     const [displayText, setDisplayText] = useState(text);
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*";
-    const intervalRef = useRef<number | null>(null);
+    const intervalRef = useRef<any>(null);
 
     const scramble = () => {
         let iteration = 0;
-        if (intervalRef.current !== null) {
-            clearInterval(intervalRef.current);
-        }
+        clearInterval(intervalRef.current);
 
-        intervalRef.current = window.setInterval(() => {
+        intervalRef.current = setInterval(() => {
             setDisplayText(prev => 
                 text
                     .split("")
@@ -204,9 +197,7 @@ const ScrambleText = ({ text, className, hoverTrigger = false }: { text: string,
             );
 
             if (iteration >= text.length) {
-                if (intervalRef.current !== null) {
-                    clearInterval(intervalRef.current);
-                }
+                clearInterval(intervalRef.current);
             }
             
             iteration += 1 / 3;
@@ -689,7 +680,7 @@ const Footer = ({ onChat }: { onChat: () => void }) => (
 );
 
 const SystemChat = ({ onBack }: { onBack: () => void }) => {
-    const [messages, setMessages] = useState<ChatMessage[]>([
+    const [messages, setMessages] = useState<{ role: string, content: string }[]>([
         { role: 'mono', content: `SYSTEM ONLINE. I am ${AI_NAME}. I organize the chaos into visuals.` },
         { role: 'mono', content: "Select a protocol or transmit your query." }
     ]);
@@ -800,7 +791,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
     );
 };
 
-const WorksPage = ({ onChat, onWorks, onHome, onSelectProject }: { onChat: () => void, onWorks: () => void, onHome: () => void, onSelectProject: (work: Work) => void }) => {
+const WorksPage = ({ onChat, onWorks, onHome, onSelectProject, setMonolithHover, monolithHover }: any) => {
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onHome={onHome} isChatView={false} />
@@ -820,7 +811,7 @@ const WorksPage = ({ onChat, onWorks, onHome, onSelectProject }: { onChat: () =>
     );
 }
 
-const HomePage = ({ onChat, onSelectProject, onWorks, onHome, setMonolithHover, monolithHover }: { onChat: () => void, onSelectProject: (work: Work) => void, onWorks: () => void, onHome: () => void, setMonolithHover: (v: boolean) => void, monolithHover: boolean }) => (
+const HomePage = ({ onChat, onSelectProject, onWorks, onHome, setMonolithHover, monolithHover }: any) => (
     <React.Fragment>
         <Header onChat={onChat} onWorks={onWorks} onHome={onHome} isChatView={false} />
         <main>
@@ -876,6 +867,8 @@ const App = () => {
                     onWorks={goWorks}
                     onHome={goHome}
                     onSelectProject={setSelectedProject}
+                    setMonolithHover={setMonolithHover} 
+                    monolithHover={monolithHover} 
                 />
             )}
 
