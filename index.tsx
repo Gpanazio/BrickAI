@@ -732,44 +732,63 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                                 <textarea className="bg-[#050505] border border-white/20 p-3 h-32" placeholder="Long Description" value={editingItem.longDesc || ''} onChange={e => setEditingItem({...editingItem, longDesc: e.target.value})} />
                                 
                                 <div className="border border-white/10 p-6 bg-[#050505]">
-                                    <label className="block text-xs text-[#DC2626] font-bold tracking-widest mb-4 uppercase">Visual Direction (Preview & Adjust)</label>
+                                    <label className="block text-xs text-[#DC2626] font-bold tracking-widest mb-6 uppercase">Visual Direction (Preview & Adjust)</label>
                                     
-                                    <div className="flex flex-col md:flex-row gap-8">
-                                        <div className="w-full md:w-1/2">
-                                            <input type="file" onChange={e => handleImageUpload(e, 'image')} className="text-xs text-[#9CA3AF] mb-4 block w-full" />
-                                            
-                                            {/* LIVE PREVIEW BOX */}
-                                            <div className="relative w-full aspect-video overflow-hidden border border-white/20 group shadow-2xl">
-                                                <div 
-                                                    className="absolute inset-0 opacity-50 mix-blend-overlay transition-all duration-0"
-                                                    style={{
-                                                        backgroundImage: `url('${editingItem.image}')`,
-                                                        backgroundSize: 'cover',
-                                                        backgroundPosition: `${editingItem.imageSettings?.x ?? 50}% ${editingItem.imageSettings?.y ?? 50}%`,
-                                                        transform: `scale(${editingItem.imageSettings?.scale ?? 1.2})`
-                                                    }}
-                                                />
+                                    <div className="flex flex-col gap-8">
+                                        {/* LIVE PREVIEW BOX - REPLICA OF HOME CARD */}
+                                        <div className="w-full relative group overflow-hidden border border-white/10 bg-[#050505]">
+                                            <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden">
+                                                {/* Image Layer */}
+                                                {editingItem.image && (
+                                                    <div 
+                                                        className="absolute inset-0 opacity-50 mix-blend-overlay transition-all duration-0"
+                                                        style={{
+                                                            backgroundImage: `url('${editingItem.image}')`,
+                                                            backgroundSize: 'cover',
+                                                            backgroundPosition: `${editingItem.imageSettings?.x ?? 50}% ${editingItem.imageSettings?.y ?? 50}%`,
+                                                            transform: `scale(${editingItem.imageSettings?.scale ?? 1.2})`
+                                                        }}
+                                                    />
+                                                )}
+                                                {/* Gradient Layer */}
                                                 <div className={`absolute inset-0 bg-gradient-to-r ${editingItem.gradient || 'from-neutral-900 to-neutral-800'} opacity-50`}></div>
-                                                <div className="absolute bottom-4 left-4 z-20">
-                                                    <span className="text-[10px] text-[#DC2626] font-bold tracking-widest block mb-1">{editingItem.subtitle || 'SUBTITLE'}</span>
-                                                    <h3 className="text-xl font-black text-white leading-none">{editingItem.title || 'PROJECT TITLE'}</h3>
+                                                
+                                                {/* Text Layer */}
+                                                <div className="relative z-20 w-full h-full flex flex-col justify-end p-6 md:p-12">
+                                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                                                        <div>
+                                                            <div className="flex items-center gap-3 mb-2 md:mb-4">
+                                                                <span className="block text-[#DC2626] text-xs font-bold tracking-[0.2em] uppercase">{editingItem.subtitle || 'SUBTITLE'}</span>
+                                                                <div className="w-1.5 h-1.5 bg-white rounded-full opacity-100"></div>
+                                                            </div>
+                                                            <h3 className="text-3xl md:text-5xl font-black tracking-tighter text-white mb-2 leading-none">{editingItem.title || 'PROJECT TITLE'}</h3>
+                                                        </div>
+                                                        <p className="text-[#9CA3AF] text-sm font-light max-w-sm text-left md:text-right">{editingItem.desc || 'Short description of the project.'}</p>
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <p className="text-[10px] text-[#9CA3AF] mt-2 text-center">LIVE RENDER PREVIEW</p>
                                         </div>
 
-                                        <div className="w-full md:w-1/2 flex flex-col justify-center gap-6">
+                                        {/* CONTROLS */}
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
                                             <div>
-                                                <div className="flex justify-between text-[10px] text-[#9CA3AF] mb-2 uppercase tracking-widest"><span>Position X</span> <span>{editingItem.imageSettings?.x ?? 50}%</span></div>
-                                                <input type="range" min="0" max="100" value={editingItem.imageSettings?.x ?? 50} onChange={e => updateImageSettings('x', parseFloat(e.target.value))} className="w-full accent-[#DC2626] h-1 bg-white/10 rounded-lg appearance-none cursor-pointer" />
+                                                <label className="block text-[10px] text-[#9CA3AF] mb-2 uppercase tracking-widest">Upload Image</label>
+                                                <input type="file" onChange={e => handleImageUpload(e, 'image')} className="text-xs text-[#9CA3AF] block w-full file:mr-4 file:py-2 file:px-4 file:border-0 file:text-xs file:font-semibold file:bg-[#DC2626] file:text-white hover:file:bg-red-700 cursor-pointer" />
                                             </div>
-                                            <div>
-                                                <div className="flex justify-between text-[10px] text-[#9CA3AF] mb-2 uppercase tracking-widest"><span>Position Y</span> <span>{editingItem.imageSettings?.y ?? 50}%</span></div>
-                                                <input type="range" min="0" max="100" value={editingItem.imageSettings?.y ?? 50} onChange={e => updateImageSettings('y', parseFloat(e.target.value))} className="w-full accent-[#DC2626] h-1 bg-white/10 rounded-lg appearance-none cursor-pointer" />
-                                            </div>
-                                            <div>
-                                                <div className="flex justify-between text-[10px] text-[#9CA3AF] mb-2 uppercase tracking-widest"><span>Scale / Zoom</span> <span>{editingItem.imageSettings?.scale ?? 1.2}x</span></div>
-                                                <input type="range" min="1" max="3" step="0.1" value={editingItem.imageSettings?.scale ?? 1.2} onChange={e => updateImageSettings('scale', parseFloat(e.target.value))} className="w-full accent-[#DC2626] h-1 bg-white/10 rounded-lg appearance-none cursor-pointer" />
+
+                                            <div className="flex flex-col gap-4">
+                                                <div>
+                                                    <div className="flex justify-between text-[10px] text-[#9CA3AF] mb-1 uppercase tracking-widest"><span>Position X</span> <span>{editingItem.imageSettings?.x ?? 50}%</span></div>
+                                                    <input type="range" min="0" max="100" value={editingItem.imageSettings?.x ?? 50} onChange={e => updateImageSettings('x', parseFloat(e.target.value))} className="w-full accent-[#DC2626] h-1 bg-white/10 rounded-lg appearance-none cursor-pointer" />
+                                                </div>
+                                                <div>
+                                                    <div className="flex justify-between text-[10px] text-[#9CA3AF] mb-1 uppercase tracking-widest"><span>Position Y</span> <span>{editingItem.imageSettings?.y ?? 50}%</span></div>
+                                                    <input type="range" min="0" max="100" value={editingItem.imageSettings?.y ?? 50} onChange={e => updateImageSettings('y', parseFloat(e.target.value))} className="w-full accent-[#DC2626] h-1 bg-white/10 rounded-lg appearance-none cursor-pointer" />
+                                                </div>
+                                                <div>
+                                                    <div className="flex justify-between text-[10px] text-[#9CA3AF] mb-1 uppercase tracking-widest"><span>Scale / Zoom</span> <span>{editingItem.imageSettings?.scale ?? 1.2}x</span></div>
+                                                    <input type="range" min="1" max="3" step="0.1" value={editingItem.imageSettings?.scale ?? 1.2} onChange={e => updateImageSettings('scale', parseFloat(e.target.value))} className="w-full accent-[#DC2626] h-1 bg-white/10 rounded-lg appearance-none cursor-pointer" />
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
