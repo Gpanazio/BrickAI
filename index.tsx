@@ -570,7 +570,7 @@ const chatWithMono = async (history: any[], message: string) => {
 const AdminPanel = ({ onExit }: { onExit: () => void }) => {
     const { works, setWorks, transmissions, setTransmissions } = useContext(DataContext)!;
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [email, setEmail] = useState("");
+    const [identifier, setIdentifier] = useState("");
     const [password, setPassword] = useState("");
     const [activeTab, setActiveTab] = useState<'works' | 'transmissions'>('works');
     const [editingItem, setEditingItem] = useState<any>(null);
@@ -583,7 +583,7 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
             const res = await fetch('/api/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, password })
+                body: JSON.stringify({ identifier, password })
             });
             const data = await res.json();
             if (data.success) {
@@ -666,10 +666,10 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                 <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full max-w-md p-8 border border-white/10 bg-white/5">
                     <h2 className="text-xl font-bold tracking-widest text-[#DC2626]">SYSTEM ACCESS</h2>
                     <input 
-                        type="email" 
-                        value={email} 
-                        onChange={e => setEmail(e.target.value)} 
-                        placeholder="EMAIL..." 
+                        type="text" 
+                        value={identifier} 
+                        onChange={e => setIdentifier(e.target.value)} 
+                        placeholder="USERNAME OR EMAIL..." 
                         className="bg-black border border-white/20 p-3 text-white focus:border-[#DC2626] outline-none tracking-widest"
                     />
                     <input 

@@ -3,6 +3,7 @@ import pg from 'pg';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
+import { randomUUID } from 'crypto';
 import 'dotenv/config';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -39,6 +40,22 @@ const initDB = async () => {
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `);
+
+        // --- GARANTIR ADMIN (Gabriel) ---
+        const adminUser = "Gabriel";
+        const adminPass = "2904";
+        const hash = await bcrypt.hash(adminPass, 10);
+        
+        const userCheck = await pool.query('SELECT * FROM master_users WHERE username = $1', [adminUser]);
+        if (userCheck.rows.length === 0) {
+            await pool.query('INSERT INTO master_users (id, username, password_hash, created_at) VALUES ($1, $2, $3, NOW())', 
+                [randomUUID(), adminUser, hash]);
+            console.log(`>> ADMIN USER '${adminUser}' CREATED.`);
+        } else {
+            await pool.query('UPDATE master_users SET password_hash = $1 WHERE username = $2', [hash, adminUser]);
+            console.log(`>> ADMIN USER '${adminUser}' PASSWORD SYNCED.`);
+        }
+
         console.log(">> DB TABLES CHECKED");
     } catch (err) {
         console.error(">> DB INIT ERROR:", err);
@@ -50,10 +67,10 @@ initDB();
 
 // 1. LOGIN (Conectado a master_users)
 app.post('/api/login', async (req, res) => {
-    const { email, password } = req.body;
+    const { identifier, password } = req.body;
     try {
-        // Busca usuário pelo email
-        const result = await pool.query('SELECT * FROM master_users WHERE email = $1', [email]);
+        // Busca usuário pelo email OU username
+        const result = await pool.query('SELECT * FROM master_users WHERE email = $1 OR username = $1', [identifier]);
         
         if (result.rows.length > 0) {
             const user = result.rows[0];
