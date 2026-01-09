@@ -127,7 +127,6 @@ const getApiKey = () => {
 };
 const apiKey = getApiKey();
 const AI_NAME = "MASON";
-const ADMIN_PASS = "BRICK_SYS_ADMIN"; // Basic security
 
 // --- TYPES ---
 interface Work {
@@ -375,8 +374,30 @@ const DataContext = React.createContext<{
 } | null>(null);
 
 const DataProvider = ({ children }: { children: React.ReactNode }) => {
-    const [works, setWorks] = useState<Work[]>(INITIAL_WORKS);
-    const [transmissions, setTransmissions] = useState<Post[]>(INITIAL_TRANSMISSIONS);
+    const [works, setWorks] = useState<Work[]>([]);
+    const [transmissions, setTransmissions] = useState<Post[]>([]);
+
+    useEffect(() => {
+        // Load data from DB on mount
+        const fetchData = async () => {
+            try {
+                const wRes = await fetch('/api/works');
+                const wData = await wRes.json();
+                if (Array.isArray(wData) && wData.length > 0) setWorks(wData);
+                else setWorks(INITIAL_WORKS); // Fallback to hardcoded if DB empty
+
+                const tRes = await fetch('/api/transmissions');
+                const tData = await tRes.json();
+                if (Array.isArray(tData) && tData.length > 0) setTransmissions(tData);
+                else setTransmissions(INITIAL_TRANSMISSIONS);
+            } catch (e) {
+                console.error("OFFLINE MODE: Using local data", e);
+                setWorks(INITIAL_WORKS);
+                setTransmissions(INITIAL_TRANSMISSIONS);
+            }
+        };
+        fetchData();
+    }, []);
 
     return (
         <DataContext.Provider value={{ works, setWorks, transmissions, setTransmissions }}>
@@ -549,14 +570,33 @@ const chatWithMono = async (history: any[], message: string) => {
 const AdminPanel = ({ onExit }: { onExit: () => void }) => {
     const { works, setWorks, transmissions, setTransmissions } = useContext(DataContext)!;
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [activeTab, setActiveTab] = useState<'works' | 'transmissions'>('works');
     const [editingItem, setEditingItem] = useState<any>(null);
+    const [status, setStatus] = useState("");
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (password === ADMIN_PASS) setIsAuthenticated(true);
-        else alert("ACCESS DENIED");
+        setStatus("AUTHENTICATING...");
+        try {
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await res.json();
+            if (data.success) {
+                setIsAuthenticated(true);
+                setStatus("");
+            } else {
+                alert("ACCESS DENIED: " + data.error);
+                setStatus("");
+            }
+        } catch (e) {
+            alert("CONNECTION ERROR");
+            setStatus("");
+        }
     };
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
@@ -570,7 +610,24 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
         }
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        setStatus("UPLOADING TO CORE...");
+        console.log(">> [DB DEBUG] Payload ready:", editingItem);
+
+        try {
+            const endpoint = activeTab === 'works' ? '/api/works' : '/api/transmissions';
+            const res = await fetch(endpoint, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(editingItem)
+            });
+            if (!res.ok) throw new Error("Server rejected save");
+        } catch (e) {
+            setStatus("ERROR: SAVE FAILED");
+            console.error(e);
+            return;
+        }
+
         if (activeTab === 'works') {
             if (works.find(w => w.id === editingItem.id)) {
                 setWorks(works.map(w => w.id === editingItem.id ? editingItem : w));
@@ -584,13 +641,21 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                 setTransmissions([...transmissions, editingItem]);
             }
         }
-        setEditingItem(null);
-        // TODO: Here you would add the fetch call to your Railway DB to persist changes
-        // e.g. fetch('/api/save', { method: 'POST', body: JSON.stringify(editingItem) })
+        
+        console.log(">> [DB DEBUG] Saved to Local State successfully.");
+        setStatus("SUCCESS.");
+        setTimeout(() => {
+            setEditingItem(null);
+            setStatus("");
+        }, 800);
     };
 
-    const handleDelete = (id: string) => {
+    const handleDelete = async (id: string) => {
         if (!confirm("CONFIRM DELETION?")) return;
+        
+        const endpoint = activeTab === 'works' ? `/api/works/${id}` : `/api/transmissions/${id}`;
+        await fetch(endpoint, { method: 'DELETE' });
+
         if (activeTab === 'works') setWorks(works.filter(w => w.id !== id));
         else setTransmissions(transmissions.filter(t => t.id !== id));
     };
@@ -601,6 +666,13 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                 <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full max-w-md p-8 border border-white/10 bg-white/5">
                     <h2 className="text-xl font-bold tracking-widest text-[#DC2626]">SYSTEM ACCESS</h2>
                     <input 
+                        type="email" 
+                        value={email} 
+                        onChange={e => setEmail(e.target.value)} 
+                        placeholder="EMAIL..." 
+                        className="bg-black border border-white/20 p-3 text-white focus:border-[#DC2626] outline-none tracking-widest"
+                    />
+                    <input 
                         type="password" 
                         value={password} 
                         onChange={e => setPassword(e.target.value)} 
@@ -608,6 +680,7 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                         className="bg-black border border-white/20 p-3 text-white focus:border-[#DC2626] outline-none tracking-widest"
                     />
                     <button type="submit" className="bg-[#DC2626] text-white p-3 font-bold tracking-widest hover:bg-red-700 transition-colors">AUTHENTICATE</button>
+                    {status && <span className="text-xs text-[#DC2626] animate-pulse text-center">{status}</span>}
                     <button type="button" onClick={onExit} className="text-xs text-[#9CA3AF] hover:text-white mt-4 text-center">RETURN TO SURFACE</button>
                 </form>
             </div>
@@ -667,6 +740,7 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                         <div className="flex gap-4 mt-4">
                             <button onClick={handleSave} className="bg-[#DC2626] text-white px-6 py-3 font-bold tracking-widest hover:bg-white hover:text-black transition-colors">SAVE_TO_DB</button>
                             <button onClick={() => setEditingItem(null)} className="border border-white/20 text-white px-6 py-3 font-bold tracking-widest hover:bg-white/10">CANCEL</button>
+                            {status && <span className="flex items-center text-[#DC2626] font-bold tracking-widest animate-pulse">{status}</span>}
                         </div>
                     </div>
                 </div>
@@ -1152,7 +1226,11 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome }
                         <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight mb-6">{post.title}</h1>
                         <p className="text-lg md:text-xl text-[#9CA3AF] font-light leading-relaxed border-l-2 border-[#DC2626] pl-6">{post.excerpt}</p>
                     </div>
-                    <div className="prose prose-invert prose-lg max-w-none">{post.content}</div>
+                    <div className="prose prose-invert prose-lg max-w-none">
+                        {typeof post.content === 'string' 
+                            ? <div dangerouslySetInnerHTML={{ __html: post.content }} /> 
+                            : post.content}
+                    </div>
                 </article>
             </main>
             <Footer onChat={onChat} />
