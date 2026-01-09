@@ -425,6 +425,25 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
     );
 };
 
+const updateMetadata = (title: string, description: string) => {
+    document.title = title;
+    const metaTags = {
+        'description': description,
+        'og:title': title,
+        'og:description': description,
+        'twitter:title': title,
+        'twitter:description': description
+    };
+
+    Object.entries(metaTags).forEach(([name, value]) => {
+        const selector = name.startsWith('og:') || name.startsWith('twitter:') 
+            ? `meta[property="${name}"]` 
+            : `meta[name="${name}"]`;
+        const el = document.querySelector(selector);
+        if (el) el.setAttribute('content', value);
+    });
+};
+
 // --- UTILS COMPONENTS ---
 const ScrambleText = ({ text, className, hoverTrigger = false }: { text: string, className?: string, hoverTrigger?: boolean }) => {
     const [displayText, setDisplayText] = useState(text);
@@ -1577,16 +1596,13 @@ const App = () => {
     useEffect(() => {
         const handleLocationChange = () => {
             const path = window.location.pathname;
-            let title = "Brick AI | Generative Production";
             
             if (path === '/') { setView('home'); }
-            else if (path === '/works') { setView('works'); title = "Archive | Brick AI"; }
-            else if (path === '/transmissions') { setView('transmissions'); title = "Transmissions | Brick AI"; }
-            else if (path === '/chat') { setView('chat'); title = "Talk to Mason | Brick AI"; }
-            else if (path === '/admin') { setView('admin'); title = "Command Console | Brick AI"; }
+            else if (path === '/works') { setView('works'); }
+            else if (path === '/transmissions') { setView('transmissions'); }
+            else if (path === '/chat') { setView('chat'); }
+            else if (path === '/admin') { setView('admin'); }
             else if (path.startsWith('/transmissions/')) { setView('post'); }
-            
-            document.title = title;
         };
 
         window.addEventListener('popstate', handleLocationChange);
@@ -1634,6 +1650,31 @@ const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedPr
             else goTransmissions();
         }
     }, [view, selectedPost, transmissions]);
+
+    // Dynamic SEO & Metadata Update
+    useEffect(() => {
+        let title = "Brick AI | Generative Production";
+        let description = "A generative production house where human artistry directs neural rendering pipelines.";
+
+        if (view === 'works') {
+            title = "Archive | Brick AI";
+            description = "Explore our selected works in generative production and neural VFX.";
+        } else if (view === 'transmissions') {
+            title = "Transmissions | Brick AI";
+            description = "Neural logs and research from the frontier of generative cinematography.";
+        } else if (view === 'chat') {
+            title = "Talk to Mason | Brick AI";
+            description = "Interact with our central intelligence for project inquiries.";
+        } else if (view === 'admin') {
+            title = "Command Console | Brick AI";
+            description = "System administration and content management.";
+        } else if (view === 'post' && selectedPost) {
+            title = `${selectedPost.title} | Brick AI`;
+            description = selectedPost.excerpt;
+        }
+
+        updateMetadata(title, description);
+    }, [view, selectedPost]);
 
     return (
         <div className="min-h-screen bg-[#050505] text-[#E5E5E5] selection:bg-[#DC2626] selection:text-white font-sans">
