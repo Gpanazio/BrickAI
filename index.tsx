@@ -516,6 +516,7 @@ const useScrollReveal = (view: string) => {
 
 const CustomCursor = ({ active }: { active: boolean }) => {
     const dotRef = useRef<HTMLDivElement>(null);
+    const [isPointer, setIsPointer] = useState(false);
 
     useEffect(() => {
         const onMouseMove = (e: MouseEvent) => {
@@ -523,6 +524,11 @@ const CustomCursor = ({ active }: { active: boolean }) => {
             if (dotRef.current) {
                 dotRef.current.style.transform = `translate3d(${clientX}px, ${clientY}px, 0) translate(-50%, -50%)`;
             }
+
+            const target = e.target as HTMLElement;
+            const isClickable = target.closest('button, a, input, textarea, [role="button"]') || 
+                               window.getComputedStyle(target).cursor === 'pointer';
+            setIsPointer(!!isClickable);
         };
 
         window.addEventListener('mousemove', onMouseMove);
@@ -531,10 +537,12 @@ const CustomCursor = ({ active }: { active: boolean }) => {
         };
     }, []);
 
+    const isVisible = active || isPointer;
+
     return (
         <div 
             ref={dotRef} 
-            className={`fixed top-0 left-0 w-2 h-2 bg-[#DC2626] rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform transition-opacity duration-200 ${active ? 'opacity-100' : 'opacity-0'}`} 
+            className={`fixed top-0 left-0 w-2 h-2 bg-[#DC2626] rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform transition-all duration-200 ${isVisible ? 'opacity-100 scale-[3]' : 'opacity-0 scale-100'}`} 
             style={{ transform: 'translate(-100px, -100px)' }} 
         />
     );
@@ -752,15 +760,32 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                                         {/* HOME PREVIEW (WIDE) */}
                                         <div className="flex flex-col gap-4">
                                             <span className="text-[10px] text-[#9CA3AF] uppercase tracking-widest">01. Home Page Layout (Wide)</span>
-                                            <div className="w-full relative overflow-hidden border border-white/10 bg-[#050505]">
-                                                <div className="relative w-full aspect-[21/9] overflow-hidden">
+                                            <div className="w-full relative overflow-hidden border border-white/10 bg-black">
+                                                <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden">
                                                     {editingItem.imageHome && (
                                                         <div className="absolute inset-0 opacity-50 mix-blend-overlay" style={{ backgroundImage: `url('${editingItem.imageHome}')`, backgroundSize: 'cover', backgroundPosition: `${editingItem.imageSettingsHome?.x ?? 50}% ${editingItem.imageSettingsHome?.y ?? 50}%`, transform: `scale(${editingItem.imageSettingsHome?.scale ?? 1.2})` }} />
+                                                        <div 
+                                                            className="absolute inset-0 opacity-60 transition-all duration-0"
+                                                            style={{ 
+                                                                backgroundImage: `url('${editingItem.imageHome}')`, 
+                                                                backgroundSize: 'cover', 
+                                                                backgroundPosition: `${editingItem.imageSettingsHome?.x ?? 50}% ${editingItem.imageSettingsHome?.y ?? 50}%`, 
+                                                                transform: `scale(${editingItem.imageSettingsHome?.scale ?? 1.2})` 
+                                                            }} 
+                                                        />
                                                     )}
-                                                    <div className={`absolute inset-0 bg-gradient-to-r ${editingItem.gradient || 'from-neutral-900 to-neutral-800'} opacity-50`}></div>
-                                                    <div className="relative z-20 w-full h-full flex flex-col justify-end p-8">
-                                                        <span className="block text-[#DC2626] text-[10px] font-bold tracking-[0.2em] uppercase mb-1">{editingItem.subtitle || 'SUBTITLE'}</span>
-                                                        <h3 className="text-3xl font-black tracking-tighter text-white leading-none">{editingItem.title || 'PROJECT TITLE'}</h3>
+                                                    <div className={`absolute inset-0 bg-gradient-to-r ${editingItem.gradient || 'from-neutral-900 to-neutral-800'} opacity-40`}></div>
+                                                    <div className="relative z-20 w-full h-full flex flex-col justify-end p-6 md:p-12">
+                                                        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
+                                                            <div>
+                                                                <div className="flex items-center gap-3 mb-2">
+                                                                    <span className="block text-[#DC2626] text-[10px] font-bold tracking-[0.2em] uppercase">{editingItem.subtitle || 'SUBTITLE'}</span>
+                                                                    <div className="w-1 h-1 bg-white rounded-full"></div>
+                                                                </div>
+                                                                <h3 className="text-3xl md:text-5xl font-black tracking-tighter text-white leading-none">{editingItem.title || 'PROJECT TITLE'}</h3>
+                                                            </div>
+                                                            <p className="text-[#9CA3AF] text-[10px] md:text-xs font-light max-w-xs text-left md:text-right">{editingItem.desc || 'Short description of the project.'}</p>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
