@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
 
 // --- STYLES & CONFIG ---
@@ -127,6 +127,7 @@ const getApiKey = () => {
 };
 const apiKey = getApiKey();
 const AI_NAME = "MASON";
+const ADMIN_PASS = "BRICK_SYS_ADMIN"; // Basic security
 
 // --- TYPES ---
 interface Work {
@@ -154,7 +155,7 @@ interface Post {
 }
 
 // --- DATA ---
-const TRANSMISSIONS: Post[] = [
+const INITIAL_TRANSMISSIONS: Post[] = [
     {
         id: "log_001",
         date: "2025.02.14",
@@ -220,8 +221,10 @@ const TRANSMISSIONS: Post[] = [
 ];
 
 // --- SEO COMPONENT: STRUCTURED DATA (JSON-LD) ---
-const StructuredData = () => {
+const StructuredData = ({ posts }: { posts: Post[] }) => {
     // Generate simple schema objects (avoiding circular JSON issues)
+    // Fallback to empty array if posts is undefined
+    const safePosts = posts || [];
     const schemaData = [
         {
             "@context": "https://schema.org",
@@ -232,7 +235,7 @@ const StructuredData = () => {
             "slogan": "From Set to Server.",
             "description": "A generative production house where human artistry directs neural rendering pipelines."
         },
-        ...TRANSMISSIONS.map(post => ({
+        ...safePosts.map(post => ({
             "@context": "https://schema.org",
             "@type": "BlogPosting",
             "headline": post.title,
@@ -250,7 +253,7 @@ const StructuredData = () => {
     );
 };
 
-const WORKS: Work[] = [
+const INITIAL_WORKS: Work[] = [
     {
         id: "inheritance",
         orientation: "horizontal", 
@@ -362,6 +365,25 @@ const WORKS: Work[] = [
 ];
 
 const CLIENTS = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO", "L'ORÉAL"];
+
+// --- CONTEXT & DATA MANAGEMENT ---
+const DataContext = React.createContext<{
+    works: Work[];
+    setWorks: React.Dispatch<React.SetStateAction<Work[]>>;
+    transmissions: Post[];
+    setTransmissions: React.Dispatch<React.SetStateAction<Post[]>>;
+} | null>(null);
+
+const DataProvider = ({ children }: { children: React.ReactNode }) => {
+    const [works, setWorks] = useState<Work[]>(INITIAL_WORKS);
+    const [transmissions, setTransmissions] = useState<Post[]>(INITIAL_TRANSMISSIONS);
+
+    return (
+        <DataContext.Provider value={{ works, setWorks, transmissions, setTransmissions }}>
+            {children}
+        </DataContext.Provider>
+    );
+};
 
 // --- UTILS COMPONENTS ---
 const ScrambleText = ({ text, className, hoverTrigger = false }: { text: string, className?: string, hoverTrigger?: boolean }) => {
@@ -521,6 +543,175 @@ const chatWithMono = async (history: any[], message: string) => {
         console.error(error);
         return "System failure. Connection lost.";
     }
+};
+
+// --- ADMIN SYSTEM ---
+const AdminPanel = ({ onExit }: { onExit: () => void }) => {
+    const { works, setWorks, transmissions, setTransmissions } = useContext(DataContext)!;
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [password, setPassword] = useState("");
+    const [activeTab, setActiveTab] = useState<'works' | 'transmissions'>('works');
+    const [editingItem, setEditingItem] = useState<any>(null);
+
+    const handleLogin = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (password === ADMIN_PASS) setIsAuthenticated(true);
+        else alert("ACCESS DENIED");
+    };
+
+    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setEditingItem((prev: any) => ({ ...prev, [field]: reader.result }));
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleSave = () => {
+        if (activeTab === 'works') {
+            if (works.find(w => w.id === editingItem.id)) {
+                setWorks(works.map(w => w.id === editingItem.id ? editingItem : w));
+            } else {
+                setWorks([...works, editingItem]);
+            }
+        } else {
+            if (transmissions.find(t => t.id === editingItem.id)) {
+                setTransmissions(transmissions.map(t => t.id === editingItem.id ? editingItem : t));
+            } else {
+                setTransmissions([...transmissions, editingItem]);
+            }
+        }
+        setEditingItem(null);
+        // TODO: Here you would add the fetch call to your Railway DB to persist changes
+        // e.g. fetch('/api/save', { method: 'POST', body: JSON.stringify(editingItem) })
+    };
+
+    const handleDelete = (id: string) => {
+        if (!confirm("CONFIRM DELETION?")) return;
+        if (activeTab === 'works') setWorks(works.filter(w => w.id !== id));
+        else setTransmissions(transmissions.filter(t => t.id !== id));
+    };
+
+    if (!isAuthenticated) {
+        return (
+            <div className="min-h-screen flex items-center justify-center bg-[#050505] text-white font-mono">
+                <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full max-w-md p-8 border border-white/10 bg-white/5">
+                    <h2 className="text-xl font-bold tracking-widest text-[#DC2626]">SYSTEM ACCESS</h2>
+                    <input 
+                        type="password" 
+                        value={password} 
+                        onChange={e => setPassword(e.target.value)} 
+                        placeholder="ENTER KEY..." 
+                        className="bg-black border border-white/20 p-3 text-white focus:border-[#DC2626] outline-none tracking-widest"
+                    />
+                    <button type="submit" className="bg-[#DC2626] text-white p-3 font-bold tracking-widest hover:bg-red-700 transition-colors">AUTHENTICATE</button>
+                    <button type="button" onClick={onExit} className="text-xs text-[#9CA3AF] hover:text-white mt-4 text-center">RETURN TO SURFACE</button>
+                </form>
+            </div>
+        );
+    }
+
+    return (
+        <div className="min-h-screen bg-[#0a0a0a] text-white font-mono pt-24 px-6 md:px-12 pb-24">
+            <div className="flex justify-between items-center mb-12 border-b border-white/10 pb-6">
+                <h1 className="text-2xl md:text-3xl font-black tracking-tighter">COMMAND_CONSOLE</h1>
+                <div className="flex gap-4">
+                    <button onClick={() => setEditingItem(null)} className="text-xs text-[#9CA3AF] hover:text-white">CANCEL</button>
+                    <button onClick={onExit} className="text-xs text-[#DC2626] border border-[#DC2626] px-4 py-2 hover:bg-[#DC2626] hover:text-white transition-colors">EXIT SYSTEM</button>
+                </div>
+            </div>
+
+            <div className="flex gap-6 mb-8">
+                <button onClick={() => { setActiveTab('works'); setEditingItem(null); }} className={`text-sm tracking-widest px-4 py-2 border ${activeTab === 'works' ? 'border-[#DC2626] text-white bg-[#DC2626]/10' : 'border-transparent text-[#9CA3AF]'}`}>WORKS_DB</button>
+                <button onClick={() => { setActiveTab('transmissions'); setEditingItem(null); }} className={`text-sm tracking-widest px-4 py-2 border ${activeTab === 'transmissions' ? 'border-[#DC2626] text-white bg-[#DC2626]/10' : 'border-transparent text-[#9CA3AF]'}`}>LOGS_DB</button>
+            </div>
+
+            {editingItem ? (
+                <div className="max-w-4xl mx-auto bg-black border border-white/10 p-8 animate-fade-in-up">
+                    <h3 className="text-xl font-bold mb-6 text-[#DC2626]">{editingItem.id ? 'EDIT_ENTRY' : 'NEW_ENTRY'}</h3>
+                    <div className="grid grid-cols-1 gap-6">
+                        {activeTab === 'works' ? (
+                            <>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="ID (unique)" value={editingItem.id || ''} onChange={e => setEditingItem({...editingItem, id: e.target.value})} />
+                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Title" value={editingItem.title || ''} onChange={e => setEditingItem({...editingItem, title: e.target.value})} />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Category" value={editingItem.category || ''} onChange={e => setEditingItem({...editingItem, category: e.target.value})} />
+                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Subtitle" value={editingItem.subtitle || ''} onChange={e => setEditingItem({...editingItem, subtitle: e.target.value})} />
+                                </div>
+                                <textarea className="bg-[#050505] border border-white/20 p-3 h-24" placeholder="Short Description" value={editingItem.desc || ''} onChange={e => setEditingItem({...editingItem, desc: e.target.value})} />
+                                <textarea className="bg-[#050505] border border-white/20 p-3 h-32" placeholder="Long Description" value={editingItem.longDesc || ''} onChange={e => setEditingItem({...editingItem, longDesc: e.target.value})} />
+                                
+                                <div className="border border-white/10 p-4">
+                                    <label className="block text-xs text-[#9CA3AF] mb-2">COVER IMAGE</label>
+                                    <input type="file" onChange={e => handleImageUpload(e, 'image')} className="text-xs text-[#9CA3AF]" />
+                                    {editingItem.image && <img src={editingItem.image} className="mt-4 h-32 object-cover border border-white/20" />}
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="ID" value={editingItem.id || ''} onChange={e => setEditingItem({...editingItem, id: e.target.value})} />
+                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Date (YYYY.MM.DD)" value={editingItem.date || ''} onChange={e => setEditingItem({...editingItem, date: e.target.value})} />
+                                </div>
+                                <input className="bg-[#050505] border border-white/20 p-3" placeholder="Title" value={editingItem.title || ''} onChange={e => setEditingItem({...editingItem, title: e.target.value})} />
+                                <textarea className="bg-[#050505] border border-white/20 p-3 h-24" placeholder="Excerpt" value={editingItem.excerpt || ''} onChange={e => setEditingItem({...editingItem, excerpt: e.target.value})} />
+                                {/* Simple Content Editor for now */}
+                                <textarea className="bg-[#050505] border border-white/20 p-3 h-64 font-mono text-xs" placeholder="Content (JSX/HTML)" value={typeof editingItem.content === 'string' ? editingItem.content : 'Complex content editing requires a rich text editor component.'} onChange={e => setEditingItem({...editingItem, content: e.target.value})} />
+                            </>
+                        )}
+                        <div className="flex gap-4 mt-4">
+                            <button onClick={handleSave} className="bg-[#DC2626] text-white px-6 py-3 font-bold tracking-widest hover:bg-white hover:text-black transition-colors">SAVE_TO_DB</button>
+                            <button onClick={() => setEditingItem(null)} className="border border-white/20 text-white px-6 py-3 font-bold tracking-widest hover:bg-white/10">CANCEL</button>
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 gap-1">
+                    <div 
+                        onClick={() => setEditingItem(activeTab === 'works' ? { id: `work_${Date.now()}`, orientation: 'horizontal', hasDetail: true, gradient: 'from-neutral-900 to-neutral-800' } : { id: `log_${Date.now()}`, tags: [] })}
+                        className="border border-white/10 border-dashed p-6 flex items-center justify-center cursor-pointer hover:border-[#DC2626] hover:bg-[#DC2626]/5 transition-all group"
+                    >
+                        <span className="text-[#9CA3AF] group-hover:text-[#DC2626] tracking-widest">+ NEW ENTRY</span>
+                    </div>
+                    {activeTab === 'works' ? (
+                        works.map(work => (
+                            <div key={work.id} className="bg-[#050505] border border-white/10 p-4 flex justify-between items-center group hover:border-white/30">
+                                <div className="flex items-center gap-4">
+                                    <img src={work.image} className="w-12 h-12 object-cover grayscale group-hover:grayscale-0 transition-all" />
+                                    <div>
+                                        <h4 className="font-bold text-white">{work.title}</h4>
+                                        <span className="text-xs text-[#9CA3AF]">{work.category}</span>
+                                    </div>
+                                </div>
+                                <div className="flex gap-4">
+                                    <button onClick={() => setEditingItem(work)} className="text-xs text-white hover:text-[#DC2626] tracking-widest">EDIT</button>
+                                    <button onClick={() => handleDelete(work.id)} className="text-xs text-[#9CA3AF] hover:text-[#DC2626] tracking-widest">DELETE</button>
+                                </div>
+                            </div>
+                        ))
+                    ) : (
+                        transmissions.map(post => (
+                            <div key={post.id} className="bg-[#050505] border border-white/10 p-4 flex justify-between items-center group hover:border-white/30">
+                                <div>
+                                    <h4 className="font-bold text-white">{post.title}</h4>
+                                    <span className="text-xs text-[#9CA3AF]">{post.date}</span>
+                                </div>
+                                <div className="flex gap-4">
+                                    <button onClick={() => setEditingItem(post)} className="text-xs text-white hover:text-[#DC2626] tracking-widest">EDIT</button>
+                                    <button onClick={() => handleDelete(post.id)} className="text-xs text-[#9CA3AF] hover:text-[#DC2626] tracking-widest">DELETE</button>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </div>
+            )}
+        </div>
+    );
 };
 
 // --- COMPONENTS: SECTIONS ---
@@ -734,7 +925,10 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
             <h2 className="text-sm md:text-base font-bold tracking-[0.3em] text-[#9CA3AF] uppercase">Selected Works</h2>
         </div>
         <div className="flex flex-col w-full gap-0">
-            {WORKS.slice(0, 3).map((work, idx) => <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />)}
+            {/* Use Context Data */}
+            <ContextConsumer>
+                {({ works }) => works.slice(0, 3).map((work, idx) => <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />)}
+            </ContextConsumer>
         </div>
     </section>
 );
@@ -876,14 +1070,16 @@ const WorksFilter = ({ categories, activeCategory, onSelect }: { categories: str
 
 const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject }: any) => {
     const [activeCategory, setActiveCategory] = useState("ALL");
+    const { works } = useContext(DataContext)!;
+    
     const categories = useMemo(() => {
-        const cats = new Set(WORKS.map(w => w.category));
+        const cats = new Set(works.map(w => w.category));
         return ["ALL", ...Array.from(cats)];
-    }, []);
+    }, [works]);
     const filteredWorks = useMemo(() => {
-        if (activeCategory === "ALL") return WORKS;
-        return WORKS.filter(w => w.category === activeCategory);
-    }, [activeCategory]);
+        if (activeCategory === "ALL") return works;
+        return works.filter(w => w.category === activeCategory);
+    }, [activeCategory, works]);
 
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
@@ -915,7 +1111,7 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject }
                      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white mb-4">ARCHIVE_INDEX</h1>
-                            <p className="text-[#9CA3AF] font-mono text-xs md:text-sm tracking-widest max-w-xl">ACESSING NEURAL DATABASE... {WORKS.length} ENTRIES FOUND.</p>
+                            <p className="text-[#9CA3AF] font-mono text-xs md:text-sm tracking-widest max-w-xl">ACESSING NEURAL DATABASE... {works.length} ENTRIES FOUND.</p>
                         </div>
                      </div>
                 </section>
@@ -964,7 +1160,9 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome }
     );
 };
 
-const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectPost }: any) => (
+const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectPost }: any) => {
+    const { transmissions } = useContext(DataContext)!;
+    return (
     <React.Fragment>
         <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
         <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
@@ -975,13 +1173,13 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
                  <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                     <div>
                         <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white mb-4">NEURAL_LOGS</h1>
-                        <p className="text-[#9CA3AF] font-mono text-xs md:text-sm tracking-widest max-w-xl">INCOMING DATA STREAMS... {TRANSMISSIONS.length} RECORDS.</p>
+                        <p className="text-[#9CA3AF] font-mono text-xs md:text-sm tracking-widest max-w-xl">INCOMING DATA STREAMS... {transmissions.length} RECORDS.</p>
                     </div>
                  </div>
             </section>
             <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 reveal">
                 <div className="space-y-px bg-white/10 border-t border-white/10">
-                    {TRANSMISSIONS.map((post) => (
+                    {transmissions.map((post) => (
                         <div key={post.id} onClick={() => onSelectPost(post)} className="block group bg-[#050505] hover:bg-[#0a0a0a] transition-colors p-8 md:p-12 border-b border-white/10 cursor-pointer">
                             <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-6">
                                 <h3 className="text-2xl md:text-4xl font-black text-white tracking-tight group-hover:text-[#DC2626] transition-colors">{post.title}</h3>
@@ -1000,9 +1198,10 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
         </main>
         <Footer onChat={onChat} />
     </React.Fragment>
-);
+    );
+};
 
-const Footer = ({ onChat }: { onChat: () => void }) => (
+const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => (
     <footer className="w-full py-32 px-6 md:px-12 lg:px-24 bg-black border-t border-white/5 relative z-10">
         <div className="flex flex-col items-center text-center gap-12 reveal">
             <h2 className="text-sm md:text-base font-mono text-[#9CA3AF] tracking-widest uppercase">Have a complex problem?</h2>
@@ -1024,6 +1223,7 @@ const Footer = ({ onChat }: { onChat: () => void }) => (
                 <span className="block mb-2">&copy; 2025 Brick AI.</span>
                 <span className="hidden md:inline">The Generative Division</span>
                 <span className="block mt-1">All Rights Reserved.</span>
+                {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">SYSTEM_ADMIN</button>}
             </div>
         </div>
     </footer>
@@ -1106,7 +1306,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
     );
 };
 
-const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, setMonolithHover, monolithHover }: any) => (
+const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, setMonolithHover, monolithHover, onAdmin }: any) => (
     <React.Fragment>
         <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
         <main>
@@ -1115,7 +1315,7 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, s
             <SelectedWorks onSelectProject={onSelectProject} />
             <Legacy />
         </main>
-        <Footer onChat={onChat} />
+        <Footer onChat={onChat} onAdmin={onAdmin} />
     </React.Fragment>
 );
 
@@ -1129,6 +1329,7 @@ const App = () => {
     const goWorks = () => { setView('works'); setSelectedPost(null); };
     const goTransmissions = () => { setView('transmissions'); setSelectedPost(null); };
     const goChat = () => { setView('chat'); setSelectedPost(null); };
+    const goAdmin = () => { setView('admin'); setSelectedPost(null); };
     
     const handleSelectPost = (post: Post) => {
         setSelectedPost(post);
@@ -1139,16 +1340,25 @@ const App = () => {
     useScrollReveal(view);
 
     return (
+        <DataProvider>
+            <AppContent view={view} setView={setView} monolithHover={monolithHover} setMonolithHover={setMonolithHover} selectedProject={selectedProject} setSelectedProject={setSelectedProject} selectedPost={selectedPost} setSelectedPost={setSelectedPost} goHome={goHome} goWorks={goWorks} goTransmissions={goTransmissions} goChat={goChat} goAdmin={goAdmin} handleSelectPost={handleSelectPost} />
+        </DataProvider>
+    );
+};
+
+const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedProject, setSelectedProject, selectedPost, setSelectedPost, goHome, goWorks, goTransmissions, goChat, goAdmin, handleSelectPost }: any) => {
+    const { transmissions } = useContext(DataContext)!;
+    return (
         <div className="min-h-screen bg-[#050505] text-[#E5E5E5] selection:bg-[#DC2626] selection:text-white font-sans">
             <GlobalStyles />
-            <StructuredData />
+            <StructuredData posts={transmissions} />
             <div className="noise-overlay"></div>
             <CustomCursor active={monolithHover || selectedProject !== null} />
             {selectedProject && (
                 <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
             )}
             {view === 'home' && (
-                <HomePage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} />
+                <HomePage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} onAdmin={goAdmin} />
             )}
             {view === 'works' && (
                 <WorksPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} />
@@ -1165,8 +1375,18 @@ const App = () => {
                     <SystemChat onBack={goHome} />
                 </React.Fragment>
             )}
+            {view === 'admin' && (
+                <AdminPanel onExit={goHome} />
+            )}
         </div>
     );
+};
+
+// Helper for Context Consumption in Class/Functional mix if needed, though Hooks are used primarily
+const ContextConsumer = ({ children }: { children: (data: any) => React.ReactNode }) => {
+    const data = useContext(DataContext);
+    if (!data) return null;
+    return <>{children(data)}</>;
 };
 
 // Mount
