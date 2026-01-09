@@ -139,9 +139,15 @@ interface Work {
     longDesc?: string;
     credits?: Array<{ role: string; name: string }>;
     gradient: string;
-    image: string;
+    imageHome: string;
+    imageWorks: string;
     hasDetail: boolean;
-    imageSettings?: {
+    imageSettingsHome?: {
+        x: number;
+        y: number;
+        scale: number;
+    };
+    imageSettingsWorks?: {
         x: number;
         y: number;
         scale: number;
@@ -273,7 +279,8 @@ const INITIAL_WORKS: Work[] = [
             { role: "Tech", name: "Stable Diffusion XL + ComfyUI" }
         ],
         gradient: "from-neutral-900 to-neutral-800",
-        image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564",
+        imageHome: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564",
+        imageWorks: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564",
         hasDetail: true
     },
     {
@@ -291,7 +298,8 @@ const INITIAL_WORKS: Work[] = [
             { role: "Tech", name: "Nuke + Generative Fill" }
         ],
         gradient: "from-neutral-900 via-[#DC2626]/10 to-neutral-900",
-        image: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop",
+        imageHome: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop",
+        imageWorks: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2670&auto=format&fit=crop",
         hasDetail: true
     },
     {
@@ -309,7 +317,8 @@ const INITIAL_WORKS: Work[] = [
             { role: "Tech", name: "Ebsynth + SD Video" }
         ],
         gradient: "from-neutral-900 to-neutral-950",
-        image: "https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=2668&auto=format&fit=crop",
+        imageHome: "https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=2668&auto=format&fit=crop",
+        imageWorks: "https://images.unsplash.com/photo-1604871000636-074fa5117945?q=80&w=2668&auto=format&fit=crop",
         hasDetail: true
     },
     {
@@ -327,7 +336,8 @@ const INITIAL_WORKS: Work[] = [
             { role: "Tech", name: "TouchDesigner + Python" }
         ],
         gradient: "from-neutral-950 to-[#DC2626]/20",
-        image: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2694&auto=format&fit=crop",
+        imageHome: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2694&auto=format&fit=crop",
+        imageWorks: "https://images.unsplash.com/photo-1534447677768-be436bb09401?q=80&w=2694&auto=format&fit=crop",
         hasDetail: true
     },
     {
@@ -345,7 +355,8 @@ const INITIAL_WORKS: Work[] = [
             { role: "Tech", name: "Houdini + AI Texture" }
         ],
         gradient: "from-neutral-900 to-neutral-800",
-        image: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?q=80&w=2670&auto=format&fit=crop",
+        imageHome: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?q=80&w=2670&auto=format&fit=crop",
+        imageWorks: "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?q=80&w=2670&auto=format&fit=crop",
         hasDetail: true
     },
     {
@@ -363,7 +374,8 @@ const INITIAL_WORKS: Work[] = [
             { role: "Tech", name: "Real-time Audio Analysis" }
         ],
         gradient: "from-neutral-900 via-white/5 to-neutral-900",
-        image: "https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?q=80&w=2755&auto=format&fit=crop",
+        imageHome: "https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?q=80&w=2755&auto=format&fit=crop",
+        imageWorks: "https://images.unsplash.com/photo-1511447333015-45b65e60f6d5?q=80&w=2755&auto=format&fit=crop",
         hasDetail: true
     }
 ];
@@ -615,10 +627,11 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
         }
     };
 
-    const updateImageSettings = (key: string, value: number) => {
+    const updateImageSettings = (type: 'home' | 'works', key: string, value: number) => {
+        const field = type === 'home' ? 'imageSettingsHome' : 'imageSettingsWorks';
         setEditingItem((prev: any) => ({
             ...prev,
-            imageSettings: { ...(prev.imageSettings || { x: 50, y: 50, scale: 1.2 }), [key]: value }
+            [field]: { ...(prev[field] || { x: 50, y: 50, scale: 1.2 }), [key]: value }
         }));
     };
 
@@ -732,62 +745,66 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                                 <textarea className="bg-[#050505] border border-white/20 p-3 h-32" placeholder="Long Description" value={editingItem.longDesc || ''} onChange={e => setEditingItem({...editingItem, longDesc: e.target.value})} />
                                 
                                 <div className="border border-white/10 p-6 bg-[#050505]">
-                                    <label className="block text-xs text-[#DC2626] font-bold tracking-widest mb-6 uppercase">Visual Direction (Preview & Adjust)</label>
+                                    <label className="block text-xs text-[#DC2626] font-bold tracking-widest mb-8 uppercase">Visual Direction (Home & Works)</label>
                                     
-                                    <div className="flex flex-col gap-8">
-                                        {/* LIVE PREVIEW BOX - REPLICA OF HOME CARD */}
-                                        <div className="w-full relative group overflow-hidden border border-white/10 bg-[#050505]">
-                                            <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden">
-                                                {/* Image Layer */}
-                                                {editingItem.image && (
-                                                    <div 
-                                                        className="absolute inset-0 opacity-50 mix-blend-overlay transition-all duration-0"
-                                                        style={{
-                                                            backgroundImage: `url('${editingItem.image}')`,
-                                                            backgroundSize: 'cover',
-                                                            backgroundPosition: `${editingItem.imageSettings?.x ?? 50}% ${editingItem.imageSettings?.y ?? 50}%`,
-                                                            transform: `scale(${editingItem.imageSettings?.scale ?? 1.2})`
-                                                        }}
-                                                    />
-                                                )}
-                                                {/* Gradient Layer */}
-                                                <div className={`absolute inset-0 bg-gradient-to-r ${editingItem.gradient || 'from-neutral-900 to-neutral-800'} opacity-50`}></div>
-                                                
-                                                {/* Text Layer */}
-                                                <div className="relative z-20 w-full h-full flex flex-col justify-end p-6 md:p-12">
-                                                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-                                                        <div>
-                                                            <div className="flex items-center gap-3 mb-2 md:mb-4">
-                                                                <span className="block text-[#DC2626] text-xs font-bold tracking-[0.2em] uppercase">{editingItem.subtitle || 'SUBTITLE'}</span>
-                                                                <div className="w-1.5 h-1.5 bg-white rounded-full opacity-100"></div>
-                                                            </div>
-                                                            <h3 className="text-3xl md:text-5xl font-black tracking-tighter text-white mb-2 leading-none">{editingItem.title || 'PROJECT TITLE'}</h3>
-                                                        </div>
-                                                        <p className="text-[#9CA3AF] text-sm font-light max-w-sm text-left md:text-right">{editingItem.desc || 'Short description of the project.'}</p>
+                                    <div className="space-y-12">
+                                        {/* HOME PREVIEW (WIDE) */}
+                                        <div className="flex flex-col gap-4">
+                                            <span className="text-[10px] text-[#9CA3AF] uppercase tracking-widest">01. Home Page Layout (Wide)</span>
+                                            <div className="w-full relative overflow-hidden border border-white/10 bg-[#050505]">
+                                                <div className="relative w-full aspect-[21/9] overflow-hidden">
+                                                    {editingItem.imageHome && (
+                                                        <div className="absolute inset-0 opacity-50 mix-blend-overlay" style={{ backgroundImage: `url('${editingItem.imageHome}')`, backgroundSize: 'cover', backgroundPosition: `${editingItem.imageSettingsHome?.x ?? 50}% ${editingItem.imageSettingsHome?.y ?? 50}%`, transform: `scale(${editingItem.imageSettingsHome?.scale ?? 1.2})` }} />
+                                                    )}
+                                                    <div className={`absolute inset-0 bg-gradient-to-r ${editingItem.gradient || 'from-neutral-900 to-neutral-800'} opacity-50`}></div>
+                                                    <div className="relative z-20 w-full h-full flex flex-col justify-end p-8">
+                                                        <span className="block text-[#DC2626] text-[10px] font-bold tracking-[0.2em] uppercase mb-1">{editingItem.subtitle || 'SUBTITLE'}</span>
+                                                        <h3 className="text-3xl font-black tracking-tighter text-white leading-none">{editingItem.title || 'PROJECT TITLE'}</h3>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+                                                <input type="file" onChange={e => handleImageUpload(e, 'imageHome')} className="text-xs text-[#9CA3AF]" />
+                                                <div className="flex flex-col gap-2">
+                                                    <div className="flex justify-between text-[9px] text-[#9CA3AF] uppercase"><span>X: {editingItem.imageSettingsHome?.x ?? 50}%</span> <span>Y: {editingItem.imageSettingsHome?.y ?? 50}%</span> <span>Z: {editingItem.imageSettingsHome?.scale ?? 1.2}x</span></div>
+                                                    <div className="flex gap-2">
+                                                        <input type="range" min="0" max="100" value={editingItem.imageSettingsHome?.x ?? 50} onChange={e => updateImageSettings('home', 'x', parseFloat(e.target.value))} className="flex-1 accent-[#DC2626] h-1 bg-white/10 appearance-none cursor-pointer" />
+                                                        <input type="range" min="0" max="100" value={editingItem.imageSettingsHome?.y ?? 50} onChange={e => updateImageSettings('home', 'y', parseFloat(e.target.value))} className="flex-1 accent-[#DC2626] h-1 bg-white/10 appearance-none cursor-pointer" />
+                                                        <input type="range" min="1" max="3" step="0.1" value={editingItem.imageSettingsHome?.scale ?? 1.2} onChange={e => updateImageSettings('home', 'scale', parseFloat(e.target.value))} className="flex-1 accent-[#DC2626] h-1 bg-white/10 appearance-none cursor-pointer" />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        {/* CONTROLS */}
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                                            <div>
-                                                <label className="block text-[10px] text-[#9CA3AF] mb-2 uppercase tracking-widest">Upload Image</label>
-                                                <input type="file" onChange={e => handleImageUpload(e, 'image')} className="text-xs text-[#9CA3AF] block w-full file:mr-4 file:py-2 file:px-4 file:border-0 file:text-xs file:font-semibold file:bg-[#DC2626] file:text-white hover:file:bg-red-700 cursor-pointer" />
-                                            </div>
-
-                                            <div className="flex flex-col gap-4">
-                                                <div>
-                                                    <div className="flex justify-between text-[10px] text-[#9CA3AF] mb-1 uppercase tracking-widest"><span>Position X</span> <span>{editingItem.imageSettings?.x ?? 50}%</span></div>
-                                                    <input type="range" min="0" max="100" value={editingItem.imageSettings?.x ?? 50} onChange={e => updateImageSettings('x', parseFloat(e.target.value))} className="w-full accent-[#DC2626] h-1 bg-white/10 rounded-lg appearance-none cursor-pointer" />
+                                        {/* WORKS PREVIEW (SQUARE) */}
+                                        <div className="flex flex-col gap-4">
+                                            <span className="text-[10px] text-[#9CA3AF] uppercase tracking-widest">02. Works Grid Layout (Square)</span>
+                                            <div className="flex flex-col md:flex-row gap-8 items-start">
+                                                <div className="w-full md:w-64 aspect-square relative overflow-hidden border border-white/10 bg-[#050505]">
+                                                    {editingItem.imageWorks && (
+                                                        <div className="absolute inset-0 opacity-60" style={{ backgroundImage: `url('${editingItem.imageWorks}')`, backgroundSize: 'cover', backgroundPosition: `${editingItem.imageSettingsWorks?.x ?? 50}% ${editingItem.imageSettingsWorks?.y ?? 50}%`, transform: `scale(${editingItem.imageSettingsWorks?.scale ?? 1.2})` }} />
+                                                    )}
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80"></div>
+                                                    <div className="absolute inset-0 p-4 flex flex-col justify-end">
+                                                        <h3 className="text-lg font-black text-white leading-none tracking-tight">{editingItem.title || 'TITLE'}</h3>
+                                                    </div>
                                                 </div>
-                                                <div>
-                                                    <div className="flex justify-between text-[10px] text-[#9CA3AF] mb-1 uppercase tracking-widest"><span>Position Y</span> <span>{editingItem.imageSettings?.y ?? 50}%</span></div>
-                                                    <input type="range" min="0" max="100" value={editingItem.imageSettings?.y ?? 50} onChange={e => updateImageSettings('y', parseFloat(e.target.value))} className="w-full accent-[#DC2626] h-1 bg-white/10 rounded-lg appearance-none cursor-pointer" />
-                                                </div>
-                                                <div>
-                                                    <div className="flex justify-between text-[10px] text-[#9CA3AF] mb-1 uppercase tracking-widest"><span>Scale / Zoom</span> <span>{editingItem.imageSettings?.scale ?? 1.2}x</span></div>
-                                                    <input type="range" min="1" max="3" step="0.1" value={editingItem.imageSettings?.scale ?? 1.2} onChange={e => updateImageSettings('scale', parseFloat(e.target.value))} className="w-full accent-[#DC2626] h-1 bg-white/10 rounded-lg appearance-none cursor-pointer" />
+                                                <div className="flex-1 flex flex-col gap-6 w-full">
+                                                    <input type="file" onChange={e => handleImageUpload(e, 'imageWorks')} className="text-xs text-[#9CA3AF]" />
+                                                    <div className="space-y-4">
+                                                        <div>
+                                                            <div className="flex justify-between text-[9px] text-[#9CA3AF] uppercase mb-1"><span>Position X</span> <span>{editingItem.imageSettingsWorks?.x ?? 50}%</span></div>
+                                                            <input type="range" min="0" max="100" value={editingItem.imageSettingsWorks?.x ?? 50} onChange={e => updateImageSettings('works', 'x', parseFloat(e.target.value))} className="w-full accent-[#DC2626] h-1 bg-white/10 appearance-none cursor-pointer" />
+                                                        </div>
+                                                        <div>
+                                                            <div className="flex justify-between text-[9px] text-[#9CA3AF] uppercase mb-1"><span>Position Y</span> <span>{editingItem.imageSettingsWorks?.y ?? 50}%</span></div>
+                                                            <input type="range" min="0" max="100" value={editingItem.imageSettingsWorks?.y ?? 50} onChange={e => updateImageSettings('works', 'y', parseFloat(e.target.value))} className="w-full accent-[#DC2626] h-1 bg-white/10 appearance-none cursor-pointer" />
+                                                        </div>
+                                                        <div>
+                                                            <div className="flex justify-between text-[9px] text-[#9CA3AF] uppercase mb-1"><span>Scale / Zoom</span> <span>{editingItem.imageSettingsWorks?.scale ?? 1.2}x</span></div>
+                                                            <input type="range" min="1" max="3" step="0.1" value={editingItem.imageSettingsWorks?.scale ?? 1.2} onChange={e => updateImageSettings('works', 'scale', parseFloat(e.target.value))} className="w-full accent-[#DC2626] h-1 bg-white/10 appearance-none cursor-pointer" />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -816,7 +833,7 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
             ) : (
                 <div className="grid grid-cols-1 gap-1">
                     <div 
-                        onClick={() => setEditingItem(activeTab === 'works' ? { id: `work_${Date.now()}`, orientation: 'horizontal', hasDetail: true, gradient: 'from-neutral-900 to-neutral-800', imageSettings: { x: 50, y: 50, scale: 1.2 } } : { id: `log_${Date.now()}`, tags: [] })}
+                        onClick={() => setEditingItem(activeTab === 'works' ? { id: `work_${Date.now()}`, orientation: 'horizontal', hasDetail: true, gradient: 'from-neutral-900 to-neutral-800', imageSettingsHome: { x: 50, y: 50, scale: 1.2 }, imageSettingsWorks: { x: 50, y: 50, scale: 1.2 } } : { id: `log_${Date.now()}`, tags: [] })}
                         className="border border-white/10 border-dashed p-6 flex items-center justify-center cursor-pointer hover:border-[#DC2626] hover:bg-[#DC2626]/5 transition-all group"
                     >
                         <span className="text-[#9CA3AF] group-hover:text-[#DC2626] tracking-widest">+ NEW ENTRY</span>
@@ -825,7 +842,7 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                         works.map(work => (
                             <div key={work.id} className="bg-[#050505] border border-white/10 p-4 flex justify-between items-center group hover:border-white/30">
                                 <div className="flex items-center gap-4">
-                                    <img src={work.image} className="w-12 h-12 object-cover grayscale group-hover:grayscale-0 transition-all" />
+                                    <img src={work.imageWorks || work.imageHome} className="w-12 h-12 object-cover grayscale group-hover:grayscale-0 transition-all" />
                                     <div>
                                         <h4 className="font-bold text-white">{work.title}</h4>
                                         <span className="text-xs text-[#9CA3AF]">{work.category}</span>
@@ -1006,7 +1023,7 @@ const PhilosophyItem = ({ title, text }: { title: string, text: string }) => (
 const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: (work: Work) => void }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const bgRef = useRef<HTMLDivElement>(null);
-    const settings = work.imageSettings || { x: 50, y: 50, scale: 1.2 };
+    const settings = work.imageSettingsHome || { x: 50, y: 50, scale: 1.2 };
 
     useEffect(() => {
         let animationFrameId: number;
@@ -1051,7 +1068,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 ref={bgRef} 
                 className="absolute inset-0 opacity-50 mix-blend-overlay will-change-transform" 
                 style={{ 
-                    backgroundImage: `url('${work.image}')`, 
+                    backgroundImage: `url('${work.imageHome}')`, 
                     backgroundSize: 'cover', 
                     backgroundPosition: `${settings.x}% ${settings.y}%`, 
                     transform: `scale(${settings.scale})` 
@@ -1115,6 +1132,7 @@ const Legacy = () => (
 
 const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void }) => {
     const [isLoaded, setIsLoaded] = useState(false);
+    const settings = project.imageSettingsHome || { x: 50, y: 50, scale: 1.2 };
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -1139,7 +1157,14 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                 <div className={`w-full md:w-2/3 bg-black relative border-b md:border-b-0 md:border-r border-white/10 group overflow-hidden`}>
                     <div className="absolute inset-0 w-full h-full">
                         <div className="placeholder-video w-full h-full flex items-center justify-center relative">
-                             <div className="absolute inset-0 opacity-40 bg-cover bg-center transition-transform duration-1000 group-hover:scale-105" style={{ backgroundImage: `url('${project.image}')` }}></div>
+                             <div 
+                                className="absolute inset-0 opacity-40 bg-cover transition-transform duration-1000 group-hover:scale-105" 
+                                style={{ 
+                                    backgroundImage: `url('${project.imageHome}')`,
+                                    backgroundPosition: `${settings.x}% ${settings.y}%`,
+                                    transform: `scale(${settings.scale})`
+                                }}
+                             ></div>
                              <div className="z-10 w-16 h-16 rounded-full border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:border-[#DC2626] transition-all duration-300 cursor-pointer backdrop-blur-sm bg-black/30">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-white ml-1"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
                              </div>
@@ -1179,13 +1204,23 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
 };
 
 const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onOpen: (work: Work) => void }) => {
+    const settings = work.imageSettingsWorks || { x: 50, y: 50, scale: 1.2 };
+    
     return (
         <div 
             className="group relative w-full aspect-square border border-white/10 bg-[#0a0a0a] overflow-hidden cursor-pointer hover:border-[#DC2626] transition-colors duration-300 reveal"
             style={{ animationDelay: `${index * 50}ms` }}
             onClick={() => onOpen(work)}
         >
-            <div className="absolute inset-0 bg-cover bg-center opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" style={{ backgroundImage: `url('${work.image}')` }}></div>
+            <div 
+                className="absolute inset-0 opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" 
+                style={{ 
+                    backgroundImage: `url('${work.imageWorks || work.imageHome}')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: `${settings.x}% ${settings.y}%`,
+                    transform: `scale(${settings.scale})`
+                }}
+            ></div>
             <div className="scanline-effect"></div>
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300"></div>
             <div className="absolute inset-0 p-6 flex flex-col justify-between">
