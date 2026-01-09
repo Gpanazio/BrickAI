@@ -18,6 +18,14 @@ const pool = new pg.Pool({
     ssl: { rejectUnauthorized: false } // Necessário para Railway
 });
 
+// --- DEBUG CONEXÃO ---
+if (process.env.DATABASE_URL) {
+    try {
+        const dbUrl = new URL(process.env.DATABASE_URL);
+        console.log(`>> DB CONFIG: Targeting host '${dbUrl.hostname}' on port '${dbUrl.port}'`);
+    } catch (e) { console.log(">> DB CONFIG: Invalid URL format"); }
+}
+
 app.use(express.json({ limit: '50mb' })); // Limite alto para imagens em Base64
 app.use(express.static(path.join(__dirname, 'dist'))); // Serve o frontend buildado
 
