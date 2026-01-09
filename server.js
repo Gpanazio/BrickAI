@@ -4,6 +4,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
+import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
 import 'dotenv/config';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -11,6 +13,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3000;
+const JWT_SECRET = process.env.JWT_SECRET || 'brick_secret_key_2025';
 
 // Conexão com o Banco de Dados (Railway fornece DATABASE_URL)
 const pool = new pg.Pool({
@@ -27,6 +30,7 @@ if (process.env.DATABASE_URL) {
 }
 
 app.use(express.json({ limit: '50mb' })); // Limite alto para imagens em Base64
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'dist'))); // Serve o frontend buildado
 
 // --- INICIALIZAÇÃO DO DB (Cria apenas as tabelas de conteúdo) ---
@@ -77,6 +81,18 @@ const initDB = async (retries = 10) => {
 };
 initDB();
 
+// --- MIDDLEWARE DE AUTENTICAÇÃO ---
+const authenticateToken = (req, res, next) => {
+    const token = req.cookies.admin_token;
+    if (!token) return res.status(401).json({ error: "Unauthorized" });
+
+    jwt.verify(token, JWT_SECRET, (err, user) => {
+        if (err) return res.status(403).json({ error: "Invalid session" });
+        req.user = user;
+        next();
+    });
+};
+
 // --- API ROUTES ---
 
 // 1. LOGIN (Conectado a master_users)
@@ -95,6 +111,12 @@ app.post('/api/login', async (req, res) => {
             if (match) {
                 // Remove o hash antes de enviar de volta (segurança)
                 delete user.password_hash;
+                
+                // Gera Token JWT
+                const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
+                
+                // Define Cookie seguro
+                res.cookie('admin_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 7 * 24 * 60 * 60 * 1000 });
                 res.json({ success: true, user });
             } else {
                 res.status(401).json({ error: "Invalid credentials" });
@@ -108,6 +130,17 @@ app.post('/api/login', async (req, res) => {
     }
 });
 
+// 1.1 CHECK AUTH (Para manter logado no F5)
+app.get('/api/auth/me', authenticateToken, (req, res) => {
+    res.json({ authenticated: true, user: req.user });
+});
+
+// 1.2 LOGOUT
+app.post('/api/auth/logout', (req, res) => {
+    res.clearCookie('admin_token');
+    res.json({ success: true });
+});
+
 // 2. WORKS (GET, POST, DELETE)
 app.get('/api/works', async (req, res) => {
     try {
@@ -117,7 +150,7 @@ app.get('/api/works', async (req, res) => {
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-app.post('/api/works', async (req, res) => {
+app.post('/api/works', authenticateToken, async (req, res) => {
     const item = req.body;
     try {
         // Upsert (Inserir ou Atualizar)
@@ -129,7 +162,7 @@ app.post('/api/works', async (req, res) => {
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-app.delete('/api/works/:id', async (req, res) => {
+app.delete('/api/works/:id', authenticateToken, async (req, res) => {
     try {
         await pool.query('DELETE FROM works WHERE id = $1', [req.params.id]);
         res.json({ success: true });
@@ -145,7 +178,7 @@ app.get('/api/transmissions', async (req, res) => {
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-app.post('/api/transmissions', async (req, res) => {
+app.post('/api/transmissions', authenticateToken, async (req, res) => {
     const item = req.body;
     try {
         await pool.query(
@@ -156,7 +189,7 @@ app.post('/api/transmissions', async (req, res) => {
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-app.delete('/api/transmissions/:id', async (req, res) => {
+app.delete('/api/transmissions/:id', authenticateToken, async (req, res) => {
     try {
         await pool.query('DELETE FROM transmissions WHERE id = $1', [req.params.id]);
         res.json({ success: true });
