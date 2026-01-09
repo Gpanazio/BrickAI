@@ -136,6 +136,7 @@ interface Work {
     category: string; 
     title: string;
     desc: string;
+    videoUrl?: string; // Novo campo para vídeo real
     longDesc?: string;
     credits?: Array<{ role: string; name: string }>;
     gradient: string;
@@ -750,6 +751,10 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                                     <input className="bg-[#050505] border border-white/20 p-3" placeholder="Category" value={editingItem.category || ''} onChange={e => setEditingItem({...editingItem, category: e.target.value})} />
                                     <input className="bg-[#050505] border border-white/20 p-3" placeholder="Subtitle" value={editingItem.subtitle || ''} onChange={e => setEditingItem({...editingItem, subtitle: e.target.value})} />
                                 </div>
+                                <div className="grid grid-cols-1">
+                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Vimeo URL (ex: https://vimeo.com/123456789)" value={editingItem.videoUrl || ''} onChange={e => setEditingItem({...editingItem, videoUrl: e.target.value})} />
+                                    <p className="text-[9px] text-[#9CA3AF] mt-1 uppercase tracking-widest">Insira o link do Vimeo para exibição automática no modal do projeto.</p>
+                                </div>
                                 <textarea className="bg-[#050505] border border-white/20 p-3 h-24" placeholder="Short Description" value={editingItem.desc || ''} onChange={e => setEditingItem({...editingItem, desc: e.target.value})} />
                                 <textarea className="bg-[#050505] border border-white/20 p-3 h-32" placeholder="Long Description" value={editingItem.longDesc || ''} onChange={e => setEditingItem({...editingItem, longDesc: e.target.value})} />
                                 
@@ -1169,6 +1174,12 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
     if (!project) return null;
 
     const isHorizontal = project.orientation === 'horizontal';
+    const getVimeoId = (url: string) => {
+        const match = url.match(/(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)/);
+        return match ? match[1] : null;
+    };
+    const vimeoId = project.videoUrl ? getVimeoId(project.videoUrl) : null;
+
     const modalClasses = isHorizontal 
         ? 'max-w-7xl max-h-[85vh] aspect-[16/8] md:aspect-[16/7]' 
         : 'max-w-5xl max-h-[90vh] aspect-[9/16] md:aspect-auto';
@@ -1180,24 +1191,43 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                 <button onClick={onClose} className="absolute top-4 right-4 z-50 text-white/50 hover:text-[#DC2626] transition-colors p-2 mix-blend-difference">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
-                <div className={`w-full md:w-2/3 bg-black relative border-b md:border-b-0 md:border-r border-white/10 group overflow-hidden`}>
+                <div className={`w-full md:w-2/3 bg-black relative border-b md:border-b-0 md:border-r border-white/10 group overflow-hidden flex items-center justify-center`}>
                     <div className="absolute inset-0 w-full h-full">
-                        <div className="placeholder-video w-full h-full flex items-center justify-center relative">
-                             <div 
-                                className="absolute inset-0 opacity-40 bg-cover transition-transform duration-1000 group-hover:scale-105" 
-                                style={{ 
-                                    backgroundImage: `url('${project.imageHome}')`,
-                                    backgroundPosition: `${settings.x}% ${settings.y}%`,
-                                    transform: `scale(${settings.scale})`
-                                }}
-                             ></div>
-                             <div className="z-10 w-16 h-16 rounded-full border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:border-[#DC2626] transition-all duration-300 cursor-pointer backdrop-blur-sm bg-black/30">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-white ml-1"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                             </div>
-                             <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end text-[10px] font-mono tracking-widest text-white/50 pointer-events-none">
-                                <span>RAW_FOOTAGE.mp4</span>
-                                <span>{isHorizontal ? '16:9' : '9:16'} // 4K</span>
+                        {project.videoUrl ? (
+                            vimeoId ? (
+                                <iframe
+                                    src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&background=1&muted=1`}
+                                    className="w-full h-full opacity-80"
+                                    frameBorder="0"
+                                    allow="autoplay; fullscreen; picture-in-picture"
+                                    allowFullScreen
+                                    title={project.title}
+                                ></iframe>
+                            ) : (
+                                <video 
+                                    src={project.videoUrl} 
+                                    className="w-full h-full object-cover opacity-80"
+                                    autoPlay loop muted playsInline
+                                />
+                            )
+                        ) : (
+                            <div className="placeholder-video w-full h-full flex items-center justify-center relative">
+                                <div 
+                                    className="absolute inset-0 opacity-40 bg-cover transition-transform duration-1000 group-hover:scale-105" 
+                                    style={{ 
+                                        backgroundImage: `url('${project.imageHome}')`,
+                                        backgroundPosition: `${settings.x}% ${settings.y}%`,
+                                        transform: `scale(${settings.scale})`
+                                    }}
+                                ></div>
+                                <div className="z-10 w-16 h-16 rounded-full border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:border-[#DC2626] transition-all duration-300 cursor-pointer backdrop-blur-sm bg-black/30">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-white ml-1"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                </div>
                             </div>
+                        )}
+                        <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end text-[10px] font-mono tracking-widest text-white/50 pointer-events-none z-20">
+                            <span>{project.videoUrl ? 'NEURAL_RENDER_ACTIVE' : 'STATIC_PREVIEW'}</span>
+                            <span>{isHorizontal ? '16:9' : '9:16'} // 4K</span>
                         </div>
                     </div>
                 </div>
@@ -1547,13 +1577,16 @@ const App = () => {
     useEffect(() => {
         const handleLocationChange = () => {
             const path = window.location.pathname;
-            if (path === '/') setView('home');
-            else if (path === '/works') setView('works');
-            else if (path === '/transmissions') setView('transmissions');
-            else if (path === '/chat') setView('chat');
-            else if (path === '/admin') setView('admin');
-            else if (path.startsWith('/transmissions/')) setView('post');
-            else setView('home');
+            let title = "Brick AI | Generative Production";
+            
+            if (path === '/') { setView('home'); }
+            else if (path === '/works') { setView('works'); title = "Archive | Brick AI"; }
+            else if (path === '/transmissions') { setView('transmissions'); title = "Transmissions | Brick AI"; }
+            else if (path === '/chat') { setView('chat'); title = "Talk to Mason | Brick AI"; }
+            else if (path === '/admin') { setView('admin'); title = "Command Console | Brick AI"; }
+            else if (path.startsWith('/transmissions/')) { setView('post'); }
+            
+            document.title = title;
         };
 
         window.addEventListener('popstate', handleLocationChange);
