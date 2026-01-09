@@ -22,8 +22,10 @@ app.use(express.json({ limit: '50mb' })); // Limite alto para imagens em Base64
 app.use(express.static(path.join(__dirname, 'dist'))); // Serve o frontend buildado
 
 // --- INICIALIZAÇÃO DO DB (Cria apenas as tabelas de conteúdo) ---
-const initDB = async () => {
-    try {
+const initDB = async (retries = 10) => {
+    while (retries > 0) {
+        try {
+            console.log(`>> ATTEMPTING DB CONNECTION... (${retries} left)`);
         // Cria tabela de Works se não existir
         await pool.query(`
             CREATE TABLE IF NOT EXISTS works (
@@ -57,8 +59,12 @@ const initDB = async () => {
         }
 
         console.log(">> DB TABLES CHECKED");
-    } catch (err) {
-        console.error(">> DB INIT ERROR:", err);
+            break; // Sucesso, sai do loop
+        } catch (err) {
+            console.error(">> DB INIT ERROR:", err.message);
+            retries -= 1;
+            await new Promise(res => setTimeout(res, 5000)); // Espera 5s antes de tentar de novo
+        }
     }
 };
 initDB();
