@@ -251,7 +251,8 @@ const StructuredData = ({ posts }: { posts: Post[] }) => {
             "headline": post.title,
             "description": post.excerpt,
             "author": { "@type": "Organization", "name": "Brick AI" },
-            "datePublished": post.date.replace(/\./g, '-')
+            "datePublished": post.date.replace(/\./g, '-'),
+            "url": `https://brickai.com/transmissions/${post.id}`
         }))
     ];
 
@@ -1517,16 +1518,40 @@ const App = () => {
     const [selectedProject, setSelectedProject] = useState<Work | null>(null);
     const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
-    const goHome = () => { setView('home'); setSelectedPost(null); };
-    const goWorks = () => { setView('works'); setSelectedPost(null); };
-    const goTransmissions = () => { setView('transmissions'); setSelectedPost(null); };
-    const goChat = () => { setView('chat'); setSelectedPost(null); };
-    const goAdmin = () => { setView('admin'); setSelectedPost(null); };
+    // Sync state with URL on load and back/forward
+    useEffect(() => {
+        const handleLocationChange = () => {
+            const path = window.location.pathname;
+            if (path === '/') setView('home');
+            else if (path === '/works') setView('works');
+            else if (path === '/transmissions') setView('transmissions');
+            else if (path === '/chat') setView('chat');
+            else if (path === '/admin') setView('admin');
+            else if (path.startsWith('/transmissions/')) setView('post');
+            else setView('home');
+        };
+
+        window.addEventListener('popstate', handleLocationChange);
+        handleLocationChange(); // Initial check
+
+        return () => window.removeEventListener('popstate', handleLocationChange);
+    }, []);
+
+    const navigate = (newView: string, path: string) => {
+        setView(newView);
+        window.history.pushState({}, '', path);
+        window.scrollTo(0, 0);
+    };
+
+    const goHome = () => { navigate('home', '/'); setSelectedPost(null); };
+    const goWorks = () => { navigate('works', '/works'); setSelectedPost(null); };
+    const goTransmissions = () => { navigate('transmissions', '/transmissions'); setSelectedPost(null); };
+    const goChat = () => { navigate('chat', '/chat'); setSelectedPost(null); };
+    const goAdmin = () => { navigate('admin', '/admin'); setSelectedPost(null); };
     
     const handleSelectPost = (post: Post) => {
         setSelectedPost(post);
-        setView('post');
-        window.scrollTo(0, 0);
+        navigate('post', `/transmissions/${post.id}`);
     };
 
     useScrollReveal(view);
@@ -1540,6 +1565,18 @@ const App = () => {
 
 const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedProject, setSelectedProject, selectedPost, setSelectedPost, goHome, goWorks, goTransmissions, goChat, goAdmin, handleSelectPost }: any) => {
     const { transmissions } = useContext(DataContext)!;
+
+    // Resolve post from URL if landing directly on a post page
+    useEffect(() => {
+        if (view === 'post' && !selectedPost && transmissions.length > 0) {
+            const pathParts = window.location.pathname.split('/');
+            const id = pathParts[pathParts.length - 1];
+            const post = transmissions.find(t => t.id === id);
+            if (post) setSelectedPost(post);
+            else goTransmissions();
+        }
+    }, [view, selectedPost, transmissions]);
+
     return (
         <div className="min-h-screen bg-[#050505] text-[#E5E5E5] selection:bg-[#DC2626] selection:text-white font-sans">
             <GlobalStyles />
