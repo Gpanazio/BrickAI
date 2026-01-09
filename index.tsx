@@ -118,12 +118,8 @@ const GlobalStyles = () => (
 // Safe API Key access to prevent crash if process is undefined
 // @ts-ignore
 const getApiKey = () => {
-    try {
-        // @ts-ignore
-        return process.env.GEMINI_API_KEY || "";
-    } catch (e) {
-        return "";
-    }
+    // @ts-ignore
+    return import.meta.env.VITE_GEMINI_API_KEY || "";
 };
 const apiKey = getApiKey();
 const AI_NAME = "MASON";
@@ -537,6 +533,7 @@ const useScrollReveal = (view: string) => {
 const CustomCursor = ({ active }: { active: boolean }) => {
     const dotRef = useRef<HTMLDivElement>(null);
     const [isPointer, setIsPointer] = useState(false);
+    const [isGlitching, setIsGlitching] = useState(false);
 
     useEffect(() => {
         const onMouseMove = (e: MouseEvent) => {
@@ -549,6 +546,9 @@ const CustomCursor = ({ active }: { active: boolean }) => {
             const isClickable = target.closest('button, a, input, textarea, [role="button"]') || 
                                window.getComputedStyle(target).cursor === 'pointer';
             setIsPointer(!!isClickable);
+            
+            const isWork = target.closest('.work-card-trigger');
+            setIsGlitching(!!isWork);
         };
 
         window.addEventListener('mousemove', onMouseMove);
@@ -562,7 +562,7 @@ const CustomCursor = ({ active }: { active: boolean }) => {
     return (
         <div 
             ref={dotRef} 
-            className={`fixed top-0 left-0 w-2 h-2 bg-[#DC2626] rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform transition-all duration-200 ${isVisible ? 'opacity-100 scale-[3]' : 'opacity-0 scale-100'}`} 
+            className={`fixed top-0 left-0 w-2 h-2 bg-[#DC2626] rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform transition-all duration-200 ${isVisible ? 'opacity-100 scale-[3]' : 'opacity-0 scale-100'} ${isGlitching ? 'animate-pulse scale-[5] blur-[2px]' : ''}`} 
             style={{ transform: 'translate(-100px, -100px)' }} 
         />
     );
@@ -664,14 +664,26 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
         onExit();
     };
 
-    const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
+    const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
         const file = e.target.files?.[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setEditingItem((prev: any) => ({ ...prev, [field]: reader.result }));
-            };
-            reader.readAsDataURL(file);
+        if (!file) return;
+
+        setStatus("UPLOADING IMAGE...");
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const res = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const data = await res.json();
+            if (data.url) {
+                setEditingItem((prev: any) => ({ ...prev, [field]: data.url }));
+                setStatus("IMAGE READY.");
+            }
+        } catch (err) {
+            setStatus("UPLOAD ERROR.");
         }
     };
 
@@ -1131,7 +1143,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
         <div 
             ref={containerRef} 
             onClick={() => work.hasDetail && onOpen(work)}
-            className={`reveal w-full min-h-[40vh] md:min-h-[50vh] relative flex items-center group overflow-hidden border-b border-black ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`} 
+            className={`reveal work-card-trigger w-full min-h-[40vh] md:min-h-[50vh] relative flex items-center group overflow-hidden border-b border-black ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`} 
             style={{ transitionDelay: `${index * 100}ms` }}
         >
             <div 
@@ -1523,6 +1535,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
     ]);
     const [input, setInput] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
+    const [awaitingEmail, setAwaitingEmail] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const SUGGESTIONS = ["What services do you offer?", "How does Generative AI work?", "I have a complex project.", "Who are your clients?"];
 

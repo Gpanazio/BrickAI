@@ -6,6 +6,8 @@ import bcrypt from 'bcrypt';
 import { randomUUID } from 'crypto';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
+import multer from 'multer';
+import fs from 'fs';
 import 'dotenv/config';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -14,6 +16,22 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || 'brick_secret_key_2025';
+const UPLOADS_DIR = path.join(__dirname, 'uploads');
+
+// Garantir que a pasta de uploads existe
+if (!fs.existsSync(UPLOADS_DIR)) {
+    fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+}
+
+// Configuração do Multer para salvar no disco local
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => cb(null, UPLOADS_DIR),
+    filename: (req, file, cb) => {
+        const ext = path.extname(file.originalname);
+        cb(null, `${randomUUID()}${ext}`);
+    }
+});
+const upload = multer({ storage });
 
 // Conexão com o Banco de Dados (Railway fornece DATABASE_URL)
 const pool = new pg.Pool({
@@ -31,6 +49,7 @@ if (process.env.DATABASE_URL) {
 
 app.use(express.json({ limit: '50mb' })); // Limite alto para imagens em Base64
 app.use(cookieParser());
+app.use('/uploads', express.static(UPLOADS_DIR)); // Serve as imagens salvas
 app.use(express.static(path.join(__dirname, 'dist'))); // Serve o frontend buildado
 
 // --- INICIALIZAÇÃO DO DB (Cria apenas as tabelas de conteúdo) ---
@@ -54,10 +73,19 @@ const initDB = async (retries = 10) => {
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `);
+        // Tabela de Leads (Contatos)
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS leads (
+                id UUID PRIMARY KEY,
+                email TEXT NOT NULL,
+                message TEXT,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `);
 
         // --- GARANTIR ADMIN (Gabriel) ---
-        const adminUser = "Gabriel";
-        const adminPass = "2904";
+        const adminUser = process.env.ADMIN_USERNAME || "Gabriel";
+        const adminPass = process.env.ADMIN_PASSWORD || "2904";
         const hash = await bcrypt.hash(adminPass, 10);
         
         const userCheck = await pool.query('SELECT * FROM master_users WHERE username = $1', [adminUser]);
@@ -139,6 +167,32 @@ app.get('/api/auth/me', authenticateToken, (req, res) => {
 app.post('/api/auth/logout', (req, res) => {
     res.clearCookie('admin_token');
     res.json({ success: true });
+});
+
+// 1.3 UPLOAD PARA DISCO LOCAL (RAILWAY VOLUME)
+app.post('/api/upload', authenticateToken, upload.single('file'), (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+        const fileUrl = `/uploads/${req.file.filename}`;
+        res.json({ url: fileUrl });
+    } catch (err) {
+        res.status(500).json({ error: "Upload failed" });
+    }
+});
+
+// 1.4 CONTACT / LEADS
+app.post('/api/contact', async (req, res) => {
+    const { email, message } = req.body;
+    try {
+        await pool.query(
+            'INSERT INTO leads (id, email, message) VALUES ($1, $2, $3)',
+            [randomUUID(), email, message]
+        );
+        res.json({ success: true });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Failed to save contact" });
+    }
 });
 
 // 2. WORKS (GET, POST, DELETE)
