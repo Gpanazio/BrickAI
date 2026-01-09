@@ -83,22 +83,7 @@ const initDB = async (retries = 10) => {
             );
         `);
 
-        // --- GARANTIR ADMIN (Gabriel) ---
-        const adminUser = process.env.ADMIN_USERNAME || "Gabriel";
-        const adminPass = process.env.ADMIN_PASSWORD || "2904";
-        const hash = await bcrypt.hash(adminPass, 10);
-        
-        const userCheck = await pool.query('SELECT * FROM master_users WHERE username = $1', [adminUser]);
-        if (userCheck.rows.length === 0) {
-            await pool.query('INSERT INTO master_users (id, username, password_hash, created_at) VALUES ($1, $2, $3, NOW())', 
-                [randomUUID(), adminUser, hash]);
-            console.log(`>> ADMIN USER '${adminUser}' CREATED.`);
-        } else {
-            await pool.query('UPDATE master_users SET password_hash = $1 WHERE username = $2', [hash, adminUser]);
-            console.log(`>> ADMIN USER '${adminUser}' PASSWORD SYNCED.`);
-        }
-
-        console.log(">> DB TABLES CHECKED");
+            console.log(">> DB TABLES CHECKED");
             break; // Sucesso, sai do loop
         } catch (err) {
             console.error(">> DB INIT ERROR:", err.message);
@@ -110,15 +95,18 @@ const initDB = async (retries = 10) => {
 initDB();
 
 // --- MIDDLEWARE DE AUTENTICAÇÃO ---
-const authenticateToken = (req, res, next) => {
+const authenticateToken = async (req, res, next) => {
     const token = req.cookies.admin_token;
     if (!token) return res.status(401).json({ error: "Unauthorized" });
 
-    jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ error: "Invalid session" });
+    try {
+        const user = jwt.verify(token, JWT_SECRET);
         req.user = user;
         next();
-    });
+    } catch (err) {
+        res.clearCookie('admin_token');
+        return res.status(403).json({ error: "Invalid session" });
+    }
 };
 
 // --- API ROUTES ---
@@ -132,7 +120,7 @@ app.post('/api/login', async (req, res) => {
         
         if (result.rows.length > 0) {
             const user = result.rows[0];
-            
+
             // Compara a senha enviada com o password_hash do banco
             const match = await bcrypt.compare(password, user.password_hash);
             
@@ -142,8 +130,6 @@ app.post('/api/login', async (req, res) => {
                 
                 // Gera Token JWT
                 const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
-                
-                // Define Cookie seguro
                 res.cookie('admin_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 7 * 24 * 60 * 60 * 1000 });
                 res.json({ success: true, user });
             } else {
@@ -153,7 +139,6 @@ app.post('/api/login', async (req, res) => {
             res.status(401).json({ error: "User not found" });
         }
     } catch (err) {
-        console.error(err);
         res.status(500).json({ error: "Database error" });
     }
 });

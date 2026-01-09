@@ -421,25 +421,6 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
     );
 };
 
-const updateMetadata = (title: string, description: string) => {
-    document.title = title;
-    const metaTags = {
-        'description': description,
-        'og:title': title,
-        'og:description': description,
-        'twitter:title': title,
-        'twitter:description': description
-    };
-
-    Object.entries(metaTags).forEach(([name, value]) => {
-        const selector = name.startsWith('og:') || name.startsWith('twitter:') 
-            ? `meta[property="${name}"]` 
-            : `meta[name="${name}"]`;
-        const el = document.querySelector(selector);
-        if (el) el.setAttribute('content', value);
-    });
-};
-
 // --- UTILS COMPONENTS ---
 const ScrambleText = ({ text, className, hoverTrigger = false }: { text: string, className?: string, hoverTrigger?: boolean }) => {
     const [displayText, setDisplayText] = useState(text);
@@ -533,7 +514,6 @@ const useScrollReveal = (view: string) => {
 const CustomCursor = ({ active }: { active: boolean }) => {
     const dotRef = useRef<HTMLDivElement>(null);
     const [isPointer, setIsPointer] = useState(false);
-    const [isGlitching, setIsGlitching] = useState(false);
 
     useEffect(() => {
         const onMouseMove = (e: MouseEvent) => {
@@ -546,9 +526,6 @@ const CustomCursor = ({ active }: { active: boolean }) => {
             const isClickable = target.closest('button, a, input, textarea, [role="button"]') || 
                                window.getComputedStyle(target).cursor === 'pointer';
             setIsPointer(!!isClickable);
-            
-            const isWork = target.closest('.work-card-trigger');
-            setIsGlitching(!!isWork);
         };
 
         window.addEventListener('mousemove', onMouseMove);
@@ -557,12 +534,10 @@ const CustomCursor = ({ active }: { active: boolean }) => {
         };
     }, []);
 
-    const isVisible = active || isPointer;
-
     return (
         <div 
             ref={dotRef} 
-            className={`fixed top-0 left-0 w-2 h-2 bg-[#DC2626] rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform transition-all duration-200 ${isVisible ? 'opacity-100 scale-[3]' : 'opacity-0 scale-100'} ${isGlitching ? 'animate-pulse scale-[5] blur-[2px]' : ''}`} 
+            className={`fixed top-0 left-0 w-2 h-2 bg-[#DC2626] rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform transition-opacity duration-200 ${active || isPointer ? 'opacity-100 scale-[3]' : 'opacity-0 scale-100'}`} 
             style={{ transform: 'translate(-100px, -100px)' }} 
         />
     );
@@ -652,7 +627,7 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                 alert("ACCESS DENIED: " + data.error);
                 setStatus("");
             }
-        } catch (e) {
+        } catch (err) {
             alert("CONNECTION ERROR");
             setStatus("");
         }
@@ -816,32 +791,15 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                                         {/* HOME PREVIEW (WIDE) */}
                                         <div className="flex flex-col gap-4">
                                             <span className="text-[10px] text-[#9CA3AF] uppercase tracking-widest">01. Home Page Layout (Wide)</span>
-                                            <div className="w-full relative overflow-hidden border border-white/10 bg-black">
+                                            <div className="w-full relative overflow-hidden border border-white/10 bg-[#050505]">
                                                 <div className="relative w-full aspect-[16/9] md:aspect-[21/9] overflow-hidden">
                                                     {editingItem.imageHome && (
-                                                        <div className="absolute inset-0 opacity-50 mix-blend-overlay" style={{ backgroundImage: `url('${editingItem.imageHome}')`, backgroundSize: 'cover', backgroundPosition: `${editingItem.imageSettingsHome?.x ?? 50}% ${editingItem.imageSettingsHome?.y ?? 50}%`, transform: `scale(${editingItem.imageSettingsHome?.scale ?? 1.2})` }} />
-                                                        <div 
-                                                            className="absolute inset-0 opacity-60 transition-all duration-0"
-                                                            style={{ 
-                                                                backgroundImage: `url('${editingItem.imageHome}')`, 
-                                                                backgroundSize: 'cover', 
-                                                                backgroundPosition: `${editingItem.imageSettingsHome?.x ?? 50}% ${editingItem.imageSettingsHome?.y ?? 50}%`, 
-                                                                transform: `scale(${editingItem.imageSettingsHome?.scale ?? 1.2})` 
-                                                            }} 
-                                                        />
+                                                        <div className="absolute inset-0 opacity-50 mix-blend-overlay transition-all duration-0" style={{ backgroundImage: `url('${editingItem.imageHome}')`, backgroundSize: 'cover', backgroundPosition: `${editingItem.imageSettingsHome?.x ?? 50}% ${editingItem.imageSettingsHome?.y ?? 50}%`, transform: `scale(${editingItem.imageSettingsHome?.scale ?? 1.2})` }} />
                                                     )}
-                                                    <div className={`absolute inset-0 bg-gradient-to-r ${editingItem.gradient || 'from-neutral-900 to-neutral-800'} opacity-40`}></div>
-                                                    <div className="relative z-20 w-full h-full flex flex-col justify-end p-6 md:p-12">
-                                                        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
-                                                            <div>
-                                                                <div className="flex items-center gap-3 mb-2">
-                                                                    <span className="block text-[#DC2626] text-[10px] font-bold tracking-[0.2em] uppercase">{editingItem.subtitle || 'SUBTITLE'}</span>
-                                                                    <div className="w-1 h-1 bg-white rounded-full"></div>
-                                                                </div>
-                                                                <h3 className="text-3xl md:text-5xl font-black tracking-tighter text-white leading-none">{editingItem.title || 'PROJECT TITLE'}</h3>
-                                                            </div>
-                                                            <p className="text-[#9CA3AF] text-[10px] md:text-xs font-light max-w-xs text-left md:text-right">{editingItem.desc || 'Short description of the project.'}</p>
-                                                        </div>
+                                                    <div className={`absolute inset-0 bg-gradient-to-r ${editingItem.gradient || 'from-neutral-900 to-neutral-800'} opacity-50`}></div>
+                                                    <div className="relative z-20 w-full h-full flex flex-col justify-end p-8">
+                                                        <span className="block text-[#DC2626] text-[10px] font-bold tracking-[0.2em] uppercase mb-1">{editingItem.subtitle || 'SUBTITLE'}</span>
+                                                        <h3 className="text-3xl font-black tracking-tighter text-white leading-none">{editingItem.title || 'PROJECT TITLE'}</h3>
                                                     </div>
                                                 </div>
                                             </div>
@@ -1683,31 +1641,6 @@ const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedPr
             else goTransmissions();
         }
     }, [view, selectedPost, transmissions]);
-
-    // Dynamic SEO & Metadata Update
-    useEffect(() => {
-        let title = "Brick AI | Generative Production";
-        let description = "A generative production house where human artistry directs neural rendering pipelines.";
-
-        if (view === 'works') {
-            title = "Archive | Brick AI";
-            description = "Explore our selected works in generative production and neural VFX.";
-        } else if (view === 'transmissions') {
-            title = "Transmissions | Brick AI";
-            description = "Neural logs and research from the frontier of generative cinematography.";
-        } else if (view === 'chat') {
-            title = "Talk to Mason | Brick AI";
-            description = "Interact with our central intelligence for project inquiries.";
-        } else if (view === 'admin') {
-            title = "Command Console | Brick AI";
-            description = "System administration and content management.";
-        } else if (view === 'post' && selectedPost) {
-            title = `${selectedPost.title} | Brick AI`;
-            description = selectedPost.excerpt;
-        }
-
-        updateMetadata(title, description);
-    }, [view, selectedPost]);
 
     return (
         <div className="min-h-screen bg-[#050505] text-[#E5E5E5] selection:bg-[#DC2626] selection:text-white font-sans">
