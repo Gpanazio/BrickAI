@@ -622,6 +622,19 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
     const [editingItem, setEditingItem] = useState<any>(null);
     const [status, setStatus] = useState("");
 
+    // Check if already logged in via cookie
+    useEffect(() => {
+        const checkAuth = async () => {
+            try {
+                const res = await fetch('/api/auth/me');
+                if (res.ok) setIsAuthenticated(true);
+            } catch (e) {
+                console.log("Not authenticated");
+            }
+        };
+        checkAuth();
+    }, []);
+
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setStatus("AUTHENTICATING...");
@@ -643,6 +656,12 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
             alert("CONNECTION ERROR");
             setStatus("");
         }
+    };
+
+    const handleLogout = async () => {
+        await fetch('/api/auth/logout', { method: 'POST' });
+        setIsAuthenticated(false);
+        onExit();
     };
 
     const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, field: string) => {
@@ -746,7 +765,8 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
             <div className="flex justify-between items-center mb-12 border-b border-white/10 pb-6">
                 <h1 className="text-2xl md:text-3xl font-black tracking-tighter">COMMAND_CONSOLE</h1>
                 <div className="flex gap-4">
-                    <button onClick={() => setEditingItem(null)} className="text-xs text-[#9CA3AF] hover:text-white">CANCEL</button>
+                    <button onClick={() => setEditingItem(null)} className="text-xs text-[#9CA3AF] hover:text-white uppercase tracking-widest">Reset View</button>
+                    <button onClick={handleLogout} className="text-xs text-[#9CA3AF] hover:text-[#DC2626] uppercase tracking-widest">Logout</button>
                     <button onClick={onExit} className="text-xs text-[#DC2626] border border-[#DC2626] px-4 py-2 hover:bg-[#DC2626] hover:text-white transition-colors">EXIT SYSTEM</button>
                 </div>
             </div>
