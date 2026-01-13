@@ -503,11 +503,22 @@ const useScrollReveal = (view: string) => {
             });
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
 
-        setTimeout(() => {
+        const observeReveals = () => {
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-        }, 100);
+        };
 
-        return () => observer.disconnect();
+        const timeoutId = window.setTimeout(observeReveals, 100);
+
+        const mutationObserver = new MutationObserver(() => {
+            observeReveals();
+        });
+        mutationObserver.observe(document.body, { childList: true, subtree: true });
+
+        return () => {
+            window.clearTimeout(timeoutId);
+            mutationObserver.disconnect();
+            observer.disconnect();
+        };
     }, [view]);
 };
 
