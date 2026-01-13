@@ -503,14 +503,27 @@ const useScrollReveal = (view: string) => {
             });
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
 
+        const observeRevealNode = (node: Element) => {
+            if (node.matches('.reveal')) {
+                observer.observe(node);
+            }
+            node.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        };
+
         const observeReveals = () => {
             document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
         };
 
         const timeoutId = window.setTimeout(observeReveals, 100);
 
-        const mutationObserver = new MutationObserver(() => {
-            observeReveals();
+        const mutationObserver = new MutationObserver((mutations) => {
+            mutations.forEach(mutation => {
+                mutation.addedNodes.forEach(node => {
+                    if (node instanceof Element) {
+                        observeRevealNode(node);
+                    }
+                });
+            });
         });
         mutationObserver.observe(document.body, { childList: true, subtree: true });
 
