@@ -517,13 +517,13 @@ const useScrollReveal = (view: string) => {
         const timeoutId = window.setTimeout(observeReveals, 100);
 
         const mutationObserver = new MutationObserver((mutations) => {
-            mutations.forEach(mutation => {
-                mutation.addedNodes.forEach(node => {
+            for (const mutation of mutations) {
+                for (const node of mutation.addedNodes) {
                     if (node instanceof Element) {
                         observeRevealNode(node);
                     }
-                });
-            });
+                }
+            }
         });
         mutationObserver.observe(document.body, { childList: true, subtree: true });
 
