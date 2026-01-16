@@ -1,400 +1,315 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt-BR" class="scroll-smooth">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Brick AI - Master Guide V5 (Real Asset)</title>
+    <title>Brick AI - Master Guide V5 (System)</title>
+    
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brick: {
+                            black: '#050505',
+                            dark: '#0a0a0a',
+                            red: '#DC2626',
+                            gray: '#9CA3AF',
+                            white: '#E5E5E5'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&family=JetBrains+Mono:wght@400;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
     <style>
         /* --- SYSTEM CORE --- */
+        :root {
+            --brick-black: #050505;
+            --brick-dark: #0a0a0a;
+            --brick-red: #DC2626;
+            --brick-gray: #9CA3AF;
+            --brick-white: #E5E5E5;
+        }
+
         body {
-            background-color: #f3f4f6;
-            font-family: 'Inter', sans-serif;
-            color: #111;
+            background-color: var(--brick-black);
+            color: var(--brick-white);
             -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
         }
 
-        /* TYPOGRAPHY TOKENS */
-        .font-brick {
-            font-family: 'Inter', sans-serif;
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            line-height: 1;
+        /* UTILS */
+        .font-brick { font-family: 'Inter', sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
+        .font-ai { font-family: 'JetBrains Mono', monospace; font-weight: 700; letter-spacing: -0.02em; }
+        
+        /* NOISE OVERLAY (From index.tsx) */
+        .noise-overlay {
+            position: fixed;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            pointer-events: none;
+            z-index: 50; 
+            opacity: 0.035; 
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            animation: grain 8s steps(10) infinite;
         }
 
-        .font-ai {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 700;
-            letter-spacing: -0.02em;
+        /* ANIMATIONS */
+        @keyframes terminal-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+        .animate-cursor { animation: terminal-blink 1s step-end infinite; }
+
+        @keyframes grain {
+            0%, 100% { transform: translate(0, 0); }
+            10% { transform: translate(-5%, -10%); }
+            30% { transform: translate(7%, -25%); }
+            50% { transform: translate(-15%, 10%); }
+            70% { transform: translate(0%, 15%); }
+            90% { transform: translate(-10%, 10%); }
         }
 
-        /* --- ANIMATIONS --- */
-        @keyframes terminal-blink {
-
-            0%,
-            100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0;
-            }
-        }
-
-        .animate-cursor {
-            animation: terminal-blink 1s step-end infinite;
-        }
-
-        /* Breathe (Monolith) */
         @keyframes atmos-breathe {
-            0% {
-                transform: translate(-50%, -50%) scale(0.8);
-                opacity: 0.2;
-            }
-
-            50% {
-                transform: translate(-50%, -50%) scale(1.2);
-                opacity: 0.8;
-            }
-
-            100% {
-                transform: translate(-50%, -50%) scale(0.8);
-                opacity: 0.2;
-            }
+            0%, 100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.2; }   
+            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }  
         }
+        .animate-atmos { animation: atmos-breathe 6s infinite ease-in-out; }
 
-        .animate-atmos {
-            animation: atmos-breathe 5s infinite ease-in-out;
-        }
-
-        /* Pulse (Icon) */
         @keyframes icon-pulse {
-            0% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0.8;
-            }
-
-            15% {
-                transform: translate(-50%, -50%) scale(1.15);
-                opacity: 0.4;
-            }
-
-            30% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0.8;
-            }
-
-            100% {
-                transform: translate(-50%, -50%) scale(1);
-                opacity: 0.8;
-            }
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            15% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.4; }
+            30% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
         }
+        .animate-icon { animation: icon-pulse 3s infinite ease-in-out; }
 
-        .animate-icon {
-            animation: icon-pulse 3s infinite ease-in-out;
-        }
-
-        /* --- ASSETS --- */
+        /* MONOLITH ASSETS */
         .monolith-structure {
             background: linear-gradient(to bottom, #0a0a0a, #000000);
             border: 1px solid #1a1a1a;
-            position: relative;
-            overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+            position: relative; overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
         }
+        .centered-layer { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; }
+        
+        .aura-atmos { width: 250px; height: 250px; background: radial-gradient(circle at center, rgba(153, 27, 27, 0.08) 0%, transparent 70%); filter: blur(30px); pointer-events: none; }
+        .light-atmos { width: 180px; height: 180px; background: radial-gradient(circle at center, rgba(220, 38, 38, 0.6) 0%, rgba(153, 0, 0, 0.1) 50%, transparent 70%); filter: blur(25px); }
+        .core-atmos { width: 40px; height: 40px; background-color: #dc2626; filter: blur(15px); opacity: 0.6; }
 
-        /* LIGHT LAYERS (CENTRALIZED) */
-        .centered-layer {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-        }
+        /* Small Icons */
+        .aura-icon { width: 150%; height: 150%; background: radial-gradient(circle at center, rgba(153, 27, 27, 0.15) 0%, transparent 70%); filter: blur(8px); }
+        .light-icon { width: 60%; height: 60%; background: radial-gradient(circle at center, rgba(220, 38, 38, 0.7) 0%, rgba(153, 0, 0, 0.1) 60%, transparent 80%); filter: blur(5px); }
+        .core-icon { width: 15%; height: 15%; background-color: #dc2626; filter: blur(3px); opacity: 0.9; }
 
-        /* Monolith Light */
-        .aura-atmos {
-            width: 250px;
-            height: 250px;
-            background: radial-gradient(circle at center, rgba(153, 27, 27, 0.08) 0%, transparent 70%);
-            filter: blur(30px);
-            pointer-events: none;
-        }
-
-        .light-atmos {
-            width: 180px;
-            height: 180px;
-            background: radial-gradient(circle at center, rgba(220, 38, 38, 0.6) 0%, rgba(153, 0, 0, 0.1) 50%, transparent 70%);
-            filter: blur(25px);
-        }
-
-        .core-atmos {
-            width: 40px;
-            height: 40px;
-            background-color: #dc2626;
-            filter: blur(15px);
-            opacity: 0.6;
-        }
-
-        /* Icon Light */
-        .aura-icon {
-            width: 150%;
-            height: 150%;
-            background: radial-gradient(circle at center, rgba(153, 27, 27, 0.15) 0%, transparent 70%);
-            filter: blur(8px);
-        }
-
-        .light-icon {
-            width: 60%;
-            height: 60%;
-            background: radial-gradient(circle at center, rgba(220, 38, 38, 0.7) 0%, rgba(153, 0, 0, 0.1) 60%, transparent 80%);
-            filter: blur(5px);
-        }
-
-        .core-icon {
-            width: 15%;
-            height: 15%;
-            background-color: #dc2626;
-            filter: blur(3px);
-            opacity: 0.9;
-        }
-
-        /* IMAGE HANDLING */
-        .logo-img-dark {
-            filter: none;
-        }
-
-        /* PNG já em branco (1.png) */
-        .logo-img-light {
-            filter: none;
-        }
-
-        /* PNG original em preto (2.png) */
-
-        /* Fallback Text (escondido se imagem carregar) */
-        .logo-fallback {
-            display: none;
-        }
-
-        img:not([src]):not([srcset])+.logo-fallback,
-        img[src=""]+.logo-fallback,
-        img[src="#"]+.logo-fallback {
-            display: block;
-        }
-
+        /* UI ELEMENTS */
         .card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            background: #0a0a0a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
-            border: 1px solid #e5e5e5;
+            transition: border-color 0.3s ease;
         }
+        .card:hover { border-color: rgba(220, 38, 38, 0.5); }
+
+        .logo-fallback { display: none; }
+        img:not([src]):not([srcset]) + .logo-fallback, img[src=""] + .logo-fallback, img[src="#"] + .logo-fallback { display: block; }
     </style>
 </head>
 
-<body class="p-8 md:p-16">
+<body class="p-6 md:p-12 lg:p-24 selection:bg-[#DC2626] selection:text-white">
 
-    <header
-        class="max-w-7xl mx-auto mb-16 pb-8 border-b border-gray-300 flex flex-col md:flex-row justify-between items-end">
+    <div class="noise-overlay"></div>
+
+    <header class="max-w-7xl mx-auto mb-24 pb-8 border-b border-white/10 flex flex-col md:flex-row justify-between items-end relative z-10">
         <div>
-            <h1 class="text-5xl font-bold mb-2 tracking-tight text-gray-900">Brick AI</h1>
-            <p class="font-mono text-sm text-gray-500 uppercase">Brand Master Guide</p>
+            <div class="flex items-baseline mb-2 select-none group cursor-default">
+                <img src="/01.png" alt="BRICK" class="h-8 md:h-10 w-auto object-contain mr-1" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <span class="logo-fallback text-4xl md:text-5xl font-brick text-white tracking-tighter hidden">BRICK</span>
+                
+                <span class="text-[#DC2626] text-4xl md:text-5xl font-light mx-2 animate-cursor" style="transform: translateY(4px);">_</span>
+                <span class="text-gray-300 group-hover:text-white transition-colors text-2xl md:text-3xl font-ai">AI</span>
+            </div>
+            <p class="font-mono text-[10px] md:text-xs text-[#DC2626] tracking-[0.3em] uppercase">Brand Master Guide // System V5</p>
+        </div>
+        <div class="mt-6 md:mt-0">
+            <a href="/" class="text-[10px] font-mono tracking-widest text-[#9CA3AF] hover:text-white transition-colors flex items-center gap-2 group">
+                <span class="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SERVER
+            </a>
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto space-y-24">
+    <main class="max-w-7xl mx-auto space-y-32 relative z-10">
 
-        <!-- 1. LOGOTIPO (COM IMAGEM REAL) -->
         <section>
-            <div class="flex items-center gap-3 mb-8">
-                <span class="w-8 h-8 bg-black text-white flex items-center justify-center font-bold rounded">01</span>
-                <h2 class="text-2xl font-bold">Logotipo (Assets: 1.png / 2.png)</h2>
+            <div class="flex items-center gap-4 mb-8">
+                <span class="font-mono text-[#DC2626] text-sm font-bold">01 //</span>
+                <h2 class="text-2xl md:text-3xl font-black tracking-tighter text-white uppercase">Logotipo (Assets)</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-                <!-- A. DARK MODE -->
-                <div class="card bg-black border-gray-800">
-                    <div class="p-16 flex flex-col items-center justify-center h-72">
+                
+                <div class="card group relative">
+                    <div class="absolute top-0 right-0 p-4 opacity-50 font-mono text-[10px] tracking-widest text-[#9CA3AF]">DEFAULT</div>
+                    <div class="p-16 flex flex-col items-center justify-center h-80 bg-[#050505]">
                         <div class="flex items-baseline select-none transform scale-100 md:scale-110">
-                            <!-- Tenta carregar a imagem. Se falhar (onerror), mostra o texto -->
-                            <img src="01.png" alt="Brick Logo" class="h-16 w-auto logo-img-dark object-contain"
-                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <!-- Fallback Text -->
-                            <span class="logo-fallback text-white text-6xl font-brick hidden">BRICK</span>
-
-                            <span class="text-[#DC2626] text-6xl font-light mx-2 animate-cursor"
-                                style="transform: translateY(4px);">_</span>
+                            <img src="/01.png" alt="Brick Logo Dark" class="h-16 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <span class="hidden text-white text-6xl font-brick">BRICK</span>
+                            
+                            <span class="text-[#DC2626] text-6xl font-light mx-2 animate-cursor" style="transform: translateY(4px);">_</span>
                             <span class="text-gray-300 text-4xl font-ai">AI</span>
                         </div>
                     </div>
-                    <div class="bg-[#111] p-4 flex justify-between items-center border-t border-gray-800">
-                        <span class="text-xs text-gray-500 font-mono uppercase">Dark Mode (1.png - letras
-                            brancas)</span>
+                    <div class="bg-[#111] p-4 border-t border-white/5 flex justify-between items-center">
+                        <span class="text-[10px] text-[#9CA3AF] font-mono tracking-widest uppercase">Dark Mode (1.png - letras brancas)</span>
+                        <div class="w-2 h-2 rounded-full bg-[#DC2626]"></div>
                     </div>
                 </div>
 
-                <!-- B. LIGHT MODE -->
-                <div class="card bg-white">
-                    <div class="p-16 flex flex-col items-center justify-center h-72">
-                        <div class="flex items-baseline select-none transform scale-100 md:scale-110">
-                            <!-- Imagem Original -->
-                            <img src="2.png" alt="Brick Logo" class="h-16 w-auto logo-img-light object-contain"
-                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <!-- Fallback Text -->
-                            <span class="logo-fallback text-black text-6xl font-brick hidden">BRICK</span>
+                <div class="card group relative">
+                    <div class="absolute top-0 right-0 p-4 font-mono text-[10px] tracking-widest text-black/50 z-20">ALTERNATE</div>
+                    <div class="p-16 flex flex-col items-center justify-center h-80 bg-[#E5E5E5] relative">
+                        <div class="flex items-baseline select-none transform scale-100 md:scale-110 z-10">
+                            <img src="/2.png" alt="Brick Logo Light" class="h-16 w-auto object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <span class="hidden text-black text-6xl font-brick">BRICK</span>
 
-                            <span class="text-[#DC2626] text-6xl font-light mx-2 animate-cursor"
-                                style="transform: translateY(4px);">_</span>
+                            <span class="text-[#DC2626] text-6xl font-light mx-2 animate-cursor" style="transform: translateY(4px);">_</span>
                             <span class="text-gray-600 text-4xl font-ai">AI</span>
                         </div>
                     </div>
-                    <div class="bg-gray-50 p-4 flex justify-between items-center border-t border-gray-200">
-                        <span class="text-xs text-gray-500 font-mono uppercase">Light Mode (2.png - letras
-                            pretas)</span>
+                    <div class="bg-[#111] p-4 border-t border-white/5 flex justify-between items-center">
+                        <span class="text-[10px] text-[#9CA3AF] font-mono tracking-widest uppercase">Light Mode (2.png - letras pretas)</span>
+                        <div class="w-2 h-2 rounded-full border border-[#9CA3AF]"></div>
                     </div>
                 </div>
 
             </div>
         </section>
 
-        <!-- 2. LOGOTIPO ESTÁTICO -->
         <section>
-            <div class="flex items-center gap-3 mb-8">
-                <span
-                    class="w-8 h-8 bg-gray-500 text-white flex items-center justify-center font-bold rounded">02</span>
-                <h2 class="text-2xl font-bold">Logotipo Estático (Print/PDF)</h2>
+            <div class="flex items-center gap-4 mb-8">
+                <span class="font-mono text-[#9CA3AF] text-sm font-bold">02 //</span>
+                <h2 class="text-2xl md:text-3xl font-black tracking-tighter text-white uppercase">Static Lockup (Print/PDF)</h2>
             </div>
 
-            <div class="card bg-gray-100 p-12 border border-gray-200">
+            <div class="card bg-[#E5E5E5] p-12 relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-[#DC2626]"></div>
                 <div class="flex flex-col md:flex-row gap-12 items-center justify-around">
-
-                    <!-- Static Lockup -->
+                    
                     <div class="flex items-baseline justify-center select-none transform scale-100 md:scale-110">
-                        <img src="2.png" alt="Brick Logo Black" class="h-16 w-auto object-contain">
-                        <!-- CURSOR SEM A CLASSE ANIMATE-CURSOR -->
-                        <span class="text-[#DC2626] text-6xl font-light mx-2"
-                            style="transform: translateY(4px);">_</span>
+                        <img src="/2.png" alt="Brick Logo Black" class="h-16 w-auto object-contain">
+                        <span class="text-[#DC2626] text-6xl font-light mx-2" style="transform: translateY(4px);">_</span>
                         <span class="text-gray-600 text-4xl font-ai">AI</span>
                     </div>
 
-                    <div class="h-12 w-px bg-gray-300 hidden md:block"></div>
+                    <div class="h-12 w-px bg-gray-400 hidden md:block"></div>
 
-                    <div class="max-w-xs text-xs text-gray-500 font-mono">
-                        <strong>REGRA DE USO:</strong><br>
-                        Em materiais estáticos (impressos, PDF), o cursor (_) permanece visível e sólido. Nunca remova o
-                        underscore. Ele é o elo de ligação.
+                    <div class="max-w-xs text-[10px] text-gray-500 font-mono tracking-wide leading-relaxed">
+                        <strong class="text-black block mb-2 tracking-widest uppercase">PROTOCOLO DE USO:</strong>
+                        Em materiais estáticos, o cursor (_) permanece visível e sólido. Nunca remova o underscore. Ele é o elo de ligação entre o humano e a máquina.
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 3. O MONÓLITO (CENTRALIZADO) -->
         <section>
-            <div class="flex items-center gap-3 mb-8">
-                <span
-                    class="w-8 h-8 bg-[#DC2626] text-white flex items-center justify-center font-bold rounded">03</span>
-                <h2 class="text-2xl font-bold">The Monolith Symbol</h2>
+            <div class="flex items-center gap-4 mb-8">
+                <span class="font-mono text-[#DC2626] text-sm font-bold">03 //</span>
+                <h2 class="text-2xl md:text-3xl font-black tracking-tighter text-white uppercase">The Monolith Symbol</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div class="card p-8 flex flex-col items-center bg-gray-50">
-                    <div class="monolith-structure w-48 h-80 rounded-lg shadow-2xl mb-8 group">
-                        <div class="aura-atmos centered-layer"></div>
-                        <div class="light-atmos centered-layer animate-atmos"></div>
+                <div class="card p-12 flex flex-col items-center bg-[#050505]">
+                    <div class="monolith-structure w-40 h-72 rounded-[2px] shadow-2xl mb-8 group relative border border-white/5">
+                        <div class="aura-atmos centered-layer opacity-50"></div>
+                        <div class="light-atmos centered-layer animate-atmos opacity-50"></div>
                         <div class="core-atmos centered-layer"></div>
+                        <div class="absolute inset-0 bg-gradient-to-b from-transparent via-white/5 to-transparent opacity-20 pointer-events-none"></div>
                     </div>
-                    <div class="text-center w-full pt-4">
-                        <h3 class="font-bold text-gray-900">Living (Breathe)</h3>
+                    <div class="text-center w-full pt-4 border-t border-white/5">
+                        <h3 class="font-bold text-white tracking-widest text-xs uppercase">Living (Digital)</h3>
+                        <p class="text-[10px] text-[#9CA3AF] mt-1 font-mono">BREATHING ANIMATION</p>
                     </div>
                 </div>
-                <div class="card p-8 flex flex-col items-center bg-white">
-                    <div class="monolith-structure w-48 h-80 rounded-lg shadow-2xl mb-8">
+                <div class="card p-12 flex flex-col items-center bg-white">
+                    <div class="monolith-structure w-40 h-72 rounded-[2px] shadow-2xl mb-8 border border-gray-200">
                         <div class="aura-atmos centered-layer"></div>
                         <div class="light-atmos centered-layer" style="opacity: 0.5;"></div>
                         <div class="core-atmos centered-layer"></div>
                     </div>
-                    <div class="text-center w-full pt-4">
-                        <h3 class="font-bold text-gray-900">Static (Print)</h3>
+                    <div class="text-center w-full pt-4 border-t border-gray-200">
+                        <h3 class="font-bold text-black tracking-widest text-xs uppercase">Static (Print)</h3>
+                        <p class="text-[10px] text-gray-500 mt-1 font-mono">FROZEN STATE</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 4. SYSTEM SPECIFICATIONS (FONTES & CORES) -->
-        <section class="border-t border-gray-300 pt-16">
-            <div class="flex items-center gap-3 mb-8">
-                <span
-                    class="w-8 h-8 bg-gray-500 text-white flex items-center justify-center font-bold rounded">04</span>
-                <h2 class="text-2xl font-bold">Especificações Técnicas</h2>
+        <section class="border-t border-white/10 pt-16">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="font-mono text-[#9CA3AF] text-sm font-bold">04 //</span>
+                <h2 class="text-2xl md:text-3xl font-black tracking-tighter text-white uppercase">Especificações Técnicas</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-
-                <!-- A. Tipografia -->
+                
                 <div class="card p-8">
-                    <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-6">Família Tipográfica
-                        (Inter)</h3>
-                    <div class="space-y-8">
+                    <h3 class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#9CA3AF] mb-8 border-b border-white/10 pb-4">Typeface Family</h3>
+                    <div class="space-y-10">
                         <div>
-                            <div class="flex justify-between items-end border-b border-gray-200 pb-2 mb-2">
-                                <span class="text-4xl font-brick">Aa</span>
-                                <span class="font-mono text-xs text-gray-500">Weight: 900 (Black)</span>
+                            <div class="flex justify-between items-end border-b border-white/10 pb-2 mb-2">
+                                <span class="text-5xl font-brick text-white">Aa</span>
+                                <span class="font-mono text-[10px] text-[#DC2626] uppercase">Inter 900 (Black)</span>
                             </div>
-                            <p class="font-brick text-xl">BRICK Primary</p>
-                            <p class="text-xs text-gray-500 mt-1">Usado para a marca mãe. Tracking apertado (-4%).</p>
+                            <p class="font-brick text-xl text-white tracking-tighter">BRICK PRIMARY</p>
+                            <p class="text-[10px] text-[#9CA3AF] mt-2 font-mono leading-relaxed">Usado para a marca mãe e manchetes. Tracking apertado (-4%). Estilo agressivo e sólido.</p>
                         </div>
                         <div>
-                            <div class="flex justify-between items-end border-b border-gray-200 pb-2 mb-2">
-                                <span class="text-4xl font-ai text-gray-700">Aa</span>
-                                <span class="font-mono text-xs text-gray-500">Weight: 600 (SemiBold)</span>
+                            <div class="flex justify-between items-end border-b border-white/10 pb-2 mb-2">
+                                <span class="text-5xl font-ai text-gray-400">Aa</span>
+                                <span class="font-mono text-[10px] text-[#DC2626] uppercase">JetBrains Mono 700</span>
                             </div>
-                            <p class="font-ai text-xl text-gray-700">AI Secondary</p>
-                            <p class="text-xs text-gray-500 mt-1">Usado para a unidade "AI" e UI. Tracking normal (-2%).
-                            </p>
+                            <p class="font-ai text-xl text-gray-400">AI SECONDARY</p>
+                            <p class="text-[10px] text-[#9CA3AF] mt-2 font-mono leading-relaxed">Usado para a unidade "AI", código, dados e interface. Tracking normal (-2%).</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- B. Cores -->
                 <div class="card p-8">
-                    <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-6">Paleta Cromática</h3>
-                    <div class="space-y-4">
-                        <!-- Preto -->
-                        <div class="flex items-center gap-4 p-2 border-b border-gray-100">
-                            <div class="w-12 h-12 rounded bg-black shadow-sm border border-gray-200"></div>
+                    <h3 class="text-[10px] font-bold uppercase tracking-[0.3em] text-[#9CA3AF] mb-8 border-b border-white/10 pb-4">Chromatic Palette</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-6 p-4 border border-white/5 bg-[#050505]">
+                            <div class="w-12 h-12 rounded-[2px] bg-[#050505] border border-white/10 shadow-lg"></div>
                             <div>
-                                <p class="font-bold text-sm">Absolute Black</p>
-                                <p class="text-xs font-mono text-gray-500">HEX: #000000</p>
-                                <p class="text-xs font-mono text-gray-500">CMYK: 60 40 40 100</p>
+                                <p class="font-bold text-sm text-white uppercase tracking-widest">Brick Black</p>
+                                <p class="text-[10px] font-mono text-[#9CA3AF]">HEX: #050505</p>
+                                <p class="text-[10px] font-mono text-[#9CA3AF]">CMYK: 60 40 40 100</p>
                             </div>
                         </div>
-                        <!-- Vermelho -->
-                        <div class="flex items-center gap-4 p-2 border-b border-gray-100">
-                            <div class="w-12 h-12 rounded bg-[#DC2626] shadow-sm"></div>
+                        <div class="flex items-center gap-6 p-4 border border-white/5 bg-[#0a0a0a]">
+                            <div class="w-12 h-12 rounded-[2px] bg-[#DC2626] shadow-[0_0_15px_rgba(220,38,38,0.4)]"></div>
                             <div>
-                                <p class="font-bold text-sm">Brick Red</p>
-                                <p class="text-xs font-mono text-gray-500">HEX: #DC2626</p>
-                                <p class="text-xs font-mono text-gray-500">RGB: 220, 38, 38</p>
+                                <p class="font-bold text-sm text-white uppercase tracking-widest">System Red</p>
+                                <p class="text-[10px] font-mono text-[#9CA3AF]">HEX: #DC2626</p>
+                                <p class="text-[10px] font-mono text-[#9CA3AF]">RGB: 220, 38, 38</p>
                             </div>
                         </div>
-                        <!-- Deep Core -->
-                        <div class="flex items-center gap-4 p-2">
-                            <div class="w-12 h-12 rounded overflow-hidden relative shadow-sm bg-black">
-                                <div class="absolute inset-0"
-                                    style="background: radial-gradient(circle, #DC2626 0%, transparent 70%); opacity: 0.6;">
-                                </div>
+                        <div class="flex items-center gap-6 p-4 border border-white/5 bg-[#0a0a0a]">
+                            <div class="w-12 h-12 rounded-[2px] overflow-hidden relative border border-white/10 bg-black">
+                                <div class="absolute inset-0" style="background: radial-gradient(circle, #DC2626 0%, transparent 70%); opacity: 0.6;"></div>
                             </div>
                             <div>
-                                <p class="font-bold text-sm">Deep Core (Gradient)</p>
-                                <p class="text-xs font-mono text-gray-500">Uso: Monólito/Ícones</p>
-                                <p class="text-xs font-mono text-gray-500">Mix: Black + Red Blur</p>
+                                <p class="font-bold text-sm text-white uppercase tracking-widest">Deep Core</p>
+                                <p class="text-[10px] font-mono text-[#9CA3AF]">Gradient Usage</p>
+                                <p class="text-[10px] font-mono text-[#9CA3AF]">Mix: Black + Red Blur</p>
                             </div>
                         </div>
                     </div>
@@ -403,53 +318,57 @@
             </div>
         </section>
 
-        <!-- 5. ÍCONES (CENTRALIZADO) -->
         <section>
-            <div class="flex items-center gap-3 mb-8">
-                <span
-                    class="w-8 h-8 bg-gray-800 text-white flex items-center justify-center font-bold rounded">05</span>
-                <h2 class="text-2xl font-bold">Icons</h2>
+            <div class="flex items-center gap-4 mb-8">
+                <span class="font-mono text-[#9CA3AF] text-sm font-bold">05 //</span>
+                <h2 class="text-2xl md:text-3xl font-black tracking-tighter text-white uppercase">System Icons</h2>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div class="card p-6 flex flex-col items-center justify-center">
-                    <div class="monolith-structure w-24 h-24 rounded-2xl shadow-lg mb-4 relative">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                
+                <div class="card p-8 flex flex-col items-center justify-center gap-4 group">
+                    <div class="monolith-structure w-16 h-16 rounded-[4px] shadow-lg relative border border-white/10 group-hover:border-[#DC2626]/50 transition-colors">
                         <div class="aura-icon centered-layer"></div>
                         <div class="light-icon centered-layer animate-icon"></div>
                         <div class="core-icon centered-layer"></div>
                     </div>
-                    <span class="text-[10px] font-bold text-red-600 uppercase">App (Live)</span>
+                    <span class="text-[9px] font-mono font-bold text-[#DC2626] uppercase tracking-widest">App (Live)</span>
                 </div>
-                <div class="card p-6 flex flex-col items-center justify-center">
-                    <div class="monolith-structure w-24 h-24 rounded-2xl shadow-lg mb-4 relative">
+
+                <div class="card p-8 flex flex-col items-center justify-center gap-4">
+                    <div class="monolith-structure w-16 h-16 rounded-[4px] shadow-lg relative border border-white/10 opacity-60">
                         <div class="aura-icon centered-layer"></div>
-                        <div class="light-icon centered-layer" style="opacity: 0.6;"></div>
+                        <div class="light-icon centered-layer opacity-60"></div>
                         <div class="core-icon centered-layer"></div>
                     </div>
-                    <span class="text-[10px] font-bold text-gray-400 uppercase">App (Static)</span>
+                    <span class="text-[9px] font-mono font-bold text-[#9CA3AF] uppercase tracking-widest">App (Static)</span>
                 </div>
-                <div class="card p-6 flex flex-col items-center justify-center">
-                    <div
-                        class="monolith-structure w-24 h-24 rounded-full shadow-lg mb-4 border-2 border-white relative">
+
+                <div class="card p-8 flex flex-col items-center justify-center gap-4 group">
+                    <div class="monolith-structure w-16 h-16 rounded-full shadow-lg border border-white relative group-hover:border-[#DC2626] transition-colors">
                         <div class="aura-icon centered-layer"></div>
                         <div class="light-icon centered-layer animate-icon"></div>
                         <div class="core-icon centered-layer"></div>
                     </div>
-                    <span class="text-[10px] font-bold text-red-600 uppercase">Social (Live)</span>
+                    <span class="text-[9px] font-mono font-bold text-[#DC2626] uppercase tracking-widest">Social (Live)</span>
                 </div>
-                <div class="card p-6 flex flex-col items-center justify-center">
-                    <div
-                        class="monolith-structure w-24 h-24 rounded-full shadow-lg mb-4 border-2 border-white relative">
+
+                <div class="card p-8 flex flex-col items-center justify-center gap-4">
+                    <div class="monolith-structure w-16 h-16 rounded-full shadow-lg border border-white/30 relative opacity-60">
                         <div class="aura-icon centered-layer"></div>
-                        <div class="light-icon centered-layer" style="opacity: 0.6;"></div>
+                        <div class="light-icon centered-layer opacity-60"></div>
                         <div class="core-icon centered-layer"></div>
                     </div>
-                    <span class="text-[10px] font-bold text-gray-400 uppercase">Social (Static)</span>
+                    <span class="text-[9px] font-mono font-bold text-[#9CA3AF] uppercase tracking-widest">Social (Static)</span>
                 </div>
+
             </div>
         </section>
-
 
     </main>
-</body>
 
+    <footer class="max-w-7xl mx-auto mt-24 py-12 border-t border-white/5 text-center md:text-left relative z-10">
+        <p class="text-[10px] font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">&copy; 2025 Brick AI. Internal Use Only.</p>
+    </footer>
+
+</body>
 </html>
