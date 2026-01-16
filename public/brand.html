@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,68 +11,195 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <style>
         /* --- SYSTEM CORE --- */
-        body { background-color: #f3f4f6; font-family: 'Inter', sans-serif; color: #111; -webkit-font-smoothing: antialiased; }
+        body {
+            background-color: #f3f4f6;
+            font-family: 'Inter', sans-serif;
+            color: #111;
+            -webkit-font-smoothing: antialiased;
+        }
 
         /* TYPOGRAPHY TOKENS */
-        .font-brick { font-family: 'Inter', sans-serif; font-weight: 900; letter-spacing: -0.04em; line-height: 1; }
-        .font-ai { font-family: 'Inter', sans-serif; font-weight: 600; letter-spacing: -0.02em; }
+        .font-brick {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1;
+        }
+
+        .font-ai {
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
 
         /* --- ANIMATIONS --- */
-        @keyframes terminal-blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-        .animate-cursor { animation: terminal-blink 1s step-end infinite; }
+        @keyframes terminal-blink {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0;
+            }
+        }
+
+        .animate-cursor {
+            animation: terminal-blink 1s step-end infinite;
+        }
 
         /* Breathe (Monolith) */
         @keyframes atmos-breathe {
-            0% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.2; }   
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }  
-            100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.2; } 
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.2;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0.2;
+            }
         }
-        .animate-atmos { animation: atmos-breathe 5s infinite ease-in-out; }
+
+        .animate-atmos {
+            animation: atmos-breathe 5s infinite ease-in-out;
+        }
 
         /* Pulse (Icon) */
         @keyframes icon-pulse {
-            0% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-            15% { transform: translate(-50%, -50%) scale(1.15); opacity: 0.4; }
-            30% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
-            100% { transform: translate(-50%, -50%) scale(1); opacity: 0.8; }
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.8;
+            }
+
+            15% {
+                transform: translate(-50%, -50%) scale(1.15);
+                opacity: 0.4;
+            }
+
+            30% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.8;
+            }
         }
-        .animate-icon { animation: icon-pulse 3s infinite ease-in-out; }
+
+        .animate-icon {
+            animation: icon-pulse 3s infinite ease-in-out;
+        }
 
         /* --- ASSETS --- */
         .monolith-structure {
             background: linear-gradient(to bottom, #0a0a0a, #000000);
             border: 1px solid #1a1a1a;
-            position: relative; overflow: hidden;
-            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
+            position: relative;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
         }
 
         /* LIGHT LAYERS (CENTRALIZED) */
-        .centered-layer { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); border-radius: 50%; }
+        .centered-layer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+        }
 
         /* Monolith Light */
-        .aura-atmos { width: 250px; height: 250px; background: radial-gradient(circle at center, rgba(153, 27, 27, 0.08) 0%, transparent 70%); filter: blur(30px); pointer-events: none; }
-        .light-atmos { width: 180px; height: 180px; background: radial-gradient(circle at center, rgba(220, 38, 38, 0.6) 0%, rgba(153, 0, 0, 0.1) 50%, transparent 70%); filter: blur(25px); }
-        .core-atmos { width: 40px; height: 40px; background-color: #dc2626; filter: blur(15px); opacity: 0.6; }
-        
+        .aura-atmos {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle at center, rgba(153, 27, 27, 0.08) 0%, transparent 70%);
+            filter: blur(30px);
+            pointer-events: none;
+        }
+
+        .light-atmos {
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle at center, rgba(220, 38, 38, 0.6) 0%, rgba(153, 0, 0, 0.1) 50%, transparent 70%);
+            filter: blur(25px);
+        }
+
+        .core-atmos {
+            width: 40px;
+            height: 40px;
+            background-color: #dc2626;
+            filter: blur(15px);
+            opacity: 0.6;
+        }
+
         /* Icon Light */
-        .aura-icon { width: 150%; height: 150%; background: radial-gradient(circle at center, rgba(153, 27, 27, 0.15) 0%, transparent 70%); filter: blur(8px); }
-        .light-icon { width: 60%; height: 60%; background: radial-gradient(circle at center, rgba(220, 38, 38, 0.7) 0%, rgba(153, 0, 0, 0.1) 60%, transparent 80%); filter: blur(5px); }
-        .core-icon { width: 15%; height: 15%; background-color: #dc2626; filter: blur(3px); opacity: 0.9; }
+        .aura-icon {
+            width: 150%;
+            height: 150%;
+            background: radial-gradient(circle at center, rgba(153, 27, 27, 0.15) 0%, transparent 70%);
+            filter: blur(8px);
+        }
+
+        .light-icon {
+            width: 60%;
+            height: 60%;
+            background: radial-gradient(circle at center, rgba(220, 38, 38, 0.7) 0%, rgba(153, 0, 0, 0.1) 60%, transparent 80%);
+            filter: blur(5px);
+        }
+
+        .core-icon {
+            width: 15%;
+            height: 15%;
+            background-color: #dc2626;
+            filter: blur(3px);
+            opacity: 0.9;
+        }
 
         /* IMAGE HANDLING */
-        .logo-img-dark { filter: none; } /* PNG já em branco (1.png) */
-        .logo-img-light { filter: none; } /* PNG original em preto (2.png) */
-        
-        /* Fallback Text (escondido se imagem carregar) */
-        .logo-fallback { display: none; }
-        img:not([src]):not([srcset]) + .logo-fallback, img[src=""] + .logo-fallback, img[src="#"] + .logo-fallback { display: block; }
+        .logo-img-dark {
+            filter: none;
+        }
 
-        .card { background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #e5e5e5; }
+        /* PNG já em branco (1.png) */
+        .logo-img-light {
+            filter: none;
+        }
+
+        /* PNG original em preto (2.png) */
+
+        /* Fallback Text (escondido se imagem carregar) */
+        .logo-fallback {
+            display: none;
+        }
+
+        img:not([src]):not([srcset])+.logo-fallback,
+        img[src=""]+.logo-fallback,
+        img[src="#"]+.logo-fallback {
+            display: block;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            border: 1px solid #e5e5e5;
+        }
     </style>
 </head>
+
 <body class="p-8 md:p-16">
 
-    <header class="max-w-7xl mx-auto mb-16 pb-8 border-b border-gray-300 flex flex-col md:flex-row justify-between items-end">
+    <header
+        class="max-w-7xl mx-auto mb-16 pb-8 border-b border-gray-300 flex flex-col md:flex-row justify-between items-end">
         <div>
             <h1 class="text-5xl font-bold mb-2 tracking-tight text-gray-900">Brick AI</h1>
             <p class="font-mono text-sm text-gray-500 uppercase">Brand Master Guide</p>
@@ -88,22 +216,25 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                
+
                 <!-- A. DARK MODE -->
                 <div class="card bg-black border-gray-800">
                     <div class="p-16 flex flex-col items-center justify-center h-72">
                         <div class="flex items-baseline select-none transform scale-100 md:scale-110">
                             <!-- Tenta carregar a imagem. Se falhar (onerror), mostra o texto -->
-                            <img src="1.png" alt="Brick Logo" class="h-16 w-auto logo-img-dark object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <img src="01.png" alt="Brick Logo" class="h-16 w-auto logo-img-dark object-contain"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                             <!-- Fallback Text -->
                             <span class="logo-fallback text-white text-6xl font-brick hidden">BRICK</span>
-                            
-                            <span class="text-[#DC2626] text-6xl font-light mx-2 animate-cursor" style="transform: translateY(4px);">_</span>
+
+                            <span class="text-[#DC2626] text-6xl font-light mx-2 animate-cursor"
+                                style="transform: translateY(4px);">_</span>
                             <span class="text-gray-300 text-4xl font-ai">AI</span>
                         </div>
                     </div>
                     <div class="bg-[#111] p-4 flex justify-between items-center border-t border-gray-800">
-                        <span class="text-xs text-gray-500 font-mono uppercase">Dark Mode (1.png - letras brancas)</span>
+                        <span class="text-xs text-gray-500 font-mono uppercase">Dark Mode (1.png - letras
+                            brancas)</span>
                     </div>
                 </div>
 
@@ -112,16 +243,19 @@
                     <div class="p-16 flex flex-col items-center justify-center h-72">
                         <div class="flex items-baseline select-none transform scale-100 md:scale-110">
                             <!-- Imagem Original -->
-                            <img src="2.png" alt="Brick Logo" class="h-16 w-auto logo-img-light object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                            <img src="2.png" alt="Brick Logo" class="h-16 w-auto logo-img-light object-contain"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                             <!-- Fallback Text -->
                             <span class="logo-fallback text-black text-6xl font-brick hidden">BRICK</span>
 
-                            <span class="text-[#DC2626] text-6xl font-light mx-2 animate-cursor" style="transform: translateY(4px);">_</span>
+                            <span class="text-[#DC2626] text-6xl font-light mx-2 animate-cursor"
+                                style="transform: translateY(4px);">_</span>
                             <span class="text-gray-600 text-4xl font-ai">AI</span>
                         </div>
                     </div>
                     <div class="bg-gray-50 p-4 flex justify-between items-center border-t border-gray-200">
-                        <span class="text-xs text-gray-500 font-mono uppercase">Light Mode (2.png - letras pretas)</span>
+                        <span class="text-xs text-gray-500 font-mono uppercase">Light Mode (2.png - letras
+                            pretas)</span>
                     </div>
                 </div>
 
@@ -131,18 +265,20 @@
         <!-- 2. LOGOTIPO ESTÁTICO -->
         <section>
             <div class="flex items-center gap-3 mb-8">
-                <span class="w-8 h-8 bg-gray-500 text-white flex items-center justify-center font-bold rounded">02</span>
+                <span
+                    class="w-8 h-8 bg-gray-500 text-white flex items-center justify-center font-bold rounded">02</span>
                 <h2 class="text-2xl font-bold">Logotipo Estático (Print/PDF)</h2>
             </div>
 
             <div class="card bg-gray-100 p-12 border border-gray-200">
                 <div class="flex flex-col md:flex-row gap-12 items-center justify-around">
-                    
+
                     <!-- Static Lockup -->
                     <div class="flex items-baseline justify-center select-none transform scale-100 md:scale-110">
                         <img src="2.png" alt="Brick Logo Black" class="h-16 w-auto object-contain">
                         <!-- CURSOR SEM A CLASSE ANIMATE-CURSOR -->
-                        <span class="text-[#DC2626] text-6xl font-light mx-2" style="transform: translateY(4px);">_</span>
+                        <span class="text-[#DC2626] text-6xl font-light mx-2"
+                            style="transform: translateY(4px);">_</span>
                         <span class="text-gray-600 text-4xl font-ai">AI</span>
                     </div>
 
@@ -150,7 +286,8 @@
 
                     <div class="max-w-xs text-xs text-gray-500 font-mono">
                         <strong>REGRA DE USO:</strong><br>
-                        Em materiais estáticos (impressos, PDF), o cursor (_) permanece visível e sólido. Nunca remova o underscore. Ele é o elo de ligação.
+                        Em materiais estáticos (impressos, PDF), o cursor (_) permanece visível e sólido. Nunca remova o
+                        underscore. Ele é o elo de ligação.
                     </div>
                 </div>
             </div>
@@ -159,7 +296,8 @@
         <!-- 3. O MONÓLITO (CENTRALIZADO) -->
         <section>
             <div class="flex items-center gap-3 mb-8">
-                <span class="w-8 h-8 bg-[#DC2626] text-white flex items-center justify-center font-bold rounded">03</span>
+                <span
+                    class="w-8 h-8 bg-[#DC2626] text-white flex items-center justify-center font-bold rounded">03</span>
                 <h2 class="text-2xl font-bold">The Monolith Symbol</h2>
             </div>
 
@@ -170,7 +308,9 @@
                         <div class="light-atmos centered-layer animate-atmos"></div>
                         <div class="core-atmos centered-layer"></div>
                     </div>
-                    <div class="text-center w-full pt-4"><h3 class="font-bold text-gray-900">Living (Breathe)</h3></div>
+                    <div class="text-center w-full pt-4">
+                        <h3 class="font-bold text-gray-900">Living (Breathe)</h3>
+                    </div>
                 </div>
                 <div class="card p-8 flex flex-col items-center bg-white">
                     <div class="monolith-structure w-48 h-80 rounded-lg shadow-2xl mb-8">
@@ -178,7 +318,9 @@
                         <div class="light-atmos centered-layer" style="opacity: 0.5;"></div>
                         <div class="core-atmos centered-layer"></div>
                     </div>
-                    <div class="text-center w-full pt-4"><h3 class="font-bold text-gray-900">Static (Print)</h3></div>
+                    <div class="text-center w-full pt-4">
+                        <h3 class="font-bold text-gray-900">Static (Print)</h3>
+                    </div>
                 </div>
             </div>
         </section>
@@ -186,15 +328,17 @@
         <!-- 4. SYSTEM SPECIFICATIONS (FONTES & CORES) -->
         <section class="border-t border-gray-300 pt-16">
             <div class="flex items-center gap-3 mb-8">
-                <span class="w-8 h-8 bg-gray-500 text-white flex items-center justify-center font-bold rounded">04</span>
+                <span
+                    class="w-8 h-8 bg-gray-500 text-white flex items-center justify-center font-bold rounded">04</span>
                 <h2 class="text-2xl font-bold">Especificações Técnicas</h2>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
-                
+
                 <!-- A. Tipografia -->
                 <div class="card p-8">
-                    <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-6">Família Tipográfica (Inter)</h3>
+                    <h3 class="text-sm font-bold uppercase tracking-widest text-gray-400 mb-6">Família Tipográfica
+                        (Inter)</h3>
                     <div class="space-y-8">
                         <div>
                             <div class="flex justify-between items-end border-b border-gray-200 pb-2 mb-2">
@@ -210,7 +354,8 @@
                                 <span class="font-mono text-xs text-gray-500">Weight: 600 (SemiBold)</span>
                             </div>
                             <p class="font-ai text-xl text-gray-700">AI Secondary</p>
-                            <p class="text-xs text-gray-500 mt-1">Usado para a unidade "AI" e UI. Tracking normal (-2%).</p>
+                            <p class="text-xs text-gray-500 mt-1">Usado para a unidade "AI" e UI. Tracking normal (-2%).
+                            </p>
                         </div>
                     </div>
                 </div>
@@ -240,7 +385,9 @@
                         <!-- Deep Core -->
                         <div class="flex items-center gap-4 p-2">
                             <div class="w-12 h-12 rounded overflow-hidden relative shadow-sm bg-black">
-                                <div class="absolute inset-0" style="background: radial-gradient(circle, #DC2626 0%, transparent 70%); opacity: 0.6;"></div>
+                                <div class="absolute inset-0"
+                                    style="background: radial-gradient(circle, #DC2626 0%, transparent 70%); opacity: 0.6;">
+                                </div>
                             </div>
                             <div>
                                 <p class="font-bold text-sm">Deep Core (Gradient)</p>
@@ -257,7 +404,8 @@
         <!-- 5. ÍCONES (CENTRALIZADO) -->
         <section>
             <div class="flex items-center gap-3 mb-8">
-                <span class="w-8 h-8 bg-gray-800 text-white flex items-center justify-center font-bold rounded">05</span>
+                <span
+                    class="w-8 h-8 bg-gray-800 text-white flex items-center justify-center font-bold rounded">05</span>
                 <h2 class="text-2xl font-bold">Icons</h2>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -277,8 +425,9 @@
                     </div>
                     <span class="text-[10px] font-bold text-gray-400 uppercase">App (Static)</span>
                 </div>
-                 <div class="card p-6 flex flex-col items-center justify-center">
-                    <div class="monolith-structure w-24 h-24 rounded-full shadow-lg mb-4 border-2 border-white relative">
+                <div class="card p-6 flex flex-col items-center justify-center">
+                    <div
+                        class="monolith-structure w-24 h-24 rounded-full shadow-lg mb-4 border-2 border-white relative">
                         <div class="aura-icon centered-layer"></div>
                         <div class="light-icon centered-layer animate-icon"></div>
                         <div class="core-icon centered-layer"></div>
@@ -286,7 +435,8 @@
                     <span class="text-[10px] font-bold text-red-600 uppercase">Social (Live)</span>
                 </div>
                 <div class="card p-6 flex flex-col items-center justify-center">
-                    <div class="monolith-structure w-24 h-24 rounded-full shadow-lg mb-4 border-2 border-white relative">
+                    <div
+                        class="monolith-structure w-24 h-24 rounded-full shadow-lg mb-4 border-2 border-white relative">
                         <div class="aura-icon centered-layer"></div>
                         <div class="light-icon centered-layer" style="opacity: 0.6;"></div>
                         <div class="core-icon centered-layer"></div>
@@ -299,4 +449,5 @@
 
     </main>
 </body>
+
 </html>

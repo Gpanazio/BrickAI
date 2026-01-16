@@ -942,40 +942,41 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
 const Header = ({ onChat, onWorks, onTransmissions, onHome, isChatView }: { onChat: () => void, onWorks: () => void, onTransmissions: () => void, onHome: () => void, isChatView: boolean }) => {
     return (
         <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center bg-gradient-to-b from-[#050505]/90 to-transparent backdrop-blur-sm pointer-events-none">
-            <div onClick={onHome} className="pointer-events-auto flex items-center gap-2 group cursor-pointer select-none">
-                <div className="flex items-center">
-                    <img src="/01.png" alt="BRICK" className="h-5 md:h-6 w-auto object-contain" />
-                </div>
-                <div className="flex items-baseline">
-                    <span className="text-[#DC2626] font-bold text-xl md:text-2xl animate-blink relative -top-[1px] mx-[2px]">_</span>
-                    <span className="text-[#9CA3AF] font-semibold text-sm md:text-base tracking-widest group-hover:text-white transition-colors duration-500">AI</span>
-                </div>
+            <div className="flex items-center">
+                <img src="/01.png" alt="BRICK" className="h-6 md:h-7 w-auto object-contain translate-y-[2px]" />
             </div>
-            {!isChatView && (
-                <div className="flex items-center gap-8 pointer-events-auto">
-                    {/* NAV STYLE: Raw Text Links */}
-                    <MagneticButton onClick={() => window.location.href = '/brand.html'} className="group text-xs md:text-sm font-mono tracking-[0.2em] text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
-                        <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
-                        BRAND
-                    </MagneticButton>
+            <div className="flex items-baseline">
+                <span className="text-[#DC2626] font-light text-3xl animate-blink mx-1 translate-y-[4px]">_</span>
+                <span className="text-[#9CA3AF] font-semibold text-xl tracking-tight col-start-1 group-hover:text-white transition-colors duration-500">AI</span>
+            </div>
+        </div>
+            {
+        !isChatView && (
+            <div className="flex items-center gap-8 pointer-events-auto">
+                {/* NAV STYLE: Raw Text Links */}
+                <MagneticButton onClick={() => window.location.href = '/brand.html'} className="group text-xs md:text-sm font-mono tracking-[0.2em] text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
+                    <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
+                    BRAND
+                </MagneticButton>
 
-                    <MagneticButton onClick={onWorks} className="group text-xs md:text-sm font-mono tracking-[0.2em] text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
-                        <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
-                        WORKS
-                    </MagneticButton>
+                <MagneticButton onClick={onWorks} className="group text-xs md:text-sm font-mono tracking-[0.2em] text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
+                    <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
+                    WORKS
+                </MagneticButton>
 
-                    <MagneticButton onClick={onTransmissions} className="group text-xs md:text-sm font-mono tracking-[0.2em] text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
-                        <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
-                        TRANSMISSIONS
-                    </MagneticButton>
+                <MagneticButton onClick={onTransmissions} className="group text-xs md:text-sm font-mono tracking-[0.2em] text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
+                    <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
+                    TRANSMISSIONS
+                </MagneticButton>
 
-                    {/* CTA STYLE: Subtle Blinking Underscore */}
-                    <MagneticButton onClick={onChat} className="ml-8 text-xs md:text-sm font-mono font-bold tracking-[0.15em] transition-all duration-300 text-white hover:text-[#DC2626] group">
-                        TALK TO US <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
-                    </MagneticButton>
-                </div>
-            )}
-        </header>
+                {/* CTA STYLE: Subtle Blinking Underscore */}
+                <MagneticButton onClick={onChat} className="ml-8 text-xs md:text-sm font-mono font-bold tracking-[0.15em] transition-all duration-300 text-white hover:text-[#DC2626] group">
+                    TALK TO US <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
+                </MagneticButton>
+            </div>
+        )
+    }
+        </header >
     );
 };
 
