@@ -129,7 +129,7 @@ interface Work {
     id: string;
     orientation: 'horizontal' | 'vertical';
     subtitle: string;
-    category: string; 
+    category: string;
     title: string;
     desc: string;
     videoUrl?: string; // Novo campo para vídeo real
@@ -264,7 +264,7 @@ const StructuredData = ({ posts }: { posts: Post[] }) => {
 const INITIAL_WORKS: Work[] = [
     {
         id: "inheritance",
-        orientation: "horizontal", 
+        orientation: "horizontal",
         subtitle: "FULL GENERATIVE",
         category: "GENERATIVE",
         title: "INHERITANCE",
@@ -283,7 +283,7 @@ const INITIAL_WORKS: Work[] = [
     },
     {
         id: "shift",
-        orientation: "horizontal", 
+        orientation: "horizontal",
         subtitle: "HYBRID EXTENSION",
         category: "VFX",
         title: "WE CAN SELL ANYTHING",
@@ -302,7 +302,7 @@ const INITIAL_WORKS: Work[] = [
     },
     {
         id: "anima",
-        orientation: "vertical", 
+        orientation: "vertical",
         subtitle: "STYLE TRANSFER",
         category: "STYLE TRANSFER",
         title: "AUTOBOL",
@@ -432,7 +432,7 @@ const ScrambleText = ({ text, className, hoverTrigger = false }: { text: string,
         clearInterval(intervalRef.current);
 
         intervalRef.current = setInterval(() => {
-            setDisplayText(prev => 
+            setDisplayText(prev =>
                 text
                     .split("")
                     .map((letter, index) => {
@@ -445,7 +445,7 @@ const ScrambleText = ({ text, className, hoverTrigger = false }: { text: string,
             if (iteration >= text.length) {
                 clearInterval(intervalRef.current);
             }
-            
+
             iteration += 1 / 3;
         }, 30);
     };
@@ -455,8 +455,8 @@ const ScrambleText = ({ text, className, hoverTrigger = false }: { text: string,
     }, []);
 
     return (
-        <span 
-            className={className} 
+        <span
+            className={className}
             onMouseEnter={hoverTrigger ? scramble : undefined}
         >
             {displayText}
@@ -466,7 +466,7 @@ const ScrambleText = ({ text, className, hoverTrigger = false }: { text: string,
 
 const MagneticButton = ({ children, onClick, className }: { children: React.ReactNode, onClick: () => void, className?: string }) => {
     const btnRef = useRef<HTMLButtonElement>(null);
-    
+
     const handleMouseMove = (e: React.MouseEvent) => {
         if (!btnRef.current) return;
         const rect = btnRef.current.getBoundingClientRect();
@@ -481,7 +481,7 @@ const MagneticButton = ({ children, onClick, className }: { children: React.Reac
     };
 
     return (
-        <button 
+        <button
             onClick={onClick}
             ref={btnRef}
             onMouseMove={handleMouseMove}
@@ -547,8 +547,8 @@ const CustomCursor = ({ active }: { active: boolean }) => {
             }
 
             const target = e.target as HTMLElement;
-            const isClickable = target.closest('button, a, input, textarea, [role="button"]') || 
-                               window.getComputedStyle(target).cursor === 'pointer';
+            const isClickable = target.closest('button, a, input, textarea, [role="button"]') ||
+                window.getComputedStyle(target).cursor === 'pointer';
             setIsPointer(!!isClickable);
         };
 
@@ -559,10 +559,10 @@ const CustomCursor = ({ active }: { active: boolean }) => {
     }, []);
 
     return (
-        <div 
-            ref={dotRef} 
-            className={`fixed top-0 left-0 w-2 h-2 bg-[#DC2626] rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform transition-opacity duration-200 ${active || isPointer ? 'opacity-100 scale-[3]' : 'opacity-0 scale-100'}`} 
-            style={{ transform: 'translate(-100px, -100px)' }} 
+        <div
+            ref={dotRef}
+            className={`fixed top-0 left-0 w-2 h-2 bg-[#DC2626] rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform transition-opacity duration-200 ${active || isPointer ? 'opacity-100 scale-[3]' : 'opacity-0 scale-100'}`}
+            style={{ transform: 'translate(-100px, -100px)' }}
         />
     );
 };
@@ -598,7 +598,7 @@ const chatWithMono = async (history: any[], message: string) => {
                 ]
             })
         });
-        
+
         const data = await response.json();
         if (data.candidates && data.candidates[0].content) {
             return data.candidates[0].content.parts[0].text;
@@ -725,7 +725,7 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                 setTransmissions([...transmissions, editingItem]);
             }
         }
-        
+
         console.log(">> [DB DEBUG] Saved to Local State successfully.");
         setStatus("SUCCESS.");
         setTimeout(() => {
@@ -736,7 +736,7 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
 
     const handleDelete = async (id: string) => {
         if (!confirm("CONFIRM DELETION?")) return;
-        
+
         const endpoint = activeTab === 'works' ? `/api/works/${id}` : `/api/transmissions/${id}`;
         await fetch(endpoint, { method: 'DELETE' });
 
@@ -749,18 +749,18 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
             <div className="min-h-screen flex items-center justify-center bg-[#050505] text-white font-mono">
                 <form onSubmit={handleLogin} className="flex flex-col gap-4 w-full max-w-md p-8 border border-white/10 bg-white/5">
                     <h2 className="text-xl font-bold tracking-widest text-[#DC2626]">SYSTEM ACCESS</h2>
-                    <input 
-                        type="text" 
-                        value={identifier} 
-                        onChange={e => setIdentifier(e.target.value)} 
-                        placeholder="USERNAME OR EMAIL..." 
+                    <input
+                        type="text"
+                        value={identifier}
+                        onChange={e => setIdentifier(e.target.value)}
+                        placeholder="USERNAME OR EMAIL..."
                         className="bg-black border border-white/20 p-3 text-white focus:border-[#DC2626] outline-none tracking-widest"
                     />
-                    <input 
-                        type="password" 
-                        value={password} 
-                        onChange={e => setPassword(e.target.value)} 
-                        placeholder="ENTER KEY..." 
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        placeholder="ENTER KEY..."
                         className="bg-black border border-white/20 p-3 text-white focus:border-[#DC2626] outline-none tracking-widest"
                     />
                     <button type="submit" className="bg-[#DC2626] text-white p-3 font-bold tracking-widest hover:bg-red-700 transition-colors">AUTHENTICATE</button>
@@ -794,23 +794,23 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                         {activeTab === 'works' ? (
                             <>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="ID (unique)" value={editingItem.id || ''} onChange={e => setEditingItem({...editingItem, id: e.target.value})} />
-                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Title" value={editingItem.title || ''} onChange={e => setEditingItem({...editingItem, title: e.target.value})} />
+                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="ID (unique)" value={editingItem.id || ''} onChange={e => setEditingItem({ ...editingItem, id: e.target.value })} />
+                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Title" value={editingItem.title || ''} onChange={e => setEditingItem({ ...editingItem, title: e.target.value })} />
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Category" value={editingItem.category || ''} onChange={e => setEditingItem({...editingItem, category: e.target.value})} />
-                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Subtitle" value={editingItem.subtitle || ''} onChange={e => setEditingItem({...editingItem, subtitle: e.target.value})} />
+                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Category" value={editingItem.category || ''} onChange={e => setEditingItem({ ...editingItem, category: e.target.value })} />
+                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Subtitle" value={editingItem.subtitle || ''} onChange={e => setEditingItem({ ...editingItem, subtitle: e.target.value })} />
                                 </div>
                                 <div className="grid grid-cols-1">
-                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Vimeo URL (ex: https://vimeo.com/123456789)" value={editingItem.videoUrl || ''} onChange={e => setEditingItem({...editingItem, videoUrl: e.target.value})} />
+                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Vimeo URL (ex: https://vimeo.com/123456789)" value={editingItem.videoUrl || ''} onChange={e => setEditingItem({ ...editingItem, videoUrl: e.target.value })} />
                                     <p className="text-[9px] text-[#9CA3AF] mt-1 uppercase tracking-widest">Insira o link do Vimeo para exibição automática no modal do projeto.</p>
                                 </div>
-                                <textarea className="bg-[#050505] border border-white/20 p-3 h-24" placeholder="Short Description" value={editingItem.desc || ''} onChange={e => setEditingItem({...editingItem, desc: e.target.value})} />
-                                <textarea className="bg-[#050505] border border-white/20 p-3 h-32" placeholder="Long Description" value={editingItem.longDesc || ''} onChange={e => setEditingItem({...editingItem, longDesc: e.target.value})} />
-                                
+                                <textarea className="bg-[#050505] border border-white/20 p-3 h-24" placeholder="Short Description" value={editingItem.desc || ''} onChange={e => setEditingItem({ ...editingItem, desc: e.target.value })} />
+                                <textarea className="bg-[#050505] border border-white/20 p-3 h-32" placeholder="Long Description" value={editingItem.longDesc || ''} onChange={e => setEditingItem({ ...editingItem, longDesc: e.target.value })} />
+
                                 <div className="border border-white/10 p-6 bg-[#050505]">
                                     <label className="block text-xs text-[#DC2626] font-bold tracking-widest mb-8 uppercase">Visual Direction (Home & Works)</label>
-                                    
+
                                     <div className="space-y-12">
                                         {/* HOME PREVIEW (WIDE) */}
                                         <div className="flex flex-col gap-4">
@@ -878,13 +878,13 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                         ) : (
                             <>
                                 <div className="grid grid-cols-2 gap-4">
-                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="ID" value={editingItem.id || ''} onChange={e => setEditingItem({...editingItem, id: e.target.value})} />
-                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Date (YYYY.MM.DD)" value={editingItem.date || ''} onChange={e => setEditingItem({...editingItem, date: e.target.value})} />
+                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="ID" value={editingItem.id || ''} onChange={e => setEditingItem({ ...editingItem, id: e.target.value })} />
+                                    <input className="bg-[#050505] border border-white/20 p-3" placeholder="Date (YYYY.MM.DD)" value={editingItem.date || ''} onChange={e => setEditingItem({ ...editingItem, date: e.target.value })} />
                                 </div>
-                                <input className="bg-[#050505] border border-white/20 p-3" placeholder="Title" value={editingItem.title || ''} onChange={e => setEditingItem({...editingItem, title: e.target.value})} />
-                                <textarea className="bg-[#050505] border border-white/20 p-3 h-24" placeholder="Excerpt" value={editingItem.excerpt || ''} onChange={e => setEditingItem({...editingItem, excerpt: e.target.value})} />
+                                <input className="bg-[#050505] border border-white/20 p-3" placeholder="Title" value={editingItem.title || ''} onChange={e => setEditingItem({ ...editingItem, title: e.target.value })} />
+                                <textarea className="bg-[#050505] border border-white/20 p-3 h-24" placeholder="Excerpt" value={editingItem.excerpt || ''} onChange={e => setEditingItem({ ...editingItem, excerpt: e.target.value })} />
                                 {/* Simple Content Editor for now */}
-                                <textarea className="bg-[#050505] border border-white/20 p-3 h-64 font-mono text-xs" placeholder="Content (JSX/HTML)" value={typeof editingItem.content === 'string' ? editingItem.content : 'Complex content editing requires a rich text editor component.'} onChange={e => setEditingItem({...editingItem, content: e.target.value})} />
+                                <textarea className="bg-[#050505] border border-white/20 p-3 h-64 font-mono text-xs" placeholder="Content (JSX/HTML)" value={typeof editingItem.content === 'string' ? editingItem.content : 'Complex content editing requires a rich text editor component.'} onChange={e => setEditingItem({ ...editingItem, content: e.target.value })} />
                             </>
                         )}
                         <div className="flex gap-4 mt-4">
@@ -896,7 +896,7 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
                 </div>
             ) : (
                 <div className="grid grid-cols-1 gap-1">
-                    <div 
+                    <div
                         onClick={() => setEditingItem(activeTab === 'works' ? { id: `work_${Date.now()}`, orientation: 'horizontal', hasDetail: true, gradient: 'from-neutral-900 to-neutral-800', imageSettingsHome: { x: 50, y: 50, scale: 1.2 }, imageSettingsWorks: { x: 50, y: 50, scale: 1.2 } } : { id: `log_${Date.now()}`, tags: [] })}
                         className="border border-white/10 border-dashed p-6 flex items-center justify-center cursor-pointer hover:border-[#DC2626] hover:bg-[#DC2626]/5 transition-all group"
                     >
@@ -943,8 +943,8 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, isChatView }: { onCh
     return (
         <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center bg-gradient-to-b from-[#050505]/90 to-transparent backdrop-blur-sm pointer-events-none">
             <div onClick={onHome} className="pointer-events-auto flex items-center gap-2 group cursor-pointer select-none">
-                <div className="font-black text-xl tracking-tighter text-white flex items-center gap-1">
-                    <ScrambleText text="BRICK" hoverTrigger={true} />
+                <div className="flex items-center">
+                    <img src="/01.png" alt="BRICK" className="h-5 md:h-6 w-auto object-contain" />
                 </div>
                 <div className="flex items-baseline">
                     <span className="text-[#DC2626] font-bold text-xl md:text-2xl animate-blink relative -top-[1px] mx-[2px]">_</span>
@@ -968,7 +968,7 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, isChatView }: { onCh
                         <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
                         TRANSMISSIONS
                     </MagneticButton>
-                    
+
                     {/* CTA STYLE: Subtle Blinking Underscore */}
                     <MagneticButton onClick={onChat} className="ml-8 text-xs md:text-sm font-mono font-bold tracking-[0.15em] transition-all duration-300 text-white hover:text-[#DC2626] group">
                         TALK TO US <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
@@ -983,7 +983,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
     const radiationRef = useRef<HTMLDivElement>(null);
     const targetPos = useRef({ x: 0, y: 0 });
     const currentPos = useRef({ x: 0, y: 0 });
-    
+
     const handleMouseMove = (e: React.MouseEvent) => {
         if (!radiationRef.current) return;
         const rect = e.currentTarget.getBoundingClientRect();
@@ -1017,7 +1017,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
         <section className="relative min-h-screen w-full flex flex-col items-center justify-start pt-28 md:pt-32 pb-20 overflow-hidden">
             <div className="reveal relative z-10 w-full flex justify-center mb-12 md:mb-16">
                 <div className="relative w-[140px] md:w-[160px] h-[40vh] md:h-[45vh]">
-                    <div 
+                    <div
                         className={`monolith-structure w-full h-full rounded-[2px] flex items-center justify-center overflow-hidden shadow-2xl relative transition-transform duration-1000 ease-out pointer-events-none ${monolithHover ? 'scale-[1.02]' : 'scale-100'}`}
                         style={{ transform: 'translateZ(0)' }}
                     >
@@ -1025,7 +1025,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                         <div className="centered-layer aura-atmos pointer-events-none opacity-50"></div>
                         <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-50"></div>
                         <div className="centered-layer core-atmos pointer-events-none"></div>
-                        <div 
+                        <div
                             ref={radiationRef}
                             className="absolute w-[300px] h-[300px] -ml-[150px] -mt-[150px] top-1/2 left-1/2 pointer-events-none transition-opacity duration-700 ease-out"
                             style={{
@@ -1042,7 +1042,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                         ></div>
                         <div className="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10"></div>
                     </div>
-                    <div 
+                    <div
                         className="absolute inset-0 z-20 cursor-none"
                         onMouseMove={handleMouseMove}
                         onMouseEnter={handleMouseEnter}
@@ -1058,7 +1058,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                 <h2 className="text-3xl md:text-6xl lg:text-7xl font-black tracking-tighter text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
                     <ScrambleText text="NOW GENERATIVE." />
                 </h2>
-                <p className="mt-12 text-[#9CA3AF] text-xs md:text-sm font-light tracking-[0.2em] uppercase opacity-60 max-w-md border-t border-white/10 pt-6">A new division by Brick.<br/>From zero to all since 2016.</p>
+                <p className="mt-12 text-[#9CA3AF] text-xs md:text-sm font-light tracking-[0.2em] uppercase opacity-60 max-w-md border-t border-white/10 pt-6">A new division by Brick.<br />From zero to all since 2016.</p>
             </div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
         </section>
@@ -1127,20 +1127,20 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
     }, [settings.scale]);
 
     return (
-        <div 
-            ref={containerRef} 
+        <div
+            ref={containerRef}
             onClick={() => work.hasDetail && onOpen(work)}
-            className={`reveal work-card-trigger w-full min-h-[40vh] md:min-h-[50vh] relative flex items-center group overflow-hidden border-b border-black ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`} 
+            className={`reveal work-card-trigger w-full min-h-[40vh] md:min-h-[50vh] relative flex items-center group overflow-hidden border-b border-black ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
             style={{ transitionDelay: `${index * 100}ms` }}
         >
-            <div 
-                ref={bgRef} 
-                className="absolute inset-0 opacity-50 mix-blend-overlay will-change-transform" 
-                style={{ 
-                    backgroundImage: `url('${work.imageHome}')`, 
-                    backgroundSize: 'cover', 
-                    backgroundPosition: `${settings.x}% ${settings.y}%`, 
-                    transform: `scale(${settings.scale})` 
+            <div
+                ref={bgRef}
+                className="absolute inset-0 opacity-50 mix-blend-overlay will-change-transform"
+                style={{
+                    backgroundImage: `url('${work.imageHome}')`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: `${settings.x}% ${settings.y}%`,
+                    transform: `scale(${settings.scale})`
                 }}
             ></div>
             <div className={`absolute inset-0 bg-gradient-to-r ${work.gradient} opacity-50 transition-opacity duration-700 group-hover:opacity-80 z-10`}></div>
@@ -1175,7 +1175,7 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
 const Legacy = () => (
     <section className="w-full py-32 px-6 md:px-12 lg:px-24 bg-[#E5E5E5] text-[#050505] relative overflow-hidden">
         <div className="max-w-[1400px] mx-auto reveal">
-            <h2 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-20 leading-[0.85]">BACKED <br className="md:hidden"/> BY BRICK.</h2>
+            <h2 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-20 leading-[0.85]">BACKED <br className="md:hidden" /> BY BRICK.</h2>
             <div className="flex flex-col lg:flex-row gap-20 border-t-4 border-[#050505] pt-16">
                 <div className="lg:w-1/2">
                     <p className="text-xl md:text-2xl font-light leading-tight max-w-lg">
@@ -1218,8 +1218,8 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
     };
     const vimeoId = project.videoUrl ? getVimeoId(project.videoUrl) : null;
 
-    const modalClasses = isHorizontal 
-        ? 'max-w-7xl max-h-[85vh] aspect-[16/8] md:aspect-[16/7]' 
+    const modalClasses = isHorizontal
+        ? 'max-w-7xl max-h-[85vh] aspect-[16/8] md:aspect-[16/7]'
         : 'max-w-5xl max-h-[90vh] aspect-[9/16] md:aspect-auto';
 
     return (
@@ -1242,17 +1242,17 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                                     title={project.title}
                                 ></iframe>
                             ) : (
-                                <video 
-                                    src={project.videoUrl} 
+                                <video
+                                    src={project.videoUrl}
                                     className="w-full h-full object-cover opacity-80"
                                     autoPlay loop muted playsInline
                                 />
                             )
                         ) : (
                             <div className="placeholder-video w-full h-full flex items-center justify-center relative">
-                                <div 
-                                    className="absolute inset-0 opacity-40 bg-cover transition-transform duration-1000 group-hover:scale-105" 
-                                    style={{ 
+                                <div
+                                    className="absolute inset-0 opacity-40 bg-cover transition-transform duration-1000 group-hover:scale-105"
+                                    style={{
                                         backgroundImage: `url('${project.imageHome}')`,
                                         backgroundPosition: `${settings.x}% ${settings.y}%`,
                                         transform: `scale(${settings.scale})`
@@ -1299,16 +1299,16 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
 
 const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onOpen: (work: Work) => void }) => {
     const settings = work.imageSettingsWorks || { x: 50, y: 50, scale: 1.2 };
-    
+
     return (
-        <div 
+        <div
             className="group relative w-full aspect-square border border-white/10 bg-[#0a0a0a] overflow-hidden cursor-pointer hover:border-[#DC2626] transition-colors duration-300 reveal"
             style={{ animationDelay: `${index * 50}ms` }}
             onClick={() => onOpen(work)}
         >
-            <div 
-                className="absolute inset-0 opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500" 
-                style={{ 
+            <div
+                className="absolute inset-0 opacity-60 grayscale group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                style={{
                     backgroundImage: `url('${work.imageWorks || work.imageHome}')`,
                     backgroundSize: 'cover',
                     backgroundPosition: `${settings.x}% ${settings.y}%`,
@@ -1353,7 +1353,7 @@ const WorksFilter = ({ categories, activeCategory, onSelect }: { categories: str
 const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject }: any) => {
     const [activeCategory, setActiveCategory] = useState("ALL");
     const { works } = useContext(DataContext)!;
-    
+
     const categories = useMemo(() => {
         const cats = new Set(works.map(w => w.category));
         return ["ALL", ...Array.from(cats)];
@@ -1371,11 +1371,11 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject }
                 }
             });
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-        
+
         const timeoutId = setTimeout(() => {
             document.querySelectorAll('.grid .reveal').forEach(el => observer.observe(el));
         }, 50);
-        
+
         return () => {
             observer.disconnect();
             clearTimeout(timeoutId);
@@ -1390,12 +1390,12 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject }
             </button>
             <main className="pt-32 min-h-screen flex flex-col">
                 <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
-                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white mb-4">ARCHIVE_INDEX</h1>
                             <p className="text-[#9CA3AF] font-mono text-xs md:text-sm tracking-widest max-w-xl">ACESSING NEURAL DATABASE... {works.length} ENTRIES FOUND.</p>
                         </div>
-                     </div>
+                    </div>
                 </section>
                 <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32">
                     <WorksFilter categories={categories} activeCategory={activeCategory} onSelect={setActiveCategory} />
@@ -1435,8 +1435,8 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome }
                         <p className="text-lg md:text-xl text-[#9CA3AF] font-light leading-relaxed border-l-2 border-[#DC2626] pl-6">{post.excerpt}</p>
                     </div>
                     <div className="prose prose-invert prose-lg max-w-none">
-                        {typeof post.content === 'string' 
-                            ? <div dangerouslySetInnerHTML={{ __html: post.content }} /> 
+                        {typeof post.content === 'string'
+                            ? <div dangerouslySetInnerHTML={{ __html: post.content }} />
                             : post.content}
                     </div>
                 </article>
@@ -1449,41 +1449,41 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome }
 const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectPost }: any) => {
     const { transmissions } = useContext(DataContext)!;
     return (
-    <React.Fragment>
-        <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
-        <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-            <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
-        </button>
-        <main className="pt-32 min-h-screen flex flex-col bg-[#0a0a0a]">
-            <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
-                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                    <div>
-                        <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white mb-4">NEURAL_LOGS</h1>
-                        <p className="text-[#9CA3AF] font-mono text-xs md:text-sm tracking-widest max-w-xl">INCOMING DATA STREAMS... {transmissions.length} RECORDS.</p>
-                    </div>
-                 </div>
-            </section>
-            <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 reveal">
-                <div className="space-y-px bg-white/10 border-t border-white/10">
-                    {transmissions.map((post) => (
-                        <div key={post.id} onClick={() => onSelectPost(post)} className="block group bg-[#050505] hover:bg-[#0a0a0a] transition-colors p-8 md:p-12 border-b border-white/10 cursor-pointer">
-                            <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-6">
-                                <h3 className="text-2xl md:text-4xl font-black text-white tracking-tight group-hover:text-[#DC2626] transition-colors">{post.title}</h3>
-                                <span className="font-mono text-xs text-[#DC2626] tracking-widest whitespace-nowrap">{post.date}</span>
-                            </div>
-                            <p className="text-[#9CA3AF] text-base md:text-lg font-light max-w-3xl mb-8 leading-relaxed">{post.excerpt}</p>
-                            <div className="flex gap-3">
-                                {post.tags.map(tag => (
-                                    <span key={tag} className="text-[10px] font-mono border border-white/10 px-3 py-1.5 text-[#9CA3AF]/60 uppercase tracking-wider">{tag}</span>
-                                ))}
-                            </div>
+        <React.Fragment>
+            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
+            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
+            </button>
+            <main className="pt-32 min-h-screen flex flex-col bg-[#0a0a0a]">
+                <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                        <div>
+                            <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white mb-4">NEURAL_LOGS</h1>
+                            <p className="text-[#9CA3AF] font-mono text-xs md:text-sm tracking-widest max-w-xl">INCOMING DATA STREAMS... {transmissions.length} RECORDS.</p>
                         </div>
-                    ))}
-                </div>
-            </section>
-        </main>
-        <Footer onChat={onChat} />
-    </React.Fragment>
+                    </div>
+                </section>
+                <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 reveal">
+                    <div className="space-y-px bg-white/10 border-t border-white/10">
+                        {transmissions.map((post) => (
+                            <div key={post.id} onClick={() => onSelectPost(post)} className="block group bg-[#050505] hover:bg-[#0a0a0a] transition-colors p-8 md:p-12 border-b border-white/10 cursor-pointer">
+                                <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-6">
+                                    <h3 className="text-2xl md:text-4xl font-black text-white tracking-tight group-hover:text-[#DC2626] transition-colors">{post.title}</h3>
+                                    <span className="font-mono text-xs text-[#DC2626] tracking-widest whitespace-nowrap">{post.date}</span>
+                                </div>
+                                <p className="text-[#9CA3AF] text-base md:text-lg font-light max-w-3xl mb-8 leading-relaxed">{post.excerpt}</p>
+                                <div className="flex gap-3">
+                                    {post.tags.map(tag => (
+                                        <span key={tag} className="text-[10px] font-mono border border-white/10 px-3 py-1.5 text-[#9CA3AF]/60 uppercase tracking-wider">{tag}</span>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            </main>
+            <Footer onChat={onChat} />
+        </React.Fragment>
     );
 };
 
@@ -1607,7 +1607,7 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, s
 );
 
 const App = () => {
-    const [view, setView] = useState('home'); 
+    const [view, setView] = useState('home');
     const [monolithHover, setMonolithHover] = useState(false);
     const [selectedProject, setSelectedProject] = useState<Work | null>(null);
     const [selectedPost, setSelectedPost] = useState<Post | null>(null);
@@ -1616,7 +1616,7 @@ const App = () => {
     useEffect(() => {
         const handleLocationChange = () => {
             const path = window.location.pathname;
-            
+
             if (path === '/') { setView('home'); }
             else if (path === '/works') { setView('works'); }
             else if (path === '/transmissions') { setView('transmissions'); }
@@ -1642,7 +1642,7 @@ const App = () => {
     const goTransmissions = () => { navigate('transmissions', '/transmissions'); setSelectedPost(null); };
     const goChat = () => { navigate('chat', '/chat'); setSelectedPost(null); };
     const goAdmin = () => { navigate('admin', '/admin'); setSelectedPost(null); };
-    
+
     const handleSelectPost = (post: Post) => {
         setSelectedPost(post);
         navigate('post', `/transmissions/${post.id}`);
