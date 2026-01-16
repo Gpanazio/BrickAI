@@ -1012,9 +1012,9 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
     }, [monolithHover]);
 
     return (
-        <section className="relative min-h-screen w-full flex flex-col items-center justify-start pt-28 md:pt-32 pb-20 overflow-hidden">
-            <div className="reveal relative z-10 w-full flex justify-center mb-12 md:mb-16">
-                <div className="relative w-[140px] md:w-[160px] h-[40vh] md:h-[45vh]">
+        <section className="relative min-h-screen w-full flex flex-col items-center justify-start pt-20 md:pt-24 pb-12 overflow-hidden">
+            <div className="reveal relative z-10 w-full flex justify-center mb-8 md:mb-12">
+                <div className="relative w-[100px] md:w-[120px] h-[30vh] md:h-[35vh]">
                     <div
                         className={`monolith-structure w-full h-full rounded-[2px] flex items-center justify-center overflow-hidden shadow-2xl relative transition-transform duration-1000 ease-out pointer-events-none ${monolithHover ? 'scale-[1.02]' : 'scale-100'}`}
                         style={{ transform: 'translateZ(0)' }}
@@ -1049,14 +1049,14 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                 </div>
             </div>
             <div className="reveal delay-200 text-center z-20 max-w-6xl px-4 flex flex-col items-center pointer-events-none">
-                <h1 className="text-5xl md:text-8xl lg:text-9xl font-black tracking-tighter text-white leading-[0.85] mb-6 md:mb-10 drop-shadow-2xl">
+                <h1 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white leading-[0.85] mb-4 md:mb-6 drop-shadow-2xl">
                     FROM SET TO SERVER.
                 </h1>
-                <p className="text-lg md:text-2xl lg:text-3xl font-light tracking-[0.3em] text-[#E5E5E5]/80 mb-2 md:mb-4">10 YEARS OF CRAFT.</p>
-                <h2 className="text-3xl md:text-6xl lg:text-7xl font-black tracking-tighter text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
+                <p className="text-base md:text-xl lg:text-2xl font-light tracking-[0.3em] text-[#E5E5E5]/80 mb-2 md:mb-4">10 YEARS OF CRAFT.</p>
+                <h2 className="text-2xl md:text-4xl lg:text-5xl font-black tracking-tighter text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
                     <ScrambleText text="NOW GENERATIVE." />
                 </h2>
-                <p className="mt-12 text-[#9CA3AF] text-xs md:text-sm font-light tracking-[0.2em] uppercase opacity-60 max-w-md border-t border-white/10 pt-6">A new division by Brick.<br />From zero to all since 2016.</p>
+                <p className="mt-8 text-[#9CA3AF] text-[10px] md:text-xs font-light tracking-[0.2em] uppercase opacity-60 max-w-md border-t border-white/10 pt-4">A new division by Brick.<br />From zero to all since 2016.</p>
             </div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
         </section>
@@ -1064,14 +1064,14 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
 };
 
 const Philosophy = () => (
-    <section className="relative w-full py-32 bg-[#050505] z-20 border-t border-white/5">
+    <section className="relative w-full py-20 bg-[#050505] z-20 border-t border-white/5">
         <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent -translate-x-1/2 hidden md:block"></div>
         <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
-            <div className="mb-32 reveal flex flex-col items-center">
+            <div className="mb-20 reveal flex flex-col items-center">
                 <div className="w-2 h-2 bg-[#DC2626] rounded-full animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.5)] mb-6"></div>
                 <span className="text-xs font-mono tracking-[0.3em] text-[#9CA3AF] uppercase bg-[#050505] px-4">The Belief</span>
             </div>
-            <div className="flex flex-col gap-32 w-full">
+            <div className="flex flex-col gap-24 w-full">
                 <PhilosophyItem title="RAW." text="AI creates infinite pixels and patterns. But it cannot create intent. It is just a resource." />
                 <PhilosophyItem title="NOISE." text="Without a human hand, generative models are just mathematical coincidence. We provide the vision." />
                 <PhilosophyItem title="WE DIRECT THE INTELLIGENCE." text="The machine is the brush. The database is the paint. We are still the artists." />
@@ -1082,8 +1082,8 @@ const Philosophy = () => (
 
 const PhilosophyItem = ({ title, text }: { title: string, text: string }) => (
     <div className="reveal flex flex-col items-center group cursor-default">
-        <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-white mb-6 transition-colors duration-500 group-hover:text-[#DC2626]">{title}</h2>
-        <p className="text-lg md:text-xl text-[#9CA3AF] font-light max-w-lg leading-relaxed group-hover:text-white transition-colors duration-300">{text}</p>
+        <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-white mb-4 transition-colors duration-500 group-hover:text-[#DC2626]">{title}</h2>
+        <p className="text-base md:text-lg text-[#9CA3AF] font-light max-w-lg leading-relaxed group-hover:text-white transition-colors duration-300">{text}</p>
     </div>
 );
 
@@ -1128,7 +1128,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
         <div
             ref={containerRef}
             onClick={() => work.hasDetail && onOpen(work)}
-            className={`reveal work-card-trigger w-full min-h-[40vh] md:min-h-[50vh] relative flex items-center group overflow-hidden border-b border-black ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
+            className={`reveal work-card-trigger w-full min-h-[35vh] md:min-h-[45vh] relative flex items-center group overflow-hidden border-b border-black ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
             style={{ transitionDelay: `${index * 100}ms` }}
         >
             <div
@@ -1148,18 +1148,18 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                         <span className="block text-[#DC2626] text-xs font-bold tracking-[0.2em]">{work.subtitle}</span>
                         {work.hasDetail && <div className="w-1.5 h-1.5 bg-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>}
                     </div>
-                    <h3 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white mb-2 group-hover:translate-x-4 transition-transform duration-500">{work.title}</h3>
+                    <h3 className="text-3xl md:text-5xl lg:text-6xl font-black tracking-tighter text-white mb-2 group-hover:translate-x-4 transition-transform duration-500">{work.title}</h3>
                 </div>
-                <p className="text-[#9CA3AF] text-sm md:text-lg font-light max-w-sm text-left md:text-right group-hover:text-white transition-colors duration-300">{work.desc}</p>
+                <p className="text-[#9CA3AF] text-xs md:text-base font-light max-w-sm text-left md:text-right group-hover:text-white transition-colors duration-300">{work.desc}</p>
             </div>
         </div>
     );
 };
 
 const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => void }) => (
-    <section id="works" className="w-full pt-24 pb-0 bg-[#050505] border-t border-white/5 relative z-40">
-        <div className="px-6 md:px-12 lg:px-24 mb-16 reveal">
-            <h2 className="text-sm md:text-base font-bold tracking-[0.3em] text-[#9CA3AF] uppercase">Selected Works</h2>
+    <section id="works" className="w-full pt-16 pb-0 bg-[#050505] border-t border-white/5 relative z-40">
+        <div className="px-6 md:px-12 lg:px-24 mb-12 reveal">
+            <h2 className="text-xs md:text-sm font-bold tracking-[0.3em] text-[#9CA3AF] uppercase">Selected Works</h2>
         </div>
         <div className="flex flex-col w-full gap-0">
             {/* Use Context Data */}
@@ -1171,21 +1171,21 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
 );
 
 const Legacy = () => (
-    <section className="w-full py-32 px-6 md:px-12 lg:px-24 bg-[#E5E5E5] text-[#050505] relative overflow-hidden">
+    <section className="w-full py-20 px-6 md:px-12 lg:px-24 bg-[#E5E5E5] text-[#050505] relative overflow-hidden">
         <div className="max-w-[1400px] mx-auto reveal">
-            <h2 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-20 leading-[0.85]">BACKED <br className="md:hidden" /> BY BRICK.</h2>
-            <div className="flex flex-col lg:flex-row gap-20 border-t-4 border-[#050505] pt-16">
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-black tracking-tighter mb-12 leading-[0.85]">BACKED <br className="md:hidden" /> BY BRICK.</h2>
+            <div className="flex flex-col lg:flex-row gap-12 border-t-4 border-[#050505] pt-12">
                 <div className="lg:w-1/2">
-                    <p className="text-xl md:text-2xl font-light leading-tight max-w-lg">
+                    <p className="text-lg md:text-xl font-light leading-tight max-w-lg">
                         This isn't a beta test. This is a new lens from a production house with 10 years of experience.
                     </p>
                 </div>
                 <div className="lg:w-1/2">
-                    <h4 className="text-xs font-bold tracking-[0.2em] uppercase mb-12 text-neutral-400 border-b border-neutral-200 pb-4 inline-block">Trusted By</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-10 w-full">
+                    <h4 className="text-xs font-bold tracking-[0.2em] uppercase mb-8 text-neutral-400 border-b border-neutral-200 pb-4 inline-block">Trusted By</h4>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 w-full">
                         {CLIENTS.map((client, i) => (
                             <div key={i} className="flex items-start justify-start group">
-                                <span className="text-base md:text-lg font-black text-neutral-300 group-hover:text-[#050505] transition-colors duration-300 cursor-default tracking-tighter uppercase whitespace-nowrap">
+                                <span className="text-sm md:text-base font-black text-neutral-300 group-hover:text-[#050505] transition-colors duration-300 cursor-default tracking-tighter uppercase whitespace-nowrap">
                                     {client}
                                 </span>
                             </div>
@@ -1317,402 +1317,4 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
             <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300"></div>
             <div className="absolute inset-0 p-6 flex flex-col justify-between">
                 <div className="flex justify-between items-start opacity-50 group-hover:opacity-100 transition-opacity duration-300">
-                    <span className="font-mono text-[10px] tracking-widest text-[#DC2626]">{(index + 1).toString().padStart(3, '0')}</span>
-                    <span className="font-mono text-[10px] tracking-widest border border-white/20 px-2 py-0.5 rounded-full">{work.category}</span>
-                </div>
-                <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                    <h3 className="text-xl md:text-2xl font-black text-white leading-none mb-2 tracking-tight group-hover:text-[#DC2626] transition-colors">{work.title}</h3>
-                    <p className="text-[10px] md:text-xs text-[#9CA3AF] font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-2">{work.desc}</p>
-                </div>
-            </div>
-            <div className="absolute top-0 left-0 w-2 h-2 border-l border-t border-white/30 group-hover:border-[#DC2626] transition-colors"></div>
-            <div className="absolute bottom-0 right-0 w-2 h-2 border-r border-b border-white/30 group-hover:border-[#DC2626] transition-colors"></div>
-        </div>
-    );
-};
-
-const WorksFilter = ({ categories, activeCategory, onSelect }: { categories: string[], activeCategory: string, onSelect: (c: string) => void }) => {
-    return (
-        <div className="flex flex-wrap gap-4 mb-12 border-b border-white/10 pb-6 reveal">
-            <span className="text-xs font-mono text-[#9CA3AF] tracking-widest uppercase py-2 mr-4 hidden md:block">PROTOCOLS //</span>
-            {categories.map((cat) => (
-                <button
-                    key={cat}
-                    onClick={() => onSelect(cat)}
-                    className={`text-xs font-bold tracking-[0.2em] uppercase transition-all duration-300 px-3 py-1 border ${activeCategory === cat ? 'bg-[#DC2626] border-[#DC2626] text-white' : 'bg-transparent border-transparent text-[#9CA3AF] hover:text-white hover:border-white/20'}`}
-                >
-                    {cat}
-                </button>
-            ))}
-        </div>
-    );
-};
-
-const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject }: any) => {
-    const [activeCategory, setActiveCategory] = useState("ALL");
-    const { works } = useContext(DataContext)!;
-
-    const categories = useMemo(() => {
-        const cats = new Set(works.map(w => w.category));
-        return ["ALL", ...Array.from(cats)];
-    }, [works]);
-    const filteredWorks = useMemo(() => {
-        if (activeCategory === "ALL") return works;
-        return works.filter(w => w.category === activeCategory);
-    }, [activeCategory, works]);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.classList.add('active');
-                }
-            });
-        }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-
-        const timeoutId = setTimeout(() => {
-            document.querySelectorAll('.grid .reveal').forEach(el => observer.observe(el));
-        }, 50);
-
-        return () => {
-            observer.disconnect();
-            clearTimeout(timeoutId);
-        };
-    }, [activeCategory]);
-
-    return (
-        <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
-            </button>
-            <main className="pt-32 min-h-screen flex flex-col">
-                <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                        <div>
-                            <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white mb-4">ARCHIVE_INDEX</h1>
-                            <p className="text-[#9CA3AF] font-mono text-xs md:text-sm tracking-widest max-w-xl">ACESSING NEURAL DATABASE... {works.length} ENTRIES FOUND.</p>
-                        </div>
-                    </div>
-                </section>
-                <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32">
-                    <WorksFilter categories={categories} activeCategory={activeCategory} onSelect={setActiveCategory} />
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
-                        {filteredWorks.map((work, idx) => (
-                            <WorksGridItem key={work.id} work={work} index={idx} onOpen={onSelectProject} />
-                        ))}
-                    </div>
-                    {filteredWorks.length === 0 && (
-                        <div className="w-full h-64 flex items-center justify-center border border-white/10 border-dashed text-[#9CA3AF] font-mono text-sm tracking-widest reveal">NO DATA FOUND IN THIS SECTOR.</div>
-                    )}
-                </section>
-            </main>
-            <Footer onChat={onChat} />
-        </React.Fragment>
-    );
-}
-
-const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome }: any) => {
-    return (
-        <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
-            <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO INDEX
-            </button>
-            <main className="pt-32 min-h-screen flex flex-col bg-[#0a0a0a] pb-32">
-                <article className="w-full max-w-3xl mx-auto px-6 md:px-12 mt-12 animate-fade-in-up">
-                    <div className="border-b border-white/10 pb-8 mb-12">
-                        <div className="flex flex-wrap gap-4 items-center mb-6 text-[10px] font-mono uppercase tracking-widest">
-                            <span className="text-[#DC2626]">LOG_ID: {post.id}</span>
-                            <span className="text-[#9CA3AF]">DATE: {post.date}</span>
-                            {post.tags.map((tag: string) => (
-                                <span key={tag} className="border border-white/10 px-2 py-0.5 text-white/50">{tag}</span>
-                            ))}
-                        </div>
-                        <h1 className="text-3xl md:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight mb-6">{post.title}</h1>
-                        <p className="text-lg md:text-xl text-[#9CA3AF] font-light leading-relaxed border-l-2 border-[#DC2626] pl-6">{post.excerpt}</p>
-                    </div>
-                    <div className="prose prose-invert prose-lg max-w-none">
-                        {typeof post.content === 'string'
-                            ? <div dangerouslySetInnerHTML={{ __html: post.content }} />
-                            : post.content}
-                    </div>
-                </article>
-            </main>
-            <Footer onChat={onChat} />
-        </React.Fragment>
-    );
-};
-
-const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectPost }: any) => {
-    const { transmissions } = useContext(DataContext)!;
-    return (
-        <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
-            </button>
-            <main className="pt-32 min-h-screen flex flex-col bg-[#0a0a0a]">
-                <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-                        <div>
-                            <h1 className="text-4xl md:text-7xl font-black tracking-tighter text-white mb-4">NEURAL_LOGS</h1>
-                            <p className="text-[#9CA3AF] font-mono text-xs md:text-sm tracking-widest max-w-xl">INCOMING DATA STREAMS... {transmissions.length} RECORDS.</p>
-                        </div>
-                    </div>
-                </section>
-                <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 reveal">
-                    <div className="space-y-px bg-white/10 border-t border-white/10">
-                        {transmissions.map((post) => (
-                            <div key={post.id} onClick={() => onSelectPost(post)} className="block group bg-[#050505] hover:bg-[#0a0a0a] transition-colors p-8 md:p-12 border-b border-white/10 cursor-pointer">
-                                <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-6">
-                                    <h3 className="text-2xl md:text-4xl font-black text-white tracking-tight group-hover:text-[#DC2626] transition-colors">{post.title}</h3>
-                                    <span className="font-mono text-xs text-[#DC2626] tracking-widest whitespace-nowrap">{post.date}</span>
-                                </div>
-                                <p className="text-[#9CA3AF] text-base md:text-lg font-light max-w-3xl mb-8 leading-relaxed">{post.excerpt}</p>
-                                <div className="flex gap-3">
-                                    {post.tags.map(tag => (
-                                        <span key={tag} className="text-[10px] font-mono border border-white/10 px-3 py-1.5 text-[#9CA3AF]/60 uppercase tracking-wider">{tag}</span>
-                                    ))}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </section>
-            </main>
-            <Footer onChat={onChat} />
-        </React.Fragment>
-    );
-};
-
-const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => (
-    <footer className="w-full py-32 px-6 md:px-12 lg:px-24 bg-black border-t border-white/5 relative z-10">
-        <div className="flex flex-col items-center text-center gap-12 reveal">
-            <h2 className="text-sm md:text-base font-mono text-[#9CA3AF] tracking-widest uppercase">Have a complex problem?</h2>
-            <p className="text-4xl md:text-6xl lg:text-8xl font-black text-white tracking-tighter leading-none max-w-5xl">WE HAVE THE INTELLIGENCE.</p>
-            <MagneticButton onClick={onChat} className="mt-8 text-lg md:text-xl font-mono font-bold tracking-[0.15em] transition-all duration-300 text-white hover:text-[#DC2626] group">
-                TALK TO US <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
-            </MagneticButton>
-        </div>
-        <div className="mt-32 border-t border-white/5 pt-12 flex flex-col md:flex-row justify-between items-end gap-8 reveal">
-            <div className="flex flex-col gap-4 items-center md:items-start w-full md:w-auto">
-                <span className="text-[10px] font-mono text-[#DC2626] tracking-widest uppercase">Network</span>
-                <div className="flex gap-6">
-                    {['LinkedIn', 'Instagram', 'Twitter'].map((social) => (
-                        <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-sm font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors">{social}</a>
-                    ))}
-                </div>
-            </div>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-center md:text-right w-full md:w-auto">
-                <span className="block mb-2">&copy; 2025 Brick AI.</span>
-                <span className="hidden md:inline">The Generative Division</span>
-                <span className="block mt-1">All Rights Reserved.</span>
-                {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">SYSTEM_ADMIN</button>}
-            </div>
-        </div>
-    </footer>
-);
-
-const SystemChat = ({ onBack }: { onBack: () => void }) => {
-    const [messages, setMessages] = useState<{ role: string, content: string }[]>([
-        { role: 'mono', content: `SYSTEM ONLINE. I am ${AI_NAME}. I organize the chaos into visuals.` },
-        { role: 'mono', content: "Select a protocol or transmit your query." }
-    ]);
-    const [input, setInput] = useState("");
-    const [isProcessing, setIsProcessing] = useState(false);
-    const [awaitingEmail, setAwaitingEmail] = useState(false);
-    const messagesEndRef = useRef<HTMLDivElement>(null);
-    const SUGGESTIONS = ["What services do you offer?", "How does Generative AI work?", "I have a complex project.", "Who are your clients?"];
-
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-    };
-
-    useEffect(scrollToBottom, [messages]);
-
-    const handleSend = async (textInput: string | React.FormEvent) => {
-        if (typeof textInput !== 'string') textInput.preventDefault();
-        const messageToSend = typeof textInput === 'string' ? textInput : input;
-        if (!messageToSend.trim() || isProcessing) return;
-        setInput("");
-        setMessages(prev => [...prev, { role: 'user', content: messageToSend }]);
-        setIsProcessing(true);
-        const response = await chatWithMono(messages, messageToSend);
-        setMessages(prev => [...prev, { role: 'mono', content: response }]);
-        setIsProcessing(false);
-    };
-
-    return (
-        <div className="min-h-screen pt-32 pb-12 flex flex-col items-center justify-start font-mono relative">
-            <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group">
-                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
-            </button>
-            <div className="relative mb-8 shrink-0 z-10 animate-fade-in-up">
-                <div className="monolith-structure w-[100px] h-[25vh] md:w-[120px] md:h-[30vh] rounded-[2px] flex items-center justify-center overflow-hidden shadow-2xl relative">
-                    <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none"></div>
-                    <div className="centered-layer aura-atmos pointer-events-none opacity-50"></div>
-                    <div className={`centered-layer light-atmos pointer-events-none transition-all duration-500 ${isProcessing ? 'animate-thinking bg-[#DC2626] opacity-100' : 'animate-breathe opacity-50'}`}></div>
-                    <div className="centered-layer core-atmos pointer-events-none"></div>
-                    <div className="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10"></div>
-                </div>
-                <div className="text-center mt-6 text-[#DC2626] text-[10px] tracking-[0.3em] uppercase opacity-70 animate-pulse">
-                    {isProcessing ? "ANALYZING INPUT..." : `${AI_NAME} ONLINE`}
-                </div>
-            </div>
-            <div className="w-full max-w-2xl px-6 flex-1 flex flex-col z-10">
-                <div className="flex-1 overflow-y-auto mb-6 space-y-6 scrollbar-hide min-h-[30vh]">
-                    {messages.map((msg, i) => (
-                        <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} opacity-0 animate-[terminal-blink_0.5s_ease-out_forwards]`} style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
-                            <span className="text-[10px] text-neutral-600 mb-2 uppercase tracking-widest font-bold">{msg.role === 'user' ? 'CLIENT_TERMINAL' : 'MASON_CORE'}</span>
-                            <div className={`max-w-lg p-6 text-sm md:text-base leading-relaxed border backdrop-blur-sm shadow-lg ${msg.role === 'user' ? 'border-white/10 text-white bg-white/5' : 'border-[#DC2626]/20 text-[#E5E5E5] bg-black/60'}`}>{msg.content}</div>
-                        </div>
-                    ))}
-                    {isProcessing && (
-                        <div className="flex flex-col items-start">
-                            <span className="text-[10px] text-neutral-600 mb-2 uppercase tracking-widest font-bold">MASON_CORE</span>
-                            <div className="typing-indicator text-[#DC2626] text-xl tracking-widest pl-4"><span>.</span><span>.</span><span>.</span></div>
-                        </div>
-                    )}
-                    <div ref={messagesEndRef} />
-                </div>
-                {!isProcessing && messages.length < 4 && (
-                    <div className="flex flex-wrap justify-center gap-3 mb-6 animate-fade-in-up">
-                        {SUGGESTIONS.map((query, i) => (
-                            <button key={i} onClick={() => handleSend(query)} className="text-[10px] uppercase tracking-wider text-[#9CA3AF] border border-white/10 bg-white/5 px-4 py-2 hover:bg-white hover:text-black hover:border-white transition-all duration-300">{query}</button>
-                        ))}
-                    </div>
-                )}
-                <form onSubmit={handleSend} className="relative group border-t border-white/10 pt-6">
-                    <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder={`ASK ${AI_NAME}...`} className="w-full bg-transparent py-4 text-white font-mono text-sm md:text-base focus:outline-none placeholder:text-neutral-700 placeholder:tracking-widest" autoFocus />
-                    <button type="submit" className="absolute right-0 top-6 bottom-0 text-[10px] text-neutral-500 hover:text-[#DC2626] uppercase tracking-[0.2em] transition-colors">TRANSMIT</button>
-                </form>
-            </div>
-        </div>
-    );
-};
-
-const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, setMonolithHover, monolithHover, onAdmin }: any) => (
-    <React.Fragment>
-        <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
-        <main>
-            <Hero setMonolithHover={setMonolithHover} monolithHover={monolithHover} />
-            <Philosophy />
-            <SelectedWorks onSelectProject={onSelectProject} />
-            <Legacy />
-        </main>
-        <Footer onChat={onChat} onAdmin={onAdmin} />
-    </React.Fragment>
-);
-
-const App = () => {
-    const [view, setView] = useState('home');
-    const [monolithHover, setMonolithHover] = useState(false);
-    const [selectedProject, setSelectedProject] = useState<Work | null>(null);
-    const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-
-    // Sync state with URL on load and back/forward
-    useEffect(() => {
-        const handleLocationChange = () => {
-            const path = window.location.pathname;
-
-            if (path === '/') { setView('home'); }
-            else if (path === '/works') { setView('works'); }
-            else if (path === '/transmissions') { setView('transmissions'); }
-            else if (path === '/chat') { setView('chat'); }
-            else if (path === '/admin') { setView('admin'); }
-            else if (path.startsWith('/transmissions/')) { setView('post'); }
-        };
-
-        window.addEventListener('popstate', handleLocationChange);
-        handleLocationChange(); // Initial check
-
-        return () => window.removeEventListener('popstate', handleLocationChange);
-    }, []);
-
-    const navigate = (newView: string, path: string) => {
-        setView(newView);
-        window.history.pushState({}, '', path);
-        window.scrollTo(0, 0);
-    };
-
-    const goHome = () => { navigate('home', '/'); setSelectedPost(null); };
-    const goWorks = () => { navigate('works', '/works'); setSelectedPost(null); };
-    const goTransmissions = () => { navigate('transmissions', '/transmissions'); setSelectedPost(null); };
-    const goChat = () => { navigate('chat', '/chat'); setSelectedPost(null); };
-    const goAdmin = () => { navigate('admin', '/admin'); setSelectedPost(null); };
-
-    const handleSelectPost = (post: Post) => {
-        setSelectedPost(post);
-        navigate('post', `/transmissions/${post.id}`);
-    };
-
-    useScrollReveal(view);
-
-    return (
-        <DataProvider>
-            <AppContent view={view} setView={setView} monolithHover={monolithHover} setMonolithHover={setMonolithHover} selectedProject={selectedProject} setSelectedProject={setSelectedProject} selectedPost={selectedPost} setSelectedPost={setSelectedPost} goHome={goHome} goWorks={goWorks} goTransmissions={goTransmissions} goChat={goChat} goAdmin={goAdmin} handleSelectPost={handleSelectPost} />
-        </DataProvider>
-    );
-};
-
-const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedProject, setSelectedProject, selectedPost, setSelectedPost, goHome, goWorks, goTransmissions, goChat, goAdmin, handleSelectPost }: any) => {
-    const { transmissions } = useContext(DataContext)!;
-
-    // Resolve post from URL if landing directly on a post page
-    useEffect(() => {
-        if (view === 'post' && !selectedPost && transmissions.length > 0) {
-            const pathParts = window.location.pathname.split('/');
-            const id = pathParts[pathParts.length - 1];
-            const post = transmissions.find(t => t.id === id);
-            if (post) setSelectedPost(post);
-            else goTransmissions();
-        }
-    }, [view, selectedPost, transmissions]);
-
-    return (
-        <div className="min-h-screen bg-[#050505] text-[#E5E5E5] selection:bg-[#DC2626] selection:text-white font-sans">
-            <GlobalStyles />
-            <StructuredData posts={transmissions} />
-            <div className="noise-overlay"></div>
-            <CustomCursor active={monolithHover || selectedProject !== null} />
-            {selectedProject && (
-                <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
-            )}
-            {view === 'home' && (
-                <HomePage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} onAdmin={goAdmin} />
-            )}
-            {view === 'works' && (
-                <WorksPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} />
-            )}
-            {view === 'transmissions' && (
-                <TransmissionsPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectPost={handleSelectPost} />
-            )}
-            {view === 'post' && selectedPost && (
-                <BlogPostPage post={selectedPost} onBack={goTransmissions} onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} />
-            )}
-            {view === 'chat' && (
-                <React.Fragment>
-                    <Header onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} isChatView={true} />
-                    <SystemChat onBack={goHome} />
-                </React.Fragment>
-            )}
-            {view === 'admin' && (
-                <AdminPanel onExit={goHome} />
-            )}
-        </div>
-    );
-};
-
-// Helper for Context Consumption in Class/Functional mix if needed, though Hooks are used primarily
-const ContextConsumer = ({ children }: { children: (data: any) => React.ReactNode }) => {
-    const data = useContext(DataContext);
-    if (!data) return null;
-    return <>{children(data)}</>;
-};
-
-// Mount
-const rootElement = document.getElementById('root');
-if (rootElement) {
-    const root = createRoot(rootElement);
-    root.render(<App />);
-}
+                    <span className="font-mono text-[10px] tracking-widest text-[#DC2626]">{(index + 1).toString().padStart(3, '0')}
