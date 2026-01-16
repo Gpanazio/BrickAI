@@ -942,14 +942,10 @@ const AdminPanel = ({ onExit }: { onExit: () => void }) => {
 const Header = ({ onChat, onWorks, onTransmissions, onHome, isChatView }: { onChat: () => void, onWorks: () => void, onTransmissions: () => void, onHome: () => void, isChatView: boolean }) => {
     return (
         <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center bg-gradient-to-b from-[#050505]/90 to-transparent backdrop-blur-sm pointer-events-none">
-            <div onClick={onHome} className="pointer-events-auto flex items-center gap-2 group cursor-pointer select-none">
-                <div className="flex items-center">
-                    <img src="/01.png" alt="BRICK" className="h-6 md:h-7 w-auto object-contain translate-y-[2px]" />
-                </div>
-                <div className="flex items-baseline">
-                    <span className="text-[#DC2626] font-light text-3xl animate-blink mx-1 translate-y-[4px]">_</span>
-                    <span className="text-[#9CA3AF] font-semibold text-xl tracking-tight group-hover:text-white transition-colors duration-500">AI</span>
-                </div>
+            <div onClick={onHome} className="pointer-events-auto flex items-baseline group cursor-pointer select-none">
+                <img src="/01.png" alt="BRICK" className="h-6 md:h-8 w-auto object-contain" />
+                <span className="text-[#DC2626] font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[3px] md:translate-y-[4px]">_</span>
+                <span className="text-gray-300 font-mono font-bold text-xl md:text-2xl tracking-tight group-hover:text-white transition-colors duration-500">AI</span>
             </div>
             {
                 !isChatView && (
