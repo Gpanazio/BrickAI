@@ -954,6 +954,11 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, isChatView }: { onCh
             {!isChatView && (
                 <div className="flex items-center gap-8 pointer-events-auto">
                     {/* NAV STYLE: Raw Text Links */}
+                    <MagneticButton onClick={() => window.location.href = '/brand.html'} className="group text-xs md:text-sm font-mono tracking-[0.2em] text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
+                        <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
+                        BRAND
+                    </MagneticButton>
+
                     <MagneticButton onClick={onWorks} className="group text-xs md:text-sm font-mono tracking-[0.2em] text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
                         <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
                         WORKS
