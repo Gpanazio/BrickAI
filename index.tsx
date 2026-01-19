@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRightIcon, DatabaseIcon } from './src/components/icons';
+import { ArrowRight, Database } from 'lucide-react';
+import './src/index.css';
 
 // --- STYLES & CONFIG ---
 const GlobalStyles = () => (
@@ -162,7 +163,7 @@ const GlobalStyles = () => (
 
 // --- CONFIG ---
 // NOTE: Em produção, utilize variáveis de ambiente para a API Key
-const apiKey = process.env.REACT_APP_GEMINI_API_KEY || ""; 
+const apiKey = (import.meta.env.VITE_GEMINI_API_KEY as string) || "";
 const AI_NAME = "MASON";
 
 // --- TYPES ---
@@ -173,7 +174,7 @@ interface Work {
     category: string;
     title: string;
     desc: string;
-    videoUrl?: string; 
+    videoUrl?: string;
     longDesc?: string;
     credits?: Array<{ role: string; name: string }>;
     gradient: string;
@@ -611,27 +612,32 @@ const chatWithMono = async (history: any[], message: string) => {
 // --- COMPONENTS: SECTIONS ---
 const BrickLogo = ({ className }: { className?: string }) => (
     <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 10H90V90H10V10Z" fill="currentColor" fillOpacity="0.1"/>
-        <path d="M20 20H80V80H20V20Z" stroke="currentColor" strokeWidth="4"/>
-        <rect x="35" y="35" width="30" height="30" fill="#DC2626"/>
+        <path d="M10 10H90V90H10V10Z" fill="currentColor" fillOpacity="0.1" />
+        <path d="M20 20H80V80H20V20Z" stroke="currentColor" strokeWidth="4" />
+        <rect x="35" y="35" width="30" height="30" fill="#DC2626" />
     </svg>
 );
 
-const Header = ({ onChat, onWorks, onTransmissions, onHome, isChatView }: { onChat: () => void, onWorks: () => void, onTransmissions: () => void, onHome: () => void, isChatView: boolean }) => {
+const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView }: { onChat: () => void, onWorks: () => void, onTransmissions: () => void, onHome: () => void, onAbout: () => void, isChatView: boolean }) => {
     return (
         <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center pointer-events-none mix-blend-screen">
-            <div onClick={onHome} className="pointer-events-auto flex items-center group cursor-pointer select-none">
-                <BrickLogo className="h-6 md:h-8 w-auto text-white" />
-                <span className="text-[#DC2626] font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[-2px]">_</span>
+            <div onClick={onHome} className="pointer-events-auto flex items-baseline group cursor-pointer select-none">
+                <img src="/01.png" alt="BRICK" className="h-6 md:h-8 w-auto object-contain mr-1" />
+                <span className="text-[#DC2626] font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[2px]">_</span>
                 <span className="text-gray-300 font-ai text-xl md:text-2xl group-hover:text-white transition-colors duration-500">AI</span>
             </div>
             {
                 !isChatView && (
                     <div className="flex items-center gap-8 pointer-events-auto">
                         {/* NAV STYLE: Raw Text Links */}
-                        <MagneticButton onClick={() => window.location.href = '#'} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300 hidden md:inline-block">
+                        <MagneticButton onClick={() => window.location.href = '/brand.html'} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300 hidden md:inline-block">
                             <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
                             BRAND
+                        </MagneticButton>
+
+                        <MagneticButton onClick={onAbout} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
+                            <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
+                            ABOUT
                         </MagneticButton>
 
                         <MagneticButton onClick={onWorks} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
@@ -692,7 +698,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
     return (
         <section className="relative w-full flex flex-col items-center justify-start pt-32 md:pt-40 pb-20 md:pb-32 overflow-visible">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-40"></div>
-            
+
             <div className="reveal relative z-10 w-full flex justify-center mb-8 md:mb-12">
                 <div className="relative">
                     <div
@@ -794,7 +800,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 const cardCenter = rect.top + rect.height / 2;
                 const screenCenter = viewportHeight / 2;
                 const distanceFromCenter = cardCenter - screenCenter;
-                const yOffset = distanceFromCenter * 0.05; 
+                const yOffset = distanceFromCenter * 0.05;
                 bgRef.current.style.transform = `scale(${settings.scale}) translate3d(0, ${yOffset}px, 0)`;
             }
             ticking = false;
@@ -861,7 +867,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 <div className="w-[1px] h-3 bg-white/40"></div>
                 <div className="w-[1px] h-3 bg-white/40"></div>
             </div>
-            
+
             {/* Bottom Line with CROP MARKS */}
             <div className="absolute bottom-0 left-0 right-0 h-px z-40 flex justify-between px-4 pointer-events-none">
                 <div className="w-[1px] h-3 bg-white/40 -mt-3"></div>
@@ -870,15 +876,15 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 
             {/* Side Rulers / Ticks */}
             <div className="absolute left-0 top-1/2 -translate-y-1/2 flex flex-col gap-1 z-40 px-1 pointer-events-none">
-                 {[...Array(5)].map((_, i) => <div key={i} className="w-1 h-px bg-white/30"></div>)}
+                {[...Array(5)].map((_, i) => <div key={i} className="w-1 h-px bg-white/30"></div>)}
             </div>
             <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col gap-1 z-40 px-1 pointer-events-none items-end">
-                 {[...Array(5)].map((_, i) => <div key={i} className="w-1 h-px bg-white/30"></div>)}
+                {[...Array(5)].map((_, i) => <div key={i} className="w-1 h-px bg-white/30"></div>)}
             </div>
 
             {/* CONTENT LAYER */}
             <div className="relative z-40 px-6 md:px-12 lg:px-24 w-full flex flex-row justify-between items-center gap-6 pointer-events-none">
-                
+
                 {/* LEFT: Project Identification */}
                 <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
@@ -898,8 +904,8 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 
                 {/* MIDDLE: Technical Data (Visible on Desktop) */}
                 <div className="hidden md:flex gap-8 opacity-60 group-hover:opacity-100 transition-opacity duration-500">
-                     {/* Using DataChip for clean data presentation */}
-                    <DataChip label="COORDS" value={`X:${Math.floor(Math.random()*99)} Y:${Math.floor(Math.random()*99)}`} />
+                    {/* Using DataChip for clean data presentation */}
+                    <DataChip label="COORDS" value={`X:${Math.floor(Math.random() * 99)} Y:${Math.floor(Math.random() * 99)}`} />
                     <DataChip label="SIZE" value="4K_RAW" />
                 </div>
 
@@ -909,7 +915,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                         <span className="block text-[8px] font-mono text-[#9CA3AF]/60 tracking-widest uppercase mb-1">SYSTEM_STATUS</span>
                         <span className="block text-[10px] font-mono text-white tracking-widest uppercase">ONLINE</span>
                     </div>
-                    <ArrowRightIcon className="w-5 h-5 text-white/30 group-hover:text-[#DC2626] transition-colors duration-300" />
+                    <ArrowRight className="w-5 h-5 text-white/30 group-hover:text-[#DC2626] transition-colors duration-300" />
                 </div>
             </div>
         </div>
@@ -920,8 +926,8 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
     <section id="works" className="w-full pt-16 pb-0 bg-[#050505] border-t border-white/5 relative z-40">
         <div className="px-6 md:px-12 lg:px-24 mb-12 reveal flex justify-between items-end border-b border-white/10 pb-4">
             <div className="flex items-center gap-3">
-                <DatabaseIcon className="w-4 h-4 text-[#DC2626]" />
-                <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">PROJECT_DATABASE // MAIN_DIRECTORY</h2>
+                <Database className="w-4 h-4 text-[#DC2626]" />
+                <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">PROJECT_DATABASE // Selected Works</h2>
             </div>
             <div className="hidden md:flex gap-4 text-[9px] font-mono text-[#9CA3AF]/50">
                 <span>SYS.VER. 5.0</span>
@@ -1081,14 +1087,14 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
                     transform: `scale(${settings.scale})`
                 }}
             ></div>
-            
+
             {/* Tech Grid Overlay for consistency */}
             <div className="absolute inset-0 bg-tech-grid opacity-20 z-10 pointer-events-none group-hover:opacity-10 transition-opacity duration-300"></div>
-            
+
             <div className="scanline-effect z-20"></div>
             {/* UPDATED GRADIENT OPACITY */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-transparent to-transparent group-hover:opacity-70 transition-opacity duration-300 z-20"></div>
-            
+
             <div className="absolute inset-0 p-6 flex flex-col justify-between z-30">
                 <div className="flex justify-between items-start opacity-50 group-hover:opacity-100 transition-opacity duration-300">
                     <span className="font-mono text-[10px] tracking-widest text-[#DC2626]">{(index + 1).toString().padStart(3, '0')}</span>
@@ -1122,7 +1128,7 @@ const WorksFilter = ({ categories, activeCategory, onSelect }: { categories: str
     );
 };
 
-const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject }: any) => {
+const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, onAbout }: any) => {
     const [activeCategory, setActiveCategory] = useState("ALL");
     const { works } = useContext(DataContext)!;
 
@@ -1156,7 +1162,7 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject }
 
     return (
         <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
+            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
             <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
             </button>
@@ -1186,10 +1192,10 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject }
     );
 }
 
-const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome }: any) => {
+const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, onAbout }: any) => {
     return (
         <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
+            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
             <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO INDEX
             </button>
@@ -1218,11 +1224,11 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome }
     );
 };
 
-const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectPost }: any) => {
+const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectPost, onAbout }: any) => {
     const { transmissions } = useContext(DataContext)!;
     return (
         <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
+            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
             <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
             </button>
@@ -1364,9 +1370,9 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
     );
 };
 
-const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, setMonolithHover, monolithHover, onAdmin }: any) => (
+const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, onAbout, setMonolithHover, monolithHover, onAdmin }: any) => (
     <React.Fragment>
-        <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} isChatView={false} />
+        <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
         <main>
             <Hero setMonolithHover={setMonolithHover} monolithHover={monolithHover} />
             <Philosophy />
@@ -1377,7 +1383,527 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, s
     </React.Fragment>
 );
 
-const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedProject, setSelectedProject, selectedPost, setSelectedPost, goHome, goWorks, goTransmissions, goChat, goAdmin, handleSelectPost }: any) => {
+const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) => {
+    return (
+        <React.Fragment>
+            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
+            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
+            </button>
+            <main className="pt-32 min-h-screen flex flex-col bg-[#050505]">
+                <section className="w-full px-6 md:px-12 lg:px-24 mb-20 reveal">
+                    <div className="border-b border-white/10 pb-8">
+                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-brick text-white mb-6">ARCHITECTS<br />OF THE VOID.</h1>
+                        <p className="text-[#9CA3AF] font-mono text-xs md:text-sm tracking-widest max-w-2xl leading-relaxed uppercase">
+                            We are not just a production house. We are a research facility dedicated to the exploration of latent space.
+                        </p>
+                    </div>
+                </section>
+
+                <section className="w-full px-6 md:px-12 lg:px-24 mb-32 reveal">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+                        <div>
+                            <h3 className="text-xl font-brick text-white mb-6 flex items-center gap-3">
+                                <span className="w-2 h-2 bg-[#DC2626]"></span>
+                                THE FIRMAMENT
+                            </h3>
+                            <p className="text-[#E5E5E5]/80 font-light leading-relaxed mb-6">
+                                Brick AI operates at the intersection of traditional filmmaking and neural rendering. Founded in 2016 as a high-end VFX boutique, we evolved into a generative laboratory.
+                            </p>
+                            <p className="text-[#E5E5E5]/80 font-light leading-relaxed">
+                                Our mission is to reclaim the "human error" in the age of synthetic perfection. We believe that true cinematic beauty lies in the grain, the glitch, and the unpredictable. We build pipelines that allow artists to direct algorithms, not the other way around.
+                            </p>
+                        </div>
+                        <div className="relative border border-white/10 p-8 flex items-center justify-center bg-white/5">
+                            <div className="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none"></div>
+                            <div className="text-center">
+                                <span className="block text-4xl md:text-6xl font-brick text-[#DC2626] mb-2">10+</span>
+                                <span className="block text-xs font-mono text-[#9CA3AF] tracking-[0.3em] uppercase">Years of Craft</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section className="w-full px-6 md:px-12 lg:px-24 pb-32 reveal">
+                    <div className="flex items-center gap-3 mb-12">
+                        <Database className="w-4 h-4 text-[#DC2626]" />
+                        <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">CORE_UNITS // STRUCTURE</h2>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10">
+                        {[
+                            { role: "Executive Director", name: "MASON CORE", desc: "System Architecture" },
+                            { role: "Creative Lead", name: "SARAH V.", desc: "Visual Synthesis" },
+                            { role: "Tech Lead", name: "J. DOE", desc: "Neural Pipelines" },
+                            { role: "R&D", name: "UNIT 734", desc: "Latent Space Exploration" },
+                            { role: "Sound", name: "ECHO LAB", desc: "Psychoacoustics" },
+                            { role: "Operations", name: "CENTRAL", desc: "Logistics" }
+                        ].map((member, i) => (
+                            <div key={i} className="bg-[#050505] p-8 group hover:bg-[#0a0a0a] transition-colors">
+                                <span className="block text-[9px] font-mono text-[#DC2626] mb-2 uppercase tracking-widest">{member.role}</span>
+                                <h4 className="text-xl font-brick text-white mb-2">{member.name}</h4>
+                                <p className="text-xs text-[#9CA3AF] font-mono opacity-60">{member.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+            </main>
+            <Footer onChat={onChat} />
+        </React.Fragment>
+    );
+};
+
+// --- ADMIN PAGE ---
+const AdminPage = ({ onHome }: { onHome: () => void }) => {
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [loginError, setLoginError] = useState('');
+    const [identifier, setIdentifier] = useState('');
+    const [password, setPassword] = useState('');
+    const [activeTab, setActiveTab] = useState<'works' | 'transmissions'>('works');
+    const { works, setWorks, transmissions, setTransmissions } = useContext(DataContext)!;
+    const [editingItem, setEditingItem] = useState<any>(null);
+
+    // Check authentication on mount
+    useEffect(() => {
+        fetch('/api/auth/me', { credentials: 'include' })
+            .then(res => res.ok ? res.json() : Promise.reject())
+            .then(() => setIsLoggedIn(true))
+            .catch(() => setIsLoggedIn(false))
+            .finally(() => setLoading(false));
+    }, []);
+
+    // Login handler
+    const handleLogin = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setLoginError('');
+        try {
+            const res = await fetch('/api/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ identifier, password }),
+                credentials: 'include'
+            });
+            if (res.ok) {
+                setIsLoggedIn(true);
+            } else {
+                const data = await res.json();
+                setLoginError(data.error || 'Login failed');
+            }
+        } catch {
+            setLoginError('Connection error');
+        }
+    };
+
+    // Logout handler
+    const handleLogout = async () => {
+        await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+        setIsLoggedIn(false);
+    };
+
+    // Delete work
+    const deleteWork = async (id: string) => {
+        if (!confirm('Delete this work?')) return;
+        await fetch(`/api/works/${id}`, { method: 'DELETE', credentials: 'include' });
+        setWorks(works.filter(w => w.id !== id));
+    };
+
+    // Delete transmission
+    const deleteTransmission = async (id: string) => {
+        if (!confirm('Delete this transmission?')) return;
+        await fetch(`/api/transmissions/${id}`, { method: 'DELETE', credentials: 'include' });
+        setTransmissions(transmissions.filter(t => t.id !== id));
+    };
+
+    // Save item (work or transmission)
+    const saveItem = async () => {
+        if (!editingItem) return;
+        const endpoint = activeTab === 'works' ? '/api/works' : '/api/transmissions';
+        await fetch(endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(editingItem),
+            credentials: 'include'
+        });
+        if (activeTab === 'works') {
+            setWorks(prev => {
+                const idx = prev.findIndex(w => w.id === editingItem.id);
+                if (idx >= 0) {
+                    const updated = [...prev];
+                    updated[idx] = editingItem;
+                    return updated;
+                }
+                return [...prev, editingItem];
+            });
+        } else {
+            setTransmissions(prev => {
+                const idx = prev.findIndex(t => t.id === editingItem.id);
+                if (idx >= 0) {
+                    const updated = [...prev];
+                    updated[idx] = editingItem;
+                    return updated;
+                }
+                return [...prev, editingItem];
+            });
+        }
+        setEditingItem(null);
+    };
+
+    if (loading) return (
+        <div className="min-h-screen flex items-center justify-center bg-[#050505]">
+            <div className="text-[#DC2626] font-mono text-sm animate-pulse">LOADING SYSTEM...</div>
+        </div>
+    );
+
+    // Login Screen
+    if (!isLoggedIn) return (
+        <div className="min-h-screen flex items-center justify-center bg-[#050505] p-6">
+            <div className="w-full max-w-md border border-white/10 p-8 bg-[#0a0a0a]">
+                <div className="flex items-center gap-3 mb-8">
+                    <div className="w-3 h-3 bg-[#DC2626]"></div>
+                    <h1 className="text-xl font-brick text-white">SYSTEM_ACCESS</h1>
+                </div>
+                <form onSubmit={handleLogin} className="space-y-6">
+                    <div>
+                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Identifier</label>
+                        <input
+                            type="text"
+                            value={identifier}
+                            onChange={e => setIdentifier(e.target.value)}
+                            className="w-full bg-transparent border border-white/20 p-3 text-white font-mono text-sm focus:outline-none focus:border-[#DC2626]"
+                            placeholder="Email or username"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Password</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={e => setPassword(e.target.value)}
+                            className="w-full bg-transparent border border-white/20 p-3 text-white font-mono text-sm focus:outline-none focus:border-[#DC2626]"
+                            placeholder="••••••••"
+                        />
+                    </div>
+                    {loginError && <p className="text-[#DC2626] text-xs font-mono">{loginError}</p>}
+                    <button type="submit" className="w-full bg-[#DC2626] text-white py-3 font-mono text-sm uppercase tracking-widest hover:bg-red-700 transition-colors">
+                        AUTHENTICATE
+                    </button>
+                </form>
+                <button onClick={onHome} className="mt-6 text-[#9CA3AF] text-xs font-mono hover:text-white transition-colors">
+                    &lt; RETURN TO SURFACE
+                </button>
+            </div>
+        </div>
+    );
+
+    // Admin Dashboard
+    return (
+        <div className="min-h-screen bg-[#050505] p-6 md:p-12">
+            <div className="max-w-6xl mx-auto">
+                {/* Header */}
+                <div className="flex justify-between items-center mb-12 border-b border-white/10 pb-6">
+                    <div className="flex items-center gap-4">
+                        <div className="w-3 h-3 bg-[#DC2626] animate-pulse"></div>
+                        <h1 className="text-2xl font-brick text-white">ADMIN_CONSOLE</h1>
+                    </div>
+                    <div className="flex gap-4">
+                        <button onClick={onHome} className="text-[#9CA3AF] text-xs font-mono hover:text-white transition-colors">
+                            &lt; HOME
+                        </button>
+                        <button onClick={handleLogout} className="text-[#DC2626] text-xs font-mono hover:text-red-400 transition-colors">
+                            LOGOUT
+                        </button>
+                    </div>
+                </div>
+
+                {/* Tabs */}
+                <div className="flex gap-4 mb-8">
+                    <button
+                        onClick={() => setActiveTab('works')}
+                        className={`px-6 py-3 text-xs font-mono uppercase tracking-widest border transition-colors ${activeTab === 'works' ? 'bg-[#DC2626] border-[#DC2626] text-white' : 'border-white/20 text-[#9CA3AF] hover:text-white'}`}
+                    >
+                        WORKS ({works.length})
+                    </button>
+                    <button
+                        onClick={() => setActiveTab('transmissions')}
+                        className={`px-6 py-3 text-xs font-mono uppercase tracking-widest border transition-colors ${activeTab === 'transmissions' ? 'bg-[#DC2626] border-[#DC2626] text-white' : 'border-white/20 text-[#9CA3AF] hover:text-white'}`}
+                    >
+                        TRANSMISSIONS ({transmissions.length})
+                    </button>
+                </div>
+
+                {/* Content */}
+                <div className="border border-white/10 p-6">
+                    {activeTab === 'works' && (
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-sm font-mono text-[#9CA3AF] uppercase tracking-widest">Project Database</h2>
+                                <button
+                                    onClick={() => setEditingItem({ id: `work_${Date.now()}`, title: '', desc: '', category: 'GENERATIVE', subtitle: '', orientation: 'horizontal', imageHome: '', imageWorks: '', hasDetail: true })}
+                                    className="text-xs font-mono bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition-colors"
+                                >
+                                    + NEW WORK
+                                </button>
+                            </div>
+                            {works.map(work => (
+                                <div key={work.id} className="flex justify-between items-center p-4 border border-white/10 hover:border-white/20 transition-colors">
+                                    <div>
+                                        <h3 className="text-white font-mono text-sm">{work.title}</h3>
+                                        <p className="text-[#9CA3AF] text-xs font-mono">{work.category} // {work.subtitle}</p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <button onClick={() => setEditingItem(work)} className="text-xs font-mono text-[#9CA3AF] hover:text-white px-3 py-1 border border-white/10">EDIT</button>
+                                        <button onClick={() => deleteWork(work.id)} className="text-xs font-mono text-[#DC2626] hover:text-red-400 px-3 py-1 border border-[#DC2626]/50">DELETE</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+
+                    {activeTab === 'transmissions' && (
+                        <div className="space-y-4">
+                            <div className="flex justify-between items-center mb-6">
+                                <h2 className="text-sm font-mono text-[#9CA3AF] uppercase tracking-widest">Neural Logs</h2>
+                                <button
+                                    onClick={() => setEditingItem({ id: `log_${Date.now()}`, title: '', excerpt: '', date: new Date().toISOString().split('T')[0].replace(/-/g, '.'), tags: [], url: '', content: '' })}
+                                    className="text-xs font-mono bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition-colors"
+                                >
+                                    + NEW TRANSMISSION
+                                </button>
+                            </div>
+                            {transmissions.map(post => (
+                                <div key={post.id} className="flex justify-between items-center p-4 border border-white/10 hover:border-white/20 transition-colors">
+                                    <div>
+                                        <h3 className="text-white font-mono text-sm">{post.title}</h3>
+                                        <p className="text-[#9CA3AF] text-xs font-mono">{post.date} // {post.tags.join(', ')}</p>
+                                    </div>
+                                    <div className="flex gap-2">
+                                        <button onClick={() => setEditingItem(post)} className="text-xs font-mono text-[#9CA3AF] hover:text-white px-3 py-1 border border-white/10">EDIT</button>
+                                        <button onClick={() => deleteTransmission(post.id)} className="text-xs font-mono text-[#DC2626] hover:text-red-400 px-3 py-1 border border-[#DC2626]/50">DELETE</button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+
+                {/* Edit Modal - Full Image Editor */}
+                {editingItem && (
+                    <div className="fixed inset-0 bg-black/95 z-50 flex items-start justify-center p-6 overflow-y-auto">
+                        <div className="w-full max-w-5xl bg-[#0a0a0a] border border-white/10 my-8">
+                            {/* Header */}
+                            <div className="flex justify-between items-center p-6 border-b border-white/10">
+                                <h2 className="text-lg font-brick text-white">EDIT_PROJECT</h2>
+                                <button onClick={() => setEditingItem(null)} className="text-[#9CA3AF] hover:text-white text-2xl">&times;</button>
+                            </div>
+
+                            <div className="flex flex-col lg:flex-row">
+                                {/* Left Side - Form Fields */}
+                                <div className="lg:w-1/2 p-6 space-y-4 border-r border-white/10">
+                                    <h3 className="text-xs font-mono text-[#DC2626] mb-4 uppercase tracking-widest">Project Info</h3>
+
+                                    {/* Basic Fields */}
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">ID</label>
+                                            <input type="text" value={editingItem.id || ''} onChange={e => setEditingItem({ ...editingItem, id: e.target.value })} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Category</label>
+                                            <select value={editingItem.category || ''} onChange={e => setEditingItem({ ...editingItem, category: e.target.value })} className="w-full bg-[#0a0a0a] border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]">
+                                                <option value="GENERATIVE">GENERATIVE</option>
+                                                <option value="VFX">VFX</option>
+                                                <option value="STYLE TRANSFER">STYLE TRANSFER</option>
+                                                <option value="DATA ART">DATA ART</option>
+                                                <option value="EXPERIENCE">EXPERIENCE</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Title</label>
+                                        <input type="text" value={editingItem.title || ''} onChange={e => setEditingItem({ ...editingItem, title: e.target.value })} className="w-full bg-transparent border border-white/20 p-3 text-white font-mono text-sm focus:outline-none focus:border-[#DC2626]" />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Subtitle</label>
+                                        <input type="text" value={editingItem.subtitle || ''} onChange={e => setEditingItem({ ...editingItem, subtitle: e.target.value })} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Description</label>
+                                        <textarea value={editingItem.desc || ''} onChange={e => setEditingItem({ ...editingItem, desc: e.target.value })} rows={2} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626] resize-none" />
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Long Description</label>
+                                        <textarea value={editingItem.longDesc || ''} onChange={e => setEditingItem({ ...editingItem, longDesc: e.target.value })} rows={3} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626] resize-none" />
+                                    </div>
+
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Orientation</label>
+                                            <select value={editingItem.orientation || 'horizontal'} onChange={e => setEditingItem({ ...editingItem, orientation: e.target.value })} className="w-full bg-[#0a0a0a] border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]">
+                                                <option value="horizontal">Horizontal</option>
+                                                <option value="vertical">Vertical</option>
+                                            </select>
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Video URL</label>
+                                            <input type="text" value={editingItem.videoUrl || ''} onChange={e => setEditingItem({ ...editingItem, videoUrl: e.target.value })} placeholder="Vimeo or MP4 URL" className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Right Side - Image Editor */}
+                                <div className="lg:w-1/2 p-6 space-y-6">
+                                    <h3 className="text-xs font-mono text-[#DC2626] mb-4 uppercase tracking-widest">Image Settings</h3>
+
+                                    {/* Image Upload */}
+                                    <div>
+                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Image URL / Upload</label>
+                                        <div className="flex gap-2">
+                                            <input type="text" value={editingItem.imageHome || ''} onChange={e => setEditingItem({ ...editingItem, imageHome: e.target.value, imageWorks: e.target.value })} placeholder="Image URL" className="flex-1 bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
+                                            <label className="px-4 py-2 bg-white/10 text-white font-mono text-xs cursor-pointer hover:bg-white/20 transition-colors flex items-center">
+                                                UPLOAD
+                                                <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
+                                                    const file = e.target.files?.[0];
+                                                    if (file) {
+                                                        const formData = new FormData();
+                                                        formData.append('file', file);
+                                                        try {
+                                                            const res = await fetch('/api/upload', { method: 'POST', body: formData, credentials: 'include' });
+                                                            const data = await res.json();
+                                                            if (data.url) setEditingItem({ ...editingItem, imageHome: data.url, imageWorks: data.url });
+                                                        } catch (err) { console.error('Upload failed', err); }
+                                                    }
+                                                }} />
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    {/* Position Controls */}
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div>
+                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">X Position</label>
+                                            <input type="range" min="0" max="100" value={editingItem.imageSettingsHome?.x || 50} onChange={e => setEditingItem({ ...editingItem, imageSettingsHome: { ...editingItem.imageSettingsHome, x: Number(e.target.value), y: editingItem.imageSettingsHome?.y || 50, scale: editingItem.imageSettingsHome?.scale || 1.2 } })} className="w-full accent-[#DC2626]" />
+                                            <span className="text-[10px] font-mono text-white">{editingItem.imageSettingsHome?.x || 50}%</span>
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Y Position</label>
+                                            <input type="range" min="0" max="100" value={editingItem.imageSettingsHome?.y || 50} onChange={e => setEditingItem({ ...editingItem, imageSettingsHome: { ...editingItem.imageSettingsHome, x: editingItem.imageSettingsHome?.x || 50, y: Number(e.target.value), scale: editingItem.imageSettingsHome?.scale || 1.2 } })} className="w-full accent-[#DC2626]" />
+                                            <span className="text-[10px] font-mono text-white">{editingItem.imageSettingsHome?.y || 50}%</span>
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Zoom/Scale</label>
+                                            <input type="range" min="100" max="200" value={(editingItem.imageSettingsHome?.scale || 1.2) * 100} onChange={e => setEditingItem({ ...editingItem, imageSettingsHome: { ...editingItem.imageSettingsHome, x: editingItem.imageSettingsHome?.x || 50, y: editingItem.imageSettingsHome?.y || 50, scale: Number(e.target.value) / 100 } })} className="w-full accent-[#DC2626]" />
+                                            <span className="text-[10px] font-mono text-white">{((editingItem.imageSettingsHome?.scale || 1.2) * 100).toFixed(0)}%</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Live Preview - Home Card */}
+                                    <div>
+                                        <label className="block text-[10px] font-mono text-[#DC2626] mb-3 uppercase tracking-widest">HOME PAGE <span className="text-[#9CA3AF]">(2560×720px)</span></label>
+                                        <div className="relative w-full h-32 border border-white/20 overflow-hidden bg-[#050505]">
+                                            {editingItem.imageHome ? (
+                                                <>
+                                                    <div
+                                                        className="absolute inset-0 transition-all duration-300"
+                                                        style={{
+                                                            backgroundImage: `url('${editingItem.imageHome}')`,
+                                                            backgroundSize: 'cover',
+                                                            backgroundPosition: `${editingItem.imageSettingsHome?.x || 50}% ${editingItem.imageSettingsHome?.y || 50}%`,
+                                                            transform: `scale(${editingItem.imageSettingsHome?.scale || 1.2})`
+                                                        }}
+                                                    />
+                                                    <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/60 to-transparent" />
+                                                    <div className="absolute bottom-3 left-3 z-10">
+                                                        <p className="text-[8px] font-mono text-[#DC2626]">{editingItem.id?.toUpperCase()}</p>
+                                                        <h4 className="text-xs font-brick text-white">{editingItem.title || 'PROJECT TITLE'}</h4>
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <div className="flex items-center justify-center h-full text-[#9CA3AF] font-mono text-xs">
+                                                    No image selected
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Separator */}
+                                    <div className="border-t border-white/10 pt-4 mt-2">
+                                        <label className="block text-[10px] font-mono text-[#DC2626] mb-3 uppercase tracking-widest">WORKS PAGE <span className="text-[#9CA3AF]">(1080×1080px)</span></label>
+                                    </div>
+
+                                    {/* Works Position Controls */}
+                                    <div className="grid grid-cols-3 gap-4">
+                                        <div>
+                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">X Position</label>
+                                            <input type="range" min="0" max="100" value={editingItem.imageSettingsWorks?.x || 50} onChange={e => setEditingItem({ ...editingItem, imageSettingsWorks: { ...editingItem.imageSettingsWorks, x: Number(e.target.value), y: editingItem.imageSettingsWorks?.y || 50, scale: editingItem.imageSettingsWorks?.scale || 1.2 } })} className="w-full accent-[#DC2626]" />
+                                            <span className="text-[10px] font-mono text-white">{editingItem.imageSettingsWorks?.x || 50}%</span>
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Y Position</label>
+                                            <input type="range" min="0" max="100" value={editingItem.imageSettingsWorks?.y || 50} onChange={e => setEditingItem({ ...editingItem, imageSettingsWorks: { ...editingItem.imageSettingsWorks, x: editingItem.imageSettingsWorks?.x || 50, y: Number(e.target.value), scale: editingItem.imageSettingsWorks?.scale || 1.2 } })} className="w-full accent-[#DC2626]" />
+                                            <span className="text-[10px] font-mono text-white">{editingItem.imageSettingsWorks?.y || 50}%</span>
+                                        </div>
+                                        <div>
+                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Zoom/Scale</label>
+                                            <input type="range" min="100" max="200" value={(editingItem.imageSettingsWorks?.scale || 1.2) * 100} onChange={e => setEditingItem({ ...editingItem, imageSettingsWorks: { ...editingItem.imageSettingsWorks, x: editingItem.imageSettingsWorks?.x || 50, y: editingItem.imageSettingsWorks?.y || 50, scale: Number(e.target.value) / 100 } })} className="w-full accent-[#DC2626]" />
+                                            <span className="text-[10px] font-mono text-white">{((editingItem.imageSettingsWorks?.scale || 1.2) * 100).toFixed(0)}%</span>
+                                        </div>
+                                    </div>
+
+                                    {/* Live Preview - Works Grid */}
+                                    <div>
+                                        <div className="relative w-40 h-40 border border-white/20 overflow-hidden bg-[#050505]">
+                                            {editingItem.imageWorks || editingItem.imageHome ? (
+                                                <>
+                                                    <div
+                                                        className="absolute inset-0 transition-all duration-300"
+                                                        style={{
+                                                            backgroundImage: `url('${editingItem.imageWorks || editingItem.imageHome}')`,
+                                                            backgroundSize: 'cover',
+                                                            backgroundPosition: `${editingItem.imageSettingsWorks?.x || 50}% ${editingItem.imageSettingsWorks?.y || 50}%`,
+                                                            transform: `scale(${editingItem.imageSettingsWorks?.scale || 1.2})`
+                                                        }}
+                                                    />
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-transparent to-transparent" />
+                                                    <div className="absolute top-2 left-2 z-10">
+                                                        <span className="font-mono text-[8px] text-[#DC2626]">001</span>
+                                                    </div>
+                                                    <div className="absolute bottom-2 left-2 z-10">
+                                                        <h4 className="text-xs font-brick text-white">{editingItem.title || 'TITLE'}</h4>
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <div className="flex items-center justify-center h-full text-[#9CA3AF] font-mono text-xs">
+                                                    No image
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Footer Actions */}
+                            <div className="flex gap-4 p-6 border-t border-white/10">
+                                <button onClick={saveItem} className="flex-1 bg-[#DC2626] text-white py-3 font-mono text-sm uppercase tracking-widest hover:bg-red-700 transition-colors">
+                                    SAVE PROJECT
+                                </button>
+                                <button onClick={() => setEditingItem(null)} className="flex-1 border border-white/20 text-white py-3 font-mono text-sm uppercase tracking-widest hover:bg-white/10 transition-colors">
+                                    CANCEL
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+};
+
+const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedProject, setSelectedProject, selectedPost, setSelectedPost, goHome, goWorks, goTransmissions, goChat, goAdmin, goAbout, handleSelectPost }: any) => {
     const { transmissions } = useContext(DataContext)!;
 
     useEffect(() => {
@@ -1399,22 +1925,28 @@ const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedPr
                 <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
             )}
             {view === 'home' && (
-                <HomePage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} onAdmin={goAdmin} />
+                <HomePage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} onAdmin={goAdmin} onAbout={goAbout} />
+            )}
+            {view === 'about' && (
+                <AboutPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} />
             )}
             {view === 'works' && (
-                <WorksPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} />
+                <WorksPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} onAbout={goAbout} />
             )}
             {view === 'transmissions' && (
-                <TransmissionsPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectPost={handleSelectPost} />
+                <TransmissionsPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectPost={handleSelectPost} onAbout={goAbout} />
             )}
             {view === 'post' && selectedPost && (
-                <BlogPostPage post={selectedPost} onBack={goTransmissions} onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} />
+                <BlogPostPage post={selectedPost} onBack={goTransmissions} onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} />
             )}
             {view === 'chat' && (
                 <React.Fragment>
-                    <Header onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} isChatView={true} />
+                    <Header onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} isChatView={true} />
                     <SystemChat onBack={goHome} />
                 </React.Fragment>
+            )}
+            {view === 'admin' && (
+                <AdminPage onHome={goHome} />
             )}
         </div>
     );
@@ -1442,8 +1974,8 @@ const App = () => {
     const goWorks = () => { navigate('works'); setSelectedPost(null); };
     const goTransmissions = () => { navigate('transmissions'); setSelectedPost(null); };
     const goChat = () => { navigate('chat'); setSelectedPost(null); };
-    // Admin disabled in preview mode
-    const goAdmin = () => { alert("Admin panel is disabled in preview mode."); };
+    const goAdmin = () => { navigate('admin'); setSelectedPost(null); };
+    const goAbout = () => { navigate('about'); setSelectedPost(null); };
 
     const handleSelectPost = (post: Post) => {
         setSelectedPost(post);
@@ -1454,9 +1986,16 @@ const App = () => {
 
     return (
         <DataProvider>
-            <AppContent view={view} setView={setView} monolithHover={monolithHover} setMonolithHover={setMonolithHover} selectedProject={selectedProject} setSelectedProject={setSelectedProject} selectedPost={selectedPost} setSelectedPost={setSelectedPost} goHome={goHome} goWorks={goWorks} goTransmissions={goTransmissions} goChat={goChat} goAdmin={goAdmin} handleSelectPost={handleSelectPost} />
+            <AppContent view={view} setView={setView} monolithHover={monolithHover} setMonolithHover={setMonolithHover} selectedProject={selectedProject} setSelectedProject={setSelectedProject} selectedPost={selectedPost} setSelectedPost={setSelectedPost} goHome={goHome} goWorks={goWorks} goTransmissions={goTransmissions} goChat={goChat} goAdmin={goAdmin} goAbout={goAbout} handleSelectPost={handleSelectPost} />
         </DataProvider>
     );
 };
 
 export default App;
+
+// Mount the React app
+const container = document.getElementById('root');
+if (container) {
+    const root = createRoot(container);
+    root.render(<App />);
+}
