@@ -14,7 +14,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3002;
 const JWT_SECRET = process.env.JWT_SECRET || 'brick_secret_key_2025';
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 
@@ -57,24 +57,24 @@ const initDB = async (retries = 10) => {
     while (retries > 0) {
         try {
             console.log(`>> ATTEMPTING DB CONNECTION... (${retries} left)`);
-        // Cria tabela de Works se não existir
-        await pool.query(`
+            // Cria tabela de Works se não existir
+            await pool.query(`
             CREATE TABLE IF NOT EXISTS works (
                 id TEXT PRIMARY KEY,
                 data JSONB NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `);
-        // Cria tabela de Transmissions se não existir
-        await pool.query(`
+            // Cria tabela de Transmissions se não existir
+            await pool.query(`
             CREATE TABLE IF NOT EXISTS transmissions (
                 id TEXT PRIMARY KEY,
                 data JSONB NOT NULL,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         `);
-        // Tabela de Leads (Contatos)
-        await pool.query(`
+            // Tabela de Leads (Contatos)
+            await pool.query(`
             CREATE TABLE IF NOT EXISTS leads (
                 id UUID PRIMARY KEY,
                 email TEXT NOT NULL,
@@ -117,17 +117,17 @@ app.post('/api/login', async (req, res) => {
     try {
         // Busca usuário pelo email OU username
         const result = await pool.query('SELECT * FROM master_users WHERE email = $1 OR username = $1', [identifier]);
-        
+
         if (result.rows.length > 0) {
             const user = result.rows[0];
 
             // Compara a senha enviada com o password_hash do banco
             const match = await bcrypt.compare(password, user.password_hash);
-            
+
             if (match) {
                 // Remove o hash antes de enviar de volta (segurança)
                 delete user.password_hash;
-                
+
                 // Gera Token JWT
                 const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
                 res.cookie('admin_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 7 * 24 * 60 * 60 * 1000 });
