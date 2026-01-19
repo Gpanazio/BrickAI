@@ -8,7 +8,7 @@ const GlobalStyles = () => (
         /* COLORS & UTILS */
         :root {
             --brick-black: #050505;
-            --brick-dark: #050505;
+            --brick-dark: #050505; 
             --brick-red: #DC2626;
             --brick-gray: #9CA3AF;
             --brick-white: #E5E5E5;
@@ -22,25 +22,25 @@ const GlobalStyles = () => (
             margin: 0;
             padding: 0;
         }
-
+        
         /* BRAND TYPOGRAPHY SYSTEM */
-        .font-brick {
-            font-family: 'Inter', sans-serif;
-            font-weight: 900;
-            letter-spacing: -0.04em;
-            line-height: 1;
+        .font-brick { 
+            font-family: 'Inter', sans-serif; 
+            font-weight: 900; 
+            letter-spacing: -0.04em; 
+            line-height: 1; 
         }
-
-        .font-ai {
-            font-family: 'JetBrains Mono', monospace;
-            font-weight: 700;
-            letter-spacing: -0.02em;
+        
+        .font-ai { 
+            font-family: 'JetBrains Mono', monospace; 
+            font-weight: 700; 
+            letter-spacing: -0.02em; 
         }
 
         .font-mono {
             font-family: 'JetBrains Mono', monospace;
         }
-
+        
         /* CUSTOM ANIMATIONS */
         @keyframes terminal-blink {
             0%, 100% { opacity: 1; }
@@ -70,13 +70,13 @@ const GlobalStyles = () => (
             0% { opacity: 0; transform: translateY(10px); }
             100% { opacity: 1; transform: translateY(0); }
         }
-
+        
         .animate-blink { animation: terminal-blink 1s step-end infinite; }
         .animate-breathe { animation: atmos-breathe 6s ease-in-out infinite; }
         .animate-grain { animation: grain 8s steps(10) infinite; }
         .animate-thinking { animation: thinking-pulse 1.5s ease-in-out infinite; }
         .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
-
+        
         .noise-overlay {
             position: fixed;
             top: -50%;
@@ -84,8 +84,8 @@ const GlobalStyles = () => (
             width: 200%;
             height: 200%;
             pointer-events: none;
-            z-index: 30;
-            opacity: 0.035;
+            z-index: 30; 
+            opacity: 0.035; 
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             animation: grain 6s steps(10) infinite;
         }
@@ -116,13 +116,13 @@ const GlobalStyles = () => (
         .aura-atmos { width: 120px; height: 120px; background: radial-gradient(circle at center, rgba(153, 27, 27, 0.08) 0%, transparent 70%); filter: blur(20px); }
         .light-atmos { width: 80px; height: 80px; background: radial-gradient(circle at center, rgba(220, 38, 38, 0.6) 0%, rgba(153, 0, 0, 0.1) 50%, transparent 70%); filter: blur(15px); }
         .core-atmos { width: 16px; height: 16px; background-color: #dc2626; filter: blur(6px); opacity: 0.8; }
-
+        
         .monolith-texture {
             background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564');
             background-size: cover;
             background-position: center;
         }
-
+        
         .reveal {
             opacity: 0;
             transform: translateY(40px);
@@ -162,7 +162,7 @@ const GlobalStyles = () => (
 
 // --- CONFIG ---
 // NOTE: Em produção, utilize variáveis de ambiente para a API Key
-const apiKey = process.env.REACT_APP_GEMINI_API_KEY || "";
+const apiKey = process.env.REACT_APP_GEMINI_API_KEY || ""; 
 const AI_NAME = "MASON";
 
 // --- TYPES ---
@@ -173,7 +173,7 @@ interface Work {
     category: string;
     title: string;
     desc: string;
-    videoUrl?: string;
+    videoUrl?: string; 
     longDesc?: string;
     credits?: Array<{ role: string; name: string }>;
     gradient: string;
@@ -692,7 +692,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
     return (
         <section className="relative w-full flex flex-col items-center justify-start pt-32 md:pt-40 pb-20 md:pb-32 overflow-visible">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-40"></div>
-
+            
             <div className="reveal relative z-10 w-full flex justify-center mb-8 md:mb-12">
                 <div className="relative">
                     <div
@@ -794,7 +794,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 const cardCenter = rect.top + rect.height / 2;
                 const screenCenter = viewportHeight / 2;
                 const distanceFromCenter = cardCenter - screenCenter;
-                const yOffset = distanceFromCenter * 0.05;
+                const yOffset = distanceFromCenter * 0.05; 
                 bgRef.current.style.transform = `scale(${settings.scale}) translate3d(0, ${yOffset}px, 0)`;
             }
             ticking = false;
@@ -861,7 +861,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 <div className="w-[1px] h-3 bg-white/40"></div>
                 <div className="w-[1px] h-3 bg-white/40"></div>
             </div>
-
+            
             {/* Bottom Line with CROP MARKS */}
             <div className="absolute bottom-0 left-0 right-0 h-px z-40 flex justify-between px-4 pointer-events-none">
                 <div className="w-[1px] h-3 bg-white/40 -mt-3"></div>
@@ -878,7 +878,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 
             {/* CONTENT LAYER */}
             <div className="relative z-40 px-6 md:px-12 lg:px-24 w-full flex flex-row justify-between items-center gap-6 pointer-events-none">
-
+                
                 {/* LEFT: Project Identification */}
                 <div className="flex-1">
                     <div className="flex items-center gap-3 mb-2">
@@ -1081,14 +1081,14 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
                     transform: `scale(${settings.scale})`
                 }}
             ></div>
-
+            
             {/* Tech Grid Overlay for consistency */}
             <div className="absolute inset-0 bg-tech-grid opacity-20 z-10 pointer-events-none group-hover:opacity-10 transition-opacity duration-300"></div>
-
+            
             <div className="scanline-effect z-20"></div>
             {/* UPDATED GRADIENT OPACITY */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-transparent to-transparent group-hover:opacity-70 transition-opacity duration-300 z-20"></div>
-
+            
             <div className="absolute inset-0 p-6 flex flex-col justify-between z-30">
                 <div className="flex justify-between items-start opacity-50 group-hover:opacity-100 transition-opacity duration-300">
                     <span className="font-mono text-[10px] tracking-widest text-[#DC2626]">{(index + 1).toString().padStart(3, '0')}</span>
