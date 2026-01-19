@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRight, Database, Cpu, Activity, Disc, LayoutGrid, MessageSquare, Terminal, Crosshair, Scan } from 'lucide-react';
+import { ArrowRightIcon, DatabaseIcon } from './src/components/icons';
 
 // --- STYLES & CONFIG ---
 const GlobalStyles = () => (
@@ -909,7 +909,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                         <span className="block text-[8px] font-mono text-[#9CA3AF]/60 tracking-widest uppercase mb-1">SYSTEM_STATUS</span>
                         <span className="block text-[10px] font-mono text-white tracking-widest uppercase">ONLINE</span>
                     </div>
-                    <ArrowRight className="w-5 h-5 text-white/30 group-hover:text-[#DC2626] transition-colors duration-300" />
+                    <ArrowRightIcon className="w-5 h-5 text-white/30 group-hover:text-[#DC2626] transition-colors duration-300" />
                 </div>
             </div>
         </div>
@@ -920,7 +920,7 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
     <section id="works" className="w-full pt-16 pb-0 bg-[#050505] border-t border-white/5 relative z-40">
         <div className="px-6 md:px-12 lg:px-24 mb-12 reveal flex justify-between items-end border-b border-white/10 pb-4">
             <div className="flex items-center gap-3">
-                <Database className="w-4 h-4 text-[#DC2626]" />
+                <DatabaseIcon className="w-4 h-4 text-[#DC2626]" />
                 <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">PROJECT_DATABASE // MAIN_DIRECTORY</h2>
             </div>
             <div className="hidden md:flex gap-4 text-[9px] font-mono text-[#9CA3AF]/50">
