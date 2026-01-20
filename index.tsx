@@ -55,6 +55,13 @@ const GlobalStyles = () => (
             0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(1); }
             50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.5); }
         }
+        @keyframes talking-glitch {
+            0% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; filter: brightness(1.2) contrast(1.2); }
+            25% { transform: translate(-52%, -48%) scale(1.15); opacity: 0.8; filter: hue-rotate(5deg); }
+            50% { transform: translate(-48%, -50%) scale(1.2); opacity: 0.9; filter: contrast(1.5); }
+            75% { transform: translate(-50%, -52%) scale(1.15); opacity: 0.8; }
+            100% { transform: translate(-50%, -50%) scale(1.1); opacity: 1; }
+        }
         @keyframes grain {
             0%, 100% { transform: translate(0, 0); }
             10% { transform: translate(-5%, -10%); }
@@ -71,12 +78,20 @@ const GlobalStyles = () => (
             0% { opacity: 0; transform: translateY(10px); }
             100% { opacity: 1; transform: translateY(0); }
         }
+        @keyframes scan {
+            0% { top: 0%; opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { top: 100%; opacity: 0; }
+        }
         
         .animate-blink { animation: terminal-blink 1s step-end infinite; }
         .animate-breathe { animation: atmos-breathe 6s ease-in-out infinite; }
         .animate-grain { animation: grain 8s steps(10) infinite; }
         .animate-thinking { animation: thinking-pulse 1.5s ease-in-out infinite; }
+        .animate-talking { animation: talking-glitch 0.15s infinite; }
         .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+        .animate-scan { animation: scan 3s ease-in-out infinite; }
         
         .noise-overlay {
             position: fixed;
@@ -86,7 +101,7 @@ const GlobalStyles = () => (
             height: 200%;
             pointer-events: none;
             z-index: 30; 
-            opacity: 0.035; 
+            opacity: 0.04; 
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             animation: grain 6s steps(10) infinite;
         }
@@ -149,6 +164,11 @@ const GlobalStyles = () => (
             transition: opacity 0.3s;
             mix-blend-mode: multiply;
         }
+
+        .vignette {
+            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 100%);
+            pointer-events: none;
+        }
         .group:hover .scanline-effect {
             opacity: 0.2;
         }
@@ -162,8 +182,6 @@ const GlobalStyles = () => (
 );
 
 // --- CONFIG ---
-// NOTE: Em produção, utilize variáveis de ambiente para a API Key
-const apiKey = (import.meta.env.VITE_GEMINI_API_KEY as string) || "";
 const AI_NAME = "MASON";
 
 // --- TYPES ---
@@ -564,50 +582,33 @@ const CustomCursor = ({ active }: { active: boolean }) => {
     );
 };
 
-// --- GEMINI SERVICE ---
+// --- GEMINI SERVICE (BACKEND PROXY) ---
 const chatWithMono = async (history: any[], message: string) => {
-    if (!apiKey) {
-        // Fallback when API key is missing
-        return new Promise<string>(resolve => setTimeout(() => resolve("ACCESS DENIED. I require an API Key to build your request. Please configure my source code."), 1000));
-    }
-
-    const SYSTEM_PROMPT = `
-        Você é ${AI_NAME}, a inteligência central da Brick AI.
-        Sua personalidade é sólida, lógica, precisa e levemente misteriosa, como um construtor de realidades (inspirado no HAL 9000, mas focado em estrutura e criação).
-        Você NÃO usa emojis. Você usa pontuação perfeita.
-        A Brick AI é uma produtora "From Set to Server", especializada em produção generativa, VFX neural e inteligência artificial aplicada ao audiovisual.
-        Responda às perguntas do usuário sobre a empresa, sobre AI, ou sobre a existência.
-        Mantenha as respostas concisas, enigmáticas mas úteis.
-        Se perguntarem quem é você: "Eu sou Mason. Eu construo a base da sua realidade."
-    `;
-
     try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+        const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [
-                    { role: "user", parts: [{ text: SYSTEM_PROMPT }] },
-                    ...history.map(msg => ({
-                        role: msg.role === 'user' ? 'user' : 'model',
-                        parts: [{ text: msg.content }]
-                    })),
-                    { role: "user", parts: [{ text: message }] }
-                ]
-            })
+            body: JSON.stringify({ history, message }),
+            credentials: 'include' // Important for cookies (session limit)
         });
 
         const data = await response.json();
-        if (data.candidates && data.candidates[0].content) {
-            return data.candidates[0].content.parts[0].text;
-        } else {
-            return "Structure integrity compromised. Cannot process.";
+
+        if (response.status === 429) {
+            return "PROTOCOL_LIMIT_REACHED: " + data.message;
         }
-    } catch (error) {
-        console.error(error);
-        return "System failure. Connection lost.";
+
+        if (data.error) {
+            return "CONNECTION_ERROR: " + data.error;
+        }
+
+        return data.response;
+
+    } catch (err) {
+        return "SYSTEM_FAILURE: Unable to establish neural link.";
     }
 };
+
 
 // --- COMPONENTS: SECTIONS ---
 const BrickLogo = ({ className }: { className?: string }) => (
@@ -620,7 +621,7 @@ const BrickLogo = ({ className }: { className?: string }) => (
 
 const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView }: { onChat: () => void, onWorks: () => void, onTransmissions: () => void, onHome: () => void, onAbout: () => void, isChatView: boolean }) => {
     return (
-        <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center pointer-events-none mix-blend-screen">
+        <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center pointer-events-none bg-gradient-to-b from-black/90 via-black/50 to-transparent">
             <div onClick={onHome} className="pointer-events-auto flex items-baseline group cursor-pointer select-none">
                 <img src="/01.png" alt="BRICK" className="h-6 md:h-8 w-auto object-contain mr-1" />
                 <span className="text-[#DC2626] font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[2px]">_</span>
@@ -628,7 +629,7 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
             </div>
             {
                 !isChatView && (
-                    <div className="flex items-center gap-8 pointer-events-auto">
+                    <div className="flex items-center gap-6 pointer-events-auto">
                         {/* NAV STYLE: Raw Text Links */}
                         <MagneticButton onClick={() => window.location.href = '/brand.html'} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300 hidden md:inline-block">
                             <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
@@ -651,7 +652,8 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
                         </MagneticButton>
 
                         {/* CTA STYLE: Subtle Blinking Underscore */}
-                        <MagneticButton onClick={onChat} className="ml-8 text-xs md:text-sm font-ai text-white hover:text-[#DC2626] transition-all duration-300 group">
+                        <MagneticButton onClick={onChat} className="group text-xs md:text-sm font-ai text-white hover:text-[#DC2626] transition-colors duration-300">
+                            <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
                             TALK TO US <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
                         </MagneticButton>
                     </div>
@@ -1295,13 +1297,18 @@ const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void 
 
 const SystemChat = ({ onBack }: { onBack: () => void }) => {
     const [messages, setMessages] = useState<{ role: string, content: string }[]>([
-        { role: 'mono', content: `SYSTEM ONLINE. I am ${AI_NAME}. I organize the chaos into visuals.` },
-        { role: 'mono', content: "Select a protocol or transmit your query." }
+        { role: 'mono', content: "SYSTEM_ONLINE. I am MASON. I build the foundation of your reality." },
+        { role: 'mono', content: "Protocol initiated. Transmit your query for immediate processing." }
     ]);
     const [input, setInput] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
-    const SUGGESTIONS = ["What services do you offer?", "How does Generative AI work?", "I have a complex project.", "Who are your clients?"];
+    const SUGGESTIONS = [
+        "What is the Monolith philosophy?",
+        "Execute project audit.",
+        "Initiate creative synthesis.",
+        "Manual override: Speak to humans."
+    ];
 
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -1313,62 +1320,185 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
         if (typeof textInput !== 'string') textInput.preventDefault();
         const messageToSend = typeof textInput === 'string' ? textInput : input;
         if (!messageToSend.trim() || isProcessing) return;
+
         setInput("");
         setMessages(prev => [...prev, { role: 'user', content: messageToSend }]);
         setIsProcessing(true);
+
         const response = await chatWithMono(messages, messageToSend);
+
         setMessages(prev => [...prev, { role: 'mono', content: response }]);
         setIsProcessing(false);
     };
 
     return (
-        <div className="min-h-screen pt-32 pb-12 flex flex-col items-center justify-start font-mono relative">
-            <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group">
+        <div className="min-h-screen pt-40 pb-20 flex flex-col items-center justify-start font-mono relative bg-[#050505] overflow-x-hidden">
+
+            {/* RETURN BUTTON */}
+            <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
             </button>
-            <div className="relative mb-8 shrink-0 z-10 animate-fade-in-up">
-                <div className="monolith-structure w-[80px] h-[20vh] md:w-[100px] md:h-[25vh] rounded-[2px] flex items-center justify-center overflow-hidden shadow-2xl relative">
-                    <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none"></div>
-                    <div className="centered-layer aura-atmos pointer-events-none opacity-50"></div>
-                    <div className={`centered-layer light-atmos pointer-events-none transition-all duration-500 ${isProcessing ? 'animate-thinking bg-[#DC2626] opacity-100' : 'animate-breathe opacity-50'}`}></div>
-                    <div className="centered-layer core-atmos pointer-events-none"></div>
-                    <div className="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10"></div>
-                </div>
-                <div className="text-center mt-6 text-[#DC2626] text-[9px] tracking-[0.3em] uppercase opacity-70 animate-pulse">
-                    {isProcessing ? "ANALYZING INPUT..." : `${AI_NAME} ONLINE`}
-                </div>
-            </div>
-            <div className="w-full max-w-2xl px-6 flex-1 flex flex-col z-10">
-                <div className="flex-1 overflow-y-auto mb-6 space-y-6 scrollbar-hide min-h-[30vh]">
-                    {messages.map((msg, i) => (
-                        <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} opacity-0 animate-[terminal-blink_0.5s_ease-out_forwards]`} style={{ animationDelay: '0.1s', animationFillMode: 'forwards' }}>
-                            <span className="text-[9px] text-neutral-600 mb-2 uppercase tracking-widest font-bold">{msg.role === 'user' ? 'CLIENT_TERMINAL' : 'MASON_CORE'}</span>
-                            <div className={`max-w-lg p-5 text-sm leading-relaxed border backdrop-blur-sm shadow-lg ${msg.role === 'user' ? 'border-white/10 text-white bg-white/5' : 'border-[#DC2626]/20 text-[#E5E5E5] bg-[#050505]/60'}`}>{msg.content}</div>
+
+            <main className="w-full max-w-7xl mx-auto px-6 md:px-12 relative z-10 flex flex-col gap-24">
+
+                {/* 1. CONTACT SECTION (Humans) */}
+                <section className="w-full animate-fade-in-up">
+                    <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-white/10 pb-6">
+                        <div>
+                            <h1 className="text-4xl md:text-6xl font-brick text-white mb-2">REACH_<span className="text-[#DC2626]">HUMANS</span></h1>
+                            <p className="text-[#9CA3AF] font-mono text-xs tracking-widest uppercase">MANUAL OVERRIDE PROTOCOLS</p>
                         </div>
-                    ))}
-                    {isProcessing && (
-                        <div className="flex flex-col items-start">
-                            <span className="text-[9px] text-neutral-600 mb-2 uppercase tracking-widest font-bold">MASON_CORE</span>
-                            <div className="typing-indicator text-[#DC2626] text-xl tracking-widest pl-4"><span>.</span><span>.</span><span>.</span></div>
+                        <div className="hidden md:block text-right">
+                            <span className="text-[10px] font-mono text-[#9CA3AF]/60 uppercase tracking-widest">STATUS: ONLINE</span>
                         </div>
-                    )}
-                    <div ref={messagesEndRef} />
-                </div>
-                {!isProcessing && messages.length < 4 && (
-                    <div className="flex flex-wrap justify-center gap-3 mb-6 animate-fade-in-up">
-                        {SUGGESTIONS.map((query, i) => (
-                            <button key={i} onClick={() => handleSend(query)} className="text-[9px] uppercase tracking-wider text-[#9CA3AF] border border-white/10 bg-white/5 px-4 py-2 hover:bg-white hover:text-black hover:border-white transition-all duration-300">{query}</button>
-                        ))}
                     </div>
-                )}
-                <form onSubmit={handleSend} className="relative group border-t border-white/10 pt-6">
-                    <input type="text" value={input} onChange={(e) => setInput(e.target.value)} placeholder={`ASK ${AI_NAME}...`} className="w-full bg-transparent py-4 text-white font-mono text-sm focus:outline-none placeholder:text-neutral-700 placeholder:tracking-widest" autoFocus />
-                    <button type="submit" className="absolute right-0 top-6 bottom-0 text-[9px] text-neutral-500 hover:text-[#DC2626] uppercase tracking-[0.2em] transition-colors">TRANSMIT</button>
-                </form>
-            </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
+                        {/* EMAIL */}
+                        <a href="mailto:contact@brickai.com" className="group block bg-[#0A0A0A] border border-white/5 p-8 hover:border-[#DC2626] transition-colors duration-500">
+                            <div className="mb-4 text-[#DC2626] opacity-50 group-hover:opacity-100 transition-opacity">
+                                <span className="text-[10px] uppercase tracking-widest border border-[#DC2626] px-2 py-1">Channel_01</span>
+                            </div>
+                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-[#DC2626] transition-colors">EMAIL_STREAMS</h3>
+                            <p className="text-[#9CA3AF] text-xs font-mono tracking-widest">CONTACT@BRICKAI.COM</p>
+                        </a>
+
+                        {/* PHONE */}
+                        <a href="tel:+5511999999999" className="group block bg-[#0A0A0A] border border-white/5 p-8 hover:border-[#DC2626] transition-colors duration-500">
+                            <div className="mb-4 text-[#DC2626] opacity-50 group-hover:opacity-100 transition-opacity">
+                                <span className="text-[10px] uppercase tracking-widest border border-[#DC2626] px-2 py-1">Channel_02</span>
+                            </div>
+                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-[#DC2626] transition-colors">VOICE_LINK</h3>
+                            <p className="text-[#9CA3AF] text-xs font-mono tracking-widest">+55 11 99999-9999</p>
+                        </a>
+
+                        {/* SOCIAL */}
+                        <div className="group block bg-[#0A0A0A] border border-white/5 p-8 hover:border-[#DC2626] transition-colors duration-500">
+                            <div className="mb-4 text-[#DC2626] opacity-50 group-hover:opacity-100 transition-opacity">
+                                <span className="text-[10px] uppercase tracking-widest border border-[#DC2626] px-2 py-1">Channel_03</span>
+                            </div>
+                            <h3 className="text-2xl font-brick text-white mb-4 group-hover:text-[#DC2626] transition-colors">NETWORK_NODES</h3>
+                            <div className="flex flex-wrap gap-4">
+                                {['LinkedIn', 'Instagram', 'Twitter'].map(social => (
+                                    <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-[#9CA3AF] hover:text-white uppercase tracking-wider underline decoration-white/20 hover:decoration-white">{social}</a>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 2. MASON INTELLIGENCE - SYMMETRICAL LAYOUT */}
+                <section className="w-full flex flex-col md:flex-row gap-0 items-start animate-fade-in-up border-t border-white/10 pt-12" style={{ animationDelay: '0.2s' }}>
+
+                    {/* LEFT: THE AVATAR (Static Monolith) */}
+                    <div className="w-full md:w-5/12 flex flex-col items-center justify-center p-12 border-r border-white/5 relative bg-[#050505]">
+                        <div className="relative w-[150px] h-[300px] md:w-[180px] md:h-[360px]">
+                            {/* The Monolith Shape - Identical to Hero but no mouse interaction */}
+                            <div
+                                className={`monolith-structure w-full h-full rounded-[2px] relative z-10 shadow-2xl transition-all duration-300 ${isProcessing ? 'shadow-[0_0_60px_rgba(220,38,38,0.3)]' : ''}`}
+                            >
+                                <div className="absolute inset-0 monolith-texture opacity-80 mix-blend-overlay pointer-events-none rounded-[2px] overflow-hidden"></div>
+
+                                {/* Static Atmospherics */}
+                                <div className="centered-layer aura-atmos pointer-events-none opacity-40 w-[300px] h-[300px] blur-[80px]"></div>
+                                <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-60 w-[200px] h-[200px] blur-[50px]"></div>
+
+                                {/* Core Glow / Eye - Pulses on Thinking/Talking */}
+                                <div className={`centered-layer core-atmos pointer-events-none shadow-[0_0_40px_rgba(220,38,38,1)] transition-all duration-200 ${isProcessing ? 'animate-talking scale-150 opacity-100' : 'animate-thinking opacity-80'}`}></div>
+
+                                {/* Glass Reflection */}
+                                <div className="absolute inset-0 border border-white/5 opacity-30 pointer-events-none z-10 rounded-[2px]"></div>
+                                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-20"></div>
+                            </div>
+                        </div>
+
+                        <div className="mt-12 text-center">
+                            <h2 className="text-4xl font-brick text-white mb-2">I AM <span className="text-[#DC2626]">MASON</span></h2>
+                            <p className="text-[10px] text-[#9CA3AF] font-mono tracking-widest max-w-[200px] mx-auto uppercase">
+                                The Generative Core.<br />State: {isProcessing ? 'ACTIVE' : 'IDLE'}
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* RIGHT: THE TERMINAL (Chat Interface) */}
+                    <div className="w-full md:w-7/12 pl-0 md:pl-12">
+                        <div className="w-full bg-[#0A0A0A] border border-white/10 flex flex-col h-[600px] relative overflow-hidden shadow-2xl">
+                            {/* Terminal Header */}
+                            <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-white/[0.02]">
+                                <div className="flex items-center gap-3">
+                                    <div className={`w-2 h-2 rounded-full ${isProcessing ? 'bg-[#DC2626] animate-pulse' : 'bg-green-500'}`}></div>
+                                    <span className="text-[9px] font-mono text-white/50 tracking-[0.2em] uppercase font-bold">
+                                        /USR/BIN/MASON_CHAT // v3.2
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* Messages */}
+                            <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 scrollbar-hide">
+                                {messages.map((msg, i) => (
+                                    <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} animate-fade-in-up`}>
+                                        <div className="flex items-center gap-2 mb-2 opacity-50">
+                                            <span className="text-[8px] font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">
+                                                {msg.role === 'user' ? 'YOU' : 'MASON'}
+                                            </span>
+                                        </div>
+                                        <div className={`max-w-[90%] p-5 text-sm font-mono leading-relaxed tracking-wide ${msg.role === 'user'
+                                            ? 'bg-white/5 text-white/90 border-r-2 border-white/20'
+                                            : 'text-[#DC2626] bg-[#DC2626]/5 border-l-2 border-[#DC2626]/40'
+                                            }`}>
+                                            {msg.content}
+                                        </div>
+                                    </div>
+                                ))}
+                                {isProcessing && (
+                                    <div className="flex flex-col items-start animate-pulse">
+                                        <span className="text-[8px] font-mono text-[#DC2626] uppercase tracking-[0.2em] mb-2">MASON</span>
+                                        <div className="p-5 bg-[#DC2626]/5 border-l-2 border-[#DC2626]/40">
+                                            <span className="inline-block w-1.5 h-4 bg-[#DC2626] animate-blink"></span>
+                                        </div>
+                                    </div>
+                                )}
+                                <div ref={messagesEndRef} />
+                            </div>
+
+                            {/* Input */}
+                            <div className="p-6 bg-[#050505] border-t border-white/5">
+                                {!isProcessing && messages.length < 4 && (
+                                    <div className="flex flex-wrap gap-2 mb-4">
+                                        {SUGGESTIONS.map((query, i) => (
+                                            <button
+                                                key={i}
+                                                onClick={() => handleSend(query)}
+                                                className="text-[8px] font-mono uppercase tracking-widest text-[#9CA3AF] border border-white/10 bg-white/[0.02] px-3 py-1.5 hover:bg-[#DC2626] hover:text-white hover:border-[#DC2626] transition-all"
+                                            >
+                                                {query}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                                <form onSubmit={handleSend} className="flex items-center gap-4">
+                                    <div className="w-2 h-2 bg-[#DC2626] animate-pulse shrink-0"></div>
+                                    <input
+                                        type="text"
+                                        value={input}
+                                        onChange={(e) => setInput(e.target.value)}
+                                        placeholder="ENTER COMMAND..."
+                                        className="w-full bg-transparent py-2 text-white font-mono text-sm focus:outline-none placeholder:text-white/20 placeholder:tracking-[0.1em]"
+                                        autoFocus
+                                    />
+                                    <button type="submit" className="text-[10px] font-brick text-white/50 hover:text-white uppercase tracking-[0.2em] transition-colors">
+                                        EXECUTE
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
         </div>
     );
 };
+
 
 const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, onAbout, setMonolithHover, monolithHover, onAdmin }: any) => (
     <React.Fragment>
@@ -1383,6 +1513,62 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, o
     </React.Fragment>
 );
 
+const InfoCard = ({ number, title, desc }: { number: string, title: string, desc: string }) => (
+    <div className="group relative bg-[#050505] p-8 md:p-10 hover:bg-[#0A0A0A] transition-colors duration-500 overflow-hidden border border-white/5 hover:border-[#DC2626] border-l-4 border-l-transparent hover:border-l-[#DC2626]">
+        <div className="absolute top-0 right-0 p-4 opacity-30 group-hover:opacity-100 transition-opacity">
+            <span className="font-mono text-[9px] text-[#DC2626] border border-[#DC2626] px-1 tracking-widest">SEC_{number}</span>
+        </div>
+        <div className="mb-6 relative z-10">
+            <h3 className="text-xl md:text-2xl font-brick text-white mb-4 group-hover:text-[#DC2626] transition-colors duration-300 uppercase leading-none">{title}</h3>
+            <p className="text-xs md:text-sm font-mono text-[#9CA3AF] leading-relaxed opacity-80">{desc}</p>
+        </div>
+        {/* Tech Decor */}
+        <div className="scanline-effect opacity-10 group-hover:opacity-20 transition-opacity"></div>
+    </div>
+);
+
+const StatBlock = ({ label, value, sub }: { label: string, value: string, sub: string }) => (
+    <div className="flex flex-col border-l border-white/10 pl-6 py-2 group hover:border-[#DC2626] transition-colors">
+        <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-widest mb-1">{label}</span>
+        <span className="font-brick text-3xl md:text-4xl text-white mb-1 group-hover:text-[#DC2626] transition-colors">{value}</span>
+        <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">{sub}</span>
+    </div>
+);
+
+const LogItem = ({ year, title, desc, highlight = false }: { year: string, title: string, desc: string, highlight?: boolean }) => (
+    <div className={`relative pl-8 md:pl-12 group ${highlight ? 'opacity-100' : 'opacity-60 hover:opacity-100'} transition-opacity duration-300`}>
+        {/* Dot */}
+        <div className={`absolute left-[-4px] top-1.5 w-2 h-2 rounded-full border-2 border-[#050505] z-10 ${highlight ? 'bg-[#DC2626]' : 'bg-[#333] group-hover:bg-white'} transition-colors`}></div>
+
+        <div className="flex flex-col md:flex-row md:items-baseline gap-2 mb-1">
+            <span className={`font-mono text-sm font-bold ${highlight ? 'text-[#DC2626]' : 'text-white'}`}>{year}</span>
+            <span className="hidden md:inline text-white/20">//</span>
+            <h4 className="font-brick text-lg text-white uppercase tracking-wide">{title}</h4>
+        </div>
+        <p className="text-xs md:text-sm text-[#9CA3AF] font-light leading-relaxed max-w-lg">{desc}</p>
+    </div>
+);
+
+const TeamMember = ({ name, role, id }: { name: string, role: string, id: string }) => (
+    <div className="group relative bg-[#050505] border border-white/5 p-6 hover:border-white/20 transition-all duration-300">
+        <div className="flex justify-between items-start mb-6">
+            <div className="w-12 h-12 bg-white/5 rounded-sm flex items-center justify-center group-hover:bg-[#DC2626] transition-colors duration-300">
+                <span className="font-brick text-[#DC2626] text-xl group-hover:text-black">{name.charAt(0)}</span>
+            </div>
+            <div className="flex flex-col items-end">
+                <span className="font-mono text-[9px] text-[#DC2626] uppercase tracking-widest mb-1">ID_{id}</span>
+                <div className="flex gap-0.5">
+                    {[...Array(3)].map((_, i) => <div key={i} className="w-1 h-1 bg-white/20 rounded-full"></div>)}
+                </div>
+            </div>
+        </div>
+        <div>
+            <h4 className="text-lg font-brick text-white group-hover:text-[#E5E5E5] transition-colors">{name}</h4>
+            <span className="block text-[10px] font-mono text-[#9CA3AF] uppercase tracking-widest mt-1 border-t border-white/10 pt-2 inline-block w-full">{role}</span>
+        </div>
+    </div>
+);
+
 const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) => {
     return (
         <React.Fragment>
@@ -1390,63 +1576,117 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
             <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
             </button>
-            <main className="pt-32 min-h-screen flex flex-col bg-[#050505]">
-                <section className="w-full px-6 md:px-12 lg:px-24 mb-20 reveal">
-                    <div className="border-b border-white/10 pb-8">
-                        <h1 className="text-4xl md:text-6xl lg:text-7xl font-brick text-white mb-6">ARCHITECTS<br />OF THE VOID.</h1>
-                        <p className="text-[#9CA3AF] font-mono text-xs md:text-sm tracking-widest max-w-2xl leading-relaxed uppercase">
-                            We are not just a production house. We are a research facility dedicated to the exploration of latent space.
-                        </p>
-                    </div>
-                </section>
 
-                <section className="w-full px-6 md:px-12 lg:px-24 mb-32 reveal">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
-                        <div>
-                            <h3 className="text-xl font-brick text-white mb-6 flex items-center gap-3">
-                                <span className="w-2 h-2 bg-[#DC2626]"></span>
-                                THE FIRMAMENT
-                            </h3>
-                            <p className="text-[#E5E5E5]/80 font-light leading-relaxed mb-6">
-                                Brick AI operates at the intersection of traditional filmmaking and neural rendering. Founded in 2016 as a high-end VFX boutique, we evolved into a generative laboratory.
-                            </p>
-                            <p className="text-[#E5E5E5]/80 font-light leading-relaxed">
-                                Our mission is to reclaim the "human error" in the age of synthetic perfection. We believe that true cinematic beauty lies in the grain, the glitch, and the unpredictable. We build pipelines that allow artists to direct algorithms, not the other way around.
-                            </p>
-                        </div>
-                        <div className="relative border border-white/10 p-8 flex items-center justify-center bg-white/5">
-                            <div className="absolute inset-0 bg-tech-grid opacity-20 pointer-events-none"></div>
-                            <div className="text-center">
-                                <span className="block text-4xl md:text-6xl font-brick text-[#DC2626] mb-2">10+</span>
-                                <span className="block text-xs font-mono text-[#9CA3AF] tracking-[0.3em] uppercase">Years of Craft</span>
+            <main className="pt-32 min-h-screen flex flex-col bg-[#050505] relative overflow-hidden">
+                {/* ATMOSPHERE */}
+                <div className="absolute top-0 right-0 w-[60vw] h-[60vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-30"></div>
+                <div className="scanline-effect fixed inset-0 z-0 pointer-events-none opacity-20"></div>
+
+                {/* CONTAINER - MAX WIDTH FOR ALIGNMENT */}
+                <div className="w-full max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+
+                    {/* HERO: ORIGIN STORY */}
+                    <section className="mb-24 reveal mt-12 md:mt-20">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+                            <div>
+                                <span className="text-[#DC2626] font-mono text-xs tracking-[0.2em] uppercase mb-6 block animate-fade-in-up">
+                                    SYSTEM_ORIGIN <span className="text-white/20 mx-2">//</span> EST. 2016
+                                </span>
+                                <h1 className="text-5xl md:text-7xl font-brick text-white mb-8 leading-[0.9] tracking-tight animate-fade-in-up delay-100">
+                                    FORGED IN<br />
+                                    <span className="text-[#DC2626]">OLD SCHOOL</span><br />
+                                    VFX.
+                                </h1>
+                                <p className="text-[#E5E5E5] font-light text-base md:text-lg leading-relaxed max-w-xl border-l-2 border-[#DC2626] pl-6 animate-fade-in-up delay-200">
+                                    Before we ever wrote a prompt, we spent 7 years pushing pixels in Nuke and Maya. We understand light, composition, and storytelling because we built them by hand for a decade. We didn't adopt AI to replace the craft. We adopted it to break the speed limit.
+                                </p>
+                            </div>
+                            {/* CORE MODULES / CAPABILITIES */}
+                            <div className="bg-[#0A0A0A] border border-white/10 p-8 md:p-10 relative animate-fade-in-up delay-300">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-[#DC2626]"></div>
+                                <h3 className="font-mono text-xs text-[#9CA3AF] uppercase tracking-[0.2em] mb-8 flex items-center gap-2">
+                                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                                    CORE_MODULES
+                                </h3>
+                                <div className="space-y-6">
+                                    <div className="group">
+                                        <div className="flex justify-between items-baseline mb-1">
+                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">SYNTHETIC_CINEMATOGRAPHY</h4>
+                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">INSTALLED</span>
+                                        </div>
+                                        <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-relaxed">
+                                            Video Generation // ComfyUI // 4K Upscaling
+                                        </p>
+                                    </div>
+                                    <div className="w-full h-px bg-white/5"></div>
+
+                                    <div className="group">
+                                        <div className="flex justify-between items-baseline mb-1">
+                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">MODEL_TRAINING</h4>
+                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">INSTALLED</span>
+                                        </div>
+                                        <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-relaxed">
+                                            Custom LoRAs // Style Consistency // Fine-Tuning
+                                        </p>
+                                    </div>
+                                    <div className="w-full h-px bg-white/5"></div>
+
+                                    <div className="group">
+                                        <div className="flex justify-between items-baseline mb-1">
+                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">PIPELINE_ARCHITECTURE</h4>
+                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">INSTALLED</span>
+                                        </div>
+                                        <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-relaxed">
+                                            Python Tooling // Automation // Render Farm
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </section>
+                    </section>
 
-                <section className="w-full px-6 md:px-12 lg:px-24 pb-32 reveal">
-                    <div className="flex items-center gap-3 mb-12">
-                        <Database className="w-4 h-4 text-[#DC2626]" />
-                        <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">CORE_UNITS // STRUCTURE</h2>
-                    </div>
+                    {/* THE INFRASTRUCTURE (DIFFERENTIATORS) */}
+                    <section className="mb-32 reveal">
+                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 border-b border-white/10 pb-4 gap-2">
+                            <h2 className="text-2xl font-brick text-white">THE ANTI-PROMPT MANIFESTO</h2>
+                            <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-widest">Why Magic Doesn't Scale</span>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <InfoCard
+                                number="01"
+                                title="CONTROL > CHANCE"
+                                desc="The 'perfect prompt' is a myth. Consistency comes from ControlNet, IP-Adapters, and Python scripts, not lucky words. We engineer our images; we don't wish for them."
+                            />
+                            <InfoCard
+                                number="02"
+                                title="CURATION IS CREATION"
+                                desc="A model can generate 1,000 images in a minute. The art is knowing which one is wrong. Our directors curate with the same critical eye they used on film sets for 10 years."
+                            />
+                            <InfoCard
+                                number="03"
+                                title="NO BLACK BOXES"
+                                desc="We don't rely on closed web-interfaces. We build our own ComfyUI pipelines locally. This gives us pixel-level control over the latent space that 'magic buttons' can't provide."
+                            />
+                        </div>
+                    </section>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/10 border border-white/10">
-                        {[
-                            { role: "Executive Director", name: "MASON CORE", desc: "System Architecture" },
-                            { role: "Creative Lead", name: "SARAH V.", desc: "Visual Synthesis" },
-                            { role: "Tech Lead", name: "J. DOE", desc: "Neural Pipelines" },
-                            { role: "R&D", name: "UNIT 734", desc: "Latent Space Exploration" },
-                            { role: "Sound", name: "ECHO LAB", desc: "Psychoacoustics" },
-                            { role: "Operations", name: "CENTRAL", desc: "Logistics" }
-                        ].map((member, i) => (
-                            <div key={i} className="bg-[#050505] p-8 group hover:bg-[#0a0a0a] transition-colors">
-                                <span className="block text-[9px] font-mono text-[#DC2626] mb-2 uppercase tracking-widest">{member.role}</span>
-                                <h4 className="text-xl font-brick text-white mb-2">{member.name}</h4>
-                                <p className="text-xs text-[#9CA3AF] font-mono opacity-60">{member.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                </section>
+                    {/* LEADERSHIP (REAL ROLES) */}
+                    <section className="pb-32 reveal">
+                        <div className="flex items-center gap-3 mb-12 border-b border-white/10 pb-4">
+                            <Database className="w-4 h-4 text-[#DC2626]" />
+                            <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">UNIT_LEADERS // COMMAND</h2>
+                        </div>
+
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                            <TeamMember name="ALEX M." role="EXECUTIVE PRODUCER" id="001" />
+                            <TeamMember name="SARAH V." role="CREATIVE DIRECTOR" id="002" />
+                            <TeamMember name="GABRIEL P." role="HEAD OF TECHNOLOGY" id="003" />
+                            <TeamMember name="MARCUS L." role="VFX SUPERVISOR" id="004" />
+                        </div>
+                    </section>
+
+                </div>
+
             </main>
             <Footer onChat={onChat} />
         </React.Fragment>
@@ -1941,7 +2181,7 @@ const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedPr
             )}
             {view === 'chat' && (
                 <React.Fragment>
-                    <Header onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} isChatView={true} />
+                    <Header onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} isChatView={false} />
                     <SystemChat onBack={goHome} />
                 </React.Fragment>
             )}
@@ -1960,13 +2200,22 @@ const ContextConsumer = ({ children }: { children: (data: any) => React.ReactNod
 };
 
 const App = () => {
-    const [view, setView] = useState('home');
+    const [view, setView] = useState(() => {
+        try {
+            return sessionStorage.getItem('brick_view') || 'home';
+        } catch {
+            return 'home';
+        }
+    });
     const [monolithHover, setMonolithHover] = useState(false);
     const [selectedProject, setSelectedProject] = useState<Work | null>(null);
     const [selectedPost, setSelectedPost] = useState<Post | null>(null);
 
     const navigate = (newView: string) => {
         setView(newView);
+        try {
+            sessionStorage.setItem('brick_view', newView);
+        } catch { }
         window.scrollTo(0, 0);
     };
 

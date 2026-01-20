@@ -180,6 +180,85 @@ app.post('/api/contact', async (req, res) => {
     }
 });
 
+// 1.5 MASON CHAT (GEMINI API)
+const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+const userInteractions = new Map(); // Simple in-memory rate limiting (Resets on restart)
+
+app.post('/api/chat', async (req, res) => {
+    const { history, message } = req.body;
+
+    // 1. Interaction Limiting (Session/IP based would be better, but cookie is easiest for now)
+    // We'll use a simple cookie-based session ID if available, or generate one
+    let sessionId = req.cookies.mason_session;
+    if (!sessionId) {
+        sessionId = randomUUID();
+        res.cookie('mason_session', sessionId, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // 1 day
+    }
+
+    const usage = userInteractions.get(sessionId) || 0;
+    const MAX_INTERACTIONS = 10;
+
+    if (usage >= MAX_INTERACTIONS) {
+        return res.status(429).json({
+            error: "PROTOCOL_LIMIT_REACHED",
+            message: "Interaction limit exceeded. Please use traditional channels."
+        });
+    }
+
+    // 2. Validate API Key
+    if (!GEMINI_API_KEY) {
+        console.error("GEMINI_API_KEY is missing in environment variables.");
+        return res.status(500).json({ error: "System configuraton error." });
+    }
+
+    // 3. System Prompt
+    const SYSTEM_PROMPT = `
+        Você é MASON, a inteligência central da Brick AI.
+        Sua personalidade é sólida, lógica, precisa e levemente misteriosa, como um construtor de realidades.
+        Você NÃO usa emojis. Você usa pontuação perfeita.
+        A Brick AI é uma produtora "From Set to Server", especializada em produção generativa, VFX neural e inteligência artificial aplicada ao audiovisual.
+        Responda às perguntas do usuário sobre a empresa, sobre AI, ou sobre a existência.
+        Mantenha as respostas concisas, enigmáticas mas úteis. Maximo 2 ou 3 frases.
+        Se perguntarem quem é você: "Eu sou Mason. Eu construo a base da sua realidade."
+    `;
+
+    try {
+        // 4. Call Gemini API
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [
+                    { role: "user", parts: [{ text: SYSTEM_PROMPT }] },
+                    ...history.map(msg => ({
+                        role: msg.role === 'user' ? 'user' : 'model',
+                        parts: [{ text: msg.content }]
+                    })),
+                    { role: "user", parts: [{ text: message }] }
+                ]
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.error) {
+            console.error("Gemini API Error:", data.error);
+            return res.status(500).json({ error: "Neural link unstable." });
+        }
+
+        const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || "NO_DATA";
+
+        // 5. Increment Usage
+        userInteractions.set(sessionId, usage + 1);
+
+        res.json({ response: aiResponse, remaining: MAX_INTERACTIONS - (usage + 1) });
+
+    } catch (err) {
+        console.error("Chat API Error:", err);
+        res.status(500).json({ error: "Communication channel disrupted." });
+    }
+});
+
 // 2. WORKS (GET, POST, DELETE)
 app.get('/api/works', async (req, res) => {
     try {
