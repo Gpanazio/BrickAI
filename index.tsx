@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRight, Database } from 'lucide-react';
+import { ArrowRight, Database, Globe } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import './src/i18n';
 import './src/index.css';
 
 // --- STYLES & CONFIG ---
@@ -221,194 +223,7 @@ interface Post {
     content: React.ReactNode;
 }
 
-// --- DATA ---
-const INITIAL_TRANSMISSIONS: Post[] = [
-    {
-        id: "log_001",
-        date: "2025.02.14",
-        title: "THE LATENT SPACE IS A LOCATION",
-        excerpt: "Why we stopped scouting physical ruins and started training LoRAs on brutalist blueprints.",
-        tags: ["THEORY", "NEURAL_RENDERING"],
-        url: "/transmissions/latent-space",
-        content: (
-            <React.Fragment>
-                <p className="mb-8 text-base md:text-lg font-light leading-relaxed text-[#E5E5E5] first-letter:text-4xl first-letter:font-brick first-letter:text-[#DC2626] first-letter:mr-3 first-letter:float-left">
-                    We tend to think of generative models as engines of creation. Input prompt, output image. A linear manufacturing process. But this metaphor is insufficient for high-end production. At Brick, we treat the model not as a factory, but as a territory.
-                </p>
-                <h3 className="text-lg md:text-xl font-brick text-white mt-10 mb-4 uppercase tracking-tight flex items-center gap-3">
-                    <span className="text-[#DC2626] text-xs align-middle font-ai">01 //</span> The Topography of Noise
-                </h3>
-                <p className="mb-6 text-[#9CA3AF] leading-relaxed">
-                    Stable Diffusion XL does not "draw". It denoises. It subtracts chaos to reveal order. This implies that the image already exists within the high-dimensional noise, mathematically waiting to be uncovered.
-                </p>
-                <div className="border-l-2 border-[#DC2626] pl-6 py-4 my-10 bg-white/5">
-                    <p className="text-base font-mono italic text-white/90">
-                        "We do not build the set. We navigate to the coordinates where the set is statistically most likely to exist."
-                    </p>
-                </div>
-            </React.Fragment>
-        )
-    },
-    {
-        id: "log_002",
-        date: "2025.01.28",
-        title: "MOTION VECTORS IN STYLE TRANSFER",
-        excerpt: "Solving the flickering problem in diffusion models. How we use optical flow to enforce temporal consistency.",
-        tags: ["R&D", "WORKFLOW"],
-        url: "/transmissions/motion-vectors",
-        content: (
-            <React.Fragment>
-                <p className="mb-6 text-[#9CA3AF] leading-relaxed">
-                    The jitter. The flicker. The "boiling" texture. This is the hallmark of raw AI video. It reveals the frame-by-frame independence of the diffusion process. For <span className="text-white font-bold">Project: Anima</span>, this artifact was unacceptable.
-                </p>
-                <p className="mb-6 text-[#9CA3AF] leading-relaxed">
-                    Our solution involved extracting optical flow maps from the source footage using Nuke. These motion vectors act as a temporal skeleton.
-                </p>
-            </React.Fragment>
-        )
-    },
-    {
-        id: "log_003",
-        date: "2025.01.10",
-        title: "INTENTIONAL GLITCH: THE HUMAN SIGNATURE",
-        excerpt: "When perfection is the error. Injecting noise back into the clean output of commercial models to reclaim the 'cinema' feel.",
-        tags: ["PHILOSOPHY", "VFX"],
-        url: "/transmissions/intentional-glitch",
-        content: (
-            <React.Fragment>
-                <p className="mb-6 text-[#9CA3AF] leading-relaxed">
-                    Modern models are converging towards a "mid-journey mean". A polished, plastic aesthetic that screams "synthetic". Paradoxically, to make AI imagery feel real, we must break it.
-                </p>
-                <p className="text-white font-brick tracking-widest uppercase border-t border-white/10 pt-6">
-                    The artifact is the art.
-                </p>
-            </React.Fragment>
-        )
-    }
-];
-
-const INITIAL_WORKS: Work[] = [
-    {
-        id: "inheritance",
-        orientation: "horizontal",
-        subtitle: "FULL GENERATIVE",
-        category: "GENERATIVE",
-        title: "INHERITANCE",
-        desc: "When the location doesn't exist. 100% Neural Rendering.",
-        longDesc: "Inheritance is a testament to directed hallucination. Our artists trained custom LoRAs on brutalist architectural blueprints to guide the Stable Diffusion XL model. We curated 4,000 frames where organic decay meets concrete, ensuring temporal consistency through ControlNet depth maps while maintaining the director's original vision of isolation.",
-        credits: [
-            { role: "Director", name: "Sarah V." },
-            { role: "AI Lead", name: "Mason Core" },
-            { role: "Sound", name: "Echo Lab" },
-            { role: "Tech", name: "Stable Diffusion XL + ComfyUI" }
-        ],
-        gradient: "from-neutral-900 to-neutral-800",
-        // Vivid Red/Orange
-        imageHome: "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80&w=2670&auto=format&fit=crop",
-        imageWorks: "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80&w=2670&auto=format&fit=crop",
-        hasDetail: true
-    },
-    {
-        id: "shift",
-        orientation: "horizontal",
-        subtitle: "HYBRID EXTENSION",
-        category: "VFX",
-        title: "WE CAN SELL ANYTHING",
-        desc: "Expanding the set beyond physical limits. Seamless VFX.",
-        longDesc: "For 'We Can Sell Anything', the challenge was to marry physical sets with infinite digital horizons. We utilized a proprietary in-painting pipeline that tracks live-action camera data (Alexa Mini) and feeds it into a generative fill model. The result is a mathematically perfect extension of the set, lighting, and grain, directed precisely by the cinematographer's lens choices.",
-        credits: [
-            { role: "Director", name: "Marcus L." },
-            { role: "VFX Sup", name: "Brick Core" },
-            { role: "Agency", name: "Future Brand" },
-            { role: "Tech", name: "Nuke + Generative Fill" }
-        ],
-        gradient: "from-neutral-900 via-[#DC2626]/10 to-neutral-900",
-        // Cyberpunk Blue/Pink
-        imageHome: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=2670&auto=format&fit=crop",
-        imageWorks: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=2670&auto=format&fit=crop",
-        hasDetail: true
-    },
-    {
-        id: "anima",
-        orientation: "vertical",
-        subtitle: "STYLE TRANSFER",
-        category: "STYLE TRANSFER",
-        title: "AUTOBOL",
-        desc: "Turning live action into branded art using custom models.",
-        longDesc: "We reinterpreted standard broadcast footage through a custom-trained style transfer model using Ebsynth and ControlNet. The goal was not random abstraction, but a specific 'kinetic sculpture' aesthetic defined by the art director. The AI acted as the brush, preserving the players' identity and 60fps fluidity while completely transforming the texture of reality.",
-        credits: [
-            { role: "Creative", name: "Ana S." },
-            { role: "AI Artist", name: "Mason Core" },
-            { role: "Client", name: "Sports Global" },
-            { role: "Tech", name: "Ebsynth + SD Video" }
-        ],
-        gradient: "from-neutral-900 to-neutral-950",
-        // Abstract Purple
-        imageHome: "https://images.unsplash.com/photo-1614850523060-8da1d56ae167?q=80&w=2670&auto=format&fit=crop",
-        imageWorks: "https://images.unsplash.com/photo-1614850523060-8da1d56ae167?q=80&w=2670&auto=format&fit=crop",
-        hasDetail: true
-    },
-    {
-        id: "void",
-        orientation: "vertical",
-        subtitle: "DATA VISUALIZATION",
-        category: "DATA ART",
-        title: "VOID GAZING",
-        desc: "Translating cosmic radiation into visible spectrums.",
-        longDesc: "A data-driven installation that visualizes real-time cosmic radiation data via the NASA Open API. We wrote Python scripts to parse numerical noise into fluid dynamics parameters within TouchDesigner. The AI then textures this simulation in real-time, effectively allowing the audience to 'see' the invisible universe through a human-curated aesthetic lens.",
-        credits: [
-            { role: "Concept", name: "Brick Lab" },
-            { role: "Code", name: "Mason Core" },
-            { role: "Data", name: "NASA Open API" },
-            { role: "Tech", name: "TouchDesigner + Python" }
-        ],
-        gradient: "from-neutral-950 to-[#DC2626]/20",
-        // Green/Tech
-        imageHome: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2670&auto=format&fit=crop",
-        imageWorks: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2670&auto=format&fit=crop",
-        hasDetail: true
-    },
-    {
-        id: "urban",
-        orientation: "horizontal",
-        subtitle: "PROCEDURAL ENV",
-        category: "GENERATIVE",
-        title: "URBAN REEF",
-        desc: "Growing cities like coral. Biological algorithms applied.",
-        longDesc: "Urban Reef explores bio-mimicry in architecture. Using differential growth algorithms in Houdini, we 'grew' city structures that seek light like coral. These procedural meshes were then texturized using AI upscaling, creating a vision of a city that feels grown rather than built, challenging traditional architectural design processes.",
-        credits: [
-            { role: "Architect", name: "J. Doe" },
-            { role: "Sim", name: "Brick Core" },
-            { role: "Render", name: "Redshift" },
-            { role: "Tech", name: "Houdini + AI Texture" }
-        ],
-        gradient: "from-neutral-900 to-neutral-800",
-        // Yellow/Architecture
-        imageHome: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop",
-        imageWorks: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop",
-        hasDetail: true
-    },
-    {
-        id: "silent",
-        orientation: "horizontal",
-        subtitle: "AUDIO REACTIVE",
-        category: "EXPERIENCE",
-        title: "SILENT ECHO",
-        desc: "A visual narrative driven entirely by sub-bass frequencies.",
-        longDesc: "In Silent Echo, the music drives the machine. We built a system in Unreal Engine 5 where visual elements are triggered directly by audio analysis. Sub-bass frequencies dictate geometry displacement, while high-hats trigger generative lighting events. It is a synesthetic experience where the artist's sound directly sculpts the digital world.",
-        credits: [
-            { role: "Band", name: "Low Freq" },
-            { role: "Visuals", name: "Brick AI" },
-            { role: "Engine", name: "Unreal 5" },
-            { role: "Tech", name: "Real-time Audio Analysis" }
-        ],
-        gradient: "from-neutral-900 via-white/5 to-neutral-900",
-        // Blue/Sound
-        imageHome: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=2674&auto=format&fit=crop",
-        imageWorks: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=2674&auto=format&fit=crop",
-        hasDetail: true
-    }
-];
+// --- DATA IS NOW GENERATED INSIDE DATA PROVIDER FOR I18N ---
 
 const CLIENTS = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO", "L'ORÉAL"];
 
@@ -421,13 +236,201 @@ const DataContext = React.createContext<{
 } | null>(null);
 
 const DataProvider = ({ children }: { children: React.ReactNode }) => {
+    const { t, i18n } = useTranslation();
     const [works, setWorks] = useState<Work[]>([]);
     const [transmissions, setTransmissions] = useState<Post[]>([]);
 
     useEffect(() => {
-        setWorks(INITIAL_WORKS);
-        setTransmissions(INITIAL_TRANSMISSIONS);
-    }, []);
+        const generatedWorks: Work[] = [
+            {
+                id: "inheritance",
+                orientation: "horizontal",
+                subtitle: t('works.inheritance.subtitle'),
+                category: "GENERATIVE",
+                title: t('works.inheritance.title'),
+                desc: t('works.inheritance.desc'),
+                longDesc: t('works.inheritance.longDesc'),
+                credits: [
+                    { role: "Director", name: "Sarah V." },
+                    { role: "AI Lead", name: "Mason Core" },
+                    { role: "Sound", name: "Echo Lab" },
+                    { role: "Tech", name: "Stable Diffusion XL + ComfyUI" }
+                ],
+                gradient: "from-neutral-900 to-neutral-800",
+                imageHome: "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80&w=2670&auto=format&fit=crop",
+                imageWorks: "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80&w=2670&auto=format&fit=crop",
+                hasDetail: true
+            },
+            {
+                id: "shift",
+                orientation: "horizontal",
+                subtitle: t('works.shift.subtitle'),
+                category: "VFX",
+                title: t('works.shift.title'),
+                desc: t('works.shift.desc'),
+                longDesc: t('works.shift.longDesc'),
+                credits: [
+                    { role: "Director", name: "Marcus L." },
+                    { role: "VFX Sup", name: "Brick Core" },
+                    { role: "Agency", name: "Future Brand" },
+                    { role: "Tech", name: "Nuke + Generative Fill" }
+                ],
+                gradient: "from-neutral-900 via-[#DC2626]/10 to-neutral-900",
+                imageHome: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=2670&auto=format&fit=crop",
+                imageWorks: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=2670&auto=format&fit=crop",
+                hasDetail: true
+            },
+            {
+                id: "anima",
+                orientation: "vertical",
+                subtitle: t('works.anima.subtitle'),
+                category: "STYLE TRANSFER",
+                title: t('works.anima.title'),
+                desc: t('works.anima.desc'),
+                longDesc: t('works.anima.longDesc'),
+                credits: [
+                    { role: "Creative", name: "Ana S." },
+                    { role: "AI Artist", name: "Mason Core" },
+                    { role: "Client", name: "Sports Global" },
+                    { role: "Tech", name: "Ebsynth + SD Video" }
+                ],
+                gradient: "from-neutral-900 to-neutral-950",
+                imageHome: "https://images.unsplash.com/photo-1614850523060-8da1d56ae167?q=80&w=2670&auto=format&fit=crop",
+                imageWorks: "https://images.unsplash.com/photo-1614850523060-8da1d56ae167?q=80&w=2670&auto=format&fit=crop",
+                hasDetail: true
+            },
+            {
+                id: "void",
+                orientation: "vertical",
+                subtitle: t('works.void.subtitle'),
+                category: "DATA ART",
+                title: t('works.void.title'),
+                desc: t('works.void.desc'),
+                longDesc: t('works.void.longDesc'),
+                credits: [
+                    { role: "Concept", name: "Brick Lab" },
+                    { role: "Code", name: "Mason Core" },
+                    { role: "Data", name: "NASA Open API" },
+                    { role: "Tech", name: "TouchDesigner + Python" }
+                ],
+                gradient: "from-neutral-950 to-[#DC2626]/20",
+                imageHome: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2670&auto=format&fit=crop",
+                imageWorks: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2670&auto=format&fit=crop",
+                hasDetail: true
+            },
+            {
+                id: "urban",
+                orientation: "horizontal",
+                subtitle: t('works.urban.subtitle'),
+                category: "GENERATIVE",
+                title: t('works.urban.title'),
+                desc: t('works.urban.desc'),
+                longDesc: t('works.urban.longDesc'),
+                credits: [
+                    { role: "Architect", name: "J. Doe" },
+                    { role: "Sim", name: "Brick Core" },
+                    { role: "Render", name: "Redshift" },
+                    { role: "Tech", name: "Houdini + AI Texture" }
+                ],
+                gradient: "from-neutral-900 to-neutral-800",
+                imageHome: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop",
+                imageWorks: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop",
+                hasDetail: true
+            },
+            {
+                id: "silent",
+                orientation: "horizontal",
+                subtitle: t('works.silent.subtitle'),
+                category: "EXPERIENCE",
+                title: t('works.silent.title'),
+                desc: t('works.silent.desc'),
+                longDesc: t('works.silent.longDesc'),
+                credits: [
+                    { role: "Band", name: "Low Freq" },
+                    { role: "Visuals", name: "Brick AI" },
+                    { role: "Engine", name: "Unreal 5" },
+                    { role: "Tech", name: "Real-time Audio Analysis" }
+                ],
+                gradient: "from-neutral-900 via-white/5 to-neutral-900",
+                imageHome: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=2674&auto=format&fit=crop",
+                imageWorks: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=2674&auto=format&fit=crop",
+                hasDetail: true
+            }
+        ];
+
+        const generatedTransmissions: Post[] = [
+            {
+                id: "log_001",
+                date: "2025.02.14",
+                title: t('transmissions.log_001.title'),
+                excerpt: t('transmissions.log_001.excerpt'),
+                tags: ["THEORY", "NEURAL_RENDERING"],
+                url: "/transmissions/latent-space",
+                content: (
+                    <React.Fragment>
+                        <p className="mb-8 text-base md:text-lg font-light leading-relaxed text-[#E5E5E5] first-letter:text-4xl first-letter:font-brick first-letter:text-[#DC2626] first-letter:mr-3 first-letter:float-left">
+                            {t('transmissions.log_001.content_p1')}
+                        </p>
+                        <h3 className="text-lg md:text-xl font-brick text-white mt-10 mb-4 uppercase tracking-tight flex items-center gap-3">
+                            <span className="text-[#DC2626] text-xs align-middle font-ai">01 //</span> {t('transmissions.log_001.section_title')}
+                        </h3>
+                        <p className="mb-6 text-[#9CA3AF] leading-relaxed">
+                            {t('transmissions.log_001.content_p2')}
+                        </p>
+                        <div className="border-l-2 border-[#DC2626] pl-6 py-4 my-10 bg-white/5">
+                            <p className="text-base font-mono italic text-white/90">
+                                {t('transmissions.log_001.quote')}
+                            </p>
+                        </div>
+                    </React.Fragment>
+                )
+            },
+            {
+                id: "log_002",
+                date: "2025.01.28",
+                title: t('transmissions.log_002.title'),
+                excerpt: t('transmissions.log_002.excerpt'),
+                tags: ["R&D", "WORKFLOW"],
+                url: "/transmissions/motion-vectors",
+                content: (
+                    <React.Fragment>
+                        <p className="mb-6 text-[#9CA3AF] leading-relaxed">
+                            {t('transmissions.log_002.content_p1').split('<0>').map((part, index, array) => {
+                                if (index === 1) return <span key={index} className="text-white font-bold">{part}</span>;
+                                if (index === array.length - 1 && part === '') return null;
+                                return part;
+                            })}
+                            {/* Fallback simple text if interpolation is too complex for this rapid refactor or proper <Trans> component usage */}
+                        </p>
+                        <p className="mb-6 text-[#9CA3AF] leading-relaxed">
+                            {t('transmissions.log_002.content_p2')}
+                        </p>
+                    </React.Fragment>
+                )
+            },
+            {
+                id: "log_003",
+                date: "2025.01.10",
+                title: t('transmissions.log_003.title'),
+                excerpt: t('transmissions.log_003.excerpt'),
+                tags: ["PHILOSOPHY", "VFX"],
+                url: "/transmissions/intentional-glitch",
+                content: (
+                    <React.Fragment>
+                        <p className="mb-6 text-[#9CA3AF] leading-relaxed">
+                            {t('transmissions.log_003.content_p1')}
+                        </p>
+                        <p className="text-white font-brick tracking-widest uppercase border-t border-white/10 pt-6">
+                            {t('transmissions.log_003.quote')}
+                        </p>
+                    </React.Fragment>
+                )
+            }
+        ];
+
+        setWorks(generatedWorks);
+        setTransmissions(generatedTransmissions);
+    }, [t, i18n.language]);
 
     return (
         <DataContext.Provider value={{ works, setWorks, transmissions, setTransmissions }}>
@@ -620,6 +623,13 @@ const BrickLogo = ({ className }: { className?: string }) => (
 );
 
 const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView }: { onChat: () => void, onWorks: () => void, onTransmissions: () => void, onHome: () => void, onAbout: () => void, isChatView: boolean }) => {
+    const { t, i18n } = useTranslation();
+
+    const toggleLanguage = () => {
+        const newLang = i18n.language === 'en' ? 'pt' : 'en';
+        i18n.changeLanguage(newLang);
+    };
+
     return (
         <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center pointer-events-none bg-gradient-to-b from-black/90 via-black/50 to-transparent">
             <div onClick={onHome} className="pointer-events-auto flex items-baseline group cursor-pointer select-none">
@@ -633,29 +643,37 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
                         {/* NAV STYLE: Raw Text Links */}
                         <MagneticButton onClick={() => window.location.href = '/brand.html'} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300 hidden md:inline-block">
                             <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
-                            BRAND
+                            {t('header.brand')}
                         </MagneticButton>
 
                         <MagneticButton onClick={onAbout} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
                             <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
-                            ABOUT
+                            {t('header.about')}
                         </MagneticButton>
 
                         <MagneticButton onClick={onWorks} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
                             <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
-                            WORKS
+                            {t('header.works')}
                         </MagneticButton>
 
                         <MagneticButton onClick={onTransmissions} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
                             <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
-                            TRANSMISSIONS
+                            {t('header.transmissions')}
                         </MagneticButton>
 
                         {/* CTA STYLE: Subtle Blinking Underscore */}
                         <MagneticButton onClick={onChat} className="group text-xs md:text-sm font-ai text-white hover:text-[#DC2626] transition-colors duration-300">
                             <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
-                            TALK TO US <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
+                            {t('header.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
                         </MagneticButton>
+
+                        {/* LANGUAGE TOGGLE */}
+                        <button
+                            onClick={toggleLanguage}
+                            className="ml-4 text-xs font-mono text-[#9CA3AF] hover:text-white transition-colors flex items-center gap-1 uppercase tracking-widest"
+                        >
+                            <Globe size={12} /> {i18n.language === 'en' ? 'PT' : 'EN'}
+                        </button>
                     </div>
                 )
             }
@@ -667,6 +685,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
     const radiationRef = useRef<HTMLDivElement>(null);
     const targetPos = useRef({ x: 0, y: 0 });
     const currentPos = useRef({ x: 0, y: 0 });
+    const { t } = useTranslation();
 
     const handleMouseMove = (e: React.MouseEvent) => {
         if (!radiationRef.current) return;
@@ -739,35 +758,39 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
             </div>
             <div className="reveal delay-200 text-center z-20 max-w-6xl px-4 flex flex-col items-center pointer-events-none">
                 <h1 className="text-4xl md:text-6xl lg:text-7xl font-brick text-white mb-4 md:mb-6 drop-shadow-2xl">
-                    FROM SET TO SERVER.
+                    {t('hero.title')}
                 </h1>
-                <p className="text-base md:text-xl lg:text-2xl font-light tracking-[0.3em] text-[#E5E5E5]/80 mb-2 md:mb-4">10 YEARS OF CRAFT.</p>
+                <p className="text-base md:text-xl lg:text-2xl font-light tracking-[0.3em] text-[#E5E5E5]/80 mb-2 md:mb-4">{t('hero.subtitle')}</p>
                 <h2 className="text-2xl md:text-4xl lg:text-5xl font-brick text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
-                    <ScrambleText text="NOW GENERATIVE." />
+                    <ScrambleText text={t('hero.scramble') as string} />
                 </h2>
-                <p className="mt-8 text-[#9CA3AF] text-[10px] md:text-xs font-light tracking-[0.2em] uppercase opacity-60 max-w-md border-t border-white/10 pt-4">A new division by Brick.<br />From zero to all since 2016.</p>
+                <p className="mt-8 text-[#9CA3AF] text-[10px] md:text-xs font-light tracking-[0.2em] uppercase opacity-60 max-w-md border-t border-white/10 pt-4 whitespace-pre-line">{t('hero.description')}</p>
             </div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
         </section>
     );
 };
 
-const Philosophy = () => (
-    <section className="relative w-full py-20 bg-[#050505] z-20 border-t border-white/5">
-        <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent -translate-x-1/2 hidden md:block"></div>
-        <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
-            <div className="mb-20 reveal flex flex-col items-center">
-                <div className="w-2 h-2 bg-[#DC2626] rounded-full animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.5)] mb-6"></div>
-                <span className="text-xs font-ai text-[#9CA3AF] bg-[#050505] px-4">The Belief</span>
+const Philosophy = () => {
+    const { t } = useTranslation();
+
+    return (
+        <section className="relative w-full py-20 bg-[#050505] z-20 border-t border-white/5">
+            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent -translate-x-1/2 hidden md:block"></div>
+            <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
+                <div className="mb-20 reveal flex flex-col items-center">
+                    <div className="w-2 h-2 bg-[#DC2626] rounded-full animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.5)] mb-6"></div>
+                    <span className="text-xs font-ai text-[#9CA3AF] bg-[#050505] px-4">{t('philosophy.belief_label')}</span>
+                </div>
+                <div className="flex flex-col gap-24 w-full">
+                    <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} />
+                    <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} />
+                    <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} />
+                </div>
             </div>
-            <div className="flex flex-col gap-24 w-full">
-                <PhilosophyItem title="RAW." text="AI creates infinite pixels and patterns. But it cannot create intent. It is just a resource." />
-                <PhilosophyItem title="NOISE." text="Without a human hand, generative models are just mathematical coincidence. We provide the vision." />
-                <PhilosophyItem title="WE DIRECT THE INTELLIGENCE." text="The machine is the brush. The database is the paint. We are still the artists." />
-            </div>
-        </div>
-    </section>
-);
+        </section>
+    );
+};
 
 const PhilosophyItem = ({ title, text }: { title: string, text: string }) => (
     <div className="reveal flex flex-col items-center group cursor-default">
@@ -825,6 +848,8 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
     // Random tech data generation for aesthetic
     const randomHash = useMemo(() => Math.random().toString(36).substring(7).toUpperCase(), []);
     const renderTime = useMemo(() => (Math.random() * 5 + 1).toFixed(2) + "s", []);
+
+    const { t } = useTranslation();
 
     return (
         <div
@@ -914,9 +939,10 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 {/* RIGHT: Status Indicator */}
                 <div className="flex items-center justify-end">
                     <div className="text-right mr-4 hidden md:block">
-                        <span className="block text-[8px] font-mono text-[#9CA3AF]/60 tracking-widest uppercase mb-1">SYSTEM_STATUS</span>
-                        <span className="block text-[10px] font-mono text-white tracking-widest uppercase">ONLINE</span>
+                        <span className="block text-[8px] font-mono text-[#9CA3AF]/60 tracking-widest uppercase mb-1">{t('common.system_status')}</span>
+                        <span className="block text-[10px] font-mono text-white tracking-widest uppercase">{t('common.online')}</span>
                     </div>
+
                     <ArrowRight className="w-5 h-5 text-white/30 group-hover:text-[#DC2626] transition-colors duration-300" />
                 </div>
             </div>
@@ -924,55 +950,62 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
     );
 };
 
-const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => void }) => (
-    <section id="works" className="w-full pt-16 pb-0 bg-[#050505] border-t border-white/5 relative z-40">
-        <div className="px-6 md:px-12 lg:px-24 mb-12 reveal flex justify-between items-end border-b border-white/10 pb-4">
-            <div className="flex items-center gap-3">
-                <Database className="w-4 h-4 text-[#DC2626]" />
-                <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">PROJECT_DATABASE // Selected Works</h2>
-            </div>
-            <div className="hidden md:flex gap-4 text-[9px] font-mono text-[#9CA3AF]/50">
-                <span>SYS.VER. 5.0</span>
-                <span>SECURE CONNECTION</span>
-            </div>
-        </div>
-        <div className="flex flex-col w-full gap-0">
-            {/* Use Context Data */}
-            <ContextConsumer>
-                {({ works }) => works.slice(0, 3).map((work, idx) => <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />)}
-            </ContextConsumer>
-        </div>
-    </section>
-);
-
-const Legacy = () => (
-    <section className="w-full py-20 px-6 md:px-12 lg:px-24 bg-[#E5E5E5] text-[#050505] relative overflow-hidden">
-        <div className="max-w-[1400px] mx-auto reveal">
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-brick mb-12 leading-[0.85]">BACKED <br className="md:hidden" /> BY BRICK.</h2>
-            <div className="flex flex-col lg:flex-row gap-12 border-t-4 border-[#050505] pt-12">
-                <div className="lg:w-1/2">
-                    <p className="text-lg md:text-xl font-light leading-tight max-w-lg">
-                        This isn't a beta test. This is a new lens from a production house with 10 years of experience.
-                    </p>
+const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => void }) => {
+    const { t } = useTranslation();
+    return (
+        <section id="works" className="w-full pt-16 pb-0 bg-[#050505] border-t border-white/5 relative z-40">
+            <div className="px-6 md:px-12 lg:px-24 mb-12 reveal flex justify-between items-end border-b border-white/10 pb-4">
+                <div className="flex items-center gap-3">
+                    <Database className="w-4 h-4 text-[#DC2626]" />
+                    <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('works_page.title')}</h2>
                 </div>
-                <div className="lg:w-1/2">
-                    <h4 className="text-xs font-bold tracking-[0.2em] uppercase mb-8 text-neutral-400 border-b border-neutral-200 pb-4 inline-block">Trusted By</h4>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 w-full">
-                        {CLIENTS.map((client, i) => (
-                            <div key={i} className="flex items-start justify-start group">
-                                <span className="text-sm md:text-base font-black text-neutral-300 group-hover:text-[#050505] transition-colors duration-300 cursor-default tracking-tighter uppercase whitespace-nowrap">
-                                    {client}
-                                </span>
-                            </div>
-                        ))}
+                <div className="hidden md:flex gap-4 text-[9px] font-mono text-[#9CA3AF]/50">
+                    <span>SYS.VER. 5.0</span>
+                    <span>{t('common.secure_connection')}</span>
+                </div>
+            </div>
+            <div className="flex flex-col w-full gap-0">
+                {/* Use Context Data */}
+                <ContextConsumer>
+                    {({ works }) => works.slice(0, 3).map((work, idx) => <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />)}
+                </ContextConsumer>
+            </div>
+        </section>
+    );
+};
+
+const Legacy = () => {
+    const { t } = useTranslation();
+    return (
+        <section className="w-full py-20 px-6 md:px-12 lg:px-24 bg-[#E5E5E5] text-[#050505] relative overflow-hidden">
+            <div className="max-w-[1400px] mx-auto reveal">
+                <h2 className="text-4xl md:text-6xl lg:text-7xl font-brick mb-12 leading-[0.85]">{t('legacy.title')}</h2>
+                <div className="flex flex-col lg:flex-row gap-12 border-t-4 border-[#050505] pt-12">
+                    <div className="lg:w-1/2">
+                        <p className="text-lg md:text-xl font-light leading-tight max-w-lg">
+                            {t('legacy.text')}
+                        </p>
+                    </div>
+                    <div className="lg:w-1/2">
+                        <h4 className="text-xs font-bold tracking-[0.2em] uppercase mb-8 text-neutral-400 border-b border-neutral-200 pb-4 inline-block">{t('legacy.trusted_by')}</h4>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 w-full">
+                            {CLIENTS.map((client, i) => (
+                                <div key={i} className="flex items-start justify-start group">
+                                    <span className="text-sm md:text-base font-black text-neutral-300 group-hover:text-[#050505] transition-colors duration-300 cursor-default tracking-tighter uppercase whitespace-nowrap">
+                                        {client}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-);
+        </section>
+    );
+};
 
 const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void }) => {
+    const { t } = useTranslation();
     const [isLoaded, setIsLoaded] = useState(false);
     const settings = project.imageSettingsHome || { x: 50, y: 50, scale: 1.2 };
 
@@ -1037,7 +1070,7 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                             </div>
                         )}
                         <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end text-[10px] font-mono tracking-widest text-white/50 pointer-events-none z-20">
-                            <span>{project.videoUrl ? 'NEURAL_RENDER_ACTIVE' : 'STATIC_PREVIEW'}</span>
+                            <span>{project.videoUrl ? t('project_modal.neural_active') : t('project_modal.static_preview')}</span>
                             <span>{isHorizontal ? '16:9' : '9:16'} // 4K</span>
                         </div>
                     </div>
@@ -1054,7 +1087,7 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                         <p className="text-[#E5E5E5]/80 font-light text-xs md:text-sm leading-relaxed">{project.longDesc || project.desc}</p>
                     </div>
                     <div className="border-t border-white/10 pt-4 mt-auto">
-                        <h4 className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#9CA3AF] mb-3">System Data</h4>
+                        <h4 className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#9CA3AF] mb-3">{t('project_modal.system_data')}</h4>
                         <div className="space-y-2">
                             {project.credits && project.credits.map((credit, idx) => (
                                 <div key={idx} className="flex justify-between items-baseline text-[10px] md:text-xs font-mono">
@@ -1114,14 +1147,15 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
 };
 
 const WorksFilter = ({ categories, activeCategory, onSelect }: { categories: string[], activeCategory: string, onSelect: (c: string) => void }) => {
+    const { t } = useTranslation();
     return (
         <div className="flex flex-wrap gap-4 mb-12 border-b border-white/10 pb-6 reveal">
-            <span className="text-[10px] font-ai text-[#9CA3AF] uppercase py-2 mr-4 hidden md:block">PROTOCOLS //</span>
+            <span className="text-[10px] font-ai text-[#9CA3AF] uppercase py-2 mr-4 hidden md:block">{t('works_page.protocols')} //</span>
             {categories.map((cat) => (
                 <button
                     key={cat}
                     onClick={() => onSelect(cat)}
-                    className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 px-3 py-1 border ${activeCategory === cat ? 'bg-[#DC2626] border-[#DC2626] text-white' : 'bg-transparent border-transparent text-[#9CA3AF] hover:text-white hover:border-white/20'}`}
+                    className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 px-3 py-1 border ${activeCategory === 'ALL' && cat === 'ALL' ? 'bg-[#DC2626] border-[#DC2626] text-white' : activeCategory === cat ? 'bg-[#DC2626] border-[#DC2626] text-white' : 'bg-transparent border-transparent text-[#9CA3AF] hover:text-white hover:border-white/20'}`}
                 >
                     {cat}
                 </button>
@@ -1131,6 +1165,7 @@ const WorksFilter = ({ categories, activeCategory, onSelect }: { categories: str
 };
 
 const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, onAbout }: any) => {
+    const { t } = useTranslation();
     const [activeCategory, setActiveCategory] = useState("ALL");
     const { works } = useContext(DataContext)!;
 
@@ -1166,14 +1201,14 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
             <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
+                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
             <main className="pt-32 min-h-screen flex flex-col">
                 <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">ARCHIVE_INDEX</h1>
-                            <p className="text-[#9CA3AF] font-mono text-[10px] md:text-xs tracking-widest max-w-xl">ACESSING NEURAL DATABASE... {works.length} ENTRIES FOUND.</p>
+                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('works_page.archive_index')}</h1>
+                            <p className="text-[#9CA3AF] font-mono text-[10px] md:text-xs tracking-widest max-w-xl">{t('works_page.accessing')} {works.length} {t('works_page.entries_found')}</p>
                         </div>
                     </div>
                 </section>
@@ -1185,7 +1220,7 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
                         ))}
                     </div>
                     {filteredWorks.length === 0 && (
-                        <div className="w-full h-64 flex items-center justify-center border border-white/10 border-dashed text-[#9CA3AF] font-mono text-sm tracking-widest reveal">NO DATA FOUND IN THIS SECTOR.</div>
+                        <div className="w-full h-64 flex items-center justify-center border border-white/10 border-dashed text-[#9CA3AF] font-mono text-sm tracking-widest reveal">{t('works_page.no_data')}</div>
                     )}
                 </section>
             </main>
@@ -1195,11 +1230,12 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
 }
 
 const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, onAbout }: any) => {
+    const { t } = useTranslation();
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
             <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO INDEX
+                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_index')}
             </button>
             <main className="pt-32 min-h-screen flex flex-col bg-[#050505] pb-32">
                 <article className="w-full max-w-3xl mx-auto px-6 md:px-12 mt-12 animate-fade-in-up">
@@ -1227,19 +1263,20 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, 
 };
 
 const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectPost, onAbout }: any) => {
+    const { t } = useTranslation();
     const { transmissions } = useContext(DataContext)!;
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
             <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
+                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
             <main className="pt-32 min-h-screen flex flex-col bg-[#050505]">
                 <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">NEURAL_LOGS</h1>
-                            <p className="text-[#9CA3AF] font-mono text-[10px] md:text-xs tracking-widest max-w-xl">INCOMING DATA STREAMS... {transmissions.length} RECORDS.</p>
+                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('transmissions_page.title')}</h1>
+                            <p className="text-[#9CA3AF] font-mono text-[10px] md:text-xs tracking-widest max-w-xl">{t('transmissions_page.incoming')} {transmissions.length} {t('transmissions_page.records')}</p>
                         </div>
                     </div>
                 </section>
@@ -1267,47 +1304,51 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
     );
 };
 
-const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => (
-    <footer className="w-full py-24 px-6 md:px-12 lg:px-24 bg-[#050505] border-t border-white/5 relative z-10">
-        <div className="flex flex-col items-center text-center gap-8 reveal">
-            <h2 className="text-xs md:text-sm font-ai text-[#9CA3AF] uppercase">Have a complex problem?</h2>
-            <p className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-none max-w-5xl">WE HAVE THE INTELLIGENCE.</p>
-            <MagneticButton onClick={onChat} className="mt-6 text-base md:text-lg font-ai font-bold text-white hover:text-[#DC2626] group">
-                TALK TO US <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
-            </MagneticButton>
-        </div>
-        <div className="mt-24 border-t border-white/5 pt-12 flex flex-col md:flex-row justify-between items-end gap-8 reveal">
-            <div className="flex flex-col gap-4 items-center md:items-start w-full md:w-auto">
-                <span className="text-[9px] font-mono text-[#DC2626] tracking-widest uppercase">Network</span>
-                <div className="flex gap-6">
-                    {['LinkedIn', 'Instagram', 'Twitter'].map((social) => (
-                        <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors">{social}</a>
-                    ))}
+const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => {
+    const { t } = useTranslation();
+    return (
+        <footer className="w-full py-24 px-6 md:px-12 lg:px-24 bg-[#050505] border-t border-white/5 relative z-10">
+            <div className="flex flex-col items-center text-center gap-8 reveal">
+                <h2 className="text-xs md:text-sm font-ai text-[#9CA3AF] uppercase">{t('footer.complex_problem')}</h2>
+                <p className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-none max-w-5xl">{t('footer.we_have_intelligence')}</p>
+                <MagneticButton onClick={onChat} className="mt-6 text-base md:text-lg font-ai font-bold text-white hover:text-[#DC2626] group">
+                    {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
+                </MagneticButton>
+            </div>
+            <div className="mt-24 border-t border-white/5 pt-12 flex flex-col md:flex-row justify-between items-end gap-8 reveal">
+                <div className="flex flex-col gap-4 items-center md:items-start w-full md:w-auto">
+                    <span className="text-[9px] font-mono text-[#DC2626] tracking-widest uppercase">{t('footer.network')}</span>
+                    <div className="flex gap-6">
+                        {['LinkedIn', 'Instagram', 'Twitter'].map((social) => (
+                            <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors">{social}</a>
+                        ))}
+                    </div>
+                </div>
+                <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-center md:text-right w-full md:w-auto">
+                    <span className="block mb-2">&copy; 2025 Brick AI.</span>
+                    <span className="hidden md:inline">{t('footer.generative_division')}</span>
+                    <span className="block mt-1">{t('footer.rights_reserved')}</span>
+                    {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">{t('footer.system_admin')}</button>}
                 </div>
             </div>
-            <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-center md:text-right w-full md:w-auto">
-                <span className="block mb-2">&copy; 2025 Brick AI.</span>
-                <span className="hidden md:inline">The Generative Division</span>
-                <span className="block mt-1">All Rights Reserved.</span>
-                {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">SYSTEM_ADMIN</button>}
-            </div>
-        </div>
-    </footer>
-);
+        </footer>
+    );
+};
 
 const SystemChat = ({ onBack }: { onBack: () => void }) => {
+    const { t } = useTranslation();
     const [messages, setMessages] = useState<{ role: string, content: string }[]>([
-        { role: 'mono', content: "SYSTEM_ONLINE. I am MASON. I build the foundation of your reality." },
-        { role: 'mono', content: "Protocol initiated. Transmit your query for immediate processing." }
+        { role: 'mono', content: t('chat.initial_messages.online') },
+        { role: 'mono', content: t('chat.initial_messages.protocol') }
     ]);
     const [input, setInput] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const SUGGESTIONS = [
-        "What is the Monolith philosophy?",
-        "Execute project audit.",
-        "Initiate creative synthesis.",
-        "Manual override: Speak to humans."
+        t('chat.suggestions.philosophy'),
+        t('chat.suggestions.audit'),
+        t('chat.suggestions.synthesis'),
+        t('chat.suggestions.humans')
     ];
 
     const scrollToBottom = () => {
@@ -1336,7 +1377,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
 
             {/* RETURN BUTTON */}
             <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
+                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
             <main className="w-full max-w-7xl mx-auto px-6 md:px-12 relative z-10 flex flex-col gap-24">
@@ -1346,10 +1387,10 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                     <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-white/10 pb-6">
                         <div>
                             <h1 className="text-4xl md:text-6xl font-brick text-white mb-2">REACH_<span className="text-[#DC2626]">HUMANS</span></h1>
-                            <p className="text-[#9CA3AF] font-mono text-xs tracking-widest uppercase">MANUAL OVERRIDE PROTOCOLS</p>
+                            <p className="text-[#9CA3AF] font-mono text-xs tracking-widest uppercase">{t('chat.manual_override')}</p>
                         </div>
                         <div className="hidden md:block text-right">
-                            <span className="text-[10px] font-mono text-[#9CA3AF]/60 uppercase tracking-widest">STATUS: ONLINE</span>
+                            <span className="text-[10px] font-mono text-[#9CA3AF]/60 uppercase tracking-widest">{t('chat.status_online')}</span>
                         </div>
                     </div>
 
@@ -1359,7 +1400,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             <div className="mb-4 text-[#DC2626] opacity-50 group-hover:opacity-100 transition-opacity">
                                 <span className="text-[10px] uppercase tracking-widest border border-[#DC2626] px-2 py-1">Channel_01</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-[#DC2626] transition-colors">EMAIL_STREAMS</h3>
+                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-[#DC2626] transition-colors">{t('chat.email_streams')}</h3>
                             <p className="text-[#9CA3AF] text-xs font-mono tracking-widest">CONTACT@BRICKAI.COM</p>
                         </a>
 
@@ -1368,7 +1409,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             <div className="mb-4 text-[#DC2626] opacity-50 group-hover:opacity-100 transition-opacity">
                                 <span className="text-[10px] uppercase tracking-widest border border-[#DC2626] px-2 py-1">Channel_02</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-[#DC2626] transition-colors">VOICE_LINK</h3>
+                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-[#DC2626] transition-colors">{t('chat.voice_link')}</h3>
                             <p className="text-[#9CA3AF] text-xs font-mono tracking-widest">+55 11 99999-9999</p>
                         </a>
 
@@ -1377,7 +1418,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             <div className="mb-4 text-[#DC2626] opacity-50 group-hover:opacity-100 transition-opacity">
                                 <span className="text-[10px] uppercase tracking-widest border border-[#DC2626] px-2 py-1">Channel_03</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-4 group-hover:text-[#DC2626] transition-colors">NETWORK_NODES</h3>
+                            <h3 className="text-2xl font-brick text-white mb-4 group-hover:text-[#DC2626] transition-colors">{t('chat.network_nodes')}</h3>
                             <div className="flex flex-wrap gap-4">
                                 {['LinkedIn', 'Instagram', 'Twitter'].map(social => (
                                     <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-[#9CA3AF] hover:text-white uppercase tracking-wider underline decoration-white/20 hover:decoration-white">{social}</a>
@@ -1413,9 +1454,9 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                         </div>
 
                         <div className="mt-12 text-center">
-                            <h2 className="text-4xl font-brick text-white mb-2">I AM <span className="text-[#DC2626]">MASON</span></h2>
+                            <h2 className="text-4xl font-brick text-white mb-2">{t('chat.mason_intro') ? t('chat.mason_intro').toUpperCase() : "I AM MASON"}</h2>
                             <p className="text-[10px] text-[#9CA3AF] font-mono tracking-widest max-w-[200px] mx-auto uppercase">
-                                The Generative Core.<br />State: {isProcessing ? 'ACTIVE' : 'IDLE'}
+                                {t('chat.generative_core')}<br />{t('chat.state')} {isProcessing ? t('chat.active') : t('chat.idle')}
                             </p>
                         </div>
                     </div>
@@ -1482,12 +1523,12 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                                         type="text"
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
-                                        placeholder="ENTER COMMAND..."
+                                        placeholder={t('chat.placeholder')}
                                         className="w-full bg-transparent py-2 text-white font-mono text-sm focus:outline-none placeholder:text-white/20 placeholder:tracking-[0.1em]"
                                         autoFocus
                                     />
                                     <button type="submit" className="text-[10px] font-brick text-white/50 hover:text-white uppercase tracking-[0.2em] transition-colors">
-                                        EXECUTE
+                                        {t('chat.execute')}
                                     </button>
                                 </form>
                             </div>
@@ -1570,11 +1611,12 @@ const TeamMember = ({ name, role, id }: { name: string, role: string, id: string
 );
 
 const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) => {
+    const { t } = useTranslation();
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
             <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> RETURN TO SURFACE
+                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
             <main className="pt-32 min-h-screen flex flex-col bg-[#050505] relative overflow-hidden">
@@ -1590,15 +1632,15 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
                             <div>
                                 <span className="text-[#DC2626] font-mono text-xs tracking-[0.2em] uppercase mb-6 block animate-fade-in-up">
-                                    SYSTEM_ORIGIN <span className="text-white/20 mx-2">//</span> EST. 2016
+                                    {t('about.origin')} <span className="text-white/20 mx-2">//</span> {t('about.est')}
                                 </span>
                                 <h1 className="text-5xl md:text-7xl font-brick text-white mb-8 leading-[0.9] tracking-tight animate-fade-in-up delay-100">
-                                    FORGED IN<br />
-                                    <span className="text-[#DC2626]">OLD SCHOOL</span><br />
-                                    VFX.
+                                    {t('about.title_primary')}<br />
+                                    <span className="text-[#DC2626]">{t('about.title_highlight')}</span><br />
+                                    {t('about.title_secondary')}
                                 </h1>
                                 <p className="text-[#E5E5E5] font-light text-base md:text-lg leading-relaxed max-w-xl border-l-2 border-[#DC2626] pl-6 animate-fade-in-up delay-200">
-                                    Before we ever wrote a prompt, we spent 7 years pushing pixels in Nuke and Maya. We understand light, composition, and storytelling because we built them by hand for a decade. We didn't adopt AI to replace the craft. We adopted it to break the speed limit.
+                                    {t('about.description')}
                                 </p>
                             </div>
                             {/* CORE MODULES / CAPABILITIES */}
@@ -1606,38 +1648,38 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                                 <div className="absolute top-0 left-0 w-full h-1 bg-[#DC2626]"></div>
                                 <h3 className="font-mono text-xs text-[#9CA3AF] uppercase tracking-[0.2em] mb-8 flex items-center gap-2">
                                     <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                                    CORE_MODULES
+                                    {t('about.core_modules')}
                                 </h3>
                                 <div className="space-y-6">
                                     <div className="group">
                                         <div className="flex justify-between items-baseline mb-1">
-                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">SYNTHETIC_CINEMATOGRAPHY</h4>
-                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">INSTALLED</span>
+                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">{t('about.modules.cinematography.title')}</h4>
+                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">{t('about.modules.cinematography.status')}</span>
                                         </div>
                                         <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-relaxed">
-                                            Video Generation // ComfyUI // 4K Upscaling
+                                            {t('about.modules.cinematography.desc')}
                                         </p>
                                     </div>
                                     <div className="w-full h-px bg-white/5"></div>
 
                                     <div className="group">
                                         <div className="flex justify-between items-baseline mb-1">
-                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">MODEL_TRAINING</h4>
-                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">INSTALLED</span>
+                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">{t('about.modules.training.title')}</h4>
+                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">{t('about.modules.training.status')}</span>
                                         </div>
                                         <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-relaxed">
-                                            Custom LoRAs // Style Consistency // Fine-Tuning
+                                            {t('about.modules.training.desc')}
                                         </p>
                                     </div>
                                     <div className="w-full h-px bg-white/5"></div>
 
                                     <div className="group">
                                         <div className="flex justify-between items-baseline mb-1">
-                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">PIPELINE_ARCHITECTURE</h4>
-                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">INSTALLED</span>
+                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">{t('about.modules.architecture.title')}</h4>
+                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">{t('about.modules.architecture.status')}</span>
                                         </div>
                                         <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-relaxed">
-                                            Python Tooling // Automation // Render Farm
+                                            {t('about.modules.architecture.desc')}
                                         </p>
                                     </div>
                                 </div>
@@ -1648,24 +1690,24 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                     {/* THE INFRASTRUCTURE (DIFFERENTIATORS) */}
                     <section className="mb-32 reveal">
                         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 border-b border-white/10 pb-4 gap-2">
-                            <h2 className="text-2xl font-brick text-white">THE ANTI-PROMPT MANIFESTO</h2>
-                            <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-widest">Why Magic Doesn't Scale</span>
+                            <h2 className="text-2xl font-brick text-white">{t('about.manifesto.title')}</h2>
+                            <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-widest">{t('about.manifesto.subtitle')}</span>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <InfoCard
                                 number="01"
-                                title="CONTROL > CHANCE"
-                                desc="The 'perfect prompt' is a myth. Consistency comes from ControlNet, IP-Adapters, and Python scripts, not lucky words. We engineer our images; we don't wish for them."
+                                title={t('about.manifesto.cards.control.title')}
+                                desc={t('about.manifesto.cards.control.desc')}
                             />
                             <InfoCard
                                 number="02"
-                                title="CURATION IS CREATION"
-                                desc="A model can generate 1,000 images in a minute. The art is knowing which one is wrong. Our directors curate with the same critical eye they used on film sets for 10 years."
+                                title={t('about.manifesto.cards.curation.title')}
+                                desc={t('about.manifesto.cards.curation.desc')}
                             />
                             <InfoCard
                                 number="03"
-                                title="NO BLACK BOXES"
-                                desc="We don't rely on closed web-interfaces. We build our own ComfyUI pipelines locally. This gives us pixel-level control over the latent space that 'magic buttons' can't provide."
+                                title={t('about.manifesto.cards.black_box.title')}
+                                desc={t('about.manifesto.cards.black_box.desc')}
                             />
                         </div>
                     </section>
@@ -1674,19 +1716,17 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                     <section className="pb-32 reveal">
                         <div className="flex items-center gap-3 mb-12 border-b border-white/10 pb-4">
                             <Database className="w-4 h-4 text-[#DC2626]" />
-                            <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">UNIT_LEADERS // COMMAND</h2>
+                            <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.team.title')}</h2>
                         </div>
 
                         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                            <TeamMember name="ALEX M." role="EXECUTIVE PRODUCER" id="001" />
-                            <TeamMember name="SARAH V." role="CREATIVE DIRECTOR" id="002" />
-                            <TeamMember name="GABRIEL P." role="HEAD OF TECHNOLOGY" id="003" />
-                            <TeamMember name="MARCUS L." role="VFX SUPERVISOR" id="004" />
+                            <TeamMember name="ALEX M." role={t('about.team.roles.alex')} id="001" />
+                            <TeamMember name="SARAH V." role={t('about.team.roles.sarah')} id="002" />
+                            <TeamMember name="GABRIEL P." role={t('about.team.roles.gabriel')} id="003" />
+                            <TeamMember name="MARCUS L." role={t('about.team.roles.marcus')} id="004" />
                         </div>
                     </section>
-
                 </div>
-
             </main>
             <Footer onChat={onChat} />
         </React.Fragment>
