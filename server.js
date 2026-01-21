@@ -192,7 +192,7 @@ app.post('/api/chat', async (req, res) => {
     let sessionId = req.cookies.mason_session;
     if (!sessionId) {
         sessionId = randomUUID();
-        res.cookie('mason_session', sessionId, { httpOnly: true, maxAge: 24 * 60 * 60 * 1000 }); // 1 day
+        res.cookie('mason_session', sessionId, { httpOnly: true, maxAge: 3 * 60 * 60 * 1000 }); // 3 hours
     }
 
     const usage = userInteractions.get(sessionId) || 0;
@@ -344,6 +344,6 @@ app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
-app.listen(port, () => {
+app.listen(port, '0.0.0.0', () => {
     console.log(`>> SERVER ONLINE ON PORT ${port}`);
 });
