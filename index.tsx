@@ -598,11 +598,11 @@ const chatWithMono = async (history: any[], message: string) => {
         const data = await response.json();
 
         if (response.status === 429) {
-            return "PROTOCOL_LIMIT_REACHED: " + data.message;
+            return data.message;
         }
 
         if (data.error) {
-            return "CONNECTION_ERROR: " + data.error;
+            return data.error;
         }
 
         return data.response;
