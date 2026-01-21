@@ -8,7 +8,7 @@
     },
     "hero": {
         "title": "DO SET AO SERVIDOR.",
-        "subtitle": "10 ANOS DE OFÍCIO.",
+        "subtitle": "10 ANOS DE CRAFT.",
         "scramble": "AGORA GENERATIVO.",
         "description": "UMA NOVA DIVISÃO DA BRICK.\nDO ZERO AO TUDO DESDE 2016."
     },
@@ -30,37 +30,37 @@
     "works": {
         "inheritance": {
             "title": "HERANÇA",
-            "subtitle": "TOTALMENTE GENERATIVO",
-            "desc": "Quando a locação não existe. 100% Renderização Neural.",
+            "subtitle": "FULL GENERATIVE",
+            "desc": "Quando a locação não existe. 100% Neural Rendering.",
             "longDesc": "Inheritance é um testamento à alucinação direcionada. Nossos artistas treinaram LoRAs personalizados em plantas arquitetônicas brutalistas para guiar o modelo Stable Diffusion XL. Curamos 4.000 quadros onde a decadência orgânica encontra o concreto, garantindo consistência temporal através de mapas de profundidade ControlNet enquanto mantemos a visão original do diretor de isolamento."
         },
         "shift": {
             "title": "VENDEMOS QUALQUER COISA",
-            "subtitle": "EXTENSÃO HÍBRIDA",
-            "desc": "Expandindo o set além dos limites físicos. VFX Inconsútil.",
+            "subtitle": "HYBRID EXTENSION",
+            "desc": "Expandindo o set além dos limites físicos. Seamless VFX.",
             "longDesc": "Para 'Vendemos Qualquer Coisa', o desafio foi casar sets físicos com horizontes digitais infinitos. Utilizamos um pipeline proprietário de in-painting que rastreia dados de câmera live-action (Alexa Mini) e os alimenta em um modelo de preenchimento generativo. O resultado é uma extensão matematicamente perfeita do set, iluminação e granulação, dirigida precisamente pelas escolhas de lente do diretor de fotografia."
         },
         "anima": {
             "title": "AUTOBOL",
-            "subtitle": "TRANSFERÊNCIA DE ESTILO",
-            "desc": "Transformando live action em arte de marca usando modelos customizados.",
+            "subtitle": "STYLE TRANSFER",
+            "desc": "Transformando live action em arte de marca usando modelos custom.",
             "longDesc": "Reinterpretamos imagens de transmissão padrão através de um modelo de transferência de estilo treinado sob medida usando Ebsynth e ControlNet. O objetivo não era abstração aleatória, mas uma estética específica de 'escultura cinética' definida pelo diretor de arte. A IA agiu como o pincel, preservando a identidade dos jogadores e a fluidez de 60fps enquanto transformava completamente a textura da realidade."
         },
         "void": {
             "title": "OLHANDO O VAZIO",
-            "subtitle": "VISUALIZAÇÃO DE DADOS",
+            "subtitle": "DATA VISUALIZATION",
             "desc": "Traduzindo radiação cósmica em espectros visíveis.",
             "longDesc": "Uma instalação baseada em dados que visualiza radiação cósmica em tempo real via NASA Open API. Escrevemos scripts Python para converter ruído numérico em parâmetros de dinâmica de fluidos no TouchDesigner. A IA então texturiza essa simulação em tempo real, permitindo efetivamente que o público 'veja' o universo invisível através de uma lente estética curada por humanos."
         },
         "urban": {
             "title": "RECIFE URBANO",
-            "subtitle": "AMB. PROCEDURAL",
+            "subtitle": "PROCEDURAL ENV",
             "desc": "Cultivando cidades como corais. Algoritmos biológicos aplicados.",
             "longDesc": "Urban Reef explora a biomimética na arquitetura. Usando algoritmos de crescimento diferencial no Houdini, 'cultivamos' estruturas de cidade que buscam luz como corais. Essas malhas procedurais foram então texturizadas usando upscaling de IA, criando uma visão de uma cidade que parece cultivada em vez de construída, desafiando processos de design arquitetônico tradicionais."
         },
         "silent": {
             "title": "ECO SILENCIOSO",
-            "subtitle": "AUDIO REATIVO",
+            "subtitle": "AUDIO REACTIVE",
             "desc": "Uma narrativa visual conduzida inteiramente por frequências sub-graves.",
             "longDesc": "Em Silent Echo, a música dirige a máquina. Construímos um sistema no Unreal Engine 5 onde elementos visuais são acionados diretamente pela análise de áudio. Frequências sub-graves ditam o deslocamento da geometria, enquanto high-hats acionam eventos de iluminação generativa. É uma experiência sinestésica onde o som do artista esculpe diretamente o mundo digital."
         }
@@ -83,17 +83,17 @@
         "log_003": {
             "title": "GLITCH INTENCIONAL: A ASSINATURA HUMANA",
             "excerpt": "Quando a perfeição é o erro. Injetando ruído de volta na saída limpa de modelos comerciais para recuperar a sensação de 'cinema'.",
-            "content_p1": "Os modelos modernos estão convergindo para uma \"média de meio de jornada\". Uma estética polida e plástica que grita \"sintético\". Paradoxalmente, para fazer a imagem de IA parecer real, precisamos quebrá-la.",
+            "content_p1": "Os modelos modernos estão convergindo para uma \"média do Midjourney\". Uma estética polida e plástica que grita \"sintético\". Paradoxalmente, para fazer a imagem de IA parecer real, precisamos quebrá-la.",
             "quote": "O artefato é a arte."
         }
     },
     "common": {
-        "return_surface": "RETORNAR À SUPERFÍCIE",
-        "return_index": "RETORNAR AO ÍNDICE",
-        "system_status": "STATUS_SISTEMA",
+        "return_surface": "RETURN TO SURFACE",
+        "return_index": "RETURN TO INDEX",
+        "system_status": "SYSTEM_STATUS",
         "online": "ONLINE",
-        "secure_connection": "CONEXÃO SEGURA",
-        "loading": "CARREGANDO SISTEMA..."
+        "secure_connection": "SECURE CONNECTION",
+        "loading": "LOADING SYSTEM..."
     },
     "legacy": {
         "title": "APOIADO PELA BRICK.",
@@ -108,30 +108,30 @@
         "network": "Rede",
         "rights_reserved": "Todos os Direitos Reservados.",
         "generative_division": "A Divisão Generativa",
-        "system_admin": "ADMIN_SISTEMA"
+        "system_admin": "SYSTEM_ADMIN"
     },
     "about": {
-        "origin": "ORIGEM_SISTEMA",
+        "origin": "SYSTEM_ORIGIN",
         "est": "EST. 2016",
         "title_primary": "FORJADO NA",
-        "title_highlight": "ESCOLA CLÁSSICA",
+        "title_highlight": "OLD SCHOOL",
         "title_secondary": "DE VFX.",
         "description": "Antes de escrevermos um prompt, passamos 7 anos empurrando pixels no Nuke e Maya. Entendemos luz, composição e narrativa porque as construímos à mão por uma década. Não adotamos IA para substituir o ofício. Adotamos para quebrar o limite de velocidade.",
-        "core_modules": "MÓDULOS_CENTRAIS",
+        "core_modules": "CORE_MODULES",
         "modules": {
             "cinematography": {
-                "title": "CINEMATOGRAFIA_SINTÉTICA",
-                "status": "INSTALADO",
+                "title": "SYNTHETIC_CINEMATOGRAPHY",
+                "status": "INSTALLED",
                 "desc": "Geração de Vídeo // ComfyUI // Upscaling 4K"
             },
             "training": {
-                "title": "TREINAMENTO_MODELO",
-                "status": "INSTALADO",
+                "title": "MODEL_TRAINING",
+                "status": "INSTALLED",
                 "desc": "LoRAs Customizados // Consistência de Estilo // Ajuste Fino"
             },
             "architecture": {
-                "title": "ARQUITETURA_PIPELINE",
-                "status": "INSTALADO",
+                "title": "PIPELINE_ARCHITECTURE",
+                "status": "INSTALLED",
                 "desc": "Ferramentas Python // Automação // Render Farm"
             }
         },
@@ -141,7 +141,7 @@
             "cards": {
                 "control": {
                     "title": "CONTROLE > ACASO",
-                    "desc": "O 'prompt perfeito' é um mito. A consistência vem do ControlNet, IP-Adapters e scripts Python, não de palavras de sorte. Nós engenhamos nossas imagens; não torcemos por elas."
+                    "desc": "O 'prompt perfeito' é um mito. A consistência vem do ControlNet, IP-Adapters e scripts Python, não de sorte. Nós engenhamos nossas imagens; não torcemos por elas."
                 },
                 "curation": {
                     "title": "CURADORIA É CRIAÇÃO",
@@ -154,7 +154,7 @@
             }
         },
         "team": {
-            "title": "LÍDERES_UNIDADE // COMANDO",
+            "title": "UNIT_LEADERS // COMMAND",
             "roles": {
                 "alex": "PRODUTOR EXECUTIVO",
                 "sarah": "DIRETORA CRIATIVA",
@@ -164,12 +164,12 @@
         }
     },
     "chat": {
-        "reach_humans": "ALCANÇAR_HUMANOS",
+        "reach_humans": "REACH_HUMANS",
         "manual_override": "PROTOCOLOS DE SUBSTITUIÇÃO MANUAL",
         "status_online": "STATUS: ONLINE",
-        "email_streams": "FLUXOS_EMAIL",
-        "voice_link": "LINK_VOZ",
-        "network_nodes": "NÓS_REDE",
+        "email_streams": "EMAIL_STREAMS",
+        "voice_link": "VOICE_LINK",
+        "network_nodes": "NETWORK_NODES",
         "mason_intro": "EU SOU MASON",
         "generative_core": "O Núcleo Generativo.",
         "state": "Estado:",
@@ -178,32 +178,32 @@
         "placeholder": "INSIRA COMANDO...",
         "execute": "EXECUTAR",
         "initial_messages": {
-            "online": "SISTEMA_ONLINE. Eu sou MASON. Construo a fundação da sua realidade.",
+            "online": "SYSTEM_ONLINE. Eu sou MASON. Construo a fundação da sua realidade.",
             "protocol": "Protocolo iniciado. Transmita sua consulta para processamento imediato."
         },
         "suggestions": {
-            "philosophy": "Qual é a filosofia do Monólito?",
+            "philosophy": "Qual é a filosofia da Monolith?",
             "audit": "Executar auditoria de projeto.",
             "synthesis": "Iniciar síntese criativa.",
             "humans": "Substituição manual: Falar com humanos."
         }
     },
     "works_page": {
-        "title": "BANCO_DADOS_PROJETOS // Trabalhos Selecionados",
-        "archive_index": "ÍNDICE_ARQUIVO",
+        "title": "PROJECT_DATABASE // Trabalhos Selecionados",
+        "archive_index": "ARCHIVE_INDEX",
         "accessing": "ACESSANDO BANCO DE DADOS NEURAL...",
         "entries_found": "ENTRADAS ENCONTRADAS.",
         "no_data": "NENHUM DADO ENCONTRADO NESTE SETOR.",
         "protocols": "PROTOCOLOS"
     },
     "transmissions_page": {
-        "title": "LOGS_NEURAIS",
+        "title": "NEURAL_LOGS",
         "incoming": "FLUXOS DE DADOS RECEBIDOS...",
         "records": "REGISTROS."
     },
     "project_modal": {
-        "neural_active": "RENDER_NEURAL_ATIVO",
-        "static_preview": "PRÉVIA_ESTÁTICA",
+        "neural_active": "NEURAL_RENDER_ACTIVE",
+        "static_preview": "STATIC_PREVIEW",
         "system_data": "Dados do Sistema"
     }
 }
