@@ -15,7 +15,7 @@
     "philosophy": {
         "belief_label": "A Crença",
         "raw": {
-            "title": "CRU.",
+            "title": "RAW.",
             "text": "A IA cria pixels e padrões infinitos. Mas não pode criar intenção. É apenas um recurso."
         },
         "noise": {
@@ -29,16 +29,16 @@
     },
     "works": {
         "inheritance": {
-            "title": "HERANÇA",
+            "title": "INHERITANCE",
             "subtitle": "FULL GENERATIVE",
             "desc": "Quando a locação não existe. 100% Neural Rendering.",
-            "longDesc": "Inheritance é um testamento à alucinação direcionada. Nossos artistas treinaram LoRAs personalizados em plantas arquitetônicas brutalistas para guiar o modelo Stable Diffusion XL. Curamos 4.000 quadros onde a decadência orgânica encontra o concreto, garantindo consistência temporal através de mapas de profundidade ControlNet enquanto mantemos a visão original do diretor de isolamento."
+            "longDesc": "Inheritance é um testemunho da alucinação direcionada. Nossos artistas treinaram LoRAs customizados em plantas arquitetônicas brutalistas para guiar o modelo Stable Diffusion XL. Curamos 4.000 frames onde a decadência orgânica encontra o concreto, garantindo consistência temporal através de depth maps do ControlNet enquanto mantemos a visão original do diretor de isolamento."
         },
         "shift": {
             "title": "VENDEMOS QUALQUER COISA",
             "subtitle": "HYBRID EXTENSION",
             "desc": "Expandindo o set além dos limites físicos. Seamless VFX.",
-            "longDesc": "Para 'Vendemos Qualquer Coisa', o desafio foi casar sets físicos com horizontes digitais infinitos. Utilizamos um pipeline proprietário de in-painting que rastreia dados de câmera live-action (Alexa Mini) e os alimenta em um modelo de preenchimento generativo. O resultado é uma extensão matematicamente perfeita do set, iluminação e granulação, dirigida precisamente pelas escolhas de lente do diretor de fotografia."
+            "longDesc": "Para 'We Can Sell Anything', o desafio foi casar sets físicos com horizontes digitais infinitos. Utilizamos um pipeline proprietário de in-painting que rastreia dados de câmera live-action (Alexa Mini) e os alimenta em um modelo de preenchimento generativo. O resultado é uma extensão matematicamente perfeita do set, iluminação e grain, dirigida precisamente pelas escolhas de lente do diretor de fotografia."
         },
         "anima": {
             "title": "AUTOBOL",
@@ -47,19 +47,19 @@
             "longDesc": "Reinterpretamos imagens de transmissão padrão através de um modelo de transferência de estilo treinado sob medida usando Ebsynth e ControlNet. O objetivo não era abstração aleatória, mas uma estética específica de 'escultura cinética' definida pelo diretor de arte. A IA agiu como o pincel, preservando a identidade dos jogadores e a fluidez de 60fps enquanto transformava completamente a textura da realidade."
         },
         "void": {
-            "title": "OLHANDO O VAZIO",
+            "title": "VOID GAZING",
             "subtitle": "DATA VISUALIZATION",
             "desc": "Traduzindo radiação cósmica em espectros visíveis.",
             "longDesc": "Uma instalação baseada em dados que visualiza radiação cósmica em tempo real via NASA Open API. Escrevemos scripts Python para converter ruído numérico em parâmetros de dinâmica de fluidos no TouchDesigner. A IA então texturiza essa simulação em tempo real, permitindo efetivamente que o público 'veja' o universo invisível através de uma lente estética curada por humanos."
         },
         "urban": {
-            "title": "RECIFE URBANO",
+            "title": "URBAN REEF",
             "subtitle": "PROCEDURAL ENV",
             "desc": "Cultivando cidades como corais. Algoritmos biológicos aplicados.",
             "longDesc": "Urban Reef explora a biomimética na arquitetura. Usando algoritmos de crescimento diferencial no Houdini, 'cultivamos' estruturas de cidade que buscam luz como corais. Essas malhas procedurais foram então texturizadas usando upscaling de IA, criando uma visão de uma cidade que parece cultivada em vez de construída, desafiando processos de design arquitetônico tradicionais."
         },
         "silent": {
-            "title": "ECO SILENCIOSO",
+            "title": "SILENT ECHO",
             "subtitle": "AUDIO REACTIVE",
             "desc": "Uma narrativa visual conduzida inteiramente por frequências sub-graves.",
             "longDesc": "Em Silent Echo, a música dirige a máquina. Construímos um sistema no Unreal Engine 5 onde elementos visuais são acionados diretamente pela análise de áudio. Frequências sub-graves ditam o deslocamento da geometria, enquanto high-hats acionam eventos de iluminação generativa. É uma experiência sinestésica onde o som do artista esculpe diretamente o mundo digital."
@@ -99,7 +99,7 @@
         "title": "APOIADO PELA BRICK.",
         "title_mobile_br": "APOIADO <br /> PELA BRICK.",
         "text": "Isto não é um teste beta. Esta é uma nova lente de uma produtora com 10 anos de experiência.",
-        "trusted_by": "Confiado Por"
+        "trusted_by": "Parceiros"
     },
     "footer": {
         "complex_problem": "Tem um problema complexo?",
@@ -116,7 +116,7 @@
         "title_primary": "FORJADO NA",
         "title_highlight": "OLD SCHOOL",
         "title_secondary": "DE VFX.",
-        "description": "Antes de escrevermos um prompt, passamos 7 anos empurrando pixels no Nuke e Maya. Entendemos luz, composição e narrativa porque as construímos à mão por uma década. Não adotamos IA para substituir o ofício. Adotamos para quebrar o limite de velocidade.",
+        "description": "Antes de escrevermos um prompt, passamos 7 anos manipulando pixels no Nuke e Maya. Entendemos luz, composição e narrativa porque as construímos à mão por uma década. Não adotamos IA para substituir o craft. Adotamos para quebrar os limites.",
         "core_modules": "CORE_MODULES",
         "modules": {
             "cinematography": {
@@ -127,7 +127,7 @@
             "training": {
                 "title": "MODEL_TRAINING",
                 "status": "INSTALLED",
-                "desc": "LoRAs Customizados // Consistência de Estilo // Ajuste Fino"
+                "desc": "LoRAs Customizados // Consistência de Estilo // Fine-Tuning"
             },
             "architecture": {
                 "title": "PIPELINE_ARCHITECTURE",
@@ -141,7 +141,7 @@
             "cards": {
                 "control": {
                     "title": "CONTROLE > ACASO",
-                    "desc": "O 'prompt perfeito' é um mito. A consistência vem do ControlNet, IP-Adapters e scripts Python, não de sorte. Nós engenhamos nossas imagens; não torcemos por elas."
+                    "desc": "O 'prompt perfeito' é um mito. A consistência vem do ControlNet, IP-Adapters e scripts Python, não de sorte. Nós projetamos nossas imagens; não torcemos por elas."
                 },
                 "curation": {
                     "title": "CURADORIA É CRIAÇÃO",
@@ -165,18 +165,18 @@
     },
     "chat": {
         "reach_humans": "REACH_HUMANS",
-        "manual_override": "PROTOCOLOS DE SUBSTITUIÇÃO MANUAL",
+        "manual_override": "MANUAL OVERRIDE PROTOCOLS",
         "status_online": "STATUS: ONLINE",
         "email_streams": "EMAIL_STREAMS",
         "voice_link": "VOICE_LINK",
         "network_nodes": "NETWORK_NODES",
         "mason_intro": "EU SOU MASON",
         "generative_core": "O Núcleo Generativo.",
-        "state": "Estado:",
-        "active": "ATIVO",
-        "idle": "OCIOSO",
-        "placeholder": "INSIRA COMANDO...",
-        "execute": "EXECUTAR",
+        "state": "State:",
+        "active": "ACTIVE",
+        "idle": "IDLE",
+        "placeholder": "ENTER COMMAND...",
+        "execute": "EXECUTE",
         "initial_messages": {
             "online": "SYSTEM_ONLINE. Eu sou MASON. Construo a fundação da sua realidade.",
             "protocol": "Protocolo iniciado. Transmita sua consulta para processamento imediato."
@@ -185,13 +185,13 @@
             "philosophy": "Qual é a filosofia da Monolith?",
             "audit": "Executar auditoria de projeto.",
             "synthesis": "Iniciar síntese criativa.",
-            "humans": "Substituição manual: Falar com humanos."
+            "humans": "Manual override: Falar com humanos."
         }
     },
     "works_page": {
         "title": "PROJECT_DATABASE // Trabalhos Selecionados",
         "archive_index": "ARCHIVE_INDEX",
-        "accessing": "ACESSANDO BANCO DE DADOS NEURAL...",
+        "accessing": "ACCESSING NEURAL DATABASE...",
         "entries_found": "ENTRADAS ENCONTRADAS.",
         "no_data": "NENHUM DADO ENCONTRADO NESTE SETOR.",
         "protocols": "PROTOCOLOS"
