@@ -1393,12 +1393,12 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
                         {/* EMAIL */}
-                        <a href="mailto:contact@brickai.com" className="group block bg-[#0A0A0A] border border-white/5 p-8 hover:border-[#DC2626] transition-colors duration-500">
+                        <a href="mailto:brick@brick.mov" className="group block bg-[#0A0A0A] border border-white/5 p-8 hover:border-[#DC2626] transition-colors duration-500">
                             <div className="mb-4 text-[#DC2626] opacity-50 group-hover:opacity-100 transition-opacity">
                                 <span className="text-[10px] uppercase tracking-widest border border-[#DC2626] px-2 py-1">Channel_01</span>
                             </div>
                             <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-[#DC2626] transition-colors">{t('chat.email_streams')}</h3>
-                            <p className="text-[#9CA3AF] text-xs font-mono tracking-widest">CONTACT@BRICKAI.COM</p>
+                            <p className="text-[#9CA3AF] text-xs font-mono tracking-widest">BRICK@BRICK.MOV</p>
                         </a>
 
                         {/* PHONE */}
