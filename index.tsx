@@ -617,7 +617,8 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
 
     return (
         <React.Fragment>
-            <header className="fixed top-0 left-0 w-full z-50 px-6 pt-12 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none bg-gradient-to-b from-black/90 via-black/50 to-transparent transition-all duration-300">
+            <header className="fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none bg-gradient-to-b from-black/90 via-black/50 to-transparent transition-all duration-300">
+                <div className="absolute inset-0 z-0 card-noise" style={{ opacity: 0.15 }}></div>
                 <div onClick={onHome} className="pointer-events-auto flex items-baseline group cursor-pointer select-none z-50 relative">
                     <img src="/01.png" alt="BRICK" className="h-6 md:h-8 w-auto object-contain mr-1" />
                     <span className="text-[#DC2626] font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[2px]">_</span>
@@ -637,7 +638,7 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
                 {/* DESKTOP NAV */}
                 {
                     !isChatView && (
-                        <div className="hidden md:flex items-center gap-6 pointer-events-auto">
+                        <div className="hidden md:flex items-center gap-6 pointer-events-auto relative z-10">
                             {/* NAV STYLE: Raw Text Links */}
 
 
