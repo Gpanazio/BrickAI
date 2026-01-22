@@ -124,6 +124,14 @@ const GlobalStyles = () => (
             -webkit-mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
         }
 
+        /* SHARPNESS UTILS */
+        .sharp-image {
+            image-rendering: -webkit-optimize-contrast;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+
         .monolith-structure {
             background: linear-gradient(to bottom, #050505, #000000);
             border: 1px solid #1a1a1a;
@@ -928,7 +936,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             >
                 <div
                     ref={bgRef}
-                    className="absolute inset-0 opacity-80 group-hover:opacity-100 will-change-transform filter saturate-[0.6] group-hover:saturate-100 contrast-[1.1] brightness-[0.9] group-hover:brightness-[1.1] transition-all duration-[6000ms] ease-linear"
+                    className="absolute inset-0 opacity-100 sharp-image filter saturate-[0.8] group-hover:saturate-100 contrast-[1.05] brightness-[1.0] group-hover:brightness-[1.1] transition-all duration-[6000ms] ease-linear"
                     style={{
                         backgroundImage: `url('${work.imageHome}')`,
                         backgroundSize: 'cover',
@@ -939,7 +947,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             </div>
 
             {/* ARTIFICIAL DEPTH OVERLAYS */}
-            <div className="absolute inset-0 card-noise z-20 pointer-events-none opacity-25 group-hover:opacity-10 transition-opacity duration-[6000ms] ease-linear"></div>
+            <div className="absolute inset-0 card-noise z-20 pointer-events-none opacity-15 group-hover:opacity-5 transition-opacity duration-[6000ms] ease-linear"></div>
             <div className="absolute inset-0 bg-tech-grid opacity-10 z-20 pointer-events-none group-hover:opacity-30 transition-opacity duration-[6000ms] ease-linear"></div>
 
             {/* VIGNETTE & GRADIENT */}
@@ -1157,7 +1165,7 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
         >
             {/* UPDATED FILTERS FOR VISIBILITY */}
             <div
-                className="absolute inset-0 opacity-70 saturate-110 brightness-90 group-hover:saturate-125 group-hover:opacity-100 group-hover:brightness-100 transition-all duration-700"
+                className="absolute inset-0 opacity-100 sharp-image saturate-[0.9] group-hover:saturate-110 brightness-95 group-hover:brightness-105 group-hover:opacity-100 transition-all duration-700"
                 style={{
                     backgroundImage: `url('${work.imageWorks || work.imageHome}')`,
                     backgroundSize: 'cover',
