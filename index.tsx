@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRight, Database, Globe } from 'lucide-react';
+import { ArrowRight, Database, Globe, Menu, X } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import './src/i18n';
 import './src/index.css';
@@ -624,57 +624,103 @@ const BrickLogo = ({ className }: { className?: string }) => (
 
 const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView }: { onChat: () => void, onWorks: () => void, onTransmissions: () => void, onHome: () => void, onAbout: () => void, isChatView: boolean }) => {
     const { t, i18n } = useTranslation();
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const toggleLanguage = () => {
         const newLang = i18n.language === 'en' ? 'pt' : 'en';
         i18n.changeLanguage(newLang);
     };
 
+    const handleNav = (action: () => void) => {
+        setMobileMenuOpen(false);
+        action();
+    }
+
     return (
-        <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center pointer-events-none bg-gradient-to-b from-black/90 via-black/50 to-transparent">
-            <div onClick={onHome} className="pointer-events-auto flex items-baseline group cursor-pointer select-none">
-                <img src="/01.png" alt="BRICK" className="h-6 md:h-8 w-auto object-contain mr-1" />
-                <span className="text-[#DC2626] font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[2px]">_</span>
-                <span className="text-gray-300 font-ai text-xl md:text-2xl group-hover:text-white transition-colors duration-500">AI</span>
+        <React.Fragment>
+            <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center pointer-events-none bg-gradient-to-b from-black/90 via-black/50 to-transparent transition-all duration-300">
+                <div onClick={onHome} className="pointer-events-auto flex items-baseline group cursor-pointer select-none z-50 relative">
+                    <img src="/01.png" alt="BRICK" className="h-6 md:h-8 w-auto object-contain mr-1" />
+                    <span className="text-[#DC2626] font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[2px]">_</span>
+                    <span className="text-gray-300 font-ai text-xl md:text-2xl group-hover:text-white transition-colors duration-500">AI</span>
+                </div>
+
+                {/* MOBILE MENU TOGGLE */}
+                {!isChatView && (
+                    <button
+                        onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        className="pointer-events-auto md:hidden text-white hover:text-[#DC2626] transition-colors z-50 relative p-2"
+                    >
+                        {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                    </button>
+                )}
+
+                {/* DESKTOP NAV */}
+                {
+                    !isChatView && (
+                        <div className="hidden md:flex items-center gap-6 pointer-events-auto">
+                            {/* NAV STYLE: Raw Text Links */}
+
+
+                            <MagneticButton onClick={onAbout} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
+                                <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
+                                {t('header.about')}
+                            </MagneticButton>
+
+                            <MagneticButton onClick={onWorks} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
+                                <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
+                                {t('header.works')}
+                            </MagneticButton>
+
+                            <MagneticButton onClick={onTransmissions} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
+                                <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
+                                {t('header.transmissions')}
+                            </MagneticButton>
+
+                            {/* CTA STYLE: Subtle Blinking Underscore */}
+                            <MagneticButton onClick={onChat} className="group text-xs md:text-sm font-ai text-white hover:text-[#DC2626] transition-colors duration-300">
+                                <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
+                                {t('header.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
+                            </MagneticButton>
+
+                            {/* LANGUAGE TOGGLE */}
+                            <button
+                                onClick={toggleLanguage}
+                                className="ml-4 text-xs font-mono text-[#9CA3AF] hover:text-white transition-colors flex items-center gap-1 uppercase tracking-widest"
+                            >
+                                <Globe size={12} /> {i18n.language === 'en' ? 'PT' : 'EN'}
+                            </button>
+                        </div>
+                    )
+                }
+            </header>
+
+            {/* MOBILE MENU OVERLAY */}
+            <div className={`fixed inset-0 z-40 bg-[#050505]/95 backdrop-blur-xl flex flex-col items-center justify-center transition-all duration-500 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                <div className="scanline-effect absolute inset-0 z-0 opacity-20 pointer-events-none"></div>
+                <div className="flex flex-col items-center gap-8 relative z-10 w-full px-8">
+                    <button onClick={() => handleNav(onAbout)} className="text-2xl font-brick text-white hover:text-[#DC2626] transition-colors w-full text-center border-b border-white/10 pb-4">
+                        {t('header.about')}
+                    </button>
+                    <button onClick={() => handleNav(onWorks)} className="text-2xl font-brick text-white hover:text-[#DC2626] transition-colors w-full text-center border-b border-white/10 pb-4">
+                        {t('header.works')}
+                    </button>
+                    <button onClick={() => handleNav(onTransmissions)} className="text-2xl font-brick text-white hover:text-[#DC2626] transition-colors w-full text-center border-b border-white/10 pb-4">
+                        {t('header.transmissions')}
+                    </button>
+                    <button onClick={() => handleNav(onChat)} className="text-2xl font-brick text-[#DC2626] hover:text-white transition-colors w-full text-center pb-4 animate-pulse">
+                        {t('header.talk_to_us')} _
+                    </button>
+
+                    <button
+                        onClick={toggleLanguage}
+                        className="mt-8 text-sm font-mono text-[#9CA3AF] hover:text-white transition-colors flex items-center gap-2 uppercase tracking-widest border border-white/20 px-6 py-2 rounded-full"
+                    >
+                        <Globe size={14} /> {i18n.language === 'en' ? 'SWITCH TO PORTUGUESE' : 'SWITCH TO ENGLISH'}
+                    </button>
+                </div>
             </div>
-            {
-                !isChatView && (
-                    <div className="flex items-center gap-6 pointer-events-auto">
-                        {/* NAV STYLE: Raw Text Links */}
-
-
-                        <MagneticButton onClick={onAbout} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
-                            <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
-                            {t('header.about')}
-                        </MagneticButton>
-
-                        <MagneticButton onClick={onWorks} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
-                            <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
-                            {t('header.works')}
-                        </MagneticButton>
-
-                        <MagneticButton onClick={onTransmissions} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
-                            <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
-                            {t('header.transmissions')}
-                        </MagneticButton>
-
-                        {/* CTA STYLE: Subtle Blinking Underscore */}
-                        <MagneticButton onClick={onChat} className="group text-xs md:text-sm font-ai text-white hover:text-[#DC2626] transition-colors duration-300">
-                            <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
-                            {t('header.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
-                        </MagneticButton>
-
-                        {/* LANGUAGE TOGGLE */}
-                        <button
-                            onClick={toggleLanguage}
-                            className="ml-4 text-xs font-mono text-[#9CA3AF] hover:text-white transition-colors flex items-center gap-1 uppercase tracking-widest"
-                        >
-                            <Globe size={12} /> {i18n.language === 'en' ? 'PT' : 'EN'}
-                        </button>
-                    </div>
-                )
-            }
-        </header >
+        </React.Fragment>
     );
 };
 
@@ -1022,8 +1068,8 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
     const vimeoId = project.videoUrl ? getVimeoId(project.videoUrl) : null;
 
     const modalClasses = isHorizontal
-        ? 'max-w-7xl max-h-[85vh] aspect-[16/8] md:aspect-[16/7]'
-        : 'max-w-5xl max-h-[90vh] aspect-[9/16] md:aspect-auto';
+        ? 'max-w-7xl w-[95%] h-[80vh] md:h-auto md:max-h-[85vh] md:aspect-[16/7]'
+        : 'max-w-5xl w-[95%] h-[85vh] md:h-auto md:max-h-[90vh] md:aspect-auto';
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
@@ -1200,7 +1246,7 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
             <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
-            <main className="pt-32 min-h-screen flex flex-col">
+            <main className="pt-24 md:pt-32 min-h-screen flex flex-col">
                 <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
@@ -1268,7 +1314,7 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
             <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
-            <main className="pt-32 min-h-screen flex flex-col bg-[#050505]">
+            <main className="pt-24 md:pt-32 min-h-screen flex flex-col bg-[#050505]">
                 <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
@@ -1370,7 +1416,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
     };
 
     return (
-        <div className="min-h-screen pt-40 pb-20 flex flex-col items-center justify-start font-mono relative bg-[#050505] overflow-x-hidden">
+        <div className="min-h-screen pt-24 md:pt-40 pb-20 flex flex-col items-center justify-start font-mono relative bg-[#050505] overflow-x-hidden">
 
             {/* RETURN BUTTON */}
             <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
@@ -1460,7 +1506,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
 
                     {/* RIGHT: THE TERMINAL (Chat Interface) */}
                     <div className="w-full md:w-7/12 pl-0 md:pl-12">
-                        <div className="w-full bg-[#0A0A0A] border border-white/10 flex flex-col h-[600px] relative overflow-hidden shadow-2xl">
+                        <div className="w-full bg-[#0A0A0A] border border-white/10 flex flex-col h-[70vh] min-h-[500px] md:h-[600px] relative overflow-hidden shadow-2xl">
                             {/* Terminal Header */}
                             <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-white/[0.02]">
                                 <div className="flex items-center gap-3">
@@ -1616,7 +1662,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
-            <main className="pt-32 min-h-screen flex flex-col bg-[#050505] relative overflow-hidden">
+            <main className="pt-24 md:pt-32 min-h-screen flex flex-col bg-[#050505] relative overflow-hidden">
                 {/* ATMOSPHERE */}
                 <div className="absolute top-0 right-0 w-[60vw] h-[60vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-30"></div>
                 <div className="scanline-effect fixed inset-0 z-0 pointer-events-none opacity-20"></div>
