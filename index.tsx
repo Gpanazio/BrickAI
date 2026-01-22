@@ -856,20 +856,36 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
     const bgRef = useRef<HTMLDivElement>(null);
     const settings = work.imageSettingsHome || { x: 50, y: 50, scale: 1.2 };
 
+    // Refs for independent tracking of scroll and mouse offsets
+    const scrollYRef = useRef(0);
+    const mouseRef = useRef({ x: 0, y: 0 });
+
+    // Unified transform update
+    const updateTransform = () => {
+        if (!bgRef.current) return;
+        const { x, y } = mouseRef.current;
+        const scrollY = scrollYRef.current;
+        bgRef.current.style.transform = `scale(${settings.scale}) translate3d(${x}px, ${scrollY + y}px, 0)`;
+    };
+
     useEffect(() => {
         let animationFrameId: number;
         let ticking = false;
 
         const updateParallax = () => {
-            if (!containerRef.current || !bgRef.current) return;
+            if (!containerRef.current) return;
             const rect = containerRef.current.getBoundingClientRect();
             const viewportHeight = window.innerHeight;
+
+            // Allow parallax a bit outside for smoother entry
             if (rect.top < viewportHeight && rect.bottom > 0) {
                 const cardCenter = rect.top + rect.height / 2;
                 const screenCenter = viewportHeight / 2;
                 const distanceFromCenter = cardCenter - screenCenter;
-                const yOffset = distanceFromCenter * 0.05;
-                bgRef.current.style.transform = `scale(${settings.scale}) translate3d(0, ${yOffset}px, 0)`;
+
+                // Update scroll offset ref
+                scrollYRef.current = distanceFromCenter * 0.05;
+                updateTransform();
             }
             ticking = false;
         };
@@ -881,7 +897,9 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             }
         }
         window.addEventListener('scroll', onScroll, { passive: true });
+        // Initial calculation
         updateParallax();
+
         return () => {
             window.removeEventListener('scroll', onScroll);
             cancelAnimationFrame(animationFrameId);
@@ -890,14 +908,36 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 
     // Random tech data generation for aesthetic
     const randomHash = useMemo(() => Math.random().toString(36).substring(7).toUpperCase(), []);
-    const renderTime = useMemo(() => (Math.random() * 5 + 1).toFixed(2) + "s", []);
 
     const { t } = useTranslation();
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!containerRef.current) return;
+        const rect = containerRef.current.getBoundingClientRect();
+
+        // Calculate mouse position relative to center of card
+        const x = e.clientX - rect.left - rect.width / 2;
+        const y = e.clientY - rect.top - rect.height / 2;
+
+        // Apply opposing force for depth effect
+        mouseRef.current = {
+            x: x * -0.05,
+            y: y * -0.05
+        };
+        requestAnimationFrame(updateTransform);
+    };
+
+    const handleMouseLeave = () => {
+        mouseRef.current = { x: 0, y: 0 };
+        requestAnimationFrame(updateTransform);
+    };
 
     return (
         <div
             ref={containerRef}
             onClick={() => work.hasDetail && onOpen(work)}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
             className={`reveal work-card-trigger w-full min-h-[22vh] md:min-h-[25vh] py-6 relative flex items-center group overflow-hidden border-b border-white/10 bg-[#050505] ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
             style={{ transitionDelay: `${index * 100}ms` }}
         >
@@ -1010,7 +1050,7 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
             <div className="flex flex-col w-full gap-0">
                 {/* Use Context Data */}
                 <ContextConsumer>
-                    {({ works }) => works.slice(0, 3).map((work, idx) => <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />)}
+                    {({ works }) => works.slice(0, 6).map((work, idx) => <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />)}
                 </ContextConsumer>
             </div>
         </section>
@@ -1589,8 +1629,8 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, o
         <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
         <main>
             <Hero setMonolithHover={setMonolithHover} monolithHover={monolithHover} />
-            <Philosophy />
             <SelectedWorks onSelectProject={onSelectProject} />
+            <Philosophy />
             <Legacy />
         </main>
         <Footer onChat={onChat} onAdmin={onAdmin} />
