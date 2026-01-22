@@ -316,25 +316,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 imageWorks: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop",
                 hasDetail: true
             },
-            {
-                id: "silent",
-                orientation: "horizontal",
-                subtitle: t('works.silent.subtitle'),
-                category: "EXPERIENCE",
-                title: t('works.silent.title'),
-                desc: t('works.silent.desc'),
-                longDesc: t('works.silent.longDesc'),
-                credits: [
-                    { role: "Band", name: "Low Freq" },
-                    { role: "Visuals", name: "Brick AI" },
-                    { role: "Engine", name: "Unreal 5" },
-                    { role: "Tech", name: "Real-time Audio Analysis" }
-                ],
-                gradient: "from-neutral-900 via-white/5 to-neutral-900",
-                imageHome: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=2674&auto=format&fit=crop",
-                imageWorks: "https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?q=80&w=2674&auto=format&fit=crop",
-                hasDetail: true
-            }
+
         ];
 
         const generatedTransmissions: Post[] = [
@@ -617,8 +599,7 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
 
     return (
         <React.Fragment>
-            <header className="fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none bg-gradient-to-b from-black/90 via-black/50 to-transparent transition-all duration-300">
-                <div className="absolute inset-0 z-0 card-noise" style={{ opacity: 0.15 }}></div>
+            <header className="fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none transition-all duration-300">
                 <div onClick={onHome} className="pointer-events-auto flex items-baseline group cursor-pointer select-none z-50 relative">
                     <img src="/01.png" alt="BRICK" className="h-6 md:h-8 w-auto object-contain mr-1" />
                     <span className="text-[#DC2626] font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[2px]">_</span>
@@ -1316,7 +1297,7 @@ const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void 
         <footer className="w-full py-24 px-6 md:px-12 lg:px-24 bg-[#050505] border-t border-white/5 relative z-10">
             <div className="flex flex-col items-center text-center gap-8 reveal">
                 <h2 className="text-xs md:text-sm font-ai text-[#9CA3AF] uppercase">{t('footer.complex_problem')}</h2>
-                <p className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-none max-w-5xl">{t('footer.we_have_intelligence')}</p>
+                <p className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-none max-w-5xl">WE HAVE THE <span className="text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">INTELLIGENCE.</span></p>
                 <MagneticButton onClick={onChat} className="mt-6 text-base md:text-lg font-ai font-bold text-white hover:text-[#DC2626] group">
                     {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
                 </MagneticButton>
