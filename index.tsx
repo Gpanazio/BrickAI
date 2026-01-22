@@ -149,36 +149,15 @@ const GlobalStyles = () => (
         }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        .scrollbar-hide::-webkit-scrollbar { display: none; }
-        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
-
-        /* AGGRESSIVE SCANLINES */
-        .scanline-effect {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.8) 50%);
-            background-size: 100% 3px;
-            pointer-events: none;
-            opacity: 0.35;
-            transition: opacity 0.3s;
-            mix-blend-mode: multiply;
+        @keyframes float-parallax {
+            0% { transform: scale(1.15) translate(0%, 0%); }
+            33% { transform: scale(1.15) translate(-3%, 2%); }
+            66% { transform: scale(1.15) translate(2%, -3%); }
+            100% { transform: scale(1.15) translate(0%, 0%); }
         }
 
-        .vignette {
-            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 100%);
-            pointer-events: none;
-        }
-        .group:hover .scanline-effect {
-            opacity: 0.2;
-        }
-
-        /* VIGNETTE EFFECT */
-        .vignette {
-            background: radial-gradient(circle, transparent 40%, rgba(0,0,0,0.8) 100%);
-            pointer-events: none;
+        .animate-float-parallax {
+            animation: float-parallax 20s ease-in-out infinite;
         }
     `}</style>
 );
@@ -579,7 +558,7 @@ const CustomCursor = ({ active }: { active: boolean }) => {
     return (
         <div
             ref={dotRef}
-            className={`fixed top-0 left-0 w-2 h-2 bg-[#DC2626] rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform transition-opacity duration-200 ${active || isPointer ? 'opacity-100 scale-[3]' : 'opacity-0 scale-100'}`}
+            className={`hidden fixed top-0 left-0 w-2 h-2 bg-[#DC2626] rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform transition-opacity duration-200 ${active || isPointer ? 'opacity-100 scale-[3]' : 'opacity-0 scale-100'}`}
             style={{ transform: 'translate(-100px, -100px)' }}
         />
     );
@@ -638,7 +617,7 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
 
     return (
         <React.Fragment>
-            <header className="fixed top-0 left-0 w-full z-50 px-6 py-6 md:px-12 flex justify-between items-center pointer-events-none bg-gradient-to-b from-black/90 via-black/50 to-transparent transition-all duration-300">
+            <header className="fixed top-0 left-0 w-full z-50 px-6 pt-12 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none bg-gradient-to-b from-black/90 via-black/50 to-transparent transition-all duration-300">
                 <div onClick={onHome} className="pointer-events-auto flex items-baseline group cursor-pointer select-none z-50 relative">
                     <img src="/01.png" alt="BRICK" className="h-6 md:h-8 w-auto object-contain mr-1" />
                     <span className="text-[#DC2626] font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[2px]">_</span>
@@ -726,6 +705,7 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
 
 const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boolean) => void, monolithHover: boolean }) => {
     const radiationRef = useRef<HTMLDivElement>(null);
+    const lightSourceRef = useRef<HTMLDivElement>(null); // Interactive Red Dot tracking
     const targetPos = useRef({ x: 0, y: 0 });
     const currentPos = useRef({ x: 0, y: 0 });
     const { t } = useTranslation();
@@ -742,7 +722,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
     useEffect(() => {
         let rafId: number;
         const animate = () => {
-            const ease = 0.08;
+            const ease = 0.04; // Slower ease for "laggy" feel
             currentPos.current.x += (targetPos.current.x - currentPos.current.x) * ease;
             currentPos.current.y += (targetPos.current.y - currentPos.current.y) * ease;
 
@@ -752,6 +732,13 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                 const opacity = monolithHover ? 1 : 0;
                 radiationRef.current.style.transform = `translate3d(${x}px, ${y}px, 0) scale(${scale})`;
                 radiationRef.current.style.opacity = opacity.toString();
+            }
+
+            // Update Light Source Dot (The "Bolinha Vermelha")
+            if (lightSourceRef.current) {
+                const { x, y } = currentPos.current;
+                lightSourceRef.current.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+                lightSourceRef.current.style.opacity = monolithHover ? '1' : '0';
             }
             rafId = requestAnimationFrame(animate);
         };
@@ -773,6 +760,21 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                         <div className="centered-layer aura-atmos pointer-events-none opacity-60 w-[400px] h-[400px] blur-[60px]"></div>
                         <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-60 w-[300px] h-[300px] blur-[40px]"></div>
                         <div className="centered-layer core-atmos pointer-events-none"></div>
+
+                        {/* INTERACTIVE RED DOT SOURCE */}
+                        <div
+                            ref={lightSourceRef}
+                            className="absolute z-30 w-1.5 h-1.5 bg-[#DC2626] rounded-full pointer-events-none mix-blend-screen shadow-[0_0_8px_rgba(220,38,38,1)] transition-opacity duration-300 ease-out"
+                            style={{
+                                top: '50%',
+                                left: '50%',
+                                marginTop: '-3px',
+                                marginLeft: '-3px',
+                                opacity: 0,
+                                willChange: 'transform, opacity'
+                            }}
+                        ></div>
+
                         <div
                             ref={radiationRef}
                             className="absolute w-[600px] h-[600px] -ml-[300px] -mt-[300px] top-1/2 left-1/2 pointer-events-none transition-opacity duration-700 ease-out"
@@ -856,201 +858,121 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
     const bgRef = useRef<HTMLDivElement>(null);
     const settings = work.imageSettingsHome || { x: 50, y: 50, scale: 1.2 };
 
-    // Refs for independent tracking of scroll and mouse offsets
-    const scrollYRef = useRef(0);
-    const mouseRef = useRef({ x: 0, y: 0 });
-
-    // Unified transform update
-    const updateTransform = () => {
-        if (!bgRef.current) return;
-        const { x, y } = mouseRef.current;
-        const scrollY = scrollYRef.current;
-        bgRef.current.style.transform = `scale(${settings.scale}) translate3d(${x}px, ${scrollY + y}px, 0)`;
-    };
-
-    useEffect(() => {
-        let animationFrameId: number;
-        let ticking = false;
-
-        const updateParallax = () => {
-            if (!containerRef.current) return;
-            const rect = containerRef.current.getBoundingClientRect();
-            const viewportHeight = window.innerHeight;
-
-            // Allow parallax a bit outside for smoother entry
-            if (rect.top < viewportHeight && rect.bottom > 0) {
-                const cardCenter = rect.top + rect.height / 2;
-                const screenCenter = viewportHeight / 2;
-                const distanceFromCenter = cardCenter - screenCenter;
-
-                // Update scroll offset ref
-                scrollYRef.current = distanceFromCenter * 0.05;
-                updateTransform();
-            }
-            ticking = false;
-        };
-
-        const onScroll = () => {
-            if (!ticking) {
-                animationFrameId = requestAnimationFrame(updateParallax);
-                ticking = true;
-            }
-        }
-        window.addEventListener('scroll', onScroll, { passive: true });
-        // Initial calculation
-        updateParallax();
-
-        return () => {
-            window.removeEventListener('scroll', onScroll);
-            cancelAnimationFrame(animationFrameId);
-        };
-    }, [settings.scale]);
-
-    // Random tech data generation for aesthetic
-    const randomHash = useMemo(() => Math.random().toString(36).substring(7).toUpperCase(), []);
+    // State only for hover visibility
+    const [isHovered, setIsHovered] = useState(false);
 
     const { t } = useTranslation();
-
-    const handleMouseMove = (e: React.MouseEvent) => {
-        if (!containerRef.current) return;
-        const rect = containerRef.current.getBoundingClientRect();
-
-        // Calculate mouse position relative to center of card
-        const x = e.clientX - rect.left - rect.width / 2;
-        const y = e.clientY - rect.top - rect.height / 2;
-
-        // Apply opposing force for depth effect
-        mouseRef.current = {
-            x: x * -0.05,
-            y: y * -0.05
-        };
-        requestAnimationFrame(updateTransform);
-    };
-
-    const handleMouseLeave = () => {
-        mouseRef.current = { x: 0, y: 0 };
-        requestAnimationFrame(updateTransform);
-    };
+    const randomHash = useMemo(() => Math.random().toString(36).substring(7).toUpperCase(), []);
 
     return (
         <div
             ref={containerRef}
             onClick={() => work.hasDetail && onOpen(work)}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            className={`reveal work-card-trigger w-full min-h-[22vh] md:min-h-[25vh] py-6 relative flex items-center group overflow-hidden border-b border-white/10 bg-[#050505] ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
-            style={{ transitionDelay: `${index * 100}ms` }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            className={`reveal relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-[#DC2626] transition-colors duration-300 bg-[#050505] group ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
+            style={{
+                flexGrow: isHovered ? 1.6 : 1,
+                flexShrink: 0,
+                flexBasis: 0,
+                willChange: 'flex-grow',
+                transition: isHovered
+                    ? 'flex-grow 6s linear'
+                    : 'flex-grow 2s linear',
+            }}
         >
-            {/* BACKGROUND LAYER: Base Black */}
-            <div className="absolute inset-0 bg-[#050505] z-0"></div>
-
-            {/* IMAGE LAYER: System Style - Lifted blacks & Analog look */}
+            {/* BACKGROUND LAYER - AUTONOMOUS PARALLAX */}
             <div
-                ref={bgRef}
-                className="absolute inset-0 opacity-80 will-change-transform filter saturate-[0.7] contrast-[1.1] brightness-[0.8] sepia-[0.1] transition-all duration-700 group-hover:opacity-100 group-hover:saturate-100 group-hover:brightness-100 group-hover:sepia-0 z-10"
+                className={`absolute inset-0 z-10 animate-float-parallax`}
                 style={{
-                    backgroundImage: `url('${work.imageHome}')`,
-                    backgroundSize: 'cover',
-                    backgroundPosition: `${settings.x}% ${settings.y}%`,
-                    transform: `scale(${settings.scale})`
+                    animationDelay: `${index * -4}s`,
                 }}
-            ></div>
-
-            {/* OVERLAY: Heavy Card Noise (Static) - Gritty Texture */}
-            <div className="absolute inset-0 card-noise z-20 pointer-events-none"></div>
-
-            {/* OVERLAY: Aggressive Scanlines - CRT Feel */}
-            <div className="scanline-effect z-20"></div>
-
-            {/* OVERLAY: Vignette - Focus & Depth */}
-            <div className="absolute inset-0 vignette z-20"></div>
-
-            {/* OVERLAY: Technical Grid - Subtle & Functional */}
-            <div className="absolute inset-0 bg-tech-grid opacity-15 z-20 pointer-events-none group-hover:opacity-25 transition-opacity duration-500"></div>
-
-            {/* GRADIENT: Functional Readability */}
-            <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/60 to-transparent z-30"></div>
-
-            {/* INTERFACE ELEMENTS: Retro-futurist clean lines */}
-            {/* Top Line with CROP MARKS */}
-            <div className="absolute top-0 left-0 right-0 h-px z-40 flex justify-between px-4 pointer-events-none">
-                <div className="w-[1px] h-3 bg-white/40"></div>
-                <div className="w-[1px] h-3 bg-white/40"></div>
+            >
+                <div
+                    ref={bgRef}
+                    className="absolute inset-0 opacity-80 group-hover:opacity-100 will-change-transform filter saturate-[0.6] group-hover:saturate-100 contrast-[1.1] brightness-[0.9] group-hover:brightness-[1.1] transition-all duration-[6000ms] ease-linear"
+                    style={{
+                        backgroundImage: `url('${work.imageHome}')`,
+                        backgroundSize: 'cover',
+                        backgroundPosition: 'center center',
+                        transform: `scale(${settings.scale}) translate(${(settings.x - 50) * 2}%, ${(settings.y - 50) * 2}%)`
+                    }}
+                ></div>
             </div>
 
-            {/* Bottom Line with CROP MARKS */}
-            <div className="absolute bottom-0 left-0 right-0 h-px z-40 flex justify-between px-4 pointer-events-none">
-                <div className="w-[1px] h-3 bg-white/40 -mt-3"></div>
-                <div className="w-[1px] h-3 bg-white/40 -mt-3"></div>
-            </div>
+            {/* ARTIFICIAL DEPTH OVERLAYS */}
+            <div className="absolute inset-0 card-noise z-20 pointer-events-none opacity-25 group-hover:opacity-10 transition-opacity duration-[6000ms] ease-linear"></div>
+            <div className="absolute inset-0 bg-tech-grid opacity-10 z-20 pointer-events-none group-hover:opacity-30 transition-opacity duration-[6000ms] ease-linear"></div>
 
-            {/* Side Rulers / Ticks */}
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 flex flex-col gap-1 z-40 px-1 pointer-events-none">
-                {[...Array(5)].map((_, i) => <div key={i} className="w-1 h-px bg-white/30"></div>)}
-            </div>
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 flex flex-col gap-1 z-40 px-1 pointer-events-none items-end">
-                {[...Array(5)].map((_, i) => <div key={i} className="w-1 h-px bg-white/30"></div>)}
-            </div>
+            {/* VIGNETTE & GRADIENT */}
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent z-30 opacity-60 group-hover:opacity-40 transition-opacity duration-[6000ms] ease-linear"></div>
+            <div className={`absolute inset-0 z-30 transition-opacity duration-[6000ms] ease-linear pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.8)] ${isHovered ? 'opacity-40' : 'opacity-60'}`}></div>
 
-            {/* CONTENT LAYER */}
-            <div className="relative z-40 px-6 md:px-12 lg:px-24 w-full flex flex-row justify-between items-center gap-6 pointer-events-none">
-
-                {/* LEFT: Project Identification */}
-                <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                        <span className="font-mono text-[9px] text-[#DC2626] tracking-widest">{work.id.toUpperCase()}</span>
-                        <span className="w-px h-3 bg-white/20"></span>
-                        <span className="font-mono text-[9px] text-[#9CA3AF] tracking-widest opacity-60">REF: {randomHash}</span>
-                    </div>
-                    <h3 className="text-2xl md:text-4xl font-brick text-white group-hover:text-[#E5E5E5] transition-colors duration-300 uppercase tracking-tight">{work.title}</h3>
-                    <div className="flex items-center gap-3 mt-2">
-                        {/* Status Indicator Square instead of dot */}
-                        <span className="w-2 h-2 border border-[#DC2626] flex items-center justify-center">
-                            <span className="w-1 h-1 bg-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity"></span>
-                        </span>
-                        <p className="text-[#9CA3AF] text-xs font-mono opacity-80 group-hover:opacity-100 transition-opacity uppercase tracking-widest">{work.category} // {work.subtitle}</p>
+            {/* CONTENT LAYER - VERTICAL TITLE ON IDLE */}
+            <div className="absolute inset-0 z-40 p-6 md:p-10 lg:p-14 flex flex-col justify-end pointer-events-none">
+                {/* HEADER TAGS (Reveal on Hover) */}
+                <div className={`flex items-center gap-4 mb-4 transform transition-all duration-500 ease-out ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 h-0 overflow-hidden'}`}>
+                    <span className="font-mono text-[10px] text-[#DC2626] tracking-widest bg-[#DC2626]/10 px-3 py-1 border border-[#DC2626]/20">{work.id.toUpperCase()}</span>
+                    <div className="flex gap-1">
+                        {[...Array(3)].map((_, i) => (
+                            <div key={i} className="w-1 h-1 bg-[#DC2626] animate-pulse" style={{ animationDelay: `${i * 200}ms` }}></div>
+                        ))}
                     </div>
                 </div>
 
-                {/* MIDDLE: Technical Data (Visible on Desktop) */}
-                <div className="hidden md:flex gap-8 opacity-60 group-hover:opacity-100 transition-opacity duration-500">
-                    {/* Using DataChip for clean data presentation */}
-                    <DataChip label="COORDS" value={`X:${Math.floor(Math.random() * 99)} Y:${Math.floor(Math.random() * 99)}`} />
-                    <DataChip label="SIZE" value="4K_RAW" />
-                </div>
+                {/* MAIN TITLE (Always Visible - High Contrast) */}
+                <h3 className="text-4xl md:text-6xl lg:text-7xl font-brick text-white uppercase tracking-tighter leading-[0.85] mb-6 whitespace-normal filter drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)] transition-all duration-500 select-none">
+                    {work.title}
+                </h3>
 
-                {/* RIGHT: Status Indicator */}
-                <div className="flex items-center justify-end">
-                    <div className="text-right mr-4 hidden md:block">
-                        <span className="block text-[8px] font-mono text-[#9CA3AF]/60 tracking-widest uppercase mb-1">{t('common.system_status')}</span>
-                        <span className="block text-[10px] font-mono text-white tracking-widest uppercase">{t('common.online')}</span>
+                {/* DETAILS CONTENT (Reveal on Hover) */}
+                <div className={`transform transition-all duration-500 ease-out ${isHovered ? 'opacity-100 max-h-[300px] translate-y-0' : 'opacity-0 max-h-0 translate-y-4'}`}>
+                    <p className="text-[#9CA3AF] text-xs md:text-sm font-mono uppercase tracking-[0.2em] mb-8 border-l-2 border-[#DC2626] pl-6 py-1 drop-shadow-md">
+                        {work.category} <span className="text-[#DC2626]/50 mx-2">//</span> {work.subtitle}
+                    </p>
+
+                    {/* Technical Decors */}
+                    <div className="flex flex-wrap gap-6 pt-8 border-t border-white/10">
+                        <DataChip label="ARCHIVE_REF" value={randomHash} />
+                        <DataChip label="RESOLUTION" value="PRORES_4444" />
+                        <div className="hidden lg:block">
+                            <DataChip label="NODE_STATUS" value="ACTIVE_SYNAPSE" />
+                        </div>
                     </div>
-
-                    <ArrowRight className="w-5 h-5 text-white/30 group-hover:text-[#DC2626] transition-colors duration-300" />
                 </div>
             </div>
-        </div>
+
+            {/* EDGE DECOR */}
+            <div className="absolute top-6 right-6 z-40 opacity-60 group-hover:opacity-100 transition-all duration-700 text-[10px] font-mono text-[#DC2626] hidden md:block group-hover:translate-x-[-10px]">
+                <span className="mr-2">◈</span>LOG_DATA_{index.toString().padStart(2, '0')}
+            </div>
+
+            {/* SCANLINE OVERLAY ON HOVER */}
+            <div className="absolute inset-0 scanline-effect opacity-0 group-hover:opacity-20 transition-opacity duration-1000 z-20 pointer-events-none"></div>
+        </div >
     );
 };
 
 const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => void }) => {
     const { t } = useTranslation();
     return (
-        <section id="works" className="w-full pt-16 pb-0 bg-[#050505] border-t border-white/5 relative z-40">
+        <section id="works" className="w-full pt-16 pb-0 bg-[#050505] border-t border-white/5 relative z-40 overflow-hidden">
             <div className="px-6 md:px-12 lg:px-24 mb-12 reveal flex justify-between items-end border-b border-white/10 pb-4">
                 <div className="flex items-center gap-3">
                     <Database className="w-4 h-4 text-[#DC2626]" />
                     <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('works_page.title')}</h2>
                 </div>
                 <div className="hidden md:flex gap-4 text-[9px] font-mono text-[#9CA3AF]/50">
-                    <span>SYS.VER. 5.0</span>
+                    <span>SYS.VER. 5.1_B</span>
                     <span>{t('common.secure_connection')}</span>
                 </div>
             </div>
-            <div className="flex flex-col w-full gap-0">
-                {/* Use Context Data */}
+
+            <div className="flex flex-col md:flex-row w-full h-auto md:h-[80vh] border-b border-white/10 px-6 md:px-12 lg:px-24">
                 <ContextConsumer>
-                    {({ works }) => works.slice(0, 6).map((work, idx) => <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />)}
+                    {({ works }) => works.slice(0, 5).map((work, idx) => (
+                        <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />
+                    ))}
                 </ContextConsumer>
             </div>
         </section>
@@ -1143,8 +1065,8 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                                     className="absolute inset-0 opacity-40 bg-cover transition-transform duration-1000 group-hover:scale-105"
                                     style={{
                                         backgroundImage: `url('${project.imageHome}')`,
-                                        backgroundPosition: `${settings.x}% ${settings.y}%`,
-                                        transform: `scale(${settings.scale})`
+                                        backgroundPosition: 'center center',
+                                        transform: `scale(${settings.scale}) translate(${(settings.x - 50) * 2}%, ${(settings.y - 50) * 2}%)`
                                     }}
                                 ></div>
                                 <div className="z-10 w-16 h-16 rounded-full border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:border-[#DC2626] transition-all duration-300 cursor-pointer backdrop-blur-sm bg-[#050505]/30">
@@ -1201,8 +1123,8 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
                 style={{
                     backgroundImage: `url('${work.imageWorks || work.imageHome}')`,
                     backgroundSize: 'cover',
-                    backgroundPosition: `${settings.x}% ${settings.y}%`,
-                    transform: `scale(${settings.scale})`
+                    backgroundPosition: 'center center',
+                    transform: `scale(${settings.scale}) translate(${(settings.x - 50) * 2}%, ${(settings.y - 50) * 2}%)`
                 }}
             ></div>
 
@@ -2146,43 +2068,51 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                                     </div>
 
                                     {/* Position Controls */}
-                                    <div className="grid grid-cols-3 gap-4">
-                                        <div>
-                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">X Position</label>
-                                            <input type="range" min="0" max="100" value={editingItem.imageSettingsHome?.x || 50} onChange={e => setEditingItem({ ...editingItem, imageSettingsHome: { ...editingItem.imageSettingsHome, x: Number(e.target.value), y: editingItem.imageSettingsHome?.y || 50, scale: editingItem.imageSettingsHome?.scale || 1.2 } })} className="w-full accent-[#DC2626]" />
-                                            <span className="text-[10px] font-mono text-white">{editingItem.imageSettingsHome?.x || 50}%</span>
-                                        </div>
-                                        <div>
-                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Y Position</label>
-                                            <input type="range" min="0" max="100" value={editingItem.imageSettingsHome?.y || 50} onChange={e => setEditingItem({ ...editingItem, imageSettingsHome: { ...editingItem.imageSettingsHome, x: editingItem.imageSettingsHome?.x || 50, y: Number(e.target.value), scale: editingItem.imageSettingsHome?.scale || 1.2 } })} className="w-full accent-[#DC2626]" />
-                                            <span className="text-[10px] font-mono text-white">{editingItem.imageSettingsHome?.y || 50}%</span>
-                                        </div>
-                                        <div>
-                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Zoom/Scale</label>
-                                            <input type="range" min="100" max="200" value={(editingItem.imageSettingsHome?.scale || 1.2) * 100} onChange={e => setEditingItem({ ...editingItem, imageSettingsHome: { ...editingItem.imageSettingsHome, x: editingItem.imageSettingsHome?.x || 50, y: editingItem.imageSettingsHome?.y || 50, scale: Number(e.target.value) / 100 } })} className="w-full accent-[#DC2626]" />
-                                            <span className="text-[10px] font-mono text-white">{((editingItem.imageSettingsHome?.scale || 1.2) * 100).toFixed(0)}%</span>
-                                        </div>
+                                    <div>
+                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">X Position</label>
+                                        <input type="range" min="0" max="100" step="0.1" value={editingItem.imageSettingsHome?.x ?? 50} onChange={e => {
+                                            const newSettings = { ...(editingItem.imageSettingsHome || { x: 50, y: 50, scale: 1.2 }), x: Number(e.target.value) };
+                                            setEditingItem({ ...editingItem, imageSettingsHome: newSettings });
+                                        }} className="w-full accent-[#DC2626]" />
+                                        <span className="text-[10px] font-mono text-white">{(editingItem.imageSettingsHome?.x || 50).toFixed(1)}%</span>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Y Position</label>
+                                        <input type="range" min="0" max="100" step="0.1" value={editingItem.imageSettingsHome?.y ?? 50} onChange={e => {
+                                            const newSettings = { ...(editingItem.imageSettingsHome || { x: 50, y: 50, scale: 1.2 }), y: Number(e.target.value) };
+                                            setEditingItem({ ...editingItem, imageSettingsHome: newSettings });
+                                        }} className="w-full accent-[#DC2626]" />
+                                        <span className="text-[10px] font-mono text-white">{(editingItem.imageSettingsHome?.y || 50).toFixed(1)}%</span>
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Zoom/Scale</label>
+                                        <input type="range" min="100" max="200" step="0.1" value={(editingItem.imageSettingsHome?.scale || 1.2) * 100} onChange={e => {
+                                            const newSettings = { ...(editingItem.imageSettingsHome || { x: 50, y: 50, scale: 1.2 }), scale: Number(e.target.value) / 100 };
+                                            setEditingItem({ ...editingItem, imageSettingsHome: newSettings });
+                                        }} className="w-full accent-[#DC2626]" />
+                                        <span className="text-[10px] font-mono text-white">{((editingItem.imageSettingsHome?.scale || 1.2) * 100).toFixed(1)}%</span>
                                     </div>
 
                                     {/* Live Preview - Home Card */}
                                     <div>
-                                        <label className="block text-[10px] font-mono text-[#DC2626] mb-3 uppercase tracking-widest">HOME PAGE <span className="text-[#9CA3AF]">(2560×720px)</span></label>
-                                        <div className="relative w-full h-32 border border-white/20 overflow-hidden bg-[#050505]">
+                                        <label className="block text-[10px] font-mono text-[#DC2626] mb-3 uppercase tracking-widest">HOME PAGE - CARD PREVIEW</label>
+                                        <div className="relative w-64 h-[400px] border border-white/20 overflow-hidden bg-[#050505] mx-auto">
                                             {editingItem.imageHome ? (
                                                 <>
                                                     <div
-                                                        className="absolute inset-0 transition-all duration-300"
+                                                        className="absolute inset-0 transition-all duration-300 opacity-80 filter saturate-[0.6] brightness-[0.9]"
                                                         style={{
                                                             backgroundImage: `url('${editingItem.imageHome}')`,
                                                             backgroundSize: 'cover',
-                                                            backgroundPosition: `${editingItem.imageSettingsHome?.x || 50}% ${editingItem.imageSettingsHome?.y || 50}%`,
-                                                            transform: `scale(${editingItem.imageSettingsHome?.scale || 1.2})`
+                                                            backgroundPosition: 'center center',
+                                                            transform: `scale(${editingItem.imageSettingsHome?.scale || 1.2}) translate(${((editingItem.imageSettingsHome?.x || 50) - 50) * 2}%, ${((editingItem.imageSettingsHome?.y || 50) - 50) * 2}%)`
                                                         }}
                                                     />
-                                                    <div className="absolute inset-0 bg-gradient-to-r from-[#050505] via-[#050505]/60 to-transparent" />
-                                                    <div className="absolute bottom-3 left-3 z-10">
-                                                        <p className="text-[8px] font-mono text-[#DC2626]">{editingItem.id?.toUpperCase()}</p>
-                                                        <h4 className="text-xs font-brick text-white">{editingItem.title || 'PROJECT TITLE'}</h4>
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent opacity-60" />
+                                                    <div className="absolute bottom-4 left-4 right-4 z-10">
+                                                        <h4 className="text-3xl font-brick text-white uppercase tracking-tighter leading-none filter drop-shadow-[0_2px_5px_rgba(0,0,0,0.8)]">
+                                                            {editingItem.title || 'PROJECT TITLE'}
+                                                        </h4>
                                                     </div>
                                                 </>
                                             ) : (
@@ -2202,18 +2132,27 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                                     <div className="grid grid-cols-3 gap-4">
                                         <div>
                                             <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">X Position</label>
-                                            <input type="range" min="0" max="100" value={editingItem.imageSettingsWorks?.x || 50} onChange={e => setEditingItem({ ...editingItem, imageSettingsWorks: { ...editingItem.imageSettingsWorks, x: Number(e.target.value), y: editingItem.imageSettingsWorks?.y || 50, scale: editingItem.imageSettingsWorks?.scale || 1.2 } })} className="w-full accent-[#DC2626]" />
-                                            <span className="text-[10px] font-mono text-white">{editingItem.imageSettingsWorks?.x || 50}%</span>
+                                            <input type="range" min="0" max="100" step="0.1" value={editingItem.imageSettingsWorks?.x ?? 50} onChange={e => {
+                                                const newSettings = { ...(editingItem.imageSettingsWorks || { x: 50, y: 50, scale: 1.2 }), x: Number(e.target.value) };
+                                                setEditingItem({ ...editingItem, imageSettingsWorks: newSettings });
+                                            }} className="w-full accent-[#DC2626]" />
+                                            <span className="text-[10px] font-mono text-white">{(editingItem.imageSettingsWorks?.x || 50).toFixed(1)}%</span>
                                         </div>
                                         <div>
                                             <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Y Position</label>
-                                            <input type="range" min="0" max="100" value={editingItem.imageSettingsWorks?.y || 50} onChange={e => setEditingItem({ ...editingItem, imageSettingsWorks: { ...editingItem.imageSettingsWorks, x: editingItem.imageSettingsWorks?.x || 50, y: Number(e.target.value), scale: editingItem.imageSettingsWorks?.scale || 1.2 } })} className="w-full accent-[#DC2626]" />
-                                            <span className="text-[10px] font-mono text-white">{editingItem.imageSettingsWorks?.y || 50}%</span>
+                                            <input type="range" min="0" max="100" step="0.1" value={editingItem.imageSettingsWorks?.y ?? 50} onChange={e => {
+                                                const newSettings = { ...(editingItem.imageSettingsWorks || { x: 50, y: 50, scale: 1.2 }), y: Number(e.target.value) };
+                                                setEditingItem({ ...editingItem, imageSettingsWorks: newSettings });
+                                            }} className="w-full accent-[#DC2626]" />
+                                            <span className="text-[10px] font-mono text-white">{(editingItem.imageSettingsWorks?.y || 50).toFixed(1)}%</span>
                                         </div>
                                         <div>
                                             <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Zoom/Scale</label>
-                                            <input type="range" min="100" max="200" value={(editingItem.imageSettingsWorks?.scale || 1.2) * 100} onChange={e => setEditingItem({ ...editingItem, imageSettingsWorks: { ...editingItem.imageSettingsWorks, x: editingItem.imageSettingsWorks?.x || 50, y: editingItem.imageSettingsWorks?.y || 50, scale: Number(e.target.value) / 100 } })} className="w-full accent-[#DC2626]" />
-                                            <span className="text-[10px] font-mono text-white">{((editingItem.imageSettingsWorks?.scale || 1.2) * 100).toFixed(0)}%</span>
+                                            <input type="range" min="100" max="200" step="0.1" value={(editingItem.imageSettingsWorks?.scale || 1.2) * 100} onChange={e => {
+                                                const newSettings = { ...(editingItem.imageSettingsWorks || { x: 50, y: 50, scale: 1.2 }), scale: Number(e.target.value) / 100 };
+                                                setEditingItem({ ...editingItem, imageSettingsWorks: newSettings });
+                                            }} className="w-full accent-[#DC2626]" />
+                                            <span className="text-[10px] font-mono text-white">{((editingItem.imageSettingsWorks?.scale || 1.2) * 100).toFixed(1)}%</span>
                                         </div>
                                     </div>
 
@@ -2223,21 +2162,30 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                                             {editingItem.imageWorks || editingItem.imageHome ? (
                                                 <>
                                                     <div
-                                                        className="absolute inset-0 transition-all duration-300"
+                                                        className="absolute inset-0 transition-all duration-300 opacity-70 saturate-110 brightness-90"
                                                         style={{
                                                             backgroundImage: `url('${editingItem.imageWorks || editingItem.imageHome}')`,
                                                             backgroundSize: 'cover',
-                                                            backgroundPosition: `${editingItem.imageSettingsWorks?.x || 50}% ${editingItem.imageSettingsWorks?.y || 50}%`,
-                                                            transform: `scale(${editingItem.imageSettingsWorks?.scale || 1.2})`
+                                                            backgroundPosition: 'center center',
+                                                            transform: `scale(${editingItem.imageSettingsWorks?.scale || 1.2}) translate(${((editingItem.imageSettingsWorks?.x || 50) - 50) * 2}%, ${((editingItem.imageSettingsWorks?.y || 50) - 50) * 2}%)`
                                                         }}
                                                     />
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/80 via-transparent to-transparent" />
-                                                    <div className="absolute top-2 left-2 z-10">
-                                                        <span className="font-mono text-[8px] text-[#DC2626]">001</span>
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-transparent to-transparent" />
+
+                                                    {/* Top Controls / Index / Category */}
+                                                    <div className="absolute inset-0 p-3 flex flex-col justify-between z-30">
+                                                        <div className="flex justify-between items-start opacity-50">
+                                                            <span className="font-mono text-[8px] tracking-widest text-[#DC2626]">001</span>
+                                                            <span className="font-mono text-[8px] tracking-widest border border-white/20 px-1 py-0.5 rounded-full text-white">{editingItem.category}</span>
+                                                        </div>
+                                                        <div>
+                                                            <h3 className="text-xs font-brick text-white leading-none mb-1 tracking-tight">{editingItem.title}</h3>
+                                                        </div>
                                                     </div>
-                                                    <div className="absolute bottom-2 left-2 z-10">
-                                                        <h4 className="text-xs font-brick text-white">{editingItem.title || 'TITLE'}</h4>
-                                                    </div>
+
+                                                    {/* Corner Decors */}
+                                                    <div className="absolute top-0 left-0 w-1.5 h-1.5 border-l border-t border-white/30 z-40"></div>
+                                                    <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-r border-b border-white/30 z-40"></div>
                                                 </>
                                             ) : (
                                                 <div className="flex items-center justify-center h-full text-[#9CA3AF] font-mono text-xs">
