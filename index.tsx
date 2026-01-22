@@ -389,8 +389,64 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
             }
         ];
 
-        setWorks(generatedWorks);
-        setTransmissions(generatedTransmissions);
+
+        const syncData = async () => {
+            // Start with defaults
+            let finalWorks = [...generatedWorks];
+            let finalTrans = [...generatedTransmissions];
+
+            try {
+                const [wRes, tRes] = await Promise.all([
+                    fetch('/api/works'),
+                    fetch('/api/transmissions')
+                ]);
+
+                if (wRes.ok) {
+                    const dbWorks = await wRes.json();
+                    if (Array.isArray(dbWorks)) {
+                        dbWorks.forEach((w: Work) => {
+                            const idx = finalWorks.findIndex(fw => fw.id === w.id);
+                            if (idx >= 0) {
+                                // SMART MERGE: Preserve i18n text, update only visuals/metadata
+                                finalWorks[idx] = {
+                                    ...finalWorks[idx],
+                                    imageHome: w.imageHome,
+                                    imageWorks: w.imageWorks,
+                                    imageSettingsHome: w.imageSettingsHome,
+                                    imageSettingsWorks: w.imageSettingsWorks,
+                                    videoUrl: w.videoUrl,
+                                    orientation: w.orientation,
+                                    gradient: w.gradient,
+                                    hasDetail: w.hasDetail,
+                                    category: w.category
+                                };
+                            } else {
+                                finalWorks.push(w);
+                            }
+                        });
+                    }
+                }
+
+                if (tRes.ok) {
+                    const dbTrans = await tRes.json();
+                    if (Array.isArray(dbTrans)) {
+                        dbTrans.forEach((tr: Post) => {
+                            const idx = finalTrans.findIndex(ft => ft.id === tr.id);
+                            if (idx >= 0) finalTrans[idx] = tr;
+                            else finalTrans.push(tr);
+                        });
+                    }
+                }
+
+            } catch (e) {
+                console.error("Failed to sync with DB", e);
+            }
+
+            setWorks(finalWorks);
+            setTransmissions(finalTrans);
+        };
+
+        syncData();
     }, [t, i18n.language]);
 
     return (
