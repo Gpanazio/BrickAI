@@ -30,21 +30,21 @@
     "works": {
         "inheritance": {
             "title": "INHERITANCE",
-            "subtitle": "FULL GENERATIVE",
-            "desc": "Quando a locação não existe. 100% Neural Rendering.",
-            "longDesc": "Inheritance é um testemunho da alucinação direcionada. Nossos artistas treinaram LoRAs customizados em plantas arquitetônicas brutalistas para guiar o modelo Stable Diffusion XL. Curamos 4.000 frames onde a decadência orgânica encontra o concreto, garantindo consistência temporal através de depth maps do ControlNet enquanto mantemos a visão original do diretor de isolamento."
+            "subtitle": "CURTA-METRAGEM",
+            "desc": "Seleção oficial Festival de Gramado 2025.",
+            "longDesc": "Um dos primeiros filmes feitos com IA a ser selecionado e exibido no Festival de Gramado. Inheritance conta a história de uma civilização que herda um mundo abandonado — e repete, passo a passo, todos os erros de seus antecessores. Uma fábula sobre ciclos, hubris e a ilusão do progresso. A versão de 5 minutos estreou em Gramado; uma versão estendida de 10 minutos permanece inédita."
         },
         "shift": {
             "title": "VENDEMOS QUALQUER COISA",
-            "subtitle": "HYBRID EXTENSION",
-            "desc": "Expandindo o set além dos limites físicos. Seamless VFX.",
-            "longDesc": "Para 'We Can Sell Anything', o desafio foi casar sets físicos com horizontes digitais infinitos. Utilizamos um pipeline proprietário de in-painting que rastreia dados de câmera live-action (Alexa Mini) e os alimenta em um modelo de preenchimento generativo. O resultado é uma extensão matematicamente perfeita do set, iluminação e grain, dirigida precisamente pelas escolhas de lente do diretor de fotografia."
+            "subtitle": "MANIFESTO",
+            "desc": "Finalista Genero Challenge.",
+            "longDesc": "Um único personagem. Infinitos mundos. Neste manifesto, o mesmo homem aparece em um estúdio de moda, lidera uma banda marcial em um estádio lotado, passeia por palácios europeus, relaxa em uma sala tipicamente americana e enfrenta lutadores de sumô — tudo em 60 segundos. A mensagem é simples: não existem mais limites de produção. Qualquer cenário, qualquer contexto, qualquer história. Finalista no Genero Challenge."
         },
         "anima": {
             "title": "AUTOBOL",
-            "subtitle": "STYLE TRANSFER",
-            "desc": "Transformando live action em arte de marca usando modelos custom.",
-            "longDesc": "Reinterpretamos imagens de transmissão padrão através de um modelo de transferência de estilo treinado sob medida usando Ebsynth e ControlNet. O objetivo não era abstração aleatória, mas uma estética específica de 'escultura cinética' definida pelo diretor de arte. A IA agiu como o pincel, preservando a identidade dos jogadores e a fluidez de 60fps enquanto transformava completamente a textura da realidade."
+            "subtitle": "HISTÓRIA REIMAGINADA",
+            "desc": "Resgatando um esporte esquecido dos anos 70.",
+            "longDesc": "Autobol existiu de verdade. Nos anos 1970, no Rio de Janeiro, carros empurravam uma bola gigante em partidas entre Flamengo, Fluminense, Vasco e Botafogo. Criado pelo médico Mário Marques Tourinho, o esporte foi um fenômeno breve e hoje quase esquecido. Este projeto reimagina o Autobol como ele poderia ter sido filmado na época — com toda a textura, o grain e a atmosfera de uma transmissão perdida dos anos 70."
         },
         "void": {
             "title": "VOID GAZING",
@@ -58,11 +58,17 @@
             "desc": "Cultivando cidades como corais. Algoritmos biológicos aplicados.",
             "longDesc": "Urban Reef explora a biomimética na arquitetura. Usando algoritmos de crescimento diferencial no Houdini, 'cultivamos' estruturas de cidade que buscam luz como corais. Essas malhas procedurais foram então texturizadas usando upscaling de IA, criando uma visão de uma cidade que parece cultivada em vez de construída, desafiando processos de design arquitetônico tradicionais."
         },
-        "silent": {
-            "title": "SILENT ECHO",
-            "subtitle": "AUDIO REACTIVE",
-            "desc": "Uma narrativa visual conduzida inteiramente por frequências sub-graves.",
-            "longDesc": "Em Silent Echo, a música dirige a máquina. Construímos um sistema no Unreal Engine 5 onde elementos visuais são acionados diretamente pela análise de áudio. Frequências sub-graves ditam o deslocamento da geometria, enquanto high-hats acionam eventos de iluminação generativa. É uma experiência sinestésica onde o som do artista esculpe diretamente o mundo digital."
+        "factory": {
+            "title": "FACTORY",
+            "subtitle": "RETRO-FUTURISMO",
+            "desc": "Decadência industrial com visão retro-futurista.",
+            "longDesc": "Uma fábrica que nunca existiu, mas que parece lembrada. Factory combina decadência industrial com uma estética retro-futurista — como se um futuro imaginado nos anos 70 tivesse envelhecido e sido abandonado. Ferrugem, concreto, maquinário silencioso. Um espaço entre a nostalgia de um passado e a ruína de um futuro que não veio."
+        },
+        "dogday": {
+            "title": "DOG DAY AFTERNOON",
+            "subtitle": "COMÉDIA ABSURDA",
+            "desc": "Cachorros em situações humanas.",
+            "longDesc": "Um grupo de apoio canino com a faixa 'SIT STAY HEAL'. Um chihuahua de suéter participando de uma call de Zoom. Dog Day Afternoon é comédia absurda levada a sério — cachorros em situações cotidianas humanas, filmados com a sobriedade de um drama independente. O título é uma referência ao clássico de Sidney Lumet com Al Pacino."
         }
     },
     "transmissions": {
