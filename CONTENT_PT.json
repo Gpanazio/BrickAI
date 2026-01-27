@@ -72,25 +72,20 @@
         }
     },
     "transmissions": {
-        "log_001": {
-            "title": "LOCAÇÕES QUE NÃO EXISTEM",
-            "excerpt": "Por que paramos de procurar o set perfeito e começamos a imaginá-lo.",
-            "content_p1": "Durante anos, a produção audiovisual foi refém da locação. Orçamentos estourados em viagens, permissões negadas, clima não colaborando. Hoje, podemos criar o lugar perfeito para cada história — não como substituto barato, mas como possibilidade expandida.",
-            "section_title": "Além do Possível",
-            "content_p2": "Não se trata de replicar o real. Se quiséssemos Paris, iríamos a Paris. O ponto é criar a Paris que só existe na cabeça do diretor. A versão idealizada, impossível, perfeita para aquela cena específica.",
-            "quote": "\"Não buscamos locações. Buscamos visões.\""
+        "when-to-use-ai": {
+            "title": "QUANDO USAR IA — E QUANDO NÃO USAR",
+            "excerpt": "Nem todo projeto precisa de IA. Saber quando usar é tão importante quanto saber como.",
+            "content": "Toda semana alguém chega pedindo \"um vídeo com IA\" como se fosse um ingrediente mágico. Joga IA que fica bom. Não funciona assim.\n\nIA é uma ferramenta. Uma ferramenta muito boa pra algumas coisas e completamente inútil pra outras. Depois de alguns anos usando isso em produção real, não em experimentos de Twitter, a gente desenvolveu um senso claro de quando faz sentido e quando é desperdício de tempo e dinheiro.\n\nFunciona quando o cenário não existe. Se o roteiro pede uma fábrica soviética abandonada, um palácio que mistura três épocas diferentes, ou um lugar que só existe na cabeça do diretor, IA resolve. A alternativa seria construir um set ou torcer pra achar a locação perfeita. As duas custam mais e demoram mais.\n\nFunciona quando você precisa de escala sem orçamento de escala. Um produto em 20 contextos diferentes normalmente significa 20 diárias. Com IA, significa uma semana de trabalho. A matemática é simples.\n\nFunciona quando ninguém sabe ainda o que quer. Fase de conceito é cara em produção tradicional. Cada teste é uma mini-produção. Com IA, você apresenta 30 direções diferentes antes de comprometer centavo com equipe e equipamento.\n\nNão funciona quando a alma do vídeo é uma pessoa real. Depoimento, entrevista, talking head. Isso precisa de um rosto humano de verdade. Não porque IA não consegue gerar rostos. Consegue. Mas a conexão emocional some. O espectador sente, mesmo sem saber explicar.\n\nNão funciona quando o produto físico é o herói. Se você está vendendo um relógio, mostre o relógio. A textura do metal, o peso visual, a luz batendo no vidro. IA pode criar o cenário em volta, mas o objeto precisa ser real.\n\nNão funciona quando você tem orçamento pra fazer direito do jeito tradicional. IA não é automaticamente melhor. É uma opção. Às vezes a opção certa é câmera, luz, equipe, locação. A gente sabe fazer os dois. A gente sabe quando usar cada um.\n\nA pergunta certa nunca é \"dá pra fazer com IA?\" Quase tudo dá. A pergunta é \"vai ficar melhor, mais rápido, ou mais viável?\" Se a resposta for não, a gente filma. Simples."
         },
-        "log_002": {
-            "title": "MOVIMENTO É TUDO",
-            "excerpt": "Como garantimos que cada frame pertença ao mesmo filme.",
-            "content_p1": "O maior desafio do vídeo generativo é consistência. Cada segundo tem 24 ou 30 frames que precisam conversar entre si. Um personagem não pode mudar de rosto, uma parede não pode trocar de textura.",
-            "content_p2": "Nossa obsessão é garantir que o espectador nunca seja arrancado da história por uma inconsistência visual. Isso exige método, não mágica."
+        "consistency-problem": {
+            "title": "O PROBLEMA DA CONSISTÊNCIA",
+            "excerpt": "Por que vídeos de IA parecem \"estranhos\" e como resolvemos isso.",
+            "content": "O maior problema de vídeo generativo não é fazer uma imagem bonita. Isso é fácil. O problema é fazer 720 imagens bonitas que pareçam o mesmo filme.\n\nCada frame é gerado do zero. O modelo não sabe o que veio antes nem o que vem depois. Sem controle, o personagem muda de rosto no frame 47. A parede troca de textura no frame 203. A luz decide vir de outro ângulo no frame 589.\n\nSeu cérebro detecta isso em milissegundos. Você não sabe explicar o que está errado, mas sabe que algo está. É o \"uncanny valley\" aplicado ao tempo, não só ao rosto.\n\nPor isso a maioria dos vídeos de IA que você vê por aí parecem... estranhos. Tecnicamente impressionantes, mas impossíveis de assistir por mais de 15 segundos sem desconforto.\n\nA solução não está no prompt. Não existe combinação de palavras que resolva isso. A solução está no pipeline: como você estrutura a geração, quais controles você impõe entre frames, como você trata a imagem depois que ela sai do modelo.\n\nÉ trabalho técnico, chato, invisível. Ninguém posta no LinkedIn. Mas é a diferença entre um experimento e um filme.\n\nQuando a consistência funciona, você nem percebe. Você só assiste. Quando não funciona, você não consegue assistir mais nada."
         },
-        "log_003": {
-            "title": "A IMPERFEIÇÃO PERFEITA",
-            "excerpt": "Por que adicionamos 'defeitos' de volta nas imagens.",
-            "content_p1": "Imagens perfeitas demais parecem falsas. O cérebro humano reconhece a perfeição artificial e rejeita. Por isso, reintroduzimos imperfeições controladas — o grão de filme, a aberração cromática sutil, o leve desfoque de movimento.",
-            "quote": "\"A imperfeição é a assinatura do real.\""
+        "direction-over-prompt": {
+            "title": "DIREÇÃO > PROMPT",
+            "excerpt": "Por que dominar prompts não faz de você um diretor.",
+            "content": "Tem uma indústria inteira vendendo a ideia de que o segredo da IA está nas palavras certas. Pacotes com \"10.000 prompts profissionais\". Cursos de \"engenharia de prompt\". Gurus explicando a ordem exata dos adjetivos.\n\nIsso é como vender uma lista de palavras em inglês e chamar de curso de roteiro.\n\nO prompt é a parte mais superficial do processo. É só a interface, o campo de texto onde você digita. O que determina o resultado de verdade é tudo que vem antes e tudo que vem depois.\n\nAntes: qual é a referência visual? Qual o mood board? Existe um storyboard? A direção de arte está definida? O cliente sabe o que quer ou acha que sabe? Essas perguntas existem há cem anos. A IA não inventou nenhuma delas.\n\nDepois: de 500 imagens geradas, quais prestam? O que precisa de correção? Como compor os elementos? Qual o tratamento de cor? Isso é curadoria, é pós-produção, é olhar treinado. Também existe há décadas.\n\nA IA é uma ferramenta no meio do processo. Uma ferramenta poderosa, mas ainda uma ferramenta. Quem acha que dominar o prompt é dominar a IA está confundindo o volante com o carro inteiro.\n\nA diferença entre trabalho amador e profissional nunca foi a ferramenta. É o olhar de quem usa. Isso não mudou."
         }
     },
     "common": {
@@ -119,21 +114,21 @@
     "about": {
         "origin": "ORIGEM",
         "est": "DESDE 2016",
-        "title_primary": "FORJADO NA",
-        "title_highlight": "OLD SCHOOL",
-        "title_secondary": "DE VFX.",
-        "description": "Antes de trabalhar com IA, passamos uma década criando efeitos visuais à mão. Entendemos luz, composição e narrativa porque as construímos frame a frame por anos. Não adotamos IA para substituir o craft. Adotamos para ir além do que era possível.",
+        "title_primary": "NASCIDOS NO",
+        "title_highlight": "SET",
+        "title_secondary": ".",
+        "description": "Antes de escrever um prompt, passamos uma década em sets de filmagem. Sabemos enquadrar, iluminar, contar histórias — porque fizemos isso centenas de vezes com câmeras reais, atores reais, problemas reais. A IA não substituiu esse conhecimento. Ela amplificou.",
         "core_modules": "CAPACIDADES",
         "modules": {
             "cinematography": {
                 "title": "CINEMATOGRAFIA SINTÉTICA",
                 "status": "ATIVO",
-                "desc": "Criação de cenas e ambientes que não existem fisicamente"
+                "desc": "Criamos cenas e ambientes que não existem fisicamente"
             },
             "training": {
                 "title": "CONSISTÊNCIA VISUAL",
                 "status": "ATIVO",
-                "desc": "Garantia de coerência estética em cada frame do projeto"
+                "desc": "Garantimos coerência estética em cada frame do projeto"
             },
             "architecture": {
                 "title": "PRODUÇÃO ESCALÁVEL",
@@ -142,28 +137,21 @@
             }
         },
         "manifesto": {
-            "title": "NOSSA FILOSOFIA",
+            "title": "THE ANTI-PROMPT MANIFESTO",
             "subtitle": "O que nos diferencia",
             "cards": {
                 "control": {
                     "title": "CONTROLE > ACASO",
-                    "desc": "Não dependemos de sorte. Cada imagem é resultado de direção intencional, não de tentativa e erro. Projetamos resultados; não torcemos por eles."
+                    "desc": "O 'prompt perfeito' é um mito. Consistência vem de método e direção, não de palavras mágicas. Nós engenheiramos imagens — não torcemos por elas."
                 },
                 "curation": {
                     "title": "CURADORIA É CRIAÇÃO",
-                    "desc": "Podemos gerar milhares de imagens por hora. A arte está em saber qual é a certa. Nossos diretores curam com o mesmo olhar crítico de uma década em sets de filmagem."
+                    "desc": "Um modelo gera 1.000 imagens por minuto. A arte é saber qual está errada. Nossos diretores curam com o mesmo olhar crítico de uma década em sets de filmagem."
                 },
                 "black_box": {
                     "title": "TRANSPARÊNCIA TOTAL",
-                    "desc": "Você entende cada decisão criativa. Sem caixas pretas, sem 'mágica'. Mostramos o processo porque temos orgulho dele."
+                    "desc": "Não dependemos de interfaces fechadas. Construímos nossos próprios pipelines. Isso nos dá controle total sobre o resultado — algo que 'botões mágicos' não oferecem."
                 }
-            }
-        },
-        "team": {
-            "title": "LIDERANÇA",
-            "roles": {
-                "gabriel": "DIRETOR / HEAD DE TECNOLOGIA",
-                "lufe": "DIRETOR DE ARTE / MOTION"
             }
         }
     },
