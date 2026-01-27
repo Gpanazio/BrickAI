@@ -181,17 +181,17 @@
         "state": "State:",
         "active": "ACTIVE",
         "idle": "IDLE",
-        "placeholder": "ENTER COMMAND...",
+        "placeholder": "Transmita sua mensagem...",
         "execute": "EXECUTE",
         "initial_messages": {
-            "online": "SYSTEM_ONLINE. Eu sou MASON. Construo a fundação da sua realidade.",
-            "protocol": "Protocolo iniciado. Transmita sua consulta para processamento imediato."
+            "online": "Olá. Eu sou MASON. Estou aqui para direcionar sua transmissão.",
+            "protocol": "Como posso ajudar?"
         },
         "suggestions": {
-            "philosophy": "Qual é a filosofia da Monolith?",
-            "audit": "Executar auditoria de projeto.",
-            "synthesis": "Iniciar síntese criativa.",
-            "humans": "Manual override: Falar com humanos."
+            "philosophy": "Quanto custa um projeto?",
+            "audit": "Quero ver mais exemplos",
+            "synthesis": "Qual o prazo médio?",
+            "humans": "Falar com a equipe"
         }
     },
     "works_page": {
