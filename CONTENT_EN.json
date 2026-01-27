@@ -72,25 +72,20 @@
         }
     },
     "transmissions": {
-        "log_001": {
-            "title": "LOCATIONS THAT DON'T EXIST",
-            "excerpt": "Why we stopped scouting for the perfect set and started imagining it.",
-            "content_p1": "For years, audiovisual production was hostage to location. Budgets blown on travel, permits denied, weather not cooperating. Today, we can create the perfect place for each story — not as a cheap substitute, but as an expanded possibility.",
-            "section_title": "Beyond Possible",
-            "content_p2": "It's not about replicating reality. If we wanted Paris, we'd go to Paris. The point is creating the Paris that only exists in the director's head. The idealized version, impossible, perfect for that specific scene.",
-            "quote": "\"We don't scout locations. We scout visions.\""
+        "when-to-use-ai": {
+            "title": "WHEN TO USE AI — AND WHEN NOT TO",
+            "excerpt": "Not every project needs AI. Knowing when to use it is as important as knowing how.",
+            "content": "Every week someone shows up asking for \"a video with AI\" like it's a magic ingredient. Just add AI and it's good. That's not how it works.\n\nAI is a tool. A very good tool for some things and completely useless for others. After a few years using this in real production, not Twitter experiments, we've developed a clear sense of when it makes sense and when it's a waste of time and money.\n\nIt works when the location doesn't exist. If the script calls for an abandoned Soviet factory, a palace mixing three different eras, or a place that only exists in the director's head, AI solves it. The alternative would be building a set or hoping to find the perfect location. Both cost more and take longer.\n\nIt works when you need scale without scale budget. One product in 20 different contexts normally means 20 shooting days. With AI, it means a week of work. The math is simple.\n\nIt works when nobody knows what they want yet. Concept phase is expensive in traditional production. Each test is a mini-production. With AI, you present 30 different directions before committing a cent to crew and equipment.\n\nIt doesn't work when the soul of the video is a real person. Testimonial, interview, talking head. That needs a real human face. Not because AI can't generate faces. It can. But the emotional connection disappears. The viewer feels it, even without knowing why.\n\nIt doesn't work when the physical product is the hero. If you're selling a watch, show the watch. The texture of the metal, the visual weight, the light hitting the glass. AI can create the environment around it, but the object needs to be real.\n\nIt doesn't work when you have the budget to do it right the traditional way. AI isn't automatically better. It's an option. Sometimes the right option is camera, lights, crew, location. We know how to do both. We know when to use each.\n\nThe right question is never \"can we do this with AI?\" Almost anything is possible. The question is \"will it be better, faster, or more viable?\" If the answer is no, we shoot it. Simple."
         },
-        "log_002": {
-            "title": "MOTION IS EVERYTHING",
-            "excerpt": "How we ensure every frame belongs to the same film.",
-            "content_p1": "The biggest challenge in generative video is consistency. Every second has 24 or 30 frames that need to talk to each other. A character can't change faces, a wall can't swap textures.",
-            "content_p2": "Our obsession is ensuring the viewer is never pulled out of the story by a visual inconsistency. That requires method, not magic."
+        "consistency-problem": {
+            "title": "THE CONSISTENCY PROBLEM",
+            "excerpt": "Why AI videos look \"off\" and how we fix it.",
+            "content": "The biggest problem with generative video isn't making a beautiful image. That's easy. The problem is making 720 beautiful images that look like the same film.\n\nEach frame is generated from scratch. The model doesn't know what came before or what comes after. Without control, the character changes face on frame 47. The wall swaps texture on frame 203. The light decides to come from another angle on frame 589.\n\nYour brain detects this in milliseconds. You can't explain what's wrong, but you know something is. It's the uncanny valley applied to time, not just to faces.\n\nThat's why most AI videos you see out there look... off. Technically impressive, but impossible to watch for more than 15 seconds without discomfort.\n\nThe solution isn't in the prompt. There's no combination of words that fixes this. The solution is in the pipeline: how you structure the generation, what controls you impose between frames, how you treat the image after it leaves the model.\n\nIt's technical work, boring, invisible. Nobody posts it on LinkedIn. But it's the difference between an experiment and a film.\n\nWhen consistency works, you don't even notice. You just watch. When it doesn't work, you can't watch anything else."
         },
-        "log_003": {
-            "title": "PERFECT IMPERFECTION",
-            "excerpt": "Why we add 'defects' back into images.",
-            "content_p1": "Images that are too perfect look fake. The human brain recognizes artificial perfection and rejects it. That's why we reintroduce controlled imperfections — film grain, subtle chromatic aberration, slight motion blur.",
-            "quote": "\"Imperfection is the signature of the real.\""
+        "direction-over-prompt": {
+            "title": "DIRECTION > PROMPT",
+            "excerpt": "Why mastering prompts doesn't make you a director.",
+            "content": "There's an entire industry selling the idea that AI's secret lies in the right words. Bundles with \"10,000 professional prompts\". \"Prompt engineering\" courses. Gurus explaining the exact order of adjectives.\n\nThat's like selling a list of English words and calling it a screenwriting course.\n\nThe prompt is the most superficial part of the process. It's just the interface, the text field where you type. What actually determines the result is everything that comes before and everything that comes after.\n\nBefore: what's the visual reference? What's the mood board? Is there a storyboard? Is the art direction defined? Does the client know what they want or think they know? These questions have existed for a hundred years. AI didn't invent any of them.\n\nAfter: out of 500 generated images, which ones work? What needs correction? How to compose the elements? What's the color treatment? That's curation, post-production, trained eye. It's also existed for decades.\n\nAI is a tool in the middle of the process. A powerful tool, but still a tool. Anyone who thinks mastering the prompt means mastering AI is confusing the steering wheel with the entire car.\n\nThe difference between amateur and professional work was never the tool. It's the eye of whoever uses it. That hasn't changed."
         }
     },
     "common": {
@@ -119,10 +114,10 @@
     "about": {
         "origin": "ORIGIN",
         "est": "SINCE 2016",
-        "title_primary": "FORGED IN",
-        "title_highlight": "OLD SCHOOL",
-        "title_secondary": "VFX.",
-        "description": "Before working with AI, we spent a decade creating visual effects by hand. We understand light, composition, and storytelling because we built them frame by frame for years. We didn't adopt AI to replace the craft. We adopted it to go beyond what was possible.",
+        "title_primary": "BORN ON",
+        "title_highlight": "SET",
+        "title_secondary": ".",
+        "description": "Before writing a prompt, we spent a decade on film sets. We know how to frame, light, and tell stories — because we did it hundreds of times with real cameras, real actors, real problems. AI didn't replace that knowledge. It amplified it.",
         "core_modules": "CAPABILITIES",
         "modules": {
             "cinematography": {
@@ -142,28 +137,21 @@
             }
         },
         "manifesto": {
-            "title": "OUR PHILOSOPHY",
+            "title": "THE ANTI-PROMPT MANIFESTO",
             "subtitle": "What sets us apart",
             "cards": {
                 "control": {
                     "title": "CONTROL > CHANCE",
-                    "desc": "We don't rely on luck. Every image is the result of intentional direction, not trial and error. We design results; we don't hope for them."
+                    "desc": "The 'perfect prompt' is a myth. Consistency comes from method and direction, not magic words. We engineer images — we don't wish for them."
                 },
                 "curation": {
                     "title": "CURATION IS CREATION",
-                    "desc": "We can generate thousands of images per hour. The art is knowing which one is right. Our directors curate with the same critical eye from a decade on film sets."
+                    "desc": "A model generates 1,000 images per minute. The art is knowing which one is wrong. Our directors curate with the same critical eye from a decade on film sets."
                 },
                 "black_box": {
                     "title": "TOTAL TRANSPARENCY",
-                    "desc": "You understand every creative decision. No black boxes, no 'magic'. We show the process because we're proud of it."
+                    "desc": "We don't rely on closed interfaces. We build our own pipelines. This gives us total control over the result — something 'magic buttons' can't offer."
                 }
-            }
-        },
-        "team": {
-            "title": "LEADERSHIP",
-            "roles": {
-                "gabriel": "DIRECTOR / HEAD OF TECHNOLOGY",
-                "lufe": "ART DIRECTOR / MOTION"
             }
         }
     },
