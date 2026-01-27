@@ -30,21 +30,33 @@
     "works": {
         "inheritance": {
             "title": "INHERITANCE",
-            "subtitle": "FULL GENERATIVE",
-            "desc": "When the location doesn't exist. 100% Neural Rendering.",
-            "longDesc": "Inheritance is a testament to directed hallucination. Our artists trained custom LoRAs on brutalist architectural blueprints to guide the Stable Diffusion XL model. We curated 4,000 frames where organic decay meets concrete, ensuring temporal consistency through ControlNet depth maps while maintaining the director's original vision of isolation."
+            "subtitle": "SHORT FILM",
+            "desc": "Official Selection Gramado Film Festival 2025.",
+            "longDesc": "One of the first AI-made films to be selected and screened at the Gramado Film Festival. Inheritance tells the story of a civilization that inherits an abandoned world — and repeats, step by step, all the mistakes of its predecessors. A fable about cycles, hubris, and the illusion of progress. The 5-minute version premiered at Gramado; a 10-minute extended version remains unreleased."
         },
         "shift": {
             "title": "WE CAN SELL ANYTHING",
-            "subtitle": "HYBRID EXTENSION",
-            "desc": "Expanding the set beyond physical limits. Seamless VFX.",
-            "longDesc": "For 'We Can Sell Anything', the challenge was to marry physical sets with infinite digital horizons. We utilized a proprietary in-painting pipeline that tracks live-action camera data (Alexa Mini) and feeds it into a generative fill model. The result is a mathematically perfect extension of the set, lighting, and grain, directed precisely by the cinematographer's lens choices."
+            "subtitle": "MANIFESTO",
+            "desc": "Genero Challenge Finalist.",
+            "longDesc": "One character. Infinite worlds. In this manifesto, the same man appears in a fashion studio, leads a marching band in a packed stadium, strolls through European palaces, relaxes in a typical American living room, and faces off with sumo wrestlers — all in 60 seconds. The message is simple: there are no more production limits. Any setting, any context, any story. Finalist at the Genero Challenge."
         },
         "anima": {
             "title": "AUTOBOL",
-            "subtitle": "STYLE TRANSFER",
-            "desc": "Turning live action into branded art using custom models.",
-            "longDesc": "We reinterpreted standard broadcast footage through a custom-trained style transfer model using Ebsynth and ControlNet. The goal was not random abstraction, but a specific 'kinetic sculpture' aesthetic defined by the art director. The AI acted as the brush, preserving the players' identity and 60fps fluidity while completely transforming the texture of reality."
+            "subtitle": "REIMAGINED HISTORY",
+            "desc": "Rescuing a forgotten sport from the 70s.",
+            "longDesc": "Autobol was real. In the 1970s, in Rio de Janeiro, cars pushed a giant ball in matches between Flamengo, Fluminense, Vasco, and Botafogo. Created by physician Mário Marques Tourinho, the sport was a brief phenomenon and today almost forgotten. This project reimagines Autobol as it might have been filmed at the time — with all the texture, grain, and atmosphere of a lost broadcast from the 70s."
+        },
+        "dogday": {
+            "title": "DOG DAY AFTERNOON",
+            "subtitle": "ABSURD COMEDY",
+            "desc": "Dogs in human situations.",
+            "longDesc": "A canine support group with a banner reading 'SIT STAY HEAL'. A chihuahua in a sweater on a Zoom call. Dog Day Afternoon is absurd comedy played straight — dogs in everyday human situations, filmed with the solemnity of an indie drama. The title is a reference to Sidney Lumet's classic with Al Pacino."
+        },
+        "factory": {
+            "title": "FACTORY",
+            "subtitle": "RETRO-FUTURISM",
+            "desc": "Industrial decay with a retro-futuristic vision.",
+            "longDesc": "A factory that never existed, but feels remembered. Factory combines industrial decay with a retro-futuristic aesthetic — as if a future imagined in the 70s had aged and been abandoned. Rust, concrete, silent machinery. A space between nostalgia for a past and the ruin of a future that never came."
         },
         "void": {
             "title": "VOID GAZING",
