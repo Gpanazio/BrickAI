@@ -287,41 +287,22 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 hasDetail: true
             },
             {
-                id: "void",
-                orientation: "vertical",
-                subtitle: t('works.void.subtitle'),
-                category: "DATA ART",
-                title: t('works.void.title'),
-                desc: t('works.void.desc'),
-                longDesc: t('works.void.longDesc'),
-                credits: [
-                    { role: "Concept", name: "Brick Lab" },
-                    { role: "Code", name: "Mason Core" },
-                    { role: "Data", name: "NASA Open API" },
-                    { role: "Tech", name: "TouchDesigner + Python" }
-                ],
-                gradient: "from-neutral-950 to-[#DC2626]/20",
-                imageHome: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2670&auto=format&fit=crop",
-                imageWorks: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2670&auto=format&fit=crop",
-                hasDetail: true
-            },
-            {
-                id: "urban",
+                id: "factory",
                 orientation: "horizontal",
-                subtitle: t('works.urban.subtitle'),
+                subtitle: t('works.factory.subtitle'),
                 category: "GENERATIVE",
-                title: t('works.urban.title'),
-                desc: t('works.urban.desc'),
-                longDesc: t('works.urban.longDesc'),
+                title: t('works.factory.title'),
+                desc: t('works.factory.desc'),
+                longDesc: t('works.factory.longDesc'),
                 credits: [
-                    { role: "Architect", name: "J. Doe" },
-                    { role: "Sim", name: "Brick Core" },
-                    { role: "Render", name: "Redshift" },
-                    { role: "Tech", name: "Houdini + AI Texture" }
+                    { role: "Director", name: "Gabriel P." },
+                    { role: "AI Artist", name: "Mason Core" },
+                    { role: "Style", name: "Retro-Futurism" },
+                    { role: "Tech", name: "Stable Diffusion + ControlNet" }
                 ],
-                gradient: "from-neutral-900 to-neutral-800",
-                imageHome: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop",
-                imageWorks: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?q=80&w=2670&auto=format&fit=crop",
+                gradient: "from-neutral-900 to-neutral-950",
+                imageHome: "/factory_thumb.jpg",
+                imageWorks: "/factory_thumb.jpg",
                 hasDetail: true
             },
 
