@@ -30,80 +30,86 @@
     "works": {
         "inheritance": {
             "title": "INHERITANCE",
-            "subtitle": "FULL GENERATIVE",
-            "desc": "Quando a locação não existe. 100% Neural Rendering.",
-            "longDesc": "Inheritance é um testemunho da alucinação direcionada. Nossos artistas treinaram LoRAs customizados em plantas arquitetônicas brutalistas para guiar o modelo Stable Diffusion XL. Curamos 4.000 frames onde a decadência orgânica encontra o concreto, garantindo consistência temporal através de depth maps do ControlNet enquanto mantemos a visão original do diretor de isolamento."
+            "subtitle": "CURTA-METRAGEM",
+            "desc": "Seleção oficial Festival de Gramado 2025.",
+            "longDesc": "Um dos primeiros filmes feitos com IA a ser selecionado e exibido no Festival de Gramado. Inheritance conta a história de uma civilização que herda um mundo abandonado — e repete, passo a passo, todos os erros de seus antecessores. Uma fábula sobre ciclos, hubris e a ilusão do progresso. A versão de 5 minutos estreou em Gramado; uma versão estendida de 10 minutos permanece inédita."
         },
         "shift": {
             "title": "VENDEMOS QUALQUER COISA",
-            "subtitle": "HYBRID EXTENSION",
-            "desc": "Expandindo o set além dos limites físicos. Seamless VFX.",
-            "longDesc": "Para 'We Can Sell Anything', o desafio foi casar sets físicos com horizontes digitais infinitos. Utilizamos um pipeline proprietário de in-painting que rastreia dados de câmera live-action (Alexa Mini) e os alimenta em um modelo de preenchimento generativo. O resultado é uma extensão matematicamente perfeita do set, iluminação e grain, dirigida precisamente pelas escolhas de lente do diretor de fotografia."
+            "subtitle": "MANIFESTO",
+            "desc": "Finalista Genero Challenge.",
+            "longDesc": "Um único personagem. Infinitos mundos. Neste manifesto, o mesmo homem aparece em um estúdio de moda, lidera uma banda marcial em um estádio lotado, passeia por palácios europeus, relaxa em uma sala tipicamente americana e enfrenta lutadores de sumô — tudo em 60 segundos. A mensagem é simples: não existem mais limites de produção. Qualquer cenário, qualquer contexto, qualquer história. Finalista no Genero Challenge."
         },
         "anima": {
             "title": "AUTOBOL",
-            "subtitle": "STYLE TRANSFER",
-            "desc": "Transformando live action em arte de marca usando modelos custom.",
-            "longDesc": "Reinterpretamos imagens de transmissão padrão através de um modelo de transferência de estilo treinado sob medida usando Ebsynth e ControlNet. O objetivo não era abstração aleatória, mas uma estética específica de 'escultura cinética' definida pelo diretor de arte. A IA agiu como o pincel, preservando a identidade dos jogadores e a fluidez de 60fps enquanto transformava completamente a textura da realidade."
+            "subtitle": "HISTÓRIA REIMAGINADA",
+            "desc": "Resgatando um esporte esquecido dos anos 70.",
+            "longDesc": "Autobol existiu de verdade. Nos anos 1970, no Rio de Janeiro, carros empurravam uma bola gigante em partidas entre Flamengo, Fluminense, Vasco e Botafogo. Criado pelo médico Mário Marques Tourinho, o esporte foi um fenômeno breve e hoje quase esquecido. Este projeto reimagina o Autobol como ele poderia ter sido filmado na época — com toda a textura, o grain e a atmosfera de uma transmissão perdida dos anos 70."
         },
         "void": {
             "title": "VOID GAZING",
-            "subtitle": "DATA VISUALIZATION",
-            "desc": "Traduzindo radiação cósmica em espectros visíveis.",
-            "longDesc": "Uma instalação baseada em dados que visualiza radiação cósmica em tempo real via NASA Open API. Escrevemos scripts Python para converter ruído numérico em parâmetros de dinâmica de fluidos no TouchDesigner. A IA então texturiza essa simulação em tempo real, permitindo efetivamente que o público 'veja' o universo invisível através de uma lente estética curada por humanos."
+            "subtitle": "DATA ART",
+            "desc": "Visualização de dados como experiência sensorial.",
+            "longDesc": "Dados são abstratos. Números em planilhas. Este projeto explora dar forma ao que não tem forma — transformar informação em experiência visual. Padrões emergem, cores pulsam, formas evoluem. Visualização de dados como arte contemplativa."
         },
         "urban": {
             "title": "URBAN REEF",
-            "subtitle": "PROCEDURAL ENV",
-            "desc": "Cultivando cidades como corais. Algoritmos biológicos aplicados.",
-            "longDesc": "Urban Reef explora a biomimética na arquitetura. Usando algoritmos de crescimento diferencial no Houdini, 'cultivamos' estruturas de cidade que buscam luz como corais. Essas malhas procedurais foram então texturizadas usando upscaling de IA, criando uma visão de uma cidade que parece cultivada em vez de construída, desafiando processos de design arquitetônico tradicionais."
+            "subtitle": "PROCEDURAL",
+            "desc": "Cidades que crescem como organismos.",
+            "longDesc": "E se cidades não fossem construídas, mas cultivadas? Este experimento explora estruturas urbanas que seguem lógicas biológicas, buscando luz como corais, ramificando-se como raízes. Design urbano orgânico, adaptativo, vivo."
         },
-        "silent": {
-            "title": "SILENT ECHO",
-            "subtitle": "AUDIO REACTIVE",
-            "desc": "Uma narrativa visual conduzida inteiramente por frequências sub-graves.",
-            "longDesc": "Em Silent Echo, a música dirige a máquina. Construímos um sistema no Unreal Engine 5 onde elementos visuais são acionados diretamente pela análise de áudio. Frequências sub-graves ditam o deslocamento da geometria, enquanto high-hats acionam eventos de iluminação generativa. É uma experiência sinestésica onde o som do artista esculpe diretamente o mundo digital."
+        "factory": {
+            "title": "FACTORY",
+            "subtitle": "RETRO-FUTURISMO",
+            "desc": "Decadência industrial com visão retro-futurista.",
+            "longDesc": "Uma fábrica que nunca existiu, mas que parece lembrada. Factory combina decadência industrial com uma estética retro-futurista — como se um futuro imaginado nos anos 70 tivesse envelhecido e sido abandonado. Ferrugem, concreto, maquinário silencioso. Um espaço entre a nostalgia de um passado e a ruína de um futuro que não veio."
+        },
+        "dogday": {
+            "title": "DOG DAY AFTERNOON",
+            "subtitle": "COMÉDIA ABSURDA",
+            "desc": "Cães em situações humanas.",
+            "longDesc": "Um grupo de apoio canino com a faixa 'SIT STAY HEAL'. Um chihuahua de suéter participando de uma call de Zoom. Dog Day Afternoon é comédia absurda levada a sério — cachorros em situações cotidianas humanas, filmados com a sobriedade de um drama independente. O título é uma referência ao clássico de Sidney Lumet com Al Pacino."
         }
     },
     "transmissions": {
         "log_001": {
-            "title": "O ESPAÇO LATENTE É UMA LOCALIZAÇÃO",
-            "excerpt": "Por que paramos de procurar ruínas físicas e começamos a treinar LoRAs em plantas brutalistas.",
-            "content_p1": "Tendemos a pensar em modelos generativos como motores de criação. Prompt de entrada, imagem de saída. Um processo de fabricação linear. Mas essa metáfora é insuficiente para produção de alto nível. Na Brick, tratamos o modelo não como uma fábrica, mas como um território.",
-            "section_title": "A Topografia do Ruído",
-            "content_p2": "O Stable Diffusion XL não \"desenha\". Ele remove o ruído. Ele subtrai o caos para revelar a ordem. Isso implica que a imagem já existe dentro do ruído de alta dimensão, matematicamente esperando para ser descoberta.",
-            "quote": "\"Não construímos o set. Navegamos para as coordenadas onde o set tem maior probabilidade estatística de existir.\""
+            "title": "LOCAÇÕES QUE NÃO EXISTEM",
+            "excerpt": "Por que paramos de procurar o set perfeito e começamos a imaginá-lo.",
+            "content_p1": "Durante anos, a produção audiovisual foi refém da locação. Orçamentos estourados em viagens, permissões negadas, clima não colaborando. Hoje, podemos criar o lugar perfeito para cada história — não como substituto barato, mas como possibilidade expandida.",
+            "section_title": "Além do Possível",
+            "content_p2": "Não se trata de replicar o real. Se quiséssemos Paris, iríamos a Paris. O ponto é criar a Paris que só existe na cabeça do diretor. A versão idealizada, impossível, perfeita para aquela cena específica.",
+            "quote": "\"Não buscamos locações. Buscamos visões.\""
         },
         "log_002": {
-            "title": "VETORES DE MOVIMENTO NA TRANSFERÊNCIA DE ESTILO",
-            "excerpt": "Resolvendo o problema de cintilação em modelos de difusão. Como usamos fluxo óptico para impor consistência temporal.",
-            "content_p1": "A trepidação. A cintilação. A textura \"fervente\". Esta é a marca registrada do vídeo de IA bruto. Revela a independência quadro a quadro do processo de difusão. Para o <0>Projeto: Anima</0>, esse artefato era inaceitável.",
-            "content_p2": "Nossa solução envolveu extrair mapas de fluxo óptico da filmagem original usando Nuke. Esses vetores de movimento agem como um esqueleto temporal."
+            "title": "MOVIMENTO É TUDO",
+            "excerpt": "Como garantimos que cada frame pertença ao mesmo filme.",
+            "content_p1": "O maior desafio do vídeo generativo é consistência. Cada segundo tem 24 ou 30 frames que precisam conversar entre si. Um personagem não pode mudar de rosto, uma parede não pode trocar de textura.",
+            "content_p2": "Nossa obsessão é garantir que o espectador nunca seja arrancado da história por uma inconsistência visual. Isso exige método, não mágica."
         },
         "log_003": {
-            "title": "GLITCH INTENCIONAL: A ASSINATURA HUMANA",
-            "excerpt": "Quando a perfeição é o erro. Injetando ruído de volta na saída limpa de modelos comerciais para recuperar a sensação de 'cinema'.",
-            "content_p1": "Os modelos modernos estão convergindo para uma \"média do Midjourney\". Uma estética polida e plástica que grita \"sintético\". Paradoxalmente, para fazer a imagem de IA parecer real, precisamos quebrá-la.",
-            "quote": "O artefato é a arte."
+            "title": "A IMPERFEIÇÃO PERFEITA",
+            "excerpt": "Por que adicionamos 'defeitos' de volta nas imagens.",
+            "content_p1": "Imagens perfeitas demais parecem falsas. O cérebro humano reconhece a perfeição artificial e rejeita. Por isso, reintroduzimos imperfeições controladas — o grão de filme, a aberração cromática sutil, o leve desfoque de movimento.",
+            "quote": "\"A imperfeição é a assinatura do real.\""
         }
     },
     "common": {
-        "return_surface": "RETURN TO SURFACE",
-        "return_index": "RETURN TO INDEX",
-        "system_status": "SYSTEM_STATUS",
+        "return_surface": "VOLTAR",
+        "return_index": "VOLTAR AO ÍNDICE",
+        "system_status": "STATUS",
         "online": "ONLINE",
-        "secure_connection": "SECURE CONNECTION",
-        "loading": "LOADING SYSTEM..."
+        "secure_connection": "CONEXÃO SEGURA",
+        "loading": "CARREGANDO..."
     },
     "legacy": {
         "title": "APOIADO PELA BRICK.",
         "title_mobile_br": "APOIADO <br /> PELA BRICK.",
-        "text": "Isto não é um teste beta. Esta é uma nova lente de uma produtora com 10 anos de experiência.",
+        "text": "Isto não é um experimento. Esta é uma nova lente de uma produtora com 10 anos de experiência.",
         "trusted_by": "Parceiros"
     },
     "footer": {
-        "complex_problem": "Tem um problema complexo?",
-        "we_have_intelligence": "NÓS TEMOS A INTELIGÊNCIA.",
+        "complex_problem": "Tem um projeto complexo?",
+        "we_have_intelligence": "NÓS TEMOS A VISÃO.",
         "talk_to_us": "FALE CONOSCO",
         "network": "Rede",
         "rights_reserved": "Todos os Direitos Reservados.",
@@ -111,99 +117,97 @@
         "system_admin": "SYSTEM_ADMIN"
     },
     "about": {
-        "origin": "SYSTEM_ORIGIN",
-        "est": "EST. 2016",
+        "origin": "ORIGEM",
+        "est": "DESDE 2016",
         "title_primary": "FORJADO NA",
         "title_highlight": "OLD SCHOOL",
         "title_secondary": "DE VFX.",
-        "description": "Antes de escrevermos um prompt, passamos 7 anos manipulando pixels no Nuke e Maya. Entendemos luz, composição e narrativa porque as construímos à mão por uma década. Não adotamos IA para substituir o craft. Adotamos para quebrar os limites.",
-        "core_modules": "CORE_MODULES",
+        "description": "Antes de trabalhar com IA, passamos uma década criando efeitos visuais à mão. Entendemos luz, composição e narrativa porque as construímos frame a frame por anos. Não adotamos IA para substituir o craft. Adotamos para ir além do que era possível.",
+        "core_modules": "CAPACIDADES",
         "modules": {
             "cinematography": {
-                "title": "SYNTHETIC_CINEMATOGRAPHY",
-                "status": "INSTALLED",
-                "desc": "Geração de Vídeo // ComfyUI // Upscaling 4K"
+                "title": "CINEMATOGRAFIA SINTÉTICA",
+                "status": "ATIVO",
+                "desc": "Criação de cenas e ambientes que não existem fisicamente"
             },
             "training": {
-                "title": "MODEL_TRAINING",
-                "status": "INSTALLED",
-                "desc": "LoRAs Customizados // Consistência de Estilo // Fine-Tuning"
+                "title": "CONSISTÊNCIA VISUAL",
+                "status": "ATIVO",
+                "desc": "Garantia de coerência estética em cada frame do projeto"
             },
             "architecture": {
-                "title": "PIPELINE_ARCHITECTURE",
-                "status": "INSTALLED",
-                "desc": "Ferramentas Python // Automação // Render Farm"
+                "title": "PRODUÇÃO ESCALÁVEL",
+                "status": "ATIVO",
+                "desc": "Infraestrutura para entregar volume sem perder qualidade"
             }
         },
         "manifesto": {
-            "title": "O MANIFESTO ANTI-PROMPT",
-            "subtitle": "Por que Mágica não Escala",
+            "title": "NOSSA FILOSOFIA",
+            "subtitle": "O que nos diferencia",
             "cards": {
                 "control": {
                     "title": "CONTROLE > ACASO",
-                    "desc": "O 'prompt perfeito' é um mito. A consistência vem do ControlNet, IP-Adapters e scripts Python, não de sorte. Nós projetamos nossas imagens; não torcemos por elas."
+                    "desc": "Não dependemos de sorte. Cada imagem é resultado de direção intencional, não de tentativa e erro. Projetamos resultados; não torcemos por eles."
                 },
                 "curation": {
                     "title": "CURADORIA É CRIAÇÃO",
-                    "desc": "Um modelo pode gerar 1.000 imagens em um minuto. A arte é saber qual está errada. Nossos diretores curam com o mesmo olhar crítico que usaram em sets de filmagem por 10 anos."
+                    "desc": "Podemos gerar milhares de imagens por hora. A arte está em saber qual é a certa. Nossos diretores curam com o mesmo olhar crítico de uma década em sets de filmagem."
                 },
                 "black_box": {
-                    "title": "SEM CAIXAS PRETAS",
-                    "desc": "Não dependemos de interfaces web fechadas. Construímos nossos próprios pipelines ComfyUI localmente. Isso nos dá controle em nível de pixel sobre o espaço latente que 'botões mágicos' não podem fornecer."
+                    "title": "TRANSPARÊNCIA TOTAL",
+                    "desc": "Você entende cada decisão criativa. Sem caixas pretas, sem 'mágica'. Mostramos o processo porque temos orgulho dele."
                 }
             }
         },
         "team": {
-            "title": "UNIT_LEADERS // COMMAND",
+            "title": "LIDERANÇA",
             "roles": {
-                "alex": "PRODUTOR EXECUTIVO",
-                "sarah": "DIRETORA CRIATIVA",
-                "gabriel": "HEAD DE TECNOLOGIA",
-                "marcus": "SUPERVISOR DE VFX"
+                "gabriel": "DIRETOR / HEAD DE TECNOLOGIA",
+                "lufe": "DIRETOR DE ARTE / MOTION"
             }
         }
     },
     "chat": {
-        "reach_humans": "REACH_HUMANS",
-        "manual_override": "MANUAL OVERRIDE PROTOCOLS",
+        "reach_humans": "FALAR COM HUMANOS",
+        "manual_override": "CONTATO DIRETO",
         "status_online": "STATUS: ONLINE",
-        "email_streams": "EMAIL_STREAMS",
-        "voice_link": "VOICE_LINK",
-        "network_nodes": "NETWORK_NODES",
-        "mason_intro": "EU SOU MASON",
-        "generative_core": "O Núcleo Generativo.",
-        "state": "State:",
-        "active": "ACTIVE",
-        "idle": "IDLE",
-        "placeholder": "ENTER COMMAND...",
-        "execute": "EXECUTE",
+        "email_streams": "EMAIL",
+        "voice_link": "TELEFONE",
+        "network_nodes": "REDES SOCIAIS",
+        "mason_intro": "OLÁ",
+        "generative_core": "Como posso ajudar?",
+        "state": "Status:",
+        "active": "ATIVO",
+        "idle": "AGUARDANDO",
+        "placeholder": "Digite sua mensagem...",
+        "execute": "ENVIAR",
         "initial_messages": {
-            "online": "SYSTEM_ONLINE. Eu sou MASON. Construo a fundação da sua realidade.",
-            "protocol": "Protocolo iniciado. Transmita sua consulta para processamento imediato."
+            "online": "Olá! Estou aqui para ajudar com seu projeto.",
+            "protocol": "Me conte sobre o que você precisa."
         },
         "suggestions": {
-            "philosophy": "Qual é a filosofia da Monolith?",
-            "audit": "Executar auditoria de projeto.",
-            "synthesis": "Iniciar síntese criativa.",
-            "humans": "Manual override: Falar com humanos."
+            "philosophy": "Qual é a abordagem da Brick AI?",
+            "audit": "Quero discutir um projeto.",
+            "synthesis": "Como funciona o processo criativo?",
+            "humans": "Prefiro falar com alguém da equipe."
         }
     },
     "works_page": {
-        "title": "PROJECT_DATABASE // Trabalhos Selecionados",
-        "archive_index": "ARCHIVE_INDEX",
-        "accessing": "ACCESSING NEURAL DATABASE...",
-        "entries_found": "ENTRADAS ENCONTRADAS.",
-        "no_data": "NENHUM DADO ENCONTRADO NESTE SETOR.",
-        "protocols": "PROTOCOLOS"
+        "title": "TRABALHOS SELECIONADOS",
+        "archive_index": "ÍNDICE",
+        "accessing": "CARREGANDO PROJETOS...",
+        "entries_found": "PROJETOS ENCONTRADOS.",
+        "no_data": "NENHUM PROJETO NESTA CATEGORIA.",
+        "protocols": "FILTROS"
     },
     "transmissions_page": {
-        "title": "NEURAL_LOGS",
-        "incoming": "FLUXOS DE DADOS RECEBIDOS...",
-        "records": "REGISTROS."
+        "title": "TRANSMISSÕES",
+        "incoming": "ATUALIZAÇÕES...",
+        "records": "POSTS."
     },
     "project_modal": {
-        "neural_active": "NEURAL_RENDER_ACTIVE",
-        "static_preview": "STATIC_PREVIEW",
-        "system_data": "Dados do Sistema"
+        "neural_active": "PREVIEW",
+        "static_preview": "IMAGEM",
+        "system_data": "Ficha Técnica"
     }
 }
