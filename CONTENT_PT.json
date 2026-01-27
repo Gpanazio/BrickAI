@@ -119,21 +119,21 @@
     "about": {
         "origin": "ORIGEM",
         "est": "DESDE 2016",
-        "title_primary": "FORJADO NA",
-        "title_highlight": "OLD SCHOOL",
-        "title_secondary": "DE VFX.",
-        "description": "Antes de trabalhar com IA, passamos uma década criando efeitos visuais à mão. Entendemos luz, composição e narrativa porque as construímos frame a frame por anos. Não adotamos IA para substituir o craft. Adotamos para ir além do que era possível.",
+        "title_primary": "NASCIDOS NO",
+        "title_highlight": "SET",
+        "title_secondary": ".",
+        "description": "Antes de escrever um prompt, passamos uma década em sets de filmagem. Sabemos enquadrar, iluminar, contar histórias — porque fizemos isso centenas de vezes com câmeras reais, atores reais, problemas reais. A IA não substituiu esse conhecimento. Ela amplificou.",
         "core_modules": "CAPACIDADES",
         "modules": {
             "cinematography": {
                 "title": "CINEMATOGRAFIA SINTÉTICA",
                 "status": "ATIVO",
-                "desc": "Criação de cenas e ambientes que não existem fisicamente"
+                "desc": "Criamos cenas e ambientes que não existem fisicamente"
             },
             "training": {
                 "title": "CONSISTÊNCIA VISUAL",
                 "status": "ATIVO",
-                "desc": "Garantia de coerência estética em cada frame do projeto"
+                "desc": "Garantimos coerência estética em cada frame do projeto"
             },
             "architecture": {
                 "title": "PRODUÇÃO ESCALÁVEL",
@@ -142,28 +142,21 @@
             }
         },
         "manifesto": {
-            "title": "NOSSA FILOSOFIA",
+            "title": "THE ANTI-PROMPT MANIFESTO",
             "subtitle": "O que nos diferencia",
             "cards": {
                 "control": {
                     "title": "CONTROLE > ACASO",
-                    "desc": "Não dependemos de sorte. Cada imagem é resultado de direção intencional, não de tentativa e erro. Projetamos resultados; não torcemos por eles."
+                    "desc": "O 'prompt perfeito' é um mito. Consistência vem de método e direção, não de palavras mágicas. Nós engenheiramos imagens — não torcemos por elas."
                 },
                 "curation": {
                     "title": "CURADORIA É CRIAÇÃO",
-                    "desc": "Podemos gerar milhares de imagens por hora. A arte está em saber qual é a certa. Nossos diretores curam com o mesmo olhar crítico de uma década em sets de filmagem."
+                    "desc": "Um modelo gera 1.000 imagens por minuto. A arte é saber qual está errada. Nossos diretores curam com o mesmo olhar crítico de uma década em sets de filmagem."
                 },
                 "black_box": {
                     "title": "TRANSPARÊNCIA TOTAL",
-                    "desc": "Você entende cada decisão criativa. Sem caixas pretas, sem 'mágica'. Mostramos o processo porque temos orgulho dele."
+                    "desc": "Não dependemos de interfaces fechadas. Construímos nossos próprios pipelines. Isso nos dá controle total sobre o resultado — algo que 'botões mágicos' não oferecem."
                 }
-            }
-        },
-        "team": {
-            "title": "LIDERANÇA",
-            "roles": {
-                "gabriel": "DIRETOR / HEAD DE TECNOLOGIA",
-                "lufe": "DIRETOR DE ARTE / MOTION"
             }
         }
     },
