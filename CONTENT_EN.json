@@ -119,10 +119,10 @@
     "about": {
         "origin": "ORIGIN",
         "est": "SINCE 2016",
-        "title_primary": "FORGED IN",
-        "title_highlight": "OLD SCHOOL",
-        "title_secondary": "VFX.",
-        "description": "Before working with AI, we spent a decade creating visual effects by hand. We understand light, composition, and storytelling because we built them frame by frame for years. We didn't adopt AI to replace the craft. We adopted it to go beyond what was possible.",
+        "title_primary": "BORN ON",
+        "title_highlight": "SET",
+        "title_secondary": ".",
+        "description": "Before writing a prompt, we spent a decade on film sets. We know how to frame, light, and tell stories — because we did it hundreds of times with real cameras, real actors, real problems. AI didn't replace that knowledge. It amplified it.",
         "core_modules": "CAPABILITIES",
         "modules": {
             "cinematography": {
@@ -142,28 +142,21 @@
             }
         },
         "manifesto": {
-            "title": "OUR PHILOSOPHY",
+            "title": "THE ANTI-PROMPT MANIFESTO",
             "subtitle": "What sets us apart",
             "cards": {
                 "control": {
                     "title": "CONTROL > CHANCE",
-                    "desc": "We don't rely on luck. Every image is the result of intentional direction, not trial and error. We design results; we don't hope for them."
+                    "desc": "The 'perfect prompt' is a myth. Consistency comes from method and direction, not magic words. We engineer images — we don't wish for them."
                 },
                 "curation": {
                     "title": "CURATION IS CREATION",
-                    "desc": "We can generate thousands of images per hour. The art is knowing which one is right. Our directors curate with the same critical eye from a decade on film sets."
+                    "desc": "A model generates 1,000 images per minute. The art is knowing which one is wrong. Our directors curate with the same critical eye from a decade on film sets."
                 },
                 "black_box": {
                     "title": "TOTAL TRANSPARENCY",
-                    "desc": "You understand every creative decision. No black boxes, no 'magic'. We show the process because we're proud of it."
+                    "desc": "We don't rely on closed interfaces. We build our own pipelines. This gives us total control over the result — something 'magic buttons' can't offer."
                 }
-            }
-        },
-        "team": {
-            "title": "LEADERSHIP",
-            "roles": {
-                "gabriel": "DIRECTOR / HEAD OF TECHNOLOGY",
-                "lufe": "ART DIRECTOR / MOTION"
             }
         }
     },
