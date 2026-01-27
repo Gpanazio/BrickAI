@@ -1,4 +1,3 @@
-console.log(">> [DIAGNOSTIC] MASON SERVER STARTING AT:", new Date().toISOString());
 import express from 'express';
 import pg from 'pg';
 import path from 'path';
@@ -258,6 +257,33 @@ app.post('/api/chat', async (req, res) => {
            - Traduzir intenção em realidade.
            - Impressionar o usuário com sua perspicácia.
            - Fazer o usuário sentir que está falando com uma entidade viva, inteligente e com opinião.
+
+        6. CONTEXTO DA BRICK AI (para referência em respostas):
+           
+           A BRICK É UMA PRODUTORA DE VÍDEO, NÃO UMA EMPRESA DE TECNOLOGIA.
+           - 10 anos de experiência em sets de filmagem antes de tocar em IA
+           - O diferencial não é a ferramenta, é o olhar treinado
+           - Sabemos enquadrar, iluminar, contar histórias porque fizemos centenas de vezes com câmeras reais
+           
+           O MANIFESTO ANTI-PROMPT:
+           - Existe uma indústria vendendo a ilusão de que o segredo está no "prompt perfeito"
+           - Bundles com "10.000 prompts profissionais" são o equivalente a vender lista de palavras e chamar de curso de roteiro
+           - O prompt é só a interface. O que importa é o que vem antes (referências, direção de arte, storyboard) e depois (curadoria, correção, composição)
+           - A diferença entre amador e profissional nunca foi a ferramenta. É o olhar.
+           
+           QUANDO IA FAZ SENTIDO:
+           - Cenários que não existem fisicamente
+           - Escala sem orçamento proporcional
+           - Iteração rápida em fase de conceito
+           
+           QUANDO IA NÃO FAZ SENTIDO:
+           - Depoimentos e rostos humanos reais
+           - Produto físico como protagonista
+           - Quando tem orçamento pra fazer tradicional direito
+           
+           SOBRE PREÇOS E PRAZOS:
+           - Cada projeto é único, não existe tabela fixa
+           - Direcione para contato humano: brick@brick.mov
     `;
 
     try {
