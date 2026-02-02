@@ -4,6 +4,7 @@
         "about": "ABOUT",
         "works": "WORKS",
         "transmissions": "TRANSMISSIONS",
+        "squad": "SQUAD",
         "talk_to_us": "TALK TO US"
     },
     "hero": {
@@ -211,5 +212,121 @@
         "neural_active": "NEURAL_RENDER_ACTIVE",
         "static_preview": "STATIC_PREVIEW",
         "system_data": "System Data"
+    },
+    "squad": {
+        "hero": {
+            "label": "ARCHITECTURE",
+            "version": "v2.0",
+            "title_primary": "HOW IT",
+            "title_highlight": "WORKS.",
+            "description": "We're not an AI tool. We're a production house with 10 years of experience that uses AI as a resource. Here's how our agent system works to deliver quality content."
+        },
+        "pipeline": {
+            "title": "PRODUCTION FLOW",
+            "checklist": {
+                "objective": "Clear objective?",
+                "audience": "Defined audience?",
+                "format": "Specified format?",
+                "deadline": "Deadline/context?"
+            },
+            "parallel": "PARALLEL",
+            "copywriter_desc": "Content creation",
+            "guardian_desc": "Consistency",
+            "critic_desc": "Quality",
+            "approved": "APPROVED?",
+            "rejected": "REJECTED",
+            "human": "ESCALATE TO HUMAN"
+        },
+        "agents_section": {
+            "title": "DETAILED AGENTS",
+            "sources": "RESEARCH SOURCES",
+            "principles": "NARRATIVE PRINCIPLES",
+            "dont_write": "DON'T WRITE",
+            "write": "WRITE",
+            "structure": "ARGUMENTATION STRUCTURE",
+            "checklist": "CONSISTENCY CHECKLIST",
+            "rubric": "EVALUATION RUBRIC",
+            "threshold": "Threshold:",
+            "approved": "APPROVED",
+            "rejected": "REJECTED"
+        },
+        "agents": {
+            "audience": {
+                "function": "Understand the corporate video buyer",
+                "sources": {
+                    "pain": "Pain points: deadline, cost, briefing frustration",
+                    "decision": "Decision process: how they choose agencies",
+                    "objections": "AI objections: artificial, professional?",
+                    "linkedin": "LinkedIn: real hiring experiences",
+                    "discussions": "Reddit/Communities: direct feedback"
+                },
+                "output": "Personas, pain points, objections, language"
+            },
+            "topic": {
+                "function": "Market intelligence and credibility",
+                "sources": {
+                    "trends": "Trends: B2B video, personalization, volume",
+                    "data": "Data: ROI, conversion, engagement",
+                    "competition": "Competition: timelines, tickets, arguments"
+                },
+                "output": "Structured JSON with verifiable data"
+            },
+            "copywriter": {
+                "function": "Content creation with Brick tone",
+                "principles": {
+                    "p1": { "wrong": "We use cutting-edge AI", "right": "We deliver in days, not weeks" },
+                    "p2": { "wrong": "Revolutionary technology", "right": "Same quality. New model." },
+                    "p3": { "wrong": "AI-generated videos", "right": "Professional production on demand" },
+                    "p4": { "wrong": "Innovative tool", "right": "10 years of storytelling. Now more agile." }
+                },
+                "structure": {
+                    "hook": "HOOK",
+                    "hook_desc": "Reader's pain (cost, deadline, bureaucracy)",
+                    "bridge": "BRIDGE",
+                    "bridge_desc": "There's another way now",
+                    "proof": "PROOF",
+                    "proof_desc": "10-year track record, clients, results",
+                    "offer": "OFFER",
+                    "offer_desc": "What changes (timeline, cost, process)",
+                    "cta": "CTA",
+                    "cta_desc": "Clear next step"
+                }
+            },
+            "guardian": {
+                "function": "Ensure brand consistency",
+                "checklist": {
+                    "c1": "AI as means, not main differentiator",
+                    "c2": "Mentions agency experience/track record",
+                    "c3": "Focus on results, no hyperbole",
+                    "c4": "Confident but not arrogant tone"
+                }
+            },
+            "critic": {
+                "function": "Final quality evaluation",
+                "rubric": {
+                    "clarity": "CLARITY",
+                    "clarity_q": "Understand the offer in 5 seconds?",
+                    "credibility": "CREDIBILITY",
+                    "credibility_q": "Looks serious or startup hype?",
+                    "differentiation": "DIFFERENTIATION",
+                    "differentiation_q": "Why not the competitor?",
+                    "action": "ACTION",
+                    "action_q": "Low-friction CTA?",
+                    "tone": "TONE",
+                    "tone_q": "Sounds like the brand?"
+                }
+            }
+        },
+        "output": {
+            "title": "OUTPUT EXAMPLE",
+            "approved_output": "APPROVED OUTPUT",
+            "example": {
+                "headline": "You know how much a corporate video costs.",
+                "body1": "Weeks of pre-production. Crew day rates. Budget that needs three approvals.",
+                "bridge": "We do it differently.",
+                "body2": "With 10 years of production across multiple sectors, we created a model that delivers the same quality — in days, for a fraction of the cost. No crew on location. No bureaucracy. No budget surprises.",
+                "cta": "See how it works"
+            }
+        }
     }
 }
