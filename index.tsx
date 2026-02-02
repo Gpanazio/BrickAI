@@ -628,7 +628,7 @@ const BrickLogo = ({ className }: { className?: string }) => (
     </svg>
 );
 
-const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, onSquad, isChatView }: { onChat: () => void, onWorks: () => void, onTransmissions: () => void, onHome: () => void, onAbout: () => void, onSquad?: () => void, isChatView: boolean }) => {
+const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView }: { onChat: () => void, onWorks: () => void, onTransmissions: () => void, onHome: () => void, onAbout: () => void, isChatView: boolean }) => {
     const { t, i18n } = useTranslation();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -683,13 +683,6 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, onSquad, is
                                 {t('header.transmissions')}
                             </MagneticButton>
 
-                            {onSquad && (
-                                <MagneticButton onClick={onSquad} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
-                                    <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
-                                    {t('header.squad')}
-                                </MagneticButton>
-                            )}
-
                             {/* CTA STYLE: Subtle Blinking Underscore */}
                             <MagneticButton onClick={onChat} className="group text-xs md:text-sm font-ai text-white hover:text-[#DC2626] transition-colors duration-300">
                                 <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
@@ -721,11 +714,6 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, onSquad, is
                     <button onClick={() => handleNav(onTransmissions)} className="text-2xl font-brick text-white hover:text-[#DC2626] transition-colors w-full text-center border-b border-white/10 pb-4">
                         {t('header.transmissions')}
                     </button>
-                    {onSquad && (
-                        <button onClick={() => handleNav(onSquad)} className="text-2xl font-brick text-white hover:text-[#DC2626] transition-colors w-full text-center border-b border-white/10 pb-4">
-                            {t('header.squad')}
-                        </button>
-                    )}
                     <button onClick={() => handleNav(onChat)} className="text-2xl font-brick text-[#DC2626] hover:text-white transition-colors w-full text-center pb-4 animate-pulse">
                         {t('header.talk_to_us')} _
                     </button>
@@ -1208,7 +1196,7 @@ const WorksFilter = ({ categories, activeCategory, onSelect }: { categories: str
     );
 };
 
-const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, onAbout, onSquad }: any) => {
+const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, onAbout }: any) => {
     const { t } = useTranslation();
     const [activeCategory, setActiveCategory] = useState("ALL");
     const { works } = useContext(DataContext)!;
@@ -1243,7 +1231,7 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
 
     return (
         <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} onSquad={onSquad} isChatView={false} />
+            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
             <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
@@ -1273,11 +1261,11 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
     );
 }
 
-const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, onAbout, onSquad }: any) => {
+const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, onAbout }: any) => {
     const { t } = useTranslation();
     return (
         <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} onSquad={onSquad} isChatView={false} />
+            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
             <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_index')}
             </button>
@@ -1306,12 +1294,12 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, 
     );
 };
 
-const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectPost, onAbout, onSquad }: any) => {
+const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectPost, onAbout }: any) => {
     const { t } = useTranslation();
     const { transmissions } = useContext(DataContext)!;
     return (
         <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} onSquad={onSquad} isChatView={false} />
+            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
             <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
@@ -1585,9 +1573,9 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
 };
 
 
-const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, onAbout, onSquad, setMonolithHover, monolithHover, onAdmin }: any) => (
+const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, onAbout, setMonolithHover, monolithHover, onAdmin }: any) => (
     <React.Fragment>
-        <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} onSquad={onSquad} isChatView={false} />
+        <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
         <main>
             <Hero setMonolithHover={setMonolithHover} monolithHover={monolithHover} />
             <SelectedWorks onSelectProject={onSelectProject} />
@@ -1654,11 +1642,11 @@ const TeamMember = ({ name, role, id }: { name: string, role: string, id: string
     </div>
 );
 
-const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout, onSquad }: any) => {
+const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) => {
     const { t } = useTranslation();
     return (
         <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} onSquad={onSquad} isChatView={false} />
+            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
             <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
@@ -1768,417 +1756,6 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout, onSquad 
                             <TeamMember name="SARAH V." role={t('about.team.roles.sarah')} id="002" />
                             <TeamMember name="GABRIEL P." role={t('about.team.roles.gabriel')} id="003" />
                             <TeamMember name="MARCUS L." role={t('about.team.roles.marcus')} id="004" />
-                        </div>
-                    </section>
-                </div>
-            </main>
-            <Footer onChat={onChat} />
-        </React.Fragment>
-    );
-};
-
-// --- SQUAD PAGE (How It Works) ---
-const SquadPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout, onSquad }: any) => {
-    const { t } = useTranslation();
-
-    const agents = [
-        {
-            id: '01',
-            name: 'AUDIENCE ANALYST',
-            model: 'Gemini Flash',
-            status: 'ACTIVE',
-            function: t('squad.agents.audience.function'),
-            sources: [
-                t('squad.agents.audience.sources.pain'),
-                t('squad.agents.audience.sources.decision'),
-                t('squad.agents.audience.sources.objections'),
-                t('squad.agents.audience.sources.linkedin'),
-                t('squad.agents.audience.sources.discussions')
-            ],
-            output: t('squad.agents.audience.output')
-        },
-        {
-            id: '02',
-            name: 'TOPIC RESEARCHER',
-            model: 'Gemini Flash',
-            status: 'ACTIVE',
-            function: t('squad.agents.topic.function'),
-            sources: [
-                t('squad.agents.topic.sources.trends'),
-                t('squad.agents.topic.sources.data'),
-                t('squad.agents.topic.sources.competition')
-            ],
-            output: t('squad.agents.topic.output')
-        },
-        {
-            id: '03',
-            name: 'COPYWRITER',
-            model: 'Claude Sonnet 4',
-            status: 'ACTIVE',
-            function: t('squad.agents.copywriter.function'),
-            principles: [
-                { wrong: t('squad.agents.copywriter.principles.p1.wrong'), right: t('squad.agents.copywriter.principles.p1.right') },
-                { wrong: t('squad.agents.copywriter.principles.p2.wrong'), right: t('squad.agents.copywriter.principles.p2.right') },
-                { wrong: t('squad.agents.copywriter.principles.p3.wrong'), right: t('squad.agents.copywriter.principles.p3.right') },
-                { wrong: t('squad.agents.copywriter.principles.p4.wrong'), right: t('squad.agents.copywriter.principles.p4.right') }
-            ],
-            structure: [
-                { step: '01', name: t('squad.agents.copywriter.structure.hook'), desc: t('squad.agents.copywriter.structure.hook_desc') },
-                { step: '02', name: t('squad.agents.copywriter.structure.bridge'), desc: t('squad.agents.copywriter.structure.bridge_desc') },
-                { step: '03', name: t('squad.agents.copywriter.structure.proof'), desc: t('squad.agents.copywriter.structure.proof_desc') },
-                { step: '04', name: t('squad.agents.copywriter.structure.offer'), desc: t('squad.agents.copywriter.structure.offer_desc') },
-                { step: '05', name: t('squad.agents.copywriter.structure.cta'), desc: t('squad.agents.copywriter.structure.cta_desc') }
-            ]
-        },
-        {
-            id: '04',
-            name: 'BRAND GUARDIAN',
-            model: 'Gemini Flash',
-            status: 'ACTIVE',
-            function: t('squad.agents.guardian.function'),
-            checklist: [
-                t('squad.agents.guardian.checklist.c1'),
-                t('squad.agents.guardian.checklist.c2'),
-                t('squad.agents.guardian.checklist.c3'),
-                t('squad.agents.guardian.checklist.c4')
-            ]
-        },
-        {
-            id: '05',
-            name: 'CRITIC',
-            model: 'Claude Opus',
-            status: 'ACTIVE',
-            function: t('squad.agents.critic.function'),
-            rubric: [
-                { name: t('squad.agents.critic.rubric.clarity'), weight: 25, question: t('squad.agents.critic.rubric.clarity_q') },
-                { name: t('squad.agents.critic.rubric.credibility'), weight: 25, question: t('squad.agents.critic.rubric.credibility_q') },
-                { name: t('squad.agents.critic.rubric.differentiation'), weight: 20, question: t('squad.agents.critic.rubric.differentiation_q') },
-                { name: t('squad.agents.critic.rubric.action'), weight: 15, question: t('squad.agents.critic.rubric.action_q') },
-                { name: t('squad.agents.critic.rubric.tone'), weight: 15, question: t('squad.agents.critic.rubric.tone_q') }
-            ]
-        }
-    ];
-
-    return (
-        <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} onSquad={onSquad} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
-            </button>
-
-            <main className="pt-24 md:pt-32 min-h-screen flex flex-col bg-[#050505] relative overflow-hidden">
-                {/* ATMOSPHERE */}
-                <div className="absolute top-0 right-0 w-[60vw] h-[60vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-30"></div>
-                <div className="scanline-effect fixed inset-0 z-0 pointer-events-none opacity-20"></div>
-
-                <div className="w-full max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-
-                    {/* HERO */}
-                    <section className="mb-16 reveal mt-12 md:mt-20">
-                        <span className="text-[#DC2626] font-mono text-xs tracking-[0.2em] uppercase mb-6 block animate-fade-in-up">
-                            {t('squad.hero.label')} <span className="text-white/20 mx-2">//</span> {t('squad.hero.version')}
-                        </span>
-                        <h1 className="text-5xl md:text-7xl font-brick text-white mb-8 leading-[0.9] tracking-tight animate-fade-in-up delay-100">
-                            {t('squad.hero.title_primary')}<br />
-                            <span className="text-[#DC2626]">{t('squad.hero.title_highlight')}</span>
-                        </h1>
-                        <p className="text-[#E5E5E5] font-light text-base md:text-lg leading-relaxed max-w-2xl border-l-2 border-[#DC2626] pl-6 animate-fade-in-up delay-200">
-                            {t('squad.hero.description')}
-                        </p>
-                    </section>
-
-                    {/* PIPELINE FLOW */}
-                    <section className="mb-20 reveal">
-                        <div className="flex items-center gap-3 mb-8 border-b border-white/10 pb-4">
-                            <Database className="w-4 h-4 text-[#DC2626]" />
-                            <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('squad.pipeline.title')}</h2>
-                        </div>
-
-                        <div className="bg-[#0A0A0A] border border-white/10 p-6 md:p-8 font-mono text-xs md:text-sm">
-                            <pre className="text-[#9CA3AF] whitespace-pre-wrap leading-relaxed">
-{`BRIEFING
-    │
-    ▼
-┌─────────────────────────────────────────────────────────────┐
-│  BRIEF VALIDATOR                                            │
-│  ├─ ${t('squad.pipeline.checklist.objective')}              │
-│  ├─ ${t('squad.pipeline.checklist.audience')}               │
-│  ├─ ${t('squad.pipeline.checklist.format')}                 │
-│  └─ ${t('squad.pipeline.checklist.deadline')}               │
-└─────────────────────────────────────────────────────────────┘
-    │
-    ▼
-┌─────────────────────┐     ┌─────────────────────┐
-│  AUDIENCE ANALYST   │     │  TOPIC RESEARCHER   │
-│  `}<span className="text-[#DC2626]">Gemini Flash</span>{`       │ ══► │  `}<span className="text-[#DC2626]">Gemini Flash</span>{`       │
-│  ${t('squad.pipeline.parallel')}              │     │  ${t('squad.pipeline.parallel')}              │
-└─────────────────────┘     └─────────────────────┘
-    │                             │
-    └──────────────┬──────────────┘
-                   ▼
-┌─────────────────────────────────────────────────────────────┐
-│  COPYWRITER                              `}<span className="text-[#DC2626]">Claude Sonnet 4</span>{`    │
-│  ${t('squad.pipeline.copywriter_desc')}                     │
-└─────────────────────────────────────────────────────────────┘
-                   │
-                   ▼
-┌─────────────────────┐     ┌─────────────────────┐
-│  BRAND GUARDIAN     │ ──► │  CRITIC             │
-│  `}<span className="text-[#DC2626]">Gemini Flash</span>{`       │     │  `}<span className="text-[#DC2626]">Claude Opus</span>{`        │
-│  ${t('squad.pipeline.guardian_desc')}│     │  ${t('squad.pipeline.critic_desc')}  │
-└─────────────────────┘     └─────────────────────┘
-                   │
-                   ▼
-        ┌──────────────────┐
-        │  `}<span className="text-green-500">{t('squad.pipeline.approved')}</span>{`  │──────────────► OUTPUT
-        └──────────────────┘
-                   │
-                   │ `}<span className="text-yellow-500">{t('squad.pipeline.rejected')}</span>{`
-                   │
-                   ▼
-        ┌──────────────────┐
-        │  LOOP (max 3x)   │──────────────► COPYWRITER
-        └──────────────────┘
-                   │
-                   │ `}<span className="text-red-500">3 FAILS</span>{`
-                   ▼
-        ┌──────────────────┐
-        │  `}<span className="text-[#DC2626]">{t('squad.pipeline.human')}</span>{`   │
-        └──────────────────┘`}
-                            </pre>
-                        </div>
-                    </section>
-
-                    {/* AGENTS DETAIL */}
-                    <section className="mb-20 reveal">
-                        <div className="flex items-center gap-3 mb-8 border-b border-white/10 pb-4">
-                            <Database className="w-4 h-4 text-[#DC2626]" />
-                            <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('squad.agents_section.title')}</h2>
-                        </div>
-
-                        <div className="space-y-6">
-                            {/* AUDIENCE ANALYST */}
-                            <div className="bg-[#0A0A0A] border border-white/10 p-6 md:p-8 relative group hover:border-[#DC2626]/30 transition-colors">
-                                <div className="absolute top-0 left-0 w-1 h-full bg-[#DC2626]"></div>
-                                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
-                                    <div>
-                                        <span className="text-[#DC2626] font-mono text-xs">{agents[0].id} //</span>
-                                        <h3 className="text-xl md:text-2xl font-brick text-white">{agents[0].name}</h3>
-                                        <span className="font-mono text-xs text-[#9CA3AF]">{agents[0].function}</span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <span className="font-mono text-xs text-[#DC2626] bg-[#DC2626]/10 px-3 py-1">{agents[0].model}</span>
-                                        <span className="flex items-center gap-1 font-mono text-xs text-green-500">
-                                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                                            {agents[0].status}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 className="font-mono text-xs text-[#9CA3AF] uppercase tracking-widest mb-3">{t('squad.agents_section.sources')}</h4>
-                                    <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                                        {agents[0].sources?.map((source: string, i: number) => (
-                                            <li key={i} className="font-mono text-xs text-[#E5E5E5] flex items-start gap-2">
-                                                <span className="text-[#DC2626]">▸</span> {source}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-
-                            {/* TOPIC RESEARCHER */}
-                            <div className="bg-[#0A0A0A] border border-white/10 p-6 md:p-8 relative group hover:border-[#DC2626]/30 transition-colors">
-                                <div className="absolute top-0 left-0 w-1 h-full bg-[#DC2626]"></div>
-                                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
-                                    <div>
-                                        <span className="text-[#DC2626] font-mono text-xs">{agents[1].id} //</span>
-                                        <h3 className="text-xl md:text-2xl font-brick text-white">{agents[1].name}</h3>
-                                        <span className="font-mono text-xs text-[#9CA3AF]">{agents[1].function}</span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <span className="font-mono text-xs text-[#DC2626] bg-[#DC2626]/10 px-3 py-1">{agents[1].model}</span>
-                                        <span className="flex items-center gap-1 font-mono text-xs text-green-500">
-                                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                                            {agents[1].status}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 className="font-mono text-xs text-[#9CA3AF] uppercase tracking-widest mb-3">{t('squad.agents_section.sources')}</h4>
-                                    <ul className="space-y-2">
-                                        {agents[1].sources?.map((source: string, i: number) => (
-                                            <li key={i} className="font-mono text-xs text-[#E5E5E5] flex items-start gap-2">
-                                                <span className="text-[#DC2626]">▸</span> {source}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-
-                            {/* COPYWRITER */}
-                            <div className="bg-[#0A0A0A] border border-white/10 p-6 md:p-8 relative group hover:border-[#DC2626]/30 transition-colors">
-                                <div className="absolute top-0 left-0 w-1 h-full bg-[#DC2626]"></div>
-                                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
-                                    <div>
-                                        <span className="text-[#DC2626] font-mono text-xs">{agents[2].id} //</span>
-                                        <h3 className="text-xl md:text-2xl font-brick text-white">{agents[2].name}</h3>
-                                        <span className="font-mono text-xs text-[#9CA3AF]">{agents[2].function}</span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <span className="font-mono text-xs text-[#DC2626] bg-[#DC2626]/10 px-3 py-1">{agents[2].model}</span>
-                                        <span className="flex items-center gap-1 font-mono text-xs text-green-500">
-                                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                                            ACTIVE
-                                        </span>
-                                    </div>
-                                </div>
-
-                                {/* Principles Table */}
-                                <div className="mb-6">
-                                    <h4 className="font-mono text-xs text-[#9CA3AF] uppercase tracking-widest mb-3">{t('squad.agents_section.principles')}</h4>
-                                    <div className="grid grid-cols-2 gap-px bg-white/10">
-                                        <div className="bg-[#0A0A0A] p-3">
-                                            <span className="font-mono text-xs text-red-500 uppercase">{t('squad.agents_section.dont_write')}</span>
-                                        </div>
-                                        <div className="bg-[#0A0A0A] p-3">
-                                            <span className="font-mono text-xs text-green-500 uppercase">{t('squad.agents_section.write')}</span>
-                                        </div>
-                                        {agents[2].principles?.map((p: any, i: number) => (
-                                            <React.Fragment key={i}>
-                                                <div className="bg-[#050505] p-3 border-t border-white/5">
-                                                    <span className="font-mono text-xs text-[#9CA3AF]">{p.wrong}</span>
-                                                </div>
-                                                <div className="bg-[#050505] p-3 border-t border-white/5">
-                                                    <span className="font-mono text-xs text-white">{p.right}</span>
-                                                </div>
-                                            </React.Fragment>
-                                        ))}
-                                    </div>
-                                </div>
-
-                                {/* Structure */}
-                                <div>
-                                    <h4 className="font-mono text-xs text-[#9CA3AF] uppercase tracking-widest mb-3">{t('squad.agents_section.structure')}</h4>
-                                    <div className="space-y-2">
-                                        {agents[2].structure?.map((s: any) => (
-                                            <div key={s.step} className="flex items-start gap-3">
-                                                <span className="text-[#DC2626] font-mono text-xs">{s.step}</span>
-                                                <div>
-                                                    <span className="font-mono text-xs text-white uppercase">{s.name}</span>
-                                                    <span className="font-mono text-xs text-[#9CA3AF] ml-2">— {s.desc}</span>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* BRAND GUARDIAN */}
-                            <div className="bg-[#0A0A0A] border border-white/10 p-6 md:p-8 relative group hover:border-[#DC2626]/30 transition-colors">
-                                <div className="absolute top-0 left-0 w-1 h-full bg-[#DC2626]"></div>
-                                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
-                                    <div>
-                                        <span className="text-[#DC2626] font-mono text-xs">{agents[3].id} //</span>
-                                        <h3 className="text-xl md:text-2xl font-brick text-white">{agents[3].name}</h3>
-                                        <span className="font-mono text-xs text-[#9CA3AF]">{agents[3].function}</span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <span className="font-mono text-xs text-[#DC2626] bg-[#DC2626]/10 px-3 py-1">{agents[3].model}</span>
-                                        <span className="flex items-center gap-1 font-mono text-xs text-green-500">
-                                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                                            ACTIVE
-                                        </span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 className="font-mono text-xs text-[#9CA3AF] uppercase tracking-widest mb-3">{t('squad.agents_section.checklist')}</h4>
-                                    <ul className="space-y-2">
-                                        {agents[3].checklist?.map((item: string, i: number) => (
-                                            <li key={i} className="font-mono text-xs text-[#E5E5E5] flex items-start gap-2">
-                                                <span className="text-green-500">✓</span> {item}
-                                            </li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            </div>
-
-                            {/* CRITIC */}
-                            <div className="bg-[#0A0A0A] border border-white/10 p-6 md:p-8 relative group hover:border-[#DC2626]/30 transition-colors">
-                                <div className="absolute top-0 left-0 w-1 h-full bg-[#DC2626]"></div>
-                                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
-                                    <div>
-                                        <span className="text-[#DC2626] font-mono text-xs">{agents[4].id} //</span>
-                                        <h3 className="text-xl md:text-2xl font-brick text-white">{agents[4].name}</h3>
-                                        <span className="font-mono text-xs text-[#9CA3AF]">{agents[4].function}</span>
-                                    </div>
-                                    <div className="flex items-center gap-3">
-                                        <span className="font-mono text-xs text-[#DC2626] bg-[#DC2626]/10 px-3 py-1">{agents[4].model}</span>
-                                        <span className="flex items-center gap-1 font-mono text-xs text-green-500">
-                                            <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                                            ACTIVE
-                                        </span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <h4 className="font-mono text-xs text-[#9CA3AF] uppercase tracking-widest mb-3">{t('squad.agents_section.rubric')}</h4>
-                                    <div className="space-y-3">
-                                        {agents[4].rubric?.map((r: any, i: number) => (
-                                            <div key={i} className="flex items-center gap-4">
-                                                <div className="w-24 flex-shrink-0">
-                                                    <span className="font-mono text-xs text-white">{r.name}</span>
-                                                </div>
-                                                <div className="flex-1 bg-[#1a1a1a] h-2 rounded-full overflow-hidden">
-                                                    <div className="h-full bg-[#DC2626]" style={{ width: `${r.weight}%` }}></div>
-                                                </div>
-                                                <span className="font-mono text-xs text-[#DC2626] w-12 text-right">{r.weight}%</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                    <div className="mt-6 pt-4 border-t border-white/10">
-                                        <div className="flex items-center gap-4">
-                                            <span className="font-mono text-xs text-[#9CA3AF]">{t('squad.agents_section.threshold')}</span>
-                                            <span className="font-mono text-sm text-green-500">≥ 80%</span>
-                                            <span className="font-mono text-xs text-green-500">{t('squad.agents_section.approved')}</span>
-                                            <span className="text-white/20">|</span>
-                                            <span className="font-mono text-sm text-red-500">&lt; 80%</span>
-                                            <span className="font-mono text-xs text-red-500">{t('squad.agents_section.rejected')}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    {/* OUTPUT EXAMPLE */}
-                    <section className="pb-32 reveal">
-                        <div className="flex items-center gap-3 mb-8 border-b border-white/10 pb-4">
-                            <Database className="w-4 h-4 text-[#DC2626]" />
-                            <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('squad.output.title')}</h2>
-                        </div>
-
-                        <div className="bg-[#0A0A0A] border border-white/10 p-8 md:p-12 relative">
-                            <div className="absolute top-4 right-4 flex items-center gap-2">
-                                <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                                <span className="font-mono text-xs text-green-500">{t('squad.output.approved_output')}</span>
-                            </div>
-
-                            <div className="max-w-2xl">
-                                <p className="text-2xl md:text-3xl font-brick text-white mb-6 leading-tight">
-                                    {t('squad.output.example.headline')}
-                                </p>
-                                <p className="text-[#9CA3AF] font-light mb-6 leading-relaxed">
-                                    {t('squad.output.example.body1')}
-                                </p>
-                                <p className="text-xl font-brick text-[#DC2626] mb-4">
-                                    {t('squad.output.example.bridge')}
-                                </p>
-                                <p className="text-[#E5E5E5] font-light mb-8 leading-relaxed">
-                                    {t('squad.output.example.body2')}
-                                </p>
-                                <button className="bg-[#DC2626] text-white font-mono text-sm px-6 py-3 hover:bg-red-700 transition-colors">
-                                    {t('squad.output.example.cta')}
-                                </button>
-                            </div>
                         </div>
                     </section>
                 </div>
@@ -2839,7 +2416,7 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
     return null;
 };
 
-const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedProject, setSelectedProject, selectedPost, setSelectedPost, goHome, goWorks, goTransmissions, goChat, goAdmin, goAbout, goSquad, handleSelectPost }: any) => {
+const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedProject, setSelectedProject, selectedPost, setSelectedPost, goHome, goWorks, goTransmissions, goChat, goAdmin, goAbout, handleSelectPost }: any) => {
     const { transmissions } = useContext(DataContext)!;
 
     useEffect(() => {
@@ -2862,26 +2439,23 @@ const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedPr
                 <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
             )}
             {view === 'home' && (
-                <HomePage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} onAdmin={goAdmin} onAbout={goAbout} onSquad={goSquad} />
+                <HomePage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} onAdmin={goAdmin} onAbout={goAbout} />
             )}
             {view === 'about' && (
-                <AboutPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} onSquad={goSquad} />
+                <AboutPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} />
             )}
             {view === 'works' && (
-                <WorksPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} onAbout={goAbout} onSquad={goSquad} />
+                <WorksPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} onAbout={goAbout} />
             )}
             {view === 'transmissions' && (
-                <TransmissionsPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectPost={handleSelectPost} onAbout={goAbout} onSquad={goSquad} />
+                <TransmissionsPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectPost={handleSelectPost} onAbout={goAbout} />
             )}
             {view === 'post' && selectedPost && (
-                <BlogPostPage post={selectedPost} onBack={goTransmissions} onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} onSquad={goSquad} />
-            )}
-            {view === 'squad' && (
-                <SquadPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} onSquad={goSquad} />
+                <BlogPostPage post={selectedPost} onBack={goTransmissions} onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} />
             )}
             {view === 'chat' && (
                 <React.Fragment>
-                    <Header onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} onSquad={goSquad} isChatView={false} />
+                    <Header onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} isChatView={false} />
                     <SystemChat onBack={goHome} />
                 </React.Fragment>
             )}
@@ -2922,7 +2496,6 @@ const App = () => {
     const goHome = () => { navigate('home'); setSelectedPost(null); };
     const goWorks = () => { navigate('works'); setSelectedPost(null); };
     const goTransmissions = () => { navigate('transmissions'); setSelectedPost(null); };
-    const goSquad = () => { navigate('squad'); setSelectedPost(null); };
     const goChat = () => { navigate('chat'); setSelectedPost(null); };
     const goAdmin = () => { navigate('admin'); setSelectedPost(null); };
     const goAbout = () => { navigate('about'); setSelectedPost(null); };
@@ -2936,7 +2509,7 @@ const App = () => {
 
     return (
         <DataProvider>
-            <AppContent view={view} setView={setView} monolithHover={monolithHover} setMonolithHover={setMonolithHover} selectedProject={selectedProject} setSelectedProject={setSelectedProject} selectedPost={selectedPost} setSelectedPost={setSelectedPost} goHome={goHome} goWorks={goWorks} goTransmissions={goTransmissions} goChat={goChat} goAdmin={goAdmin} goAbout={goAbout} goSquad={goSquad} handleSelectPost={handleSelectPost} />
+            <AppContent view={view} setView={setView} monolithHover={monolithHover} setMonolithHover={setMonolithHover} selectedProject={selectedProject} setSelectedProject={setSelectedProject} selectedPost={selectedPost} setSelectedPost={setSelectedPost} goHome={goHome} goWorks={goWorks} goTransmissions={goTransmissions} goChat={goChat} goAdmin={goAdmin} goAbout={goAbout} handleSelectPost={handleSelectPost} />
         </DataProvider>
     );
 };
