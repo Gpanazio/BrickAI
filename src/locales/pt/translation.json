@@ -4,7 +4,6 @@
         "about": "SOBRE",
         "works": "TRABALHOS",
         "transmissions": "TRANSMISSÕES",
-        "squad": "SQUAD",
         "talk_to_us": "FALE CONOSCO"
     },
     "hero": {
@@ -168,165 +167,49 @@
                 "gabriel": "HEAD DE TECNOLOGIA",
                 "marcus": "SUPERVISOR DE VFX"
             }
-        },
-        "chat": {
-            "reach_humans": "REACH_HUMANS",
-            "manual_override": "MANUAL OVERRIDE PROTOCOLS",
-            "status_online": "STATUS: ONLINE",
-            "email_streams": "EMAIL_STREAMS",
-            "voice_link": "VOICE_LINK",
-            "network_nodes": "NETWORK_NODES",
-            "mason_intro": "EU SOU MASON",
-            "generative_core": "O Núcleo Generativo.",
-            "state": "State:",
-            "active": "ACTIVE",
-            "idle": "IDLE",
-            "placeholder": "Transmita sua mensagem...",
-            "execute": "EXECUTE",
-            "initial_messages": {
-                "online": "Olá. Eu sou MASON. Estou aqui para direcionar sua transmissão.",
-                "protocol": "Como posso ajudar?"
-            },
-            "suggestions": {
-                "philosophy": "Quanto custa um projeto?",
-                "audit": "Quero ver mais exemplos",
-                "synthesis": "Qual o prazo médio?",
-                "humans": "Falar com a equipe"
-            }
-        },
-        "works_page": {
-            "title": "PROJECT_DATABASE // Trabalhos Selecionados",
-            "archive_index": "ARCHIVE_INDEX",
-            "accessing": "ACCESSING NEURAL DATABASE...",
-            "entries_found": "ENTRADAS ENCONTRADAS.",
-            "no_data": "NENHUM DADO ENCONTRADO NESTE SETOR.",
-            "protocols": "PROTOCOLOS"
-        },
-        "transmissions_page": {
-            "title": "NEURAL_LOGS",
-            "incoming": "FLUXOS DE DADOS RECEBIDOS...",
-            "records": "REGISTROS."
-        },
-        "project_modal": {
-            "neural_active": "NEURAL_RENDER_ACTIVE",
-            "static_preview": "STATIC_PREVIEW",
-            "system_data": "Dados do Sistema"
-        },
-        "squad": {
-            "hero": {
-                "label": "ARQUITETURA",
-                "version": "v2.0",
-                "title_primary": "COMO",
-                "title_highlight": "FUNCIONA.",
-                "description": "Não somos uma ferramenta de IA. Somos uma produtora com 10 anos de experiência que usa IA como recurso. Aqui você entende como nosso sistema de agentes trabalha para entregar conteúdo de qualidade."
-            },
-            "pipeline": {
-                "title": "FLUXO DE PRODUÇÃO",
-                "checklist": {
-                    "objective": "Objetivo claro?",
-                    "audience": "Público definido?",
-                    "format": "Formato especificado?",
-                    "deadline": "Prazo/contexto?"
-                },
-                "parallel": "PARALELO",
-                "copywriter_desc": "Criação de conteúdo",
-                "guardian_desc": "Consistência",
-                "critic_desc": "Qualidade",
-                "approved": "APROVADO?",
-                "rejected": "REPROVADO",
-                "human": "ESCALA HUMANO"
-            },
-            "agents_section": {
-                "title": "AGENTES DETALHADOS",
-                "sources": "FONTES DE PESQUISA",
-                "principles": "PRINCÍPIOS NARRATIVOS",
-                "dont_write": "NÃO ESCREVER",
-                "write": "ESCREVER",
-                "structure": "ESTRUTURA DE ARGUMENTAÇÃO",
-                "checklist": "CHECKLIST DE CONSISTÊNCIA",
-                "rubric": "RUBRICA DE AVALIAÇÃO",
-                "threshold": "Threshold:",
-                "approved": "APROVADO",
-                "rejected": "REPROVA"
-            },
-            "agents": {
-                "audience": {
-                    "function": "Entender o comprador de vídeo corporativo",
-                    "sources": {
-                        "pain": "Dores: prazo, custo, frustração com briefing",
-                        "decision": "Processo de decisão: como escolhem produtoras",
-                        "objections": "Objeções sobre IA: artificial, profissional?",
-                        "linkedin": "LinkedIn: experiências reais de contratação",
-                        "discussions": "Reddit/Comunidades: feedback direto"
-                    },
-                    "output": "Personas, dores, objeções, linguagem"
-                },
-                "topic": {
-                    "function": "Inteligência de mercado e credibilidade",
-                    "sources": {
-                        "trends": "Tendências: vídeo B2B, personalização, volume",
-                        "data": "Dados: ROI, conversão, engajamento",
-                        "competition": "Concorrência: prazos, tickets, argumentos"
-                    },
-                    "output": "JSON estruturado com dados verificáveis"
-                },
-                "copywriter": {
-                    "function": "Criação de conteúdo com tom Brick",
-                    "principles": {
-                        "p1": { "wrong": "Usamos IA de ponta", "right": "Entregamos em dias, não semanas" },
-                        "p2": { "wrong": "Tecnologia revolucionária", "right": "A mesma qualidade. Novo modelo." },
-                        "p3": { "wrong": "Vídeos gerados por IA", "right": "Produção profissional sob demanda" },
-                        "p4": { "wrong": "Ferramenta inovadora", "right": "10 anos de narrativa. Agora mais ágil." }
-                    },
-                    "structure": {
-                        "hook": "GANCHO",
-                        "hook_desc": "Dor do leitor (custo, prazo, burocracia)",
-                        "bridge": "PONTE",
-                        "bridge_desc": "Existe outro jeito agora",
-                        "proof": "PROVA",
-                        "proof_desc": "Trajetória de 10 anos, clientes, resultados",
-                        "offer": "OFERTA",
-                        "offer_desc": "O que muda (prazo, custo, processo)",
-                        "cta": "CTA",
-                        "cta_desc": "Próximo passo claro"
-                    }
-                },
-                "guardian": {
-                    "function": "Garantir consistência de marca",
-                    "checklist": {
-                        "c1": "IA como meio, não como diferencial principal",
-                        "c2": "Menciona experiência/trajetória da produtora",
-                        "c3": "Foco em resultado, sem hipérboles",
-                        "c4": "Tom confiante mas não arrogante"
-                    }
-                },
-                "critic": {
-                    "function": "Avaliação final de qualidade",
-                    "rubric": {
-                        "clarity": "CLAREZA",
-                        "clarity_q": "Entende a oferta em 5 segundos?",
-                        "credibility": "CREDIBILIDADE",
-                        "credibility_q": "Parece séria ou startup hype?",
-                        "differentiation": "DIFERENCIAÇÃO",
-                        "differentiation_q": "Por que não o concorrente?",
-                        "action": "AÇÃO",
-                        "action_q": "CTA de baixa fricção?",
-                        "tone": "TOM",
-                        "tone_q": "Soa como a marca?"
-                    }
-                }
-            },
-            "output": {
-                "title": "EXEMPLO DE OUTPUT",
-                "approved_output": "OUTPUT APROVADO",
-                "example": {
-                    "headline": "Você sabe quanto custa um vídeo institucional.",
-                    "body1": "Semanas de pré-produção. Diárias de equipe. Orçamento que precisa de três aprovações.",
-                    "bridge": "A gente faz diferente.",
-                    "body2": "Com 10 anos de produção para diversos setores, criamos um modelo que entrega a mesma qualidade — em dias, por uma fração do custo. Sem equipe em campo. Sem burocracia. Sem surpresa no orçamento.",
-                    "cta": "Quero ver como funciona"
-                }
-            }
         }
+    },
+    "chat": {
+        "reach_humans": "REACH_HUMANS",
+        "manual_override": "MANUAL OVERRIDE PROTOCOLS",
+        "status_online": "STATUS: ONLINE",
+        "email_streams": "EMAIL_STREAMS",
+        "voice_link": "VOICE_LINK",
+        "network_nodes": "NETWORK_NODES",
+        "mason_intro": "EU SOU MASON",
+        "generative_core": "O Núcleo Generativo.",
+        "state": "State:",
+        "active": "ACTIVE",
+        "idle": "IDLE",
+        "placeholder": "Transmita sua mensagem...",
+        "execute": "EXECUTE",
+        "initial_messages": {
+            "online": "Olá. Eu sou MASON. Estou aqui para direcionar sua transmissão.",
+            "protocol": "Como posso ajudar?"
+        },
+        "suggestions": {
+            "philosophy": "Quanto custa um projeto?",
+            "audit": "Quero ver mais exemplos",
+            "synthesis": "Qual o prazo médio?",
+            "humans": "Falar com a equipe"
+        }
+    },
+    "works_page": {
+        "title": "PROJECT_DATABASE // Trabalhos Selecionados",
+        "archive_index": "ARCHIVE_INDEX",
+        "accessing": "ACCESSING NEURAL DATABASE...",
+        "entries_found": "ENTRADAS ENCONTRADAS.",
+        "no_data": "NENHUM DADO ENCONTRADO NESTE SETOR.",
+        "protocols": "PROTOCOLOS"
+    },
+    "transmissions_page": {
+        "title": "NEURAL_LOGS",
+        "incoming": "FLUXOS DE DADOS RECEBIDOS...",
+        "records": "REGISTROS."
+    },
+    "project_modal": {
+        "neural_active": "NEURAL_RENDER_ACTIVE",
+        "static_preview": "STATIC_PREVIEW",
+        "system_data": "Dados do Sistema"
     }
 }
