@@ -902,10 +902,8 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 flexGrow: isHovered ? 1.6 : 1,
                 flexShrink: 0,
                 flexBasis: 0,
-                willChange: 'flex-grow',
-                transition: isHovered
-                    ? 'flex-grow 6s linear'
-                    : 'flex-grow 2s linear',
+                willChange: 'flex-grow, opacity, transform',
+                transition: `flex-grow ${isHovered ? '6s' : '2s'} linear, opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 300ms ease`,
             }}
         >
             {/* BACKGROUND LAYER - AUTONOMOUS PARALLAX */}
@@ -913,16 +911,17 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 className={`absolute inset-0 z-10 animate-float-parallax`}
                 style={{
                     animationDelay: `${index * -4}s`,
+                    willChange: 'transform',
                 }}
             >
                 <div
                     ref={bgRef}
-                    className="absolute inset-0 opacity-100 sharp-image filter saturate-[0.8] group-hover:saturate-100 contrast-[1.05] brightness-[1.0] group-hover:brightness-[1.1] transition-all duration-[6000ms] ease-linear"
+                    className="absolute inset-0 opacity-100 sharp-image filter saturate-[0.8] group-hover:saturate-100 contrast-[1.05] brightness-[1.0] group-hover:brightness-[1.1] transition-[filter] duration-[3000ms] ease-out"
                     style={{
                         backgroundImage: `url('${work.imageHome}')`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center center',
-                        transform: `scale(${settings.scale}) translate(${(settings.x - 50) * 2}%, ${(settings.y - 50) * 2}%)`
+                        transform: `scale(${settings.scale}) translate(${(settings.x - 50) * 2}%, ${(settings.y - 50) * 2}%) translateZ(0)`,
                     }}
                 ></div>
             </div>
