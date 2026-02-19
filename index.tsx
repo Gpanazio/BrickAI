@@ -946,7 +946,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 
                 {/* MAIN TITLE (Always Visible - High Contrast) */}
                 <h3
-                    className="text-4xl md:text-6xl lg:text-7xl font-brick text-white uppercase tracking-tighter leading-[0.85] mb-6 whitespace-normal transition-all duration-500 select-none"
+                    className="text-[2.7rem] md:text-7xl lg:text-[5.4rem] font-brick text-white uppercase tracking-tighter leading-[0.85] mb-6 whitespace-normal transition-all duration-500 select-none"
                     style={{ textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 4px 12px rgba(0,0,0,0.7), 0 8px 30px rgba(0,0,0,0.5)' }}
                 >
                     {work.title}
@@ -2138,7 +2138,7 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                                                     <div className="absolute inset-0 opacity-90" style={{ background: 'linear-gradient(to top, #050505 0%, #050505e6 15%, #05050599 40%, transparent 70%)' }} />
                                                     <div className="absolute bottom-4 left-4 right-4 z-10">
                                                         <h4
-                                                            className="text-3xl font-brick text-white uppercase tracking-tighter leading-none"
+                                                            className="text-4xl font-brick text-white uppercase tracking-tighter leading-none"
                                                             style={{ textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 4px 12px rgba(0,0,0,0.7), 0 8px 30px rgba(0,0,0,0.5)' }}
                                                         >
                                                             {editingItem.title || 'PROJECT TITLE'}
