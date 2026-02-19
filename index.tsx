@@ -158,14 +158,12 @@ const GlobalStyles = () => (
         .reveal.active { opacity: 1; transform: translateY(0); }
 
         @keyframes float-parallax {
-            0% { transform: scale(1.15) translate(0%, 0%); }
-            33% { transform: scale(1.15) translate(-3%, 2%); }
-            66% { transform: scale(1.15) translate(2%, -3%); }
-            100% { transform: scale(1.15) translate(0%, 0%); }
+            from { transform: scale(1.15) translate(-2%, 1.5%); }
+            to { transform: scale(1.15) translate(2%, -1.5%); }
         }
 
         .animate-float-parallax {
-            animation: float-parallax 20s ease-in-out infinite;
+            animation: float-parallax 10s ease-in-out infinite alternate;
         }
     `}</style>
 );
