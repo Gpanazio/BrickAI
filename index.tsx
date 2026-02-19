@@ -929,11 +929,11 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             <div className="absolute inset-0 bg-tech-grid opacity-10 z-20 pointer-events-none group-hover:opacity-30 transition-opacity duration-[6000ms] ease-linear"></div>
 
             {/* VIGNETTE & GRADIENT */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent z-30 opacity-60 group-hover:opacity-40 transition-opacity duration-[6000ms] ease-linear"></div>
+            <div className="absolute inset-0 z-30 transition-opacity duration-[6000ms] ease-linear opacity-90 group-hover:opacity-80" style={{ background: 'linear-gradient(to top, #050505 0%, #050505e6 15%, #05050599 40%, transparent 70%)' }}></div>
             <div className={`absolute inset-0 z-30 transition-opacity duration-[6000ms] ease-linear pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.8)] ${isHovered ? 'opacity-40' : 'opacity-60'}`}></div>
 
             {/* CONTENT LAYER - VERTICAL TITLE ON IDLE */}
-            <div className="absolute inset-0 z-40 p-6 md:p-10 lg:p-14 flex flex-col justify-end pointer-events-none">
+            <div className="absolute inset-x-0 bottom-0 z-40 p-6 md:p-10 lg:p-14 flex flex-col justify-end pointer-events-none">
                 {/* HEADER TAGS (Reveal on Hover) */}
                 <div className={`flex items-center gap-4 mb-4 transform transition-all duration-500 ease-out ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 h-0 overflow-hidden'}`}>
                     <span className="font-mono text-[10px] text-[#DC2626] tracking-widest bg-[#DC2626]/10 px-3 py-1 border border-[#DC2626]/20">{work.id.toUpperCase()}</span>
@@ -945,7 +945,10 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 </div>
 
                 {/* MAIN TITLE (Always Visible - High Contrast) */}
-                <h3 className="text-4xl md:text-6xl lg:text-7xl font-brick text-white uppercase tracking-tighter leading-[0.85] mb-6 whitespace-normal filter drop-shadow-[0_5px_15px_rgba(0,0,0,0.8)] transition-all duration-500 select-none">
+                <h3
+                    className="text-4xl md:text-6xl lg:text-7xl font-brick text-white uppercase tracking-tighter leading-[0.85] mb-6 whitespace-normal transition-all duration-500 select-none"
+                    style={{ textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 4px 12px rgba(0,0,0,0.7), 0 8px 30px rgba(0,0,0,0.5)' }}
+                >
                     {work.title}
                 </h3>
 
