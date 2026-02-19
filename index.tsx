@@ -902,7 +902,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 flexGrow: isHovered ? 1.6 : 1,
                 flexShrink: 0,
                 flexBasis: 0,
-                willChange: 'flex-grow, opacity, transform',
+                willChange: 'flex-grow, opacity, transform, border-color',
                 transition: `flex-grow ${isHovered ? '6s' : '2s'} linear, opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 300ms ease`,
             }}
         >
