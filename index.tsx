@@ -158,14 +158,12 @@ const GlobalStyles = () => (
         .reveal.active { opacity: 1; transform: translateY(0); }
 
         @keyframes float-parallax {
-            0% { transform: scale(1.15) translate(0%, 0%); }
-            33% { transform: scale(1.15) translate(-3%, 2%); }
-            66% { transform: scale(1.15) translate(2%, -3%); }
-            100% { transform: scale(1.15) translate(0%, 0%); }
+            from { transform: scale(1.15) translate(-2%, 1.5%); }
+            to { transform: scale(1.15) translate(2%, -1.5%); }
         }
 
         .animate-float-parallax {
-            animation: float-parallax 20s ease-in-out infinite;
+            animation: float-parallax 10s ease-in-out infinite alternate;
         }
     `}</style>
 );
@@ -902,7 +900,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 flexGrow: isHovered ? 1.6 : 1,
                 flexShrink: 0,
                 flexBasis: 0,
-                willChange: 'flex-grow, opacity, transform',
+                willChange: 'flex-grow, opacity, transform, border-color',
                 transition: `flex-grow ${isHovered ? '6s' : '2s'} linear, opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 300ms ease`,
             }}
         >
