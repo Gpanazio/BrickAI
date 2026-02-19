@@ -2135,9 +2135,12 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                                                             transform: `scale(${editingItem.imageSettingsHome?.scale || 1.2}) translate(${((editingItem.imageSettingsHome?.x || 50) - 50) * 2}%, ${((editingItem.imageSettingsHome?.y || 50) - 50) * 2}%)`
                                                         }}
                                                     />
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent opacity-60" />
+                                                    <div className="absolute inset-0 opacity-90" style={{ background: 'linear-gradient(to top, #050505 0%, #050505e6 15%, #05050599 40%, transparent 70%)' }} />
                                                     <div className="absolute bottom-4 left-4 right-4 z-10">
-                                                        <h4 className="text-3xl font-brick text-white uppercase tracking-tighter leading-none filter drop-shadow-[0_2px_5px_rgba(0,0,0,0.8)]">
+                                                        <h4
+                                                            className="text-3xl font-brick text-white uppercase tracking-tighter leading-none"
+                                                            style={{ textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 4px 12px rgba(0,0,0,0.7), 0 8px 30px rgba(0,0,0,0.5)' }}
+                                                        >
                                                             {editingItem.title || 'PROJECT TITLE'}
                                                         </h4>
                                                     </div>
