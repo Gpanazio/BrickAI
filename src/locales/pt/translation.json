@@ -12,48 +12,85 @@
         "scramble": "UM NOVO CORPO",
         "description": "UMA NOVA DIVISÃO DA BRICK.\nDO ZERO AO TUDO DESDE 2016"
     },
-    "about": {
-        "origin": "DNA_ORIGIN",
-        "est": "EST_2016",
-        "title_primary": "VISÃO DE",
-        "title_highlight": "CINEMA",
-        "title_secondary": "EXECUÇÃO NEURAL",
-        "description": "Nossa visão não veio do ChatGPT. Ela é o resultado de anos de set, direção e execução no mundo real. Muito antes do primeiro prompt, nossa trajetória já era pautada pela produção visual de alta complexidade. Entendemos narrativa e estética porque o nosso olhar foi refinado no dia a dia do set e no rigor técnico da pós-produção clássica. Para nós, a tecnologia não é um atalho para o medíocre, mas um multiplicador de potência: o critério artístico continua sendo puramente humano, mas agora a execução final alcança o que a nossa imaginação sempre buscou.",
-        "core_modules": "CORE_SYSTEMS",
-        "modules": {
-            "cinematography": {
-                "title": "01. CONCEPÇÃO ARTÍSTICA",
-                "status": "CALIBRADO",
-                "desc": "A IA alucina imagens; nós projetamos intenção. O filme é concebido no repertório, onde cada frame serve à narrativa. A tecnologia é o pincel, mas o comando é puramente autoral."
-            },
-            "training": {
-                "title": "02. DIREÇÃO VISUAL",
-                "status": "ONLINE",
-                "desc": "O fim do amadorismo generativo. Aplicamos o rigor da luz cinematográfica e a precisão da lente para garantir que a estética não seja um acidente, mas uma assinatura inegociável."
-            },
-            "architecture": {
-                "title": "03. EXECUÇÃO INTEGRAL",
-                "status": "ESTÁVEL",
-                "desc": "Não entregamos arquivos gerados; entregamos obras finalizadas. Unimos a potência neural com o acabamento de elite de quem domina o set há uma década. O resultado é o impossível materializado."
-            }
+    "philosophy": {
+        "belief_label": "A Crença",
+        "raw": {
+            "title": "BRUTO",
+            "text": "A IA cria pixels e padrões infinitos. Mas não consegue criar intenção. É apenas um recurso"
         },
-        "manifesto": {
-            "title": "ANTI-SLOP PROTOCOL",
-            "subtitle": "SYSTEM_DIRECTIVES",
-            "cards": {
-                "control": {
-                    "title": "01. CONTROLE > ACASO",
-                    "desc": "O “prompt perfeito” é um mito. Consistência vem de quem dirige o processo, não da sorte de uma linha de texto. Para nós, tecnologia só faz sentido quando é submetida ao rigor do olhar artístico. Onde o mercado vê automação, nós exercemos domínio total sobre a imagem."
-                },
-                "curation": {
-                    "title": "02. QUALIDADE > VOLUME",
-                    "desc": "Não estamos aqui para produzir volume descartável. Usamos a potência da máquina como motor de busca pela imagem certa. A tecnologia amplia a capacidade, mas é o repertório que define o que merece chegar à tela."
-                },
-                "black_box": {
-                    "title": "03. ARTE = VIRTUOSISMO",
-                    "desc": "O que nos separa é dominar as duas pontas: olhar de set e controle técnico da nova geração. Não testamos ferramenta por curiosidade; fundimos estética e potência para entregar o que o mercado não consegue replicar. A tecnologia obedece à arte."
-                }
-            }
+        "noise": {
+            "title": "RUÍDO",
+            "text": "Sem uma mão humana, modelos generativos são apenas coincidência matemática. Nós fornecemos a visão"
+        },
+        "direct": {
+            "title": "NÓS DIRIGIMOS A INTELIGÊNCIA",
+            "text": "A máquina é o pincel. O banco de dados é a tinta. Nós continuamos sendo os artistas"
+        }
+    },
+    "works": {
+        "inheritance": {
+            "title": "INHERITANCE",
+            "subtitle": "CURTA-METRAGEM",
+            "desc": "Seleção oficial Festival de Gramado 2025",
+            "longDesc": "Um dos primeiros filmes feitos com IA a ser selecionado e exibido no Festival de Gramado. Inheritance conta a história de uma civilização que herda um mundo abandonado — e repete, passo a passo, todos os erros de seus antecessores. Uma fábula sobre ciclos, hubris e a ilusão do progresso. A versão de 5 minutos estreou em Gramado; uma versão estendida de 10 minutos permanece inédita"
+        },
+        "shift": {
+            "title": "VENDEMOS QUALQUER COISA",
+            "subtitle": "MANIFESTO",
+            "desc": "Finalista Genero Challenge",
+            "longDesc": "Um único personagem. Infinitos mundos. Neste manifesto, o mesmo homem aparece em um estúdio de moda, lidera uma banda marcial em um estádio lotado, passeia por palácios europeus, relaxa em uma sala tipicamente americana e enfrenta lutadores de sumô — tudo em 60 segundos. A mensagem é simples: não existem mais limites de produção. Qualquer cenário, qualquer contexto, qualquer história. Finalista no Genero Challenge"
+        },
+        "anima": {
+            "title": "AUTOBOL",
+            "subtitle": "HISTÓRIA REIMAGINADA",
+            "desc": "Resgatando um esporte esquecido dos anos 70",
+            "longDesc": "Autobol existiu de verdade. Nos anos 1970, no Rio de Janeiro, carros empurravam uma bola gigante em partidas entre Flamengo, Fluminense, Vasco e Botafogo. Criado pelo médico Mário Marques Tourinho, o esporte foi um fenômeno breve e hoje quase esquecido. Este projeto reimagina o Autobol como ele poderia ter sido filmado na época — com toda a textura, o grain e a atmosfera de uma transmissão perdida dos anos 70"
+        },
+        "void": {
+            "title": "VOID GAZING",
+            "subtitle": "DATA VISUALIZATION",
+            "desc": "Traduzindo radiação cósmica em espectros visíveis",
+            "longDesc": "Uma instalação baseada em dados que visualiza radiação cósmica em tempo real via NASA Open API. Escrevemos scripts Python para converter ruído numérico em parâmetros de dinâmica de fluidos no TouchDesigner. A IA então texturiza essa simulação em tempo real, permitindo efetivamente que o público 'veja' o universo invisível através de uma lente estética curada por humanos"
+        },
+        "urban": {
+            "title": "URBAN REEF",
+            "subtitle": "PROCEDURAL ENV",
+            "desc": "Cultivando cidades como corais. Algoritmos biológicos aplicados",
+            "longDesc": "Urban Reef explora a biomimética na arquitetura. Usando algoritmos de crescimento diferencial no Houdini, 'cultivamos' estruturas de cidade que buscam luz como corais. Essas malhas procedurais foram então texturizadas usando upscaling de IA, criando uma visão de uma cidade que parece cultivada em vez de construída, desafiando processos de design arquitetônico tradicionais"
+        },
+        "factory": {
+            "title": "FACTORY",
+            "subtitle": "RETRO-FUTURISMO",
+            "desc": "Decadência industrial com visão retro-futurista",
+            "longDesc": "Uma fábrica que nunca existiu, mas que parece lembrada. Factory combina decadência industrial com uma estética retro-futurista — como se um futuro imaginado nos anos 70 tivesse envelhecido e sido abandonado. Ferrugem, concreto, maquinário silencioso. Um espaço entre a nostalgia de um passado e a ruína de um futuro que não veio"
+        },
+        "dogday": {
+            "title": "DOG DAY AFTERNOON",
+            "subtitle": "COMÉDIA ABSURDA",
+            "desc": "Cachorros em situações humanas",
+            "longDesc": "Um grupo de apoio canino com a faixa 'SIT STAY HEAL'. Um chihuahua de suéter participando de uma call de Zoom. Dog Day Afternoon é comédia absurda levada a sério — cachorros em situações cotidianas humanas, filmados com a sobriedade de um drama independente. O título é uma referência ao clássico de Sidney Lumet com Al Pacino"
+        }
+    },
+    "transmissions": {
+        "log_001": {
+            "title": "A MÁQUINA NÃO TEM ALMA. NÓS TEMOS.",
+            "excerpt": "Tecnologia sem intenção artística é ruído caro. A arte conduz. A máquina executa.",
+            "content_p1": "O bando de bytes que sustenta a inteligência artificial não sabe o que é uma narrativa que dói, nem por que um enquadramento torto às vezes é o que salva uma cena. Eles não sentem a estética. Só processam estatística.\n\nMas a Brick respira isso há décadas. Como criadores, sabemos que tecnologia sem intenção artística é apenas ruído caro. Somos artistas que decidiram dominar o caos tecnológico.\n\nO que entregamos não é um processo automatizado. É execução autoral potencializada ao extremo. Enquanto o mercado se perde em prompts fáceis, utilizamos a IA como um pincel cirúrgico para materializar conceitos que até ontem ficariam presos no orçamento ou na limitação física.\n\nA alma da cena, o mood que prende o espectador e a decupagem que faz sentido são humanos, são nossos. A máquina é apenas a ferramenta que nos permite entregar a visão do cliente com uma força visual que ninguém mais alcança.\n\nEssa distinção não nasceu de uma tela. Nasceu de set. De anos calibrando luz, construindo performance, entendendo o que faz uma cena respirar.\n\nA Brick não chegou à IA pela tecnologia. Chegou pela busca de escala sem abrir mão de autoria. Os modelos foram treinados no cinema que a indústria produziu. O nosso trabalho é definir o que vem a seguir.",
+            "section_title": "",
+            "content_p2": "",
+            "quote": ""
+        },
+        "log_002": {
+            "title": "VÍDEO NÃO É PROMPT. É VISÃO E EXECUÇÃO.",
+            "excerpt": "Prompt inicia. Visão e execução finalizam com estética de cinema.",
+            "content_p1": "O mercado se deslumbrou com a ideia de que qualquer um com uma linha de texto pode ser cineasta. A gente sabe que isso é ilusão. O prompt é o ponto de partida, mas sem o olhar de quem entende de lente, profundidade de campo e narrativa, ele morre em segundos.\n\nNa Brick, a gente não brinca de digitar frase; a gente produz vídeo com autoridade visual. A Inteligência Artificial na nossa mão não é um gerador de sorte, é um pincel pesado. A Brick é uma produtora de vídeo que domina essa tecnologia para entregar o que o setup tradicional não consegue mais alcançar.\n\nUsamos a nossa bagagem de anos de set e pós-produção para filtrar o lixo genérico da IA e extrair apenas o que tem estética de cinema. Nós não entregamos um arquivo gerado por algoritmo. Entregamos uma direção de arte lapidada, uma pós-produção de elite e uma execução que só quem já sentiu o peso de uma câmera na mão consegue entregar.\n\nO cliente não compra uma tecnologia; ele compra o nosso critério artístico potencializado por ferramentas que dão escala ao impossível. Se for para fazer o óbvio, tem muita gente apertando botão por aí. Se for para construir uma obra com direção de vídeo séria e impacto real, o caminho é a visão e a execução que a gente coloca em cada frame. Aqui, a arte dá a ordem e o software se vira para acompanhar.",
+            "content_p2": ""
+        },
+        "log_003": {
+            "title": "RESISTÊNCIA É OBITUÁRIO",
+            "excerpt": "Quem resiste à mudança tecnológica não preserva arte: assina a própria irrelevância.",
+            "content_p1": "Quando a Pixar lançou Toy Story, o purismo do traço à mão virou nota de rodapé. Os que resistiram ao 3D não salvaram a alma da animação; eles apenas assinaram o próprio obituário profissional enquanto o mundo descobria que o software, na mão de quem tem visão, era o novo canhão da arte. A máquina não criou os personagens, ela deu aos diretores a escala necessária para materializar o que era impossível até ali.\n\nA gente enxerga a Inteligência Artificial com essa mesma frieza. O sistema não entende de direção de cena. Não sabe o peso dramático de um silêncio. Não sabe por que aquela luz de contra muda tudo no final. A IA é uma ferramenta brutal: se você é medíocre, o resultado é medíocre. Se você tem visão, ela vira multiplicador.\n\nO que separa um vídeo genérico de um filme que prende o espectador continua sendo a cabeça de quem está dirigindo. Não estamos aqui para automatizar a sensibilidade, estamos aqui para dar superpoderes à nossa execução autoral. Quem resiste hoje ao que a IA permite na direção de cena e na pós-produção está apenas escolhendo o caminho da irrelevância.\n\nA gente usa o que existe de mais bruto na tecnologia para garantir que o seu projeto tenha um impacto que ninguém mais no mercado consegue sequer simular. A máquina não entende de cinema, ela só entende de matemática. O brio, a luz e o corte que faz o espectador sentir o soco continuam sendo puramente humanos e inteiramente nossos.\n\nNa Brick, a gente não pede desculpas por estar na vanguarda. O cinema sempre foi uma evolução de ferramentas e quem não entende que a nova era digital chegou já virou passado.",
+            "quote": ""
         }
     },
     "common": {
@@ -64,6 +101,12 @@
         "secure_connection": "CONEXÃO SEGURA",
         "loading": "CARREGANDO..."
     },
+    "legacy": {
+        "title": "APOIADO PELA BRICK",
+        "title_mobile_br": "APOIADO <br /> PELA BRICK",
+        "text": "Não é um experimento. É uma produtora com 10 anos de set reinventando o que é possível produzir.",
+        "trusted_by": "Parceiros"
+    },
     "footer": {
         "complex_problem": "TEM UMA IDEIA IMPOSSÍVEL?",
         "we_have_intelligence": "NÓS TEMOS A VISÃO",
@@ -72,5 +115,92 @@
         "rights_reserved": "Todos os Direitos Reservados",
         "generative_division": "A Divisão Generativa",
         "system_admin": "SYSTEM_ADMIN"
+    },
+    "about": {
+        "origin": "DNA_ORIGIN",
+        "est": "EST_2016",
+        "title_primary": "VISÃO DE",
+        "title_highlight": "CINEMA",
+        "title_secondary": "EXECUÇÃO NEURAL",
+        "description": "Nossa visão não veio do ChatGPT. Ela é o resultado de anos de set, direção e execução no mundo real. Muito antes do primeiro prompt, nossa trajetória já era pautada pela produção visual de alta complexidade. Entendemos narrativa e estética porque o nosso olhar foi refinado no dia a dia do set e no rigor técnico da pós-produção clássica. Para nós, a tecnologia não é um atalho para o medíocre, mas um multiplicador de potência: o critério artístico continua sendo puramente humano, mas agora a execução final alcança o que a nossa imaginação sempre buscou.",
+        "core_modules": "OLHAR AUTORAL",
+        "modules": {
+            "cinematography": {
+                "title": "CONCEPÇÃO ARTÍSTICA",
+                "status": "CALIBRADO",
+                "desc": "A IA alucina imagens; nós projetamos intenção. O filme é concebido no repertório, onde cada frame serve à narrativa. A tecnologia é o pincel, mas o comando é puramente autoral."
+            },
+            "training": {
+                "title": "DIREÇÃO VISUAL",
+                "status": "ONLINE",
+                "desc": "O fim do amadorismo generativo. Aplicamos o rigor da luz cinematográfica e a precisão da lente para garantir que a estética não seja um acidente, mas uma assinatura inegociável."
+            },
+            "architecture": {
+                "title": "EXECUÇÃO INTEGRAL",
+                "status": "ESTÁVEL",
+                "desc": "Não entregamos arquivos gerados; entregamos obras finalizadas. Unimos a potência neural com o acabamento de elite de quem domina o set há uma década. O resultado é o impossível materializado."
+            }
+        },
+        "manifesto": {
+            "title": "ANTI-SLOP PROTOCOL",
+            "subtitle": "SYSTEM_DIRECTIVES",
+            "cards": {
+                "control": {
+                    "title": "CONTROLE > ACASO",
+                    "desc": "O \u201cprompt perfeito\u201d é um mito. Consistência vem de quem dirige o processo, não da sorte de uma linha de texto. Para nós, tecnologia só faz sentido quando é submetida ao rigor do olhar artístico. Onde o mercado vê automação, nós exercemos domínio total sobre a imagem."
+                },
+                "curation": {
+                    "title": "QUALIDADE > VOLUME",
+                    "desc": "Não estamos aqui para produzir volume descartável. Usamos a potência da máquina como motor de busca pela imagem certa. A tecnologia amplia a capacidade, mas é o repertório que define o que merece chegar à tela."
+                },
+                "black_box": {
+                    "title": "ARTE = VIRTUOSISMO",
+                    "desc": "O que nos separa é dominar as duas pontas: olhar de set e controle técnico da nova geração. Não testamos ferramenta por curiosidade; fundimos estética e potência para entregar o que o mercado não consegue replicar. A tecnologia obedece à arte."
+                }
+            }
+        }
+    },
+    "chat": {
+        "reach_humans": "REACH_HUMANS",
+        "manual_override": "MANUAL OVERRIDE PROTOCOLS",
+        "status_online": "STATUS: ONLINE",
+        "email_streams": "EMAIL_STREAMS",
+        "voice_link": "VOICE_LINK",
+        "network_nodes": "NETWORK_NODES",
+        "mason_intro": "EU SOU MASON",
+        "generative_core": "O Núcleo Generativo",
+        "state": "State:",
+        "active": "ACTIVE",
+        "idle": "IDLE",
+        "placeholder": "Transmita sua mensagem...",
+        "execute": "EXECUTE",
+        "initial_messages": {
+            "online": "Olá. Eu sou MASON. Estou aqui para direcionar sua transmissão",
+            "protocol": "Como posso ajudar?"
+        },
+        "suggestions": {
+            "philosophy": "Quanto custa um projeto?",
+            "audit": "Quero ver mais exemplos",
+            "synthesis": "Qual o prazo médio?",
+            "humans": "Falar com a equipe"
+        }
+    },
+    "works_page": {
+        "title": "PROJECT_DATABASE // Trabalhos Selecionados",
+        "archive_index": "ARCHIVE_INDEX",
+        "accessing": "ACESSANDO BASE NEURAL...",
+        "entries_found": "ENTRADAS ENCONTRADAS",
+        "no_data": "NENHUM DADO ENCONTRADO NESTE SETOR",
+        "protocols": "PROTOCOLOS"
+    },
+    "transmissions_page": {
+        "title": "NEURAL_LOGS",
+        "incoming": "FLUXOS DE DADOS RECEBIDOS...",
+        "records": "REGISTROS"
+    },
+    "project_modal": {
+        "neural_active": "NEURAL_RENDER_ACTIVE",
+        "static_preview": "STATIC_PREVIEW",
+        "system_data": "Dados do Sistema"
     }
 }
