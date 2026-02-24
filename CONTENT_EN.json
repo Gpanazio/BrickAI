@@ -100,33 +100,34 @@
         "system_admin": "SYSTEM_ADMIN"
     },
     "about": {
-        "origin": "ORIGIN",
-        "est": "SINCE 2016",
+        "origin": "DNA_ORIGIN",
+        "est": "EST_2016",
         "title_primary": "BORN ON",
         "title_highlight": "SET",
-        "title_secondary": "",
-        "description": "Before writing a prompt, we spent a decade on film sets. We know how to frame, light, and tell stories — because we did it hundreds of times with real cameras, real actors, real problems. AI didn't replace that knowledge. It amplified it",
-        "core_modules": "CAPABILITIES",
+        "title_secondary": "THE MACHINE HAS NO SOUL.",
+        "description_p1": "Before writing a prompt, we spent a decade on film sets. We know how to frame, light, and tell stories — because we did it hundreds of times with real cameras, real actors, real problems.",
+        "description_p2": "AI didn't replace that knowledge. It amplified it. We use the machine as a multiplier of power, while the artistic criterion remains purely human.",
+        "core_modules": "CORE_SYSTEMS",
         "modules": {
             "cinematography": {
-                "title": "SYNTHETIC CINEMATOGRAPHY",
-                "status": "ACTIVE",
-                "desc": "Creating scenes and environments that don't physically exist"
+                "title": "VISUAL SYNTHESIS",
+                "status": "CALIBRATED",
+                "desc": "Visual direction with AI // Scene construction // Aesthetic precision"
             },
             "training": {
-                "title": "VISUAL CONSISTENCY",
-                "status": "ACTIVE",
-                "desc": "Ensuring aesthetic coherence in every frame of the project"
+                "title": "NEURAL BRANDING",
+                "status": "ONLINE",
+                "desc": "Custom models // Style consistency // Signature per project"
             },
             "architecture": {
-                "title": "SCALABLE PRODUCTION",
-                "status": "ACTIVE",
-                "desc": "Infrastructure to deliver volume without losing quality"
+                "title": "PIPELINE FORGE",
+                "status": "STABLE",
+                "desc": "Proprietary workflows // Process automation // Total creative control"
             }
         },
         "manifesto": {
-            "title": "THE ANTI-PROMPT MANIFESTO",
-            "subtitle": "What sets us apart",
+            "title": "ANTI-SLOP PROTOCOL",
+            "subtitle": "SYSTEM_DIRECTIVES",
             "cards": {
                 "control": {
                     "title": "CONTROL > CHANCE",
@@ -134,11 +135,11 @@
                 },
                 "curation": {
                     "title": "CURATION IS CREATION",
-                    "desc": "A model generates 1,000 images per minute. The art is knowing which one is wrong. Our directors curate with the same critical eye from a decade on film sets"
+                    "desc": "A model generates 1,000 images per minute. The art is knowing which one is wrong. Our directors curate with a trained eye"
                 },
                 "black_box": {
-                    "title": "TOTAL TRANSPARENCY",
-                    "desc": "We don't rely on closed interfaces. We build our own pipelines. This gives us total control over the result — something 'magic buttons' can't offer"
+                    "title": "VIRTUOSISMO",
+                    "desc": "We merge classical aesthetics with next-gen power. The technology obeys the art, always."
                 }
             }
         }

@@ -100,45 +100,45 @@
         "system_admin": "SYSTEM_ADMIN"
     },
     "about": {
-        "origin": "ORIGEM",
-        "est": "DESDE 2016",
-        "title_primary": "BAGAGEM DE",
-        "title_highlight": "CINEMA",
-        "title_secondary": "EXECUÇÃO DE FUTURO",
+        "origin": "DNA_ORIGIN",
+        "est": "EST_2016",
+        "title_primary": "NASCIDOS NO",
+        "title_highlight": "SET",
+        "title_secondary": "THE MACHINE HAS NO SOUL.",
         "description": "Nossa visão não veio do ChatGPT. Ela é o resultado de anos de set, direção e execução no mundo real. Muito antes do primeiro prompt, nossa trajetória já era pautada pela produção visual de alta complexidade. Entendemos narrativa e estética porque o nosso olhar foi refinado no dia a dia do set e no rigor técnico da pós-produção clássica. Para nós, a tecnologia não é um atalho para o medíocre, mas um multiplicador de potência: o critério artístico continua sendo puramente humano, mas agora a execução final alcança o que a nossa imaginação sempre buscou.",
-        "core_modules": "CAPACIDADES-CHAVE",
+        "core_modules": "CORE_SYSTEMS",
         "modules": {
             "cinematography": {
-                "title": "CINEMATOGRAFIA EXPANDIDA",
-                "status": "ATIVO",
+                "title": "SÍNTESE VISUAL",
+                "status": "CALIBRADO",
                 "desc": "Direção visual com IA // Construção de cena // Precisão estética"
             },
             "training": {
-                "title": "LINGUAGEM VISUAL PRÓPRIA",
-                "status": "ATIVO",
+                "title": "NEURAL BRANDING",
+                "status": "ONLINE",
                 "desc": "Modelos personalizados // Consistência de estilo // Assinatura por projeto"
             },
             "architecture": {
                 "title": "ENGENHARIA DE EXECUÇÃO",
-                "status": "ATIVO",
+                "status": "STABLE",
                 "desc": "Pipelines proprietários // Automação de processo // Controle criativo total"
             }
         },
         "manifesto": {
-            "title": "THE ANTI-PROMPT MANIFESTO",
-            "subtitle": "O que nos diferencia",
+            "title": "ANTI-SLOP PROTOCOL",
+            "subtitle": "SYSTEM_DIRECTIVES",
             "cards": {
                 "control": {
-                    "title": "CONTROLE > ACASO",
-                    "desc": "O “prompt perfeito” é um mito. Consistência vem de quem dirige o processo, não da sorte de uma linha de texto. Para nós, tecnologia só faz sentido quando é submetida ao rigor do olhar artístico. Onde o mercado vê automação, nós exercemos domínio total sobre a imagem."
+                    "title": "DOMÍNIO > ACASO",
+                    "desc": "O acaso é para amadores. Na Brick, cada pixel é uma decisão técnica submetida ao rigor do olhar artístico."
                 },
                 "curation": {
-                    "title": "QUALIDADE > VOLUME",
-                    "desc": "Não estamos aqui para produzir volume descartável. Usamos a potência da máquina como motor de busca pela imagem certa. A tecnologia amplia a capacidade, mas é o repertório que define o que merece chegar à tela."
+                    "title": "CRITÉRIO > VOLUME",
+                    "desc": "A máquina amplia a capacidade, mas é o repertório que define o que merece chegar à tela. Qualidade é inegociável."
                 },
                 "black_box": {
-                    "title": "ARTE = VIRTUOSISMO",
-                    "desc": "O que nos separa é dominar as duas pontas: olhar de set e controle técnico da nova geração. Não testamos ferramenta por curiosidade; fundimos estética e potência para entregar o que o mercado não consegue replicar. A tecnologia obedece à arte."
+                    "title": "VIRTUOSISMO",
+                    "desc": "Fundimos a estética clássica com a potência da nova geração. A tecnologia obedece à arte, sempre."
                 }
             }
         }
