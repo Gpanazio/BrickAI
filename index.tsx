@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ArrowRight, Database, Globe, Menu, X } from 'lucide-react';
+import * as THREE from 'three';
 import { useTranslation } from 'react-i18next';
 import './src/i18n';
 import './src/index.css';
@@ -846,14 +847,145 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
     );
 };
 
+const ParticleBackground = () => {
+    const mountRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!mountRef.current) return;
+
+        // Scene setup
+        const scene = new THREE.Scene();
+        // Adjust camera FOV based on container aspect ratio
+        const camera = new THREE.PerspectiveCamera(75, mountRef.current.clientWidth / mountRef.current.clientHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        
+        renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        mountRef.current.appendChild(renderer.domElement);
+
+        // Particles
+        const particlesCount = 3200; 
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for (let i = 0; i < particlesCount; i++) {
+            const i3 = i * 3;
+            posArray[i3] = (Math.random() - 0.5) * 15;
+            posArray[i3 + 1] = (Math.random() - 0.5) * 15;
+
+            // Bring stars back, but keep a small safe gap around camera to avoid huge foreground blocks
+            let z = (Math.random() - 0.5) * 15;
+            if (Math.abs(z) < 1.5) z = z < 0 ? -1.5 : 1.5;
+            posArray[i3 + 2] = z;
+        }
+        
+        const particlesGeometry = new THREE.BufferGeometry();
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        
+        // Create a circular texture for soft particles
+        const canvas = document.createElement('canvas');
+        canvas.width = 32;
+        canvas.height = 32;
+        const context = canvas.getContext('2d');
+        if (context) {
+            const gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16);
+            gradient.addColorStop(0, 'rgba(255,255,255,1)');
+            gradient.addColorStop(0.2, 'rgba(255,255,255,0.8)');
+            gradient.addColorStop(0.5, 'rgba(255,255,255,0.2)');
+            gradient.addColorStop(1, 'rgba(255,255,255,0)');
+            context.fillStyle = gradient;
+            context.fillRect(0, 0, 32, 32);
+        }
+        const particleTexture = new THREE.CanvasTexture(canvas);
+
+        // Material
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.028,
+            color: 0xf3f4f6,
+            map: particleTexture,
+            transparent: true,
+            opacity: 0.52,
+            blending: THREE.AdditiveBlending,
+            depthWrite: false
+        });
+        
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particlesMesh);
+        camera.position.z = 3;
+
+        // Mouse interaction
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        const handleMouseMove = (event: MouseEvent) => {
+            mouseX = (event.clientX / window.innerWidth) - 0.5;
+            mouseY = (event.clientY / window.innerHeight) - 0.5;
+        };
+        
+        window.addEventListener('mousemove', handleMouseMove);
+
+        // Animation
+        let animationFrameId: number;
+        
+        const animate = () => {
+            animationFrameId = requestAnimationFrame(animate);
+            
+            particlesMesh.rotation.y += 0.0008;
+            
+            // Mouse influence
+            const targetX = mouseX * 0.5;
+            const targetY = mouseY * 0.5;
+            
+            particlesMesh.rotation.x += 0.05 * (targetY - particlesMesh.rotation.x);
+            particlesMesh.rotation.y += 0.05 * (targetX - particlesMesh.rotation.y);
+
+            renderer.render(scene, camera);
+        };
+        
+        animate();
+
+        // Resize handler
+        const handleResize = () => {
+            if (!mountRef.current) return;
+            const width = mountRef.current.clientWidth;
+            const height = mountRef.current.clientHeight;
+            
+            camera.aspect = width / height;
+            camera.updateProjectionMatrix();
+            renderer.setSize(width, height);
+        };
+        
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('resize', handleResize);
+            cancelAnimationFrame(animationFrameId);
+            if (mountRef.current && renderer.domElement) {
+                mountRef.current.removeChild(renderer.domElement);
+            }
+            particlesGeometry.dispose();
+            particlesMaterial.dispose();
+            renderer.dispose();
+        };
+    }, []);
+
+    return <div ref={mountRef} className="absolute inset-0 pointer-events-none z-0" />;
+};
+
 const Philosophy = () => {
     const { t } = useTranslation();
 
     return (
-        <section className="relative w-full py-20 bg-[#050505] z-20 border-t border-white/5">
+        <section className="relative w-full py-20 bg-[#050505] z-20 border-t border-white/5 overflow-hidden">
+            <ParticleBackground />
+            
+            {/* NOISE OVERLAY */}
+            <div className="absolute inset-0 z-[2] opacity-20 pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
+            
+            <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle,transparent_40%,rgba(5,5,5,0.9)_100%)] pointer-events-none"></div>
             <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
                 <div className="mb-20 reveal flex flex-col items-center">
-                    <div className="w-2 h-2 bg-[#DC2626] rounded-full animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.5)] mb-6"></div>
+                    <div className="w-5 h-5 rounded-full animate-breathe blur-[2px] mb-6 mx-auto" style={{ background: 'radial-gradient(circle, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0.18) 45%, rgba(220,38,38,0) 75%)' }}></div>
                     <span className="text-xs font-ai text-[#9CA3AF] bg-[#050505] px-4">{t('philosophy.belief_label')}</span>
                 </div>
                 <div className="flex flex-col gap-24 w-full">
@@ -1336,11 +1468,15 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
 
 const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => {
     const { t } = useTranslation();
+    const footerLine = (t('footer.we_have_intelligence') as string).trim();
+    const footerParts = footerLine.split(' ');
+    const footerHighlight = footerParts.pop() || '';
+    const footerPrefix = footerParts.join(' ');
     return (
         <footer className="w-full py-24 px-6 md:px-12 lg:px-24 bg-[#050505] border-t border-white/5 relative z-10">
             <div className="flex flex-col items-center text-center gap-8 reveal">
                 <h2 className="text-xs md:text-sm font-ai text-[#9CA3AF] uppercase">{t('footer.complex_problem')}</h2>
-                <p className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-none max-w-5xl">WE HAVE THE <span className="text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">INTELLIGENCE.</span></p>
+                <p className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-none max-w-5xl">{footerPrefix} <span className="text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">{footerHighlight}</span></p>
                 <MagneticButton onClick={onChat} className="mt-6 text-base md:text-lg font-ai font-bold text-white hover:text-[#DC2626] group">
                     {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
                 </MagneticButton>
@@ -2341,6 +2477,9 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
         updateMeta('og:url', `https://ai.brick.mov/${view === 'home' ? '' : view}`);
         updateMeta('og:type', 'website');
         updateMeta('twitter:card', 'summary_large_image', 'name');
+        updateMeta('twitter:title', data.ogTitle || data.title, 'name');
+        updateMeta('twitter:description', data.ogDescription || data.description, 'name');
+        updateMeta('twitter:image', 'https://ai.brick.mov/og-image.jpg', 'name');
 
         // Update Canonical
         let linkCanonical = document.querySelector('link[rel="canonical"]');
@@ -2349,7 +2488,26 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
             linkCanonical.setAttribute('rel', 'canonical');
             document.head.appendChild(linkCanonical);
         }
-        linkCanonical.setAttribute('href', `https://ai.brick.mov/${view === 'home' ? '' : view}`);
+        const canonicalUrl = `https://ai.brick.mov/${view === 'home' ? '' : view}`;
+        linkCanonical.setAttribute('href', canonicalUrl);
+
+        // Keep language + hreflang consistent
+        document.documentElement.setAttribute('lang', lang === 'pt' ? 'pt-BR' : 'en');
+
+        const upsertAlt = (hreflang: string, href: string) => {
+            let link = document.querySelector(`link[rel="alternate"][hreflang="${hreflang}"]`) as HTMLLinkElement | null;
+            if (!link) {
+                link = document.createElement('link');
+                link.setAttribute('rel', 'alternate');
+                link.setAttribute('hreflang', hreflang);
+                document.head.appendChild(link);
+            }
+            link.setAttribute('href', href);
+        };
+
+        upsertAlt('x-default', canonicalUrl);
+        upsertAlt('pt-BR', `https://ai.brick.mov/${view === 'home' ? '' : view}`);
+        upsertAlt('en', `https://ai.brick.mov/${view === 'home' ? '' : view}?lang=en`);
 
         // Update JSON-LD (Schema.org)
         const oldScripts = document.querySelectorAll('script[type="application/ld+json"]');

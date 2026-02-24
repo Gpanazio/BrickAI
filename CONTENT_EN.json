@@ -7,73 +7,73 @@
         "talk_to_us": "TALK TO US"
     },
     "hero": {
-        "title": "FROM SET TO SERVER.",
-        "subtitle": "10 YEARS OF CRAFT.",
-        "scramble": "NOW GENERATIVE.",
-        "description": "A NEW DIVISION BY BRICK.\nFROM ZERO TO ALL SINCE 2016."
+        "title": "FROM SET TO SERVER",
+        "subtitle": "10 YEARS OF CRAFT",
+        "scramble": "NOW GENERATIVE",
+        "description": "A NEW DIVISION BY BRICK.\nFROM ZERO TO ALL SINCE 2016"
     },
     "philosophy": {
         "belief_label": "The Belief",
         "raw": {
-            "title": "RAW.",
-            "text": "AI creates infinite pixels and patterns. But it cannot create intent. It is just a resource."
+            "title": "RAW",
+            "text": "AI creates infinite pixels and patterns. But it cannot create intent. It is just a resource"
         },
         "noise": {
-            "title": "NOISE.",
-            "text": "Without a human hand, generative models are just mathematical coincidence. We provide the vision."
+            "title": "NOISE",
+            "text": "Without a human hand, generative models are just mathematical coincidence. We provide the vision"
         },
         "direct": {
-            "title": "WE DIRECT THE INTELLIGENCE.",
-            "text": "The machine is the brush. The database is the paint. We are still the artists."
+            "title": "WE DIRECT THE INTELLIGENCE",
+            "text": "The machine is the brush. The database is the paint. We are still the artists"
         }
     },
     "works": {
         "inheritance": {
             "title": "INHERITANCE",
             "subtitle": "SHORT FILM",
-            "desc": "Official Selection Gramado Film Festival 2025.",
-            "longDesc": "One of the first AI-made films to be selected and exhibited at the Gramado Film Festival. Inheritance tells the story of a civilization that inherits an abandoned world — and repeats, step by step, all the mistakes of its predecessors. A fable about cycles, hubris, and the illusion of progress. The 5-minute version premiered at Gramado; an extended 10-minute version remains unreleased."
+            "desc": "Official Selection Gramado Film Festival 2025",
+            "longDesc": "One of the first AI-made films to be selected and exhibited at the Gramado Film Festival. Inheritance tells the story of a civilization that inherits an abandoned world — and repeats, step by step, all the mistakes of its predecessors. A fable about cycles, hubris, and the illusion of progress. The 5-minute version premiered at Gramado; an extended 10-minute version remains unreleased"
         },
         "shift": {
             "title": "WE CAN SELL ANYTHING",
             "subtitle": "MANIFESTO",
-            "desc": "Genero Challenge Finalist.",
-            "longDesc": "One character. Infinite worlds. In this manifesto, the same man appears in a fashion studio, leads a marching band in a packed stadium, strolls through European palaces, relaxes in a typical American living room, and faces sumo wrestlers — all in 60 seconds. The message is simple: there are no more production limits. Any scenario, any context, any story. Genero Challenge Finalist."
+            "desc": "Genero Challenge Finalist",
+            "longDesc": "One character. Infinite worlds. In this manifesto, the same man appears in a fashion studio, leads a marching band in a packed stadium, strolls through European palaces, relaxes in a typical American living room, and faces sumo wrestlers — all in 60 seconds. The message is simple: there are no more production limits. Any scenario, any context, any story. Genero Challenge Finalist"
         },
         "anima": {
             "title": "AUTOBOL",
             "subtitle": "REIMAGINED HISTORY",
-            "desc": "Bringing back a forgotten sport from the 70s.",
-            "longDesc": "Autobol was real. In the 1970s, in Rio de Janeiro, cars pushed a giant ball in matches between Flamengo, Fluminense, Vasco, and Botafogo. Created by doctor Mário Marques Tourinho, the sport was a brief phenomenon and is now almost forgotten. This project reimagines Autobol as it could have been filmed back then — with all the texture, grain, and atmosphere of lost 70s footage."
+            "desc": "Bringing back a forgotten sport from the 70s",
+            "longDesc": "Autobol was real. In the 1970s, in Rio de Janeiro, cars pushed a giant ball in matches between Flamengo, Fluminense, Vasco, and Botafogo. Created by doctor Mário Marques Tourinho, the sport was a brief phenomenon and is now almost forgotten. This project reimagines Autobol as it could have been filmed back then — with all the texture, grain, and atmosphere of lost 70s footage"
         },
         "factory": {
             "title": "FACTORY",
             "subtitle": "RETRO-FUTURISM",
-            "desc": "Industrial decay with a retro-futuristic vision.",
-            "longDesc": "A factory that never existed, but feels remembered. Factory combines industrial decay with a retro-futuristic aesthetic — as if a future imagined in the 70s had aged and been abandoned. Rust, concrete, silent machinery. A space between the nostalgia of a past and the ruins of a future that never came."
+            "desc": "Industrial decay with a retro-futuristic vision",
+            "longDesc": "A factory that never existed, but feels remembered. Factory combines industrial decay with a retro-futuristic aesthetic — as if a future imagined in the 70s had aged and been abandoned. Rust, concrete, silent machinery. A space between the nostalgia of a past and the ruins of a future that never came"
         },
         "dogday": {
             "title": "DOG DAY AFTERNOON",
             "subtitle": "ABSURDIST COMEDY",
-            "desc": "Dogs in human situations.",
-            "longDesc": "A canine support group with a 'SIT STAY HEAL' banner. A chihuahua in a sweater on a Zoom call. Dog Day Afternoon is absurdist comedy played straight — dogs in everyday human situations, filmed with the sobriety of an indie drama. The title is a reference to Sidney Lumet's classic with Al Pacino."
+            "desc": "Dogs in human situations",
+            "longDesc": "A canine support group with a 'SIT STAY HEAL' banner. A chihuahua in a sweater on a Zoom call. Dog Day Afternoon is absurdist comedy played straight — dogs in everyday human situations, filmed with the sobriety of an indie drama. The title is a reference to Sidney Lumet's classic with Al Pacino"
         }
     },
     "transmissions": {
         "when-to-use-ai": {
             "title": "WHEN TO USE AI — AND WHEN NOT TO",
-            "excerpt": "Not every project needs AI. Knowing when to use it is as important as knowing how.",
-            "content": "Every week someone shows up asking for \"a video with AI\" like it's a magic ingredient. Just add AI and it's good. That's not how it works.\n\nAI is a tool. A very good tool for some things and completely useless for others. After a few years using this in real production, not Twitter experiments, we've developed a clear sense of when it makes sense and when it's a waste of time and money.\n\nIt works when the location doesn't exist. If the script calls for an abandoned Soviet factory, a palace mixing three different eras, or a place that only exists in the director's head, AI solves it. The alternative would be building a set or hoping to find the perfect location. Both cost more and take longer.\n\nIt works when you need scale without scale budget. One product in 20 different contexts normally means 20 shooting days. With AI, it means a week of work. The math is simple.\n\nIt works when nobody knows what they want yet. Concept phase is expensive in traditional production. Each test is a mini-production. With AI, you present 30 different directions before committing a cent to crew and equipment.\n\nIt doesn't work when the soul of the video is a real person. Testimonial, interview, talking head. That needs a real human face. Not because AI can't generate faces. It can. But the emotional connection disappears. The viewer feels it, even without knowing why.\n\nIt doesn't work when the physical product is the hero. If you're selling a watch, show the watch. The texture of the metal, the visual weight, the light hitting the glass. AI can create the environment around it, but the object needs to be real.\n\nIt doesn't work when you have the budget to do it right the traditional way. AI isn't automatically better. It's an option. Sometimes the right option is camera, lights, crew, location. We know how to do both. We know when to use each.\n\nThe right question is never \"can we do this with AI?\" Almost anything is possible. The question is \"will it be better, faster, or more viable?\" If the answer is no, we shoot it. Simple."
+            "excerpt": "Not every project needs AI. Knowing when to use it is as important as knowing how",
+            "content": "Every week someone shows up asking for \"a video with AI\" like it's a magic ingredient. Just add AI and it's good. That's not how it works.\n\nAI is a tool. A very good tool for some things and completely useless for others. After a few years using this in real production, not Twitter experiments, we've developed a clear sense of when it makes sense and when it's a waste of time and money.\n\nIt works when the location doesn't exist. If the script calls for an abandoned Soviet factory, a palace mixing three different eras, or a place that only exists in the director's head, AI solves it. The alternative would be building a set or hoping to find the perfect location. Both cost more and take longer.\n\nIt works when you need scale without scale budget. One product in 20 different contexts normally means 20 shooting days. With AI, it means a week of work. The math is simple.\n\nIt works when nobody knows what they want yet. Concept phase is expensive in traditional production. Each test is a mini-production. With AI, you present 30 different directions before committing a cent to crew and equipment.\n\nIt doesn't work when the soul of the video is a real person. Testimonial, interview, talking head. That needs a real human face. Not because AI can't generate faces. It can. But the emotional connection disappears. The viewer feels it, even without knowing why.\n\nIt doesn't work when the physical product is the hero. If you're selling a watch, show the watch. The texture of the metal, the visual weight, the light hitting the glass. AI can create the environment around it, but the object needs to be real.\n\nIt doesn't work when you have the budget to do it right the traditional way. AI isn't automatically better. It's an option. Sometimes the right option is camera, lights, crew, location. We know how to do both. We know when to use each.\n\nThe right question is never \"can we do this with AI?\" Almost anything is possible. The question is \"will it be better, faster, or more viable?\" If the answer is no, we shoot it. Simple"
         },
         "consistency-problem": {
             "title": "THE CONSISTENCY PROBLEM",
-            "excerpt": "Why AI videos look \"off\" and how we fix it.",
-            "content": "The biggest problem with generative video isn't making a beautiful image. That's easy. The problem is making 720 beautiful images that look like the same film.\n\nEach frame is generated from scratch. The model doesn't know what came before or what comes after. Without control, the character changes face on frame 47. The wall swaps texture on frame 203. The light decides to come from another angle on frame 589.\n\nYour brain detects this in milliseconds. You can't explain what's wrong, but you know something is. It's the uncanny valley applied to time, not just to faces.\n\nThat's why most AI videos you see out there look... off. Technically impressive, but impossible to watch for more than 15 seconds without discomfort.\n\nThe solution isn't in the prompt. There's no combination of words that fixes this. The solution is in the pipeline: how you structure the generation, what controls you impose between frames, how you treat the image after it leaves the model.\n\nIt's technical work, boring, invisible. Nobody posts it on LinkedIn. But it's the difference between an experiment and a film.\n\nWhen consistency works, you don't even notice. You just watch. When it doesn't work, you can't watch anything else."
+            "excerpt": "Why AI videos look \"off\" and how we fix it",
+            "content": "The biggest problem with generative video isn't making a beautiful image. That's easy. The problem is making 720 beautiful images that look like the same film.\n\nEach frame is generated from scratch. The model doesn't know what came before or what comes after. Without control, the character changes face on frame 47. The wall swaps texture on frame 203. The light decides to come from another angle on frame 589.\n\nYour brain detects this in milliseconds. You can't explain what's wrong, but you know something is. It's the uncanny valley applied to time, not just to faces.\n\nThat's why most AI videos you see out there look... off. Technically impressive, but impossible to watch for more than 15 seconds without discomfort.\n\nThe solution isn't in the prompt. There's no combination of words that fixes this. The solution is in the pipeline: how you structure the generation, what controls you impose between frames, how you treat the image after it leaves the model.\n\nIt's technical work, boring, invisible. Nobody posts it on LinkedIn. But it's the difference between an experiment and a film.\n\nWhen consistency works, you don't even notice. You just watch. When it doesn't work, you can't watch anything else"
         },
         "direction-over-prompt": {
             "title": "DIRECTION > PROMPT",
-            "excerpt": "Why mastering prompts doesn't make you a director.",
-            "content": "There's an entire industry selling the idea that AI's secret lies in the right words. Bundles with \"10,000 professional prompts\". \"Prompt engineering\" courses. Gurus explaining the exact order of adjectives.\n\nThat's like selling a list of English words and calling it a screenwriting course.\n\nThe prompt is the most superficial part of the process. It's just the interface, the text field where you type. What actually determines the result is everything that comes before and everything that comes after.\n\nBefore: what's the visual reference? What's the mood board? Is there a storyboard? Is the art direction defined? Does the client know what they want or think they know? These questions have existed for a hundred years. AI didn't invent any of them.\n\nAfter: out of 500 generated images, which ones work? What needs correction? How to compose the elements? What's the color treatment? That's curation, post-production, trained eye. It's also existed for decades.\n\nAI is a tool in the middle of the process. A powerful tool, but still a tool. Anyone who thinks mastering the prompt means mastering AI is confusing the steering wheel with the entire car.\n\nThe difference between amateur and professional work was never the tool. It's the eye of whoever uses it. That hasn't changed."
+            "excerpt": "Why mastering prompts doesn't make you a director",
+            "content": "There's an entire industry selling the idea that AI's secret lies in the right words. Bundles with \"10,000 professional prompts\". \"Prompt engineering\" courses. Gurus explaining the exact order of adjectives.\n\nThat's like selling a list of English words and calling it a screenwriting course.\n\nThe prompt is the most superficial part of the process. It's just the interface, the text field where you type. What actually determines the result is everything that comes before and everything that comes after.\n\nBefore: what's the visual reference? What's the mood board? Is there a storyboard? Is the art direction defined? Does the client know what they want or think they know? These questions have existed for a hundred years. AI didn't invent any of them.\n\nAfter: out of 500 generated images, which ones work? What needs correction? How to compose the elements? What's the color treatment? That's curation, post-production, trained eye. It's also existed for decades.\n\nAI is a tool in the middle of the process. A powerful tool, but still a tool. Anyone who thinks mastering the prompt means mastering AI is confusing the steering wheel with the entire car.\n\nThe difference between amateur and professional work was never the tool. It's the eye of whoever uses it. That hasn't changed"
         }
     },
     "common": {
@@ -85,17 +85,17 @@
         "loading": "LOADING..."
     },
     "legacy": {
-        "title": "BACKED BY BRICK.",
-        "title_mobile_br": "BACKED <br /> BY BRICK.",
-        "text": "This isn't an experiment. This is a new lens from a production house with 10 years of experience.",
+        "title": "BACKED BY BRICK",
+        "title_mobile_br": "BACKED <br /> BY BRICK",
+        "text": "This isn't an experiment. This is a new lens from a production house with 10 years of experience",
         "trusted_by": "Partners"
     },
     "footer": {
         "complex_problem": "Have a complex project?",
-        "we_have_intelligence": "WE HAVE THE VISION.",
+        "we_have_intelligence": "WE HAVE THE VISION",
         "talk_to_us": "TALK TO US",
         "network": "Network",
-        "rights_reserved": "All Rights Reserved.",
+        "rights_reserved": "All Rights Reserved",
         "generative_division": "The Generative Division",
         "system_admin": "SYSTEM_ADMIN"
     },
@@ -104,8 +104,8 @@
         "est": "SINCE 2016",
         "title_primary": "BORN ON",
         "title_highlight": "SET",
-        "title_secondary": ".",
-        "description": "Before writing a prompt, we spent a decade on film sets. We know how to frame, light, and tell stories — because we did it hundreds of times with real cameras, real actors, real problems. AI didn't replace that knowledge. It amplified it.",
+        "title_secondary": "",
+        "description": "Before writing a prompt, we spent a decade on film sets. We know how to frame, light, and tell stories — because we did it hundreds of times with real cameras, real actors, real problems. AI didn't replace that knowledge. It amplified it",
         "core_modules": "CAPABILITIES",
         "modules": {
             "cinematography": {
@@ -130,15 +130,15 @@
             "cards": {
                 "control": {
                     "title": "CONTROL > CHANCE",
-                    "desc": "The 'perfect prompt' is a myth. Consistency comes from method and direction, not magic words. We engineer images — we don't wish for them."
+                    "desc": "The 'perfect prompt' is a myth. Consistency comes from method and direction, not magic words. We engineer images — we don't wish for them"
                 },
                 "curation": {
                     "title": "CURATION IS CREATION",
-                    "desc": "A model generates 1,000 images per minute. The art is knowing which one is wrong. Our directors curate with the same critical eye from a decade on film sets."
+                    "desc": "A model generates 1,000 images per minute. The art is knowing which one is wrong. Our directors curate with the same critical eye from a decade on film sets"
                 },
                 "black_box": {
                     "title": "TOTAL TRANSPARENCY",
-                    "desc": "We don't rely on closed interfaces. We build our own pipelines. This gives us total control over the result — something 'magic buttons' can't offer."
+                    "desc": "We don't rely on closed interfaces. We build our own pipelines. This gives us total control over the result — something 'magic buttons' can't offer"
                 }
             }
         }
@@ -158,28 +158,28 @@
         "placeholder": "Type your message...",
         "execute": "SEND",
         "initial_messages": {
-            "online": "Hello! I'm here to help with your project.",
-            "protocol": "Tell me about what you need."
+            "online": "Hello! I'm here to help with your project",
+            "protocol": "Tell me about what you need"
         },
         "suggestions": {
             "philosophy": "What is Brick AI's approach?",
-            "audit": "I want to discuss a project.",
+            "audit": "I want to discuss a project",
             "synthesis": "How does the creative process work?",
-            "humans": "I'd rather speak to someone on the team."
+            "humans": "I'd rather speak to someone on the team"
         }
     },
     "works_page": {
         "title": "SELECTED WORKS",
         "archive_index": "INDEX",
         "accessing": "LOADING PROJECTS...",
-        "entries_found": "PROJECTS FOUND.",
-        "no_data": "NO PROJECTS IN THIS CATEGORY.",
+        "entries_found": "PROJECTS FOUND",
+        "no_data": "NO PROJECTS IN THIS CATEGORY",
         "protocols": "FILTERS"
     },
     "transmissions_page": {
         "title": "TRANSMISSIONS",
         "incoming": "UPDATES...",
-        "records": "POSTS."
+        "records": "POSTS"
     },
     "project_modal": {
         "neural_active": "PREVIEW",

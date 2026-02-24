@@ -7,90 +7,90 @@
         "talk_to_us": "FALE CONOSCO"
     },
     "hero": {
-        "title": "DO SET AO SERVIDOR.",
-        "subtitle": "10 ANOS DE CRAFT.",
-        "scramble": "AGORA GENERATIVO.",
-        "description": "UMA NOVA DIVISÃO DA BRICK.\nDO ZERO AO TUDO DESDE 2016."
+        "title": "NASCIDOS NO SET",
+        "subtitle": "A MESMA ALMA",
+        "scramble": "UM NOVO CORPO",
+        "description": "UMA NOVA DIVISÃO DA BRICK.\nDO ZERO AO TUDO DESDE 2016"
     },
     "philosophy": {
         "belief_label": "A Crença",
         "raw": {
-            "title": "RAW.",
-            "text": "A IA cria pixels e padrões infinitos. Mas não pode criar intenção. É apenas um recurso."
+            "title": "RAW",
+            "text": "A IA cria pixels e padrões infinitos. Mas não pode criar intenção."
         },
         "noise": {
-            "title": "RUÍDO.",
-            "text": "Sem a mão humana, modelos generativos são apenas coincidência matemática. Nós fornecemos a visão."
+            "title": "RUÍDO",
+            "text": "Sem a mão humana, modelos generativos são apenas coincidência matemática. Nós fornecemos a visão"
         },
         "direct": {
-            "title": "NÓS DIRECIONAMOS A INTELIGÊNCIA.",
-            "text": "A máquina é o pincel. O banco de dados é a tinta. Ainda somos os artistas."
+            "title": "NÓS DIRIGIMOS A INTELIGÊNCIA",
+            "text": "A máquina é o pincel. O modelo é a tinta. Ainda somos os artistas."
         }
     },
     "works": {
         "inheritance": {
             "title": "INHERITANCE",
             "subtitle": "CURTA-METRAGEM",
-            "desc": "Seleção oficial Festival de Gramado 2025.",
-            "longDesc": "Um dos primeiros filmes feitos com IA a ser selecionado e exibido no Festival de Gramado. Inheritance conta a história de uma civilização que herda um mundo abandonado — e repete, passo a passo, todos os erros de seus antecessores. Uma fábula sobre ciclos, hubris e a ilusão do progresso. A versão de 5 minutos estreou em Gramado; uma versão estendida de 10 minutos permanece inédita."
+            "desc": "Seleção oficial Festival de Gramado 2025",
+            "longDesc": "Um dos primeiros filmes feitos com IA a ser selecionado e exibido no Festival de Gramado. Inheritance conta a história de uma civilização que herda um mundo abandonado — e repete, passo a passo, todos os erros de seus antecessores. Uma fábula sobre ciclos, hubris e a ilusão do progresso. A versão de 5 minutos estreou em Gramado; uma versão estendida de 10 minutos permanece inédita"
         },
         "shift": {
             "title": "VENDEMOS QUALQUER COISA",
             "subtitle": "MANIFESTO",
-            "desc": "Finalista Genero Challenge.",
-            "longDesc": "Um único personagem. Infinitos mundos. Neste manifesto, o mesmo homem aparece em um estúdio de moda, lidera uma banda marcial em um estádio lotado, passeia por palácios europeus, relaxa em uma sala tipicamente americana e enfrenta lutadores de sumô — tudo em 60 segundos. A mensagem é simples: não existem mais limites de produção. Qualquer cenário, qualquer contexto, qualquer história. Finalista no Genero Challenge."
+            "desc": "Finalista Genero Challenge",
+            "longDesc": "Um único personagem. Infinitos mundos. Neste manifesto, o mesmo homem aparece em um estúdio de moda, lidera uma banda marcial em um estádio lotado, passeia por palácios europeus, relaxa em uma sala tipicamente americana e enfrenta lutadores de sumô — tudo em 60 segundos. A mensagem é simples: não existem mais limites de produção. Qualquer cenário, qualquer contexto, qualquer história. Finalista no Genero Challenge"
         },
         "anima": {
             "title": "AUTOBOL",
             "subtitle": "HISTÓRIA REIMAGINADA",
-            "desc": "Resgatando um esporte esquecido dos anos 70.",
-            "longDesc": "Autobol existiu de verdade. Nos anos 1970, no Rio de Janeiro, carros empurravam uma bola gigante em partidas entre Flamengo, Fluminense, Vasco e Botafogo. Criado pelo médico Mário Marques Tourinho, o esporte foi um fenômeno breve e hoje quase esquecido. Este projeto reimagina o Autobol como ele poderia ter sido filmado na época — com toda a textura, o grain e a atmosfera de uma transmissão perdida dos anos 70."
+            "desc": "Resgatando um esporte esquecido dos anos 70",
+            "longDesc": "Autobol existiu de verdade. Nos anos 1970, no Rio de Janeiro, carros empurravam uma bola gigante em partidas entre Flamengo, Fluminense, Vasco e Botafogo. Criado pelo médico Mário Marques Tourinho, o esporte foi um fenômeno breve e hoje quase esquecido. Este projeto reimagina o Autobol como ele poderia ter sido filmado na época — com toda a textura, o grain e a atmosfera de uma transmissão perdida dos anos 70"
         },
         "void": {
             "title": "VOID GAZING",
             "subtitle": "DATA VISUALIZATION",
-            "desc": "Traduzindo radiação cósmica em espectros visíveis.",
-            "longDesc": "Uma instalação baseada em dados que visualiza radiação cósmica em tempo real via NASA Open API. Escrevemos scripts Python para converter ruído numérico em parâmetros de dinâmica de fluidos no TouchDesigner. A IA então texturiza essa simulação em tempo real, permitindo efetivamente que o público 'veja' o universo invisível através de uma lente estética curada por humanos."
+            "desc": "Traduzindo radiação cósmica em espectros visíveis",
+            "longDesc": "Uma instalação baseada em dados que visualiza radiação cósmica em tempo real via NASA Open API. Escrevemos scripts Python para converter ruído numérico em parâmetros de dinâmica de fluidos no TouchDesigner. A IA então texturiza essa simulação em tempo real, permitindo efetivamente que o público 'veja' o universo invisível através de uma lente estética curada por humanos"
         },
         "urban": {
             "title": "URBAN REEF",
             "subtitle": "PROCEDURAL ENV",
-            "desc": "Cultivando cidades como corais. Algoritmos biológicos aplicados.",
-            "longDesc": "Urban Reef explora a biomimética na arquitetura. Usando algoritmos de crescimento diferencial no Houdini, 'cultivamos' estruturas de cidade que buscam luz como corais. Essas malhas procedurais foram então texturizadas usando upscaling de IA, criando uma visão de uma cidade que parece cultivada em vez de construída, desafiando processos de design arquitetônico tradicionais."
+            "desc": "Cultivando cidades como corais. Algoritmos biológicos aplicados",
+            "longDesc": "Urban Reef explora a biomimética na arquitetura. Usando algoritmos de crescimento diferencial no Houdini, 'cultivamos' estruturas de cidade que buscam luz como corais. Essas malhas procedurais foram então texturizadas usando upscaling de IA, criando uma visão de uma cidade que parece cultivada em vez de construída, desafiando processos de design arquitetônico tradicionais"
         },
         "factory": {
             "title": "FACTORY",
             "subtitle": "RETRO-FUTURISMO",
-            "desc": "Decadência industrial com visão retro-futurista.",
-            "longDesc": "Uma fábrica que nunca existiu, mas que parece lembrada. Factory combina decadência industrial com uma estética retro-futurista — como se um futuro imaginado nos anos 70 tivesse envelhecido e sido abandonado. Ferrugem, concreto, maquinário silencioso. Um espaço entre a nostalgia de um passado e a ruína de um futuro que não veio."
+            "desc": "Decadência industrial com visão retro-futurista",
+            "longDesc": "Uma fábrica que nunca existiu, mas que parece lembrada. Factory combina decadência industrial com uma estética retro-futurista — como se um futuro imaginado nos anos 70 tivesse envelhecido e sido abandonado. Ferrugem, concreto, maquinário silencioso. Um espaço entre a nostalgia de um passado e a ruína de um futuro que não veio"
         },
         "dogday": {
             "title": "DOG DAY AFTERNOON",
             "subtitle": "COMÉDIA ABSURDA",
-            "desc": "Cachorros em situações humanas.",
-            "longDesc": "Um grupo de apoio canino com a faixa 'SIT STAY HEAL'. Um chihuahua de suéter participando de uma call de Zoom. Dog Day Afternoon é comédia absurda levada a sério — cachorros em situações cotidianas humanas, filmados com a sobriedade de um drama independente. O título é uma referência ao clássico de Sidney Lumet com Al Pacino."
+            "desc": "Cachorros em situações humanas",
+            "longDesc": "Um grupo de apoio canino com a faixa 'SIT STAY HEAL'. Um chihuahua de suéter participando de uma call de Zoom. Dog Day Afternoon é comédia absurda levada a sério — cachorros em situações cotidianas humanas, filmados com a sobriedade de um drama independente. O título é uma referência ao clássico de Sidney Lumet com Al Pacino"
         }
     },
     "transmissions": {
         "log_001": {
             "title": "O ESPAÇO LATENTE É UMA LOCALIZAÇÃO",
-            "excerpt": "Por que paramos de procurar ruínas físicas e começamos a treinar LoRAs em plantas brutalistas.",
-            "content_p1": "Tendemos a pensar em modelos generativos como motores de criação. Prompt de entrada, imagem de saída. Um processo de fabricação linear. Mas essa metáfora é insuficiente para produção de alto nível. Na Brick, tratamos o modelo não como uma fábrica, mas como um território.",
+            "excerpt": "Por que paramos de procurar ruínas físicas e começamos a treinar LoRAs em plantas brutalistas",
+            "content_p1": "Tendemos a pensar em modelos generativos como motores de criação. Prompt de entrada, imagem de saída. Um processo de fabricação linear. Mas essa metáfora é insuficiente para produção de alto nível. Na Brick, tratamos o modelo não como uma fábrica, mas como um território",
             "section_title": "A Topografia do Ruído",
-            "content_p2": "O Stable Diffusion XL não \"desenha\". Ele remove o ruído. Ele subtrai o caos para revelar a ordem. Isso implica que a imagem já existe dentro do ruído de alta dimensão, matematicamente esperando para ser descoberta.",
+            "content_p2": "O Stable Diffusion XL não \"desenha\". Ele remove o ruído. Ele subtrai o caos para revelar a ordem. Isso implica que a imagem já existe dentro do ruído de alta dimensão, matematicamente esperando para ser descoberta",
             "quote": "\"Não construímos o set. Navegamos para as coordenadas onde o set tem maior probabilidade estatística de existir.\""
         },
         "log_002": {
             "title": "VETORES DE MOVIMENTO NA TRANSFERÊNCIA DE ESTILO",
-            "excerpt": "Resolvendo o problema de cintilação em modelos de difusão. Como usamos fluxo óptico para impor consistência temporal.",
-            "content_p1": "A trepidação. A cintilação. A textura \"fervente\". Esta é a marca registrada do vídeo de IA bruto. Revela a independência quadro a quadro do processo de difusão. Para o <0>Projeto: Anima</0>, esse artefato era inaceitável.",
-            "content_p2": "Nossa solução envolveu extrair mapas de fluxo óptico da filmagem original usando Nuke. Esses vetores de movimento agem como um esqueleto temporal."
+            "excerpt": "Resolvendo o problema de cintilação em modelos de difusão. Como usamos fluxo óptico para impor consistência temporal",
+            "content_p1": "A trepidação. A cintilação. A textura \"fervente\". Esta é a marca registrada do vídeo de IA bruto. Revela a independência quadro a quadro do processo de difusão. Para o <0>Projeto: Anima</0>, esse artefato era inaceitável",
+            "content_p2": "Nossa solução envolveu extrair mapas de fluxo óptico da filmagem original usando Nuke. Esses vetores de movimento agem como um esqueleto temporal"
         },
         "log_003": {
             "title": "GLITCH INTENCIONAL: A ASSINATURA HUMANA",
-            "excerpt": "Quando a perfeição é o erro. Injetando ruído de volta na saída limpa de modelos comerciais para recuperar a sensação de 'cinema'.",
-            "content_p1": "Os modelos modernos estão convergindo para uma \"média do Midjourney\". Uma estética polida e plástica que grita \"sintético\". Paradoxalmente, para fazer a imagem de IA parecer real, precisamos quebrá-la.",
-            "quote": "O artefato é a arte."
+            "excerpt": "Quando a perfeição é o erro. Injetando ruído de volta na saída limpa de modelos comerciais para recuperar a sensação de 'cinema'",
+            "content_p1": "Os modelos modernos estão convergindo para uma \"média do Midjourney\". Uma estética polida e plástica que grita \"sintético\". Paradoxalmente, para fazer a imagem de IA parecer real, precisamos quebrá-la",
+            "quote": "O artefato é a arte"
         }
     },
     "common": {
@@ -102,17 +102,17 @@
         "loading": "LOADING SYSTEM..."
     },
     "legacy": {
-        "title": "APOIADO PELA BRICK.",
-        "title_mobile_br": "APOIADO <br /> PELA BRICK.",
-        "text": "Isto não é um teste beta. Esta é uma nova lente de uma produtora com 10 anos de experiência.",
+        "title": "APOIADO PELA BRICK",
+        "title_mobile_br": "APOIADO <br /> PELA BRICK",
+        "text": "Não é um experimento. É uma produtora com 10 anos de set reinventando o que é possível produzir.",
         "trusted_by": "Parceiros"
     },
     "footer": {
-        "complex_problem": "Tem um projeto complexo?",
-        "we_have_intelligence": "NÓS TEMOS A VISÃO.",
+        "complex_problem": "TEM UMA IDEIA IMPOSSÍVEL?",
+        "we_have_intelligence": "NÓS TEMOS A VISÃO",
         "talk_to_us": "FALE CONOSCO",
         "network": "Rede",
-        "rights_reserved": "Todos os Direitos Reservados.",
+        "rights_reserved": "Todos os Direitos Reservados",
         "generative_division": "A Divisão Generativa",
         "system_admin": "SYSTEM_ADMIN"
     },
@@ -121,8 +121,8 @@
         "est": "EST. 2016",
         "title_primary": "FORJADO NA",
         "title_highlight": "OLD SCHOOL",
-        "title_secondary": "DE VFX.",
-        "description": "Antes de escrevermos um prompt, passamos 7 anos manipulando pixels no Nuke e Maya. Entendemos luz, composição e narrativa porque as construímos à mão por uma década. Não adotamos IA para substituir o craft. Adotamos para quebrar os limites.",
+        "title_secondary": "DE VFX",
+        "description": "Antes de escrevermos um prompt, passamos 7 anos manipulando pixels no Nuke e Maya. Entendemos luz, composição e narrativa porque as construímos à mão por uma década. Não adotamos IA para substituir o craft. Adotamos para quebrar os limites",
         "core_modules": "CORE_MODULES",
         "modules": {
             "cinematography": {
@@ -147,15 +147,15 @@
             "cards": {
                 "control": {
                     "title": "CONTROLE > ACASO",
-                    "desc": "O 'prompt perfeito' é um mito. A consistência vem do ControlNet, IP-Adapters e scripts Python, não de sorte. Nós projetamos nossas imagens; não torcemos por elas."
+                    "desc": "O 'prompt perfeito' é um mito. A consistência vem do ControlNet, IP-Adapters e scripts Python, não de sorte. Nós projetamos nossas imagens; não torcemos por elas"
                 },
                 "curation": {
                     "title": "CURADORIA É CRIAÇÃO",
-                    "desc": "Um modelo pode gerar 1.000 imagens em um minuto. A arte é saber qual está errada. Nossos diretores curam com o mesmo olhar crítico que usaram em sets de filmagem por 10 anos."
+                    "desc": "Um modelo pode gerar 1.000 imagens em um minuto. A arte é saber qual está errada. Nossos diretores curam com o mesmo olhar crítico que usaram em sets de filmagem por 10 anos"
                 },
                 "black_box": {
                     "title": "SEM CAIXAS PRETAS",
-                    "desc": "Não dependemos de interfaces web fechadas. Construímos nossos próprios pipelines ComfyUI localmente. Isso nos dá controle em nível de pixel sobre o espaço latente que 'botões mágicos' não podem fornecer."
+                    "desc": "Não dependemos de interfaces web fechadas. Construímos nossos próprios pipelines ComfyUI localmente. Isso nos dá controle em nível de pixel sobre o espaço latente que 'botões mágicos' não podem fornecer"
                 }
             }
         },
@@ -177,14 +177,14 @@
         "voice_link": "VOICE_LINK",
         "network_nodes": "NETWORK_NODES",
         "mason_intro": "EU SOU MASON",
-        "generative_core": "O Núcleo Generativo.",
+        "generative_core": "O Núcleo Generativo",
         "state": "State:",
         "active": "ACTIVE",
         "idle": "IDLE",
         "placeholder": "Transmita sua mensagem...",
         "execute": "EXECUTE",
         "initial_messages": {
-            "online": "Olá. Eu sou MASON. Estou aqui para direcionar sua transmissão.",
+            "online": "Olá. Eu sou MASON. Estou aqui para direcionar sua transmissão",
             "protocol": "Como posso ajudar?"
         },
         "suggestions": {
@@ -198,14 +198,14 @@
         "title": "PROJECT_DATABASE // Trabalhos Selecionados",
         "archive_index": "ARCHIVE_INDEX",
         "accessing": "ACCESSING NEURAL DATABASE...",
-        "entries_found": "ENTRADAS ENCONTRADAS.",
-        "no_data": "NENHUM DADO ENCONTRADO NESTE SETOR.",
+        "entries_found": "ENTRADAS ENCONTRADAS",
+        "no_data": "NENHUM DADO ENCONTRADO NESTE SETOR",
         "protocols": "PROTOCOLOS"
     },
     "transmissions_page": {
         "title": "NEURAL_LOGS",
         "incoming": "FLUXOS DE DADOS RECEBIDOS...",
-        "records": "REGISTROS."
+        "records": "REGISTROS"
     },
     "project_modal": {
         "neural_active": "NEURAL_RENDER_ACTIVE",
