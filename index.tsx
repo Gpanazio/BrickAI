@@ -1838,59 +1838,100 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
             </button>
 
             <main className="min-h-screen flex flex-col bg-[#050505] relative overflow-hidden">
+                <div className="scanline-effect opacity-10 pointer-events-none"></div>
 
-                {/* ── HERO: SYMMETRIC 2-COL EDITORIAL ── */}
-                <section className="pt-36 md:pt-48 pb-0 border-b border-white/10 reveal">
+                {/* ── HERO: DOSSIER STYLE ── */}
+                <section className="pt-36 md:pt-48 pb-20 border-b border-white/10 reveal">
                     <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
 
-                        {/* META LINE */}
-                        <div className="flex items-center justify-between mb-10">
-                            <span className="font-mono text-[10px] tracking-[0.3em] text-[#9CA3AF] uppercase flex items-center gap-3">
-                                <span className="w-1.5 h-1.5 bg-[#DC2626] rounded-full animate-pulse inline-block"></span>
-                                {t('about.origin')}
-                            </span>
-                            <span className="font-mono text-[10px] tracking-[0.3em] text-[#9CA3AF] uppercase">{t('about.est')}</span>
+                        {/* META HEADER */}
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-4 border-b border-white/10 pb-6">
+                            <div className="flex items-center gap-4">
+                                <div className="w-2 h-2 bg-[#DC2626] animate-pulse"></div>
+                                <span className="font-mono text-[10px] tracking-[0.4em] text-white uppercase">{t('about.origin')} // ACCESS_GRANTED</span>
+                            </div>
+                            <div className="font-mono text-[10px] tracking-[0.2em] text-[#9CA3AF] uppercase">
+                                <span className="text-white/40 mr-2">TIMESTAMP:</span> {t('about.est')}
+                            </div>
                         </div>
 
-                        {/* 2-COL SYMMETRIC */}
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-t border-white/10">
-
-                            {/* LEFT: TITLE */}
-                            <div className="py-12 pr-0 md:pr-16 border-b md:border-b-0 md:border-r border-white/10">
-                                <h1 className="font-brick text-5xl md:text-6xl lg:text-7xl text-white leading-[0.9] tracking-tight uppercase">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
+                            {/* LEFT: GLITCH TITLE */}
+                            <div className="lg:col-span-7">
+                                <h1 className="font-brick text-6xl md:text-8xl lg:text-9xl text-white leading-[0.85] tracking-tighter uppercase mb-8">
                                     {t('about.title_primary')}<br />
-                                    <span className="text-[#DC2626]">{t('about.title_highlight')}</span><br />
-                                    {t('about.title_secondary')}
+                                    <span className="text-[#DC2626] inline-block hover:translate-x-2 transition-transform duration-100 cursor-default">{t('about.title_highlight')}</span><br />
+                                    <span className="text-sm md:text-xl font-mono tracking-[0.5em] text-white/30 block mt-4">{t('about.title_secondary')}</span>
                                 </h1>
                             </div>
 
-                            {/* RIGHT: DESC */}
-                            <div className="py-12 pl-0 md:pl-16 flex flex-col justify-between gap-8">
-                                <p className="text-[#9CA3AF] font-light text-sm md:text-base leading-loose">
-                                    {t('about.description')}
-                                </p>
-                                <div className="flex items-center gap-3 mt-auto">
-                                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
-                                    <span className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-[0.3em]">Sistema operacional</span>
+                            {/* RIGHT: DATA DUMP DESC */}
+                            <div className="lg:col-span-5 flex flex-col justify-start">
+                                <div className="font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed space-y-6">
+                                    {(() => {
+                                        const fullDesc = t('about.description');
+                                        const half = Math.ceil(fullDesc.length / 2);
+                                        // Tenta quebrar no fim de uma frase próxima da metade
+                                        const splitIndex = fullDesc.indexOf('.', half) !== -1 ? fullDesc.indexOf('.', half) + 1 : half;
+                                        const p1 = fullDesc.substring(0, splitIndex).trim();
+                                        const p2 = fullDesc.substring(splitIndex).trim();
+
+                                        return (
+                                            <>
+                                                <div className="flex gap-4 group">
+                                                    <span className="text-[#DC2626] font-bold shrink-0 opacity-50 group-hover:opacity-100">[01]</span>
+                                                    <p className="border-l border-white/10 pl-4 group-hover:border-[#DC2626] transition-colors">
+                                                        {p1}
+                                                    </p>
+                                                </div>
+                                                {p2 && (
+                                                    <div className="flex gap-4 group">
+                                                        <span className="text-[#DC2626] font-bold shrink-0 opacity-50 group-hover:opacity-100">[02]</span>
+                                                        <p className="border-l border-white/10 pl-4 group-hover:border-[#DC2626] transition-colors">
+                                                            {p2}
+                                                        </p>
+                                                    </div>
+                                                )}
+                                            </>
+                                        );
+                                    })()}
+                                    
+                                    <div className="pt-8 flex items-center gap-4">
+                                        <div className="flex-1 h-px bg-white/5"></div>
+                                        <div className="flex items-center gap-2">
+                                            <span className="w-1 h-1 bg-green-500 rounded-full animate-pulse"></span>
+                                            <span className="text-[9px] uppercase tracking-[0.3em] text-white/40">Active_Protocol</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* ── CAPACIDADES: 3 COLS SYMMETRIC ── */}
-                <section className="border-b border-white/10 reveal">
+                {/* ── CAPACIDADES: INDUSTRIAL GRID ── */}
+                <section className="reveal bg-[#080808]">
                     <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
-                        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
+                        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10 border-x border-white/10">
                             {['cinematography', 'training', 'architecture'].map((mod, idx) => (
-                                <div key={idx} className="group py-10 md:px-10 first:pl-0 last:pr-0 hover:bg-white/[0.02] transition-colors duration-500">
-                                    <span className="font-mono text-[9px] text-[#DC2626] tracking-[0.3em] uppercase mb-5 block">
-                                        {String(idx + 1).padStart(2, '0')}
-                                    </span>
-                                    <h3 className="font-brick text-xl md:text-2xl text-white mb-3 uppercase group-hover:text-[#DC2626] transition-colors duration-300">
-                                        {t(`about.modules.${mod}.title`)}
-                                    </h3>
-                                    <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-loose opacity-70 group-hover:opacity-100 transition-opacity">
+                                <div key={idx} className="group p-10 hover:bg-[#DC2626]/[0.02] transition-all duration-500 min-h-[320px] flex flex-col justify-between relative overflow-hidden">
+                                    <div className="absolute top-0 right-0 p-4 font-mono text-[8px] text-white/10 group-hover:text-[#DC2626]/40 transition-colors uppercase tracking-[0.5em]">
+                                        Unit_0{idx + 1}
+                                    </div>
+                                    
+                                    <div>
+                                        <div className="mb-8 flex items-center gap-2">
+                                            <div className="w-4 h-px bg-[#DC2626]"></div>
+                                            <span className="font-mono text-[9px] text-[#DC2626] tracking-[0.3em] uppercase">
+                                                {t(`about.modules.${mod}.status`)}
+                                            </span>
+                                        </div>
+                                        <h3 className="font-brick text-2xl text-white mb-4 uppercase group-hover:tracking-widest transition-all duration-500">
+                                            {t(`about.modules.${mod}.title`)}
+                                        </h3>
+                                    </div>
+                                    
+                                    <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-loose opacity-60 group-hover:opacity-100 transition-opacity border-t border-white/5 pt-6">
                                         {t(`about.modules.${mod}.desc`)}
                                     </p>
                                 </div>
@@ -1899,27 +1940,25 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                     </div>
                 </section>
 
-
-                {/* ── MANIFESTO: 3 CARDS SYMMETRIC ── */}
-                <section className="py-20 md:py-28 reveal">
+                {/* ── MANIFESTO: BRUTALIST BLOCKS ── */}
+                <section className="py-24 md:py-32 reveal bg-[#050505]">
                     <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
-                        <div className="flex flex-col md:flex-row justify-between items-start md:items-baseline mb-12 border-b border-white/10 pb-6 gap-4">
-                            <h2 className="text-xl md:text-3xl font-brick text-white uppercase">{t('about.manifesto.title')}</h2>
+                        <div className="flex flex-row justify-between items-baseline mb-16 border-b border-white/10 pb-6">
+                            <h2 className="text-xl md:text-3xl font-brick text-white uppercase tracking-tight">{t('about.manifesto.title')}</h2>
                             <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.manifesto.subtitle')}</span>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/[0.06]">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-white/10 divide-y md:divide-y-0 md:divide-x divide-white/10 bg-[#080808] max-w-5xl mx-auto">
                             {['control', 'curation', 'black_box'].map((key, i) => (
-                                <div key={i} className="group relative bg-[#050505] p-8 md:p-10 hover:bg-[#0D0D0D] transition-colors duration-500 overflow-hidden">
-                                    <span className="font-mono text-[9px] text-[#DC2626] tracking-[0.3em] uppercase mb-6 block opacity-50 group-hover:opacity-100 transition-opacity">
-                                        {String(i + 1).padStart(2, '0')} _
-                                    </span>
-                                    <h3 className="text-xl md:text-2xl font-brick text-white mb-5 uppercase leading-snug group-hover:text-[#DC2626] transition-colors duration-300">
-                                        {t(`about.manifesto.cards.${key}.title`)}
-                                    </h3>
-                                    <p className="text-sm font-mono text-[#9CA3AF] leading-loose opacity-70 group-hover:opacity-100 transition-opacity">
-                                        {t(`about.manifesto.cards.${key}.desc`)}
-                                    </p>
+                                <div key={i} className="group relative bg-[#050505] p-6 md:p-8 hover:bg-[#0D0D0D] transition-colors duration-500 min-h-[200px] flex flex-col justify-start">
+                                    <div className="relative z-10">
+                                        <h3 className="text-lg md:text-xl font-brick text-white mb-3 uppercase leading-tight group-hover:text-[#DC2626] transition-colors duration-500">
+                                            {t(`about.manifesto.cards.${key}.title`)}
+                                        </h3>
+                                        <p className="text-[10px] md:text-xs font-mono text-[#9CA3AF] leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity">
+                                            {t(`about.manifesto.cards.${key}.desc`)}
+                                        </p>
+                                    </div>
                                 </div>
                             ))}
                         </div>
