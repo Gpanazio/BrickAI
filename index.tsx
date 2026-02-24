@@ -887,15 +887,15 @@ const ParticleBackground = () => {
         // Adjust camera FOV based on container aspect ratio
         const camera = new THREE.PerspectiveCamera(75, mountRef.current.clientWidth / mountRef.current.clientHeight, 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        
+
         renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         mountRef.current.appendChild(renderer.domElement);
 
         // Particles
-        const particlesCount = 3200; 
+        const particlesCount = 3200;
         const posArray = new Float32Array(particlesCount * 3);
-        
+
         for (let i = 0; i < particlesCount; i++) {
             const i3 = i * 3;
             posArray[i3] = (Math.random() - 0.5) * 15;
@@ -906,10 +906,10 @@ const ParticleBackground = () => {
             if (Math.abs(z) < 1.5) z = z < 0 ? -1.5 : 1.5;
             posArray[i3 + 2] = z;
         }
-        
+
         const particlesGeometry = new THREE.BufferGeometry();
         particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-        
+
         // Create a circular texture for soft particles
         const canvas = document.createElement('canvas');
         canvas.width = 32;
@@ -936,7 +936,7 @@ const ParticleBackground = () => {
             blending: THREE.AdditiveBlending,
             depthWrite: false
         });
-        
+
         const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
         scene.add(particlesMesh);
         camera.position.z = 3;
@@ -944,32 +944,32 @@ const ParticleBackground = () => {
         // Mouse interaction
         let mouseX = 0;
         let mouseY = 0;
-        
+
         const handleMouseMove = (event: MouseEvent) => {
             mouseX = (event.clientX / window.innerWidth) - 0.5;
             mouseY = (event.clientY / window.innerHeight) - 0.5;
         };
-        
+
         window.addEventListener('mousemove', handleMouseMove);
 
         // Animation
         let animationFrameId: number;
-        
+
         const animate = () => {
             animationFrameId = requestAnimationFrame(animate);
-            
+
             particlesMesh.rotation.y += 0.0008;
-            
+
             // Mouse influence
             const targetX = mouseX * 0.5;
             const targetY = mouseY * 0.5;
-            
+
             particlesMesh.rotation.x += 0.05 * (targetY - particlesMesh.rotation.x);
             particlesMesh.rotation.y += 0.05 * (targetX - particlesMesh.rotation.y);
 
             renderer.render(scene, camera);
         };
-        
+
         animate();
 
         // Resize handler
@@ -977,12 +977,12 @@ const ParticleBackground = () => {
             if (!mountRef.current) return;
             const width = mountRef.current.clientWidth;
             const height = mountRef.current.clientHeight;
-            
+
             camera.aspect = width / height;
             camera.updateProjectionMatrix();
             renderer.setSize(width, height);
         };
-        
+
         window.addEventListener('resize', handleResize);
 
         return () => {
@@ -1007,10 +1007,10 @@ const Philosophy = () => {
     return (
         <section className="relative w-full py-20 bg-[#050505] z-20 border-t border-white/5 overflow-hidden">
             <ParticleBackground />
-            
+
             {/* NOISE OVERLAY */}
             <div className="absolute inset-0 z-[2] opacity-20 pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
-            
+
             <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle,transparent_40%,rgba(5,5,5,0.9)_100%)] pointer-events-none"></div>
             <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
                 <div className="mb-20 reveal w-full flex flex-col items-center">
@@ -1104,7 +1104,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 
             {/* CONTENT LAYER - ULTRA MINIMALIST NO BLOCKS */}
             <div className={`absolute inset-x-0 bottom-0 z-40 p-6 md:p-10 flex flex-col justify-end transition-all duration-500 pointer-events-none ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-                
+
                 {/* DECORATIVE LINE */}
                 <div className="w-12 h-[2px] bg-[#DC2626] mb-4 shadow-[0_0_8px_#DC2626]"></div>
 
@@ -1128,7 +1128,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 
             {/* ID TAG - Always Visible Minimal */}
             <div className={`absolute top-6 left-6 transition-all duration-500 ${isHovered ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'}`}>
-                 <span className="font-mono text-[10px] text-white/40 tracking-widest border border-white/10 px-2 py-1">
+                <span className="font-mono text-[10px] text-white/40 tracking-widest border border-white/10 px-2 py-1">
                     {work.id.toUpperCase()}
                 </span>
             </div>
@@ -1837,100 +1837,95 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
-            <main className="pt-24 md:pt-32 min-h-screen flex flex-col bg-[#050505] relative overflow-hidden">
-                {/* ATMOSPHERE */}
-                <div className="absolute top-0 right-0 w-[60vw] h-[60vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-30"></div>
-                <div className="scanline-effect fixed inset-0 z-0 pointer-events-none opacity-20"></div>
+            <main className="min-h-screen flex flex-col bg-[#050505] relative overflow-hidden">
 
-                {/* CONTAINER - MAX WIDTH FOR ALIGNMENT */}
-                <div className="w-full max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+                {/* ── HERO: SYMMETRIC 2-COL EDITORIAL ── */}
+                <section className="pt-36 md:pt-48 pb-0 border-b border-white/10 reveal">
+                    <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
 
-                    {/* HERO: ORIGIN STORY */}
-                    <section className="mb-24 reveal mt-12 md:mt-20">
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-                            <div>
-                                <span className="text-[#DC2626] font-mono text-xs tracking-[0.2em] uppercase mb-6 block animate-fade-in-up">
-                                    {t('about.origin')} <span className="text-white/20 mx-2">//</span> {t('about.est')}
-                                </span>
-                                <h1 className="text-5xl md:text-7xl font-brick text-white mb-8 leading-[0.9] tracking-tight animate-fade-in-up delay-100">
+                        {/* META LINE */}
+                        <div className="flex items-center justify-between mb-10">
+                            <span className="font-mono text-[10px] tracking-[0.3em] text-[#9CA3AF] uppercase flex items-center gap-3">
+                                <span className="w-1.5 h-1.5 bg-[#DC2626] rounded-full animate-pulse inline-block"></span>
+                                {t('about.origin')}
+                            </span>
+                            <span className="font-mono text-[10px] tracking-[0.3em] text-[#9CA3AF] uppercase">{t('about.est')}</span>
+                        </div>
+
+                        {/* 2-COL SYMMETRIC */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 border-t border-white/10">
+
+                            {/* LEFT: TITLE */}
+                            <div className="py-12 pr-0 md:pr-16 border-b md:border-b-0 md:border-r border-white/10">
+                                <h1 className="font-brick text-5xl md:text-6xl lg:text-7xl text-white leading-[0.9] tracking-tight uppercase">
                                     {t('about.title_primary')}<br />
                                     <span className="text-[#DC2626]">{t('about.title_highlight')}</span><br />
                                     {t('about.title_secondary')}
                                 </h1>
-                                <p className="text-[#E5E5E5] font-light text-base md:text-lg leading-relaxed max-w-xl border-l-2 border-[#DC2626] pl-6 animate-fade-in-up delay-200">
+                            </div>
+
+                            {/* RIGHT: DESC */}
+                            <div className="py-12 pl-0 md:pl-16 flex flex-col justify-between gap-8">
+                                <p className="text-[#9CA3AF] font-light text-sm md:text-base leading-loose">
                                     {t('about.description')}
                                 </p>
-                            </div>
-                            {/* CORE MODULES / CAPABILITIES */}
-                            <div className="bg-[#0A0A0A] border border-white/10 p-8 md:p-10 relative animate-fade-in-up delay-300">
-                                <div className="absolute top-0 left-0 w-full h-1 bg-[#DC2626]"></div>
-                                <h3 className="font-mono text-xs text-[#9CA3AF] uppercase tracking-[0.2em] mb-8 flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-                                    {t('about.core_modules')}
-                                </h3>
-                                <div className="space-y-6">
-                                    <div className="group">
-                                        <div className="flex justify-between items-baseline mb-1">
-                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">{t('about.modules.cinematography.title')}</h4>
-                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">{t('about.modules.cinematography.status')}</span>
-                                        </div>
-                                        <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-relaxed">
-                                            {t('about.modules.cinematography.desc')}
-                                        </p>
-                                    </div>
-                                    <div className="w-full h-px bg-white/5"></div>
-
-                                    <div className="group">
-                                        <div className="flex justify-between items-baseline mb-1">
-                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">{t('about.modules.training.title')}</h4>
-                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">{t('about.modules.training.status')}</span>
-                                        </div>
-                                        <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-relaxed">
-                                            {t('about.modules.training.desc')}
-                                        </p>
-                                    </div>
-                                    <div className="w-full h-px bg-white/5"></div>
-
-                                    <div className="group">
-                                        <div className="flex justify-between items-baseline mb-1">
-                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">{t('about.modules.architecture.title')}</h4>
-                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">{t('about.modules.architecture.status')}</span>
-                                        </div>
-                                        <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-relaxed">
-                                            {t('about.modules.architecture.desc')}
-                                        </p>
-                                    </div>
+                                <div className="flex items-center gap-3 mt-auto">
+                                    <span className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></span>
+                                    <span className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-[0.3em]">Sistema operacional</span>
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </div>
+                </section>
 
-                    {/* THE INFRASTRUCTURE (DIFFERENTIATORS) */}
-                    <section className="mb-32 reveal">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 border-b border-white/10 pb-4 gap-2">
-                            <h2 className="text-2xl font-brick text-white">{t('about.manifesto.title')}</h2>
-                            <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-widest">{t('about.manifesto.subtitle')}</span>
+                {/* ── CAPACIDADES: 3 COLS SYMMETRIC ── */}
+                <section className="border-b border-white/10 reveal">
+                    <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
+                        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
+                            {['cinematography', 'training', 'architecture'].map((mod, idx) => (
+                                <div key={idx} className="group py-10 md:px-10 first:pl-0 last:pr-0 hover:bg-white/[0.02] transition-colors duration-500">
+                                    <span className="font-mono text-[9px] text-[#DC2626] tracking-[0.3em] uppercase mb-5 block">
+                                        {String(idx + 1).padStart(2, '0')}
+                                    </span>
+                                    <h3 className="font-brick text-xl md:text-2xl text-white mb-3 uppercase group-hover:text-[#DC2626] transition-colors duration-300">
+                                        {t(`about.modules.${mod}.title`)}
+                                    </h3>
+                                    <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-loose opacity-70 group-hover:opacity-100 transition-opacity">
+                                        {t(`about.modules.${mod}.desc`)}
+                                    </p>
+                                </div>
+                            ))}
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <InfoCard
-                                number="01"
-                                title={t('about.manifesto.cards.control.title')}
-                                desc={t('about.manifesto.cards.control.desc')}
-                            />
-                            <InfoCard
-                                number="02"
-                                title={t('about.manifesto.cards.curation.title')}
-                                desc={t('about.manifesto.cards.curation.desc')}
-                            />
-                            <InfoCard
-                                number="03"
-                                title={t('about.manifesto.cards.black_box.title')}
-                                desc={t('about.manifesto.cards.black_box.desc')}
-                            />
-                        </div>
-                    </section>
+                    </div>
+                </section>
 
-                </div>
+
+                {/* ── MANIFESTO: 3 CARDS SYMMETRIC ── */}
+                <section className="py-20 md:py-28 reveal">
+                    <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
+                        <div className="flex flex-col md:flex-row justify-between items-start md:items-baseline mb-12 border-b border-white/10 pb-6 gap-4">
+                            <h2 className="text-xl md:text-3xl font-brick text-white uppercase">{t('about.manifesto.title')}</h2>
+                            <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.manifesto.subtitle')}</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-white/[0.06]">
+                            {['control', 'curation', 'black_box'].map((key, i) => (
+                                <div key={i} className="group relative bg-[#050505] p-8 md:p-10 hover:bg-[#0D0D0D] transition-colors duration-500 overflow-hidden">
+                                    <span className="font-mono text-[9px] text-[#DC2626] tracking-[0.3em] uppercase mb-6 block opacity-50 group-hover:opacity-100 transition-opacity">
+                                        {String(i + 1).padStart(2, '0')} _
+                                    </span>
+                                    <h3 className="text-xl md:text-2xl font-brick text-white mb-5 uppercase leading-snug group-hover:text-[#DC2626] transition-colors duration-300">
+                                        {t(`about.manifesto.cards.${key}.title`)}
+                                    </h3>
+                                    <p className="text-sm font-mono text-[#9CA3AF] leading-loose opacity-70 group-hover:opacity-100 transition-opacity">
+                                        {t(`about.manifesto.cards.${key}.desc`)}
+                                    </p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </section>
+
             </main>
             <Footer onChat={onChat} />
         </React.Fragment>
