@@ -81,6 +81,11 @@ const GlobalStyles = () => (
             0% { opacity: 0; transform: translateY(10px); }
             100% { opacity: 1; transform: translateY(0); }
         }
+        @keyframes soul-breathe {
+            0%, 100% { opacity: 0.5; letter-spacing: 0.25em; }
+            50% { opacity: 1; letter-spacing: 0.38em; }
+        }
+        .animate-soul { animation: soul-breathe 5s ease-in-out infinite; }
         @keyframes scan {
             0% { top: 0%; opacity: 0; }
             10% { opacity: 1; }
@@ -103,8 +108,8 @@ const GlobalStyles = () => (
             width: 200%;
             height: 200%;
             pointer-events: none;
-            z-index: 30; 
-            opacity: 0.04; 
+            z-index: 30;
+            opacity: 0.04;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             animation: grain 6s steps(10) infinite;
         }
@@ -467,6 +472,83 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 // --- UTILS COMPONENTS ---
+const GlitchText = ({ text, className }: { text: string, className?: string }) => {
+    const glitchChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_#@!";
+    const [displayed, setDisplayed] = useState('');
+    const [ready, setReady] = useState(false);
+    const [chars, setChars] = useState<{ char: string; glitched: boolean }[]>([]);
+
+    // Phase 1: typewriter
+    useEffect(() => {
+        let i = 0;
+        const interval = setInterval(() => {
+            i++;
+            setDisplayed(text.slice(0, i));
+            if (i >= text.length) {
+                clearInterval(interval);
+                setChars(text.split('').map(c => ({ char: c, glitched: false })));
+                setTimeout(() => setReady(true), 200);
+            }
+        }, 80);
+        return () => clearInterval(interval);
+    }, [text]);
+
+    // Phase 2: glitch after typewriter done
+    useEffect(() => {
+        if (!ready) return;
+        const positions = text.split('').reduce((acc: number[], c, i) => c !== ' ' ? [...acc, i] : acc, []);
+        let timeout: any;
+
+        const glitch = () => {
+            const count = 2 + Math.floor(Math.random() * 2);
+            const picked = [...positions].sort(() => Math.random() - 0.5).slice(0, count);
+            setChars(text.split('').map((c, i) => ({
+                char: picked.includes(i) ? glitchChars[Math.floor(Math.random() * glitchChars.length)] : c,
+                glitched: picked.includes(i),
+            })));
+            setTimeout(() => setChars(text.split('').map(c => ({ char: c, glitched: false }))), 150);
+            timeout = setTimeout(glitch, 600 + Math.random() * 600);
+        };
+
+        timeout = setTimeout(glitch, 600);
+        return () => clearTimeout(timeout);
+    }, [ready, text]);
+
+    return (
+        <span className={className}>
+            {ready
+                ? chars.map(({ char, glitched }, i) => (
+                    <span key={i} style={glitched ? { color: '#DC2626' } : undefined}>{char}</span>
+                ))
+                : displayed}
+        </span>
+    );
+};
+
+const TypewriterText = ({ text, className }: { text: string, className?: string }) => {
+    const [displayed, setDisplayed] = useState('');
+    const [done, setDone] = useState(false);
+
+    useEffect(() => {
+        let i = 0;
+        const interval = setInterval(() => {
+            i++;
+            setDisplayed(text.slice(0, i));
+            if (i >= text.length) {
+                clearInterval(interval);
+                setDone(true);
+            }
+        }, 80);
+        return () => clearInterval(interval);
+    }, [text]);
+
+    return (
+        <span className={className}>
+            {displayed}<span className={`text-[#DC2626] ${done ? 'animate-blink' : 'opacity-100'}`}>_</span>
+        </span>
+    );
+};
+
 const ScrambleText = ({ text, className, hoverTrigger = false }: { text: string, className?: string, hoverTrigger?: boolean }) => {
     const [displayText, setDisplayText] = useState(text);
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*";
@@ -862,14 +944,12 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                 </div>
             </div>
             <div className="reveal delay-200 text-center z-20 max-w-6xl px-4 flex flex-col items-center pointer-events-none">
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-brick text-white mb-4 md:mb-6 drop-shadow-2xl">
-                    {t('hero.title')}
-                </h1>
-                <p className="text-base md:text-xl lg:text-2xl font-light tracking-[0.3em] text-[#E5E5E5]/80 mb-2 md:mb-4">{t('hero.subtitle')}</p>
+                <p className="text-base md:text-xl lg:text-2xl font-mono text-white drop-shadow-2xl mb-2 md:mb-4">
+                    <TypewriterText text={t('hero.scramble') as string} />
+                </p>
                 <h2 className="text-2xl md:text-4xl lg:text-5xl font-brick text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
-                    <ScrambleText text={t('hero.scramble') as string} />
+                    <ScrambleText text={t('hero.subtitle') as string} />
                 </h2>
-                <p className="mt-8 text-[#9CA3AF] text-[10px] md:text-xs font-light tracking-[0.2em] uppercase opacity-60 max-w-md border-t border-white/10 pt-4 whitespace-pre-line">{t('hero.description')}</p>
             </div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
         </section>
