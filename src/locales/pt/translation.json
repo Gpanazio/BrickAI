@@ -119,26 +119,26 @@
     "about": {
         "origin": "SYSTEM_ORIGIN",
         "est": "EST. 2016",
-        "title_primary": "FORJADO NA",
-        "title_highlight": "OLD SCHOOL",
-        "title_secondary": "DE VFX",
-        "description": "Antes de escrevermos um prompt, passamos 7 anos manipulando pixels no Nuke e Maya. Entendemos luz, composição e narrativa porque as construímos à mão por uma década. Não adotamos IA para substituir o craft. Adotamos para quebrar os limites",
-        "core_modules": "CORE_MODULES",
+        "title_primary": "BAGAGEM DE",
+        "title_highlight": "CINEMA",
+        "title_secondary": "EXECUÇÃO DE FUTURO",
+        "description": "Nossa visão não veio do ChatGPT. Ela é o resultado de anos de set, direção e execução no mundo real. Muito antes do primeiro prompt, nossa trajetória já era pautada pela produção visual de alta complexidade. Entendemos narrativa e estética porque o nosso olhar foi refinado no dia a dia do set e no rigor técnico da pós-produção clássica. Para nós, a tecnologia não é um atalho para o medíocre, mas um multiplicador de potência: o critério artístico continua sendo puramente humano, mas agora a execução final alcança o que a nossa imaginação sempre buscou.",
+        "core_modules": "CAPACIDADES-CHAVE",
         "modules": {
             "cinematography": {
-                "title": "SYNTHETIC_CINEMATOGRAPHY",
+                "title": "CINEMATOGRAFIA EXPANDIDA",
                 "status": "INSTALLED",
-                "desc": "Geração de Vídeo // ComfyUI // Upscaling 4K"
+                "desc": "Direção visual com IA // Construção de cena // Precisão estética"
             },
             "training": {
-                "title": "MODEL_TRAINING",
+                "title": "LINGUAGEM VISUAL PRÓPRIA",
                 "status": "INSTALLED",
-                "desc": "LoRAs Customizados // Consistência de Estilo // Fine-Tuning"
+                "desc": "Modelos personalizados // Consistência de estilo // Assinatura por projeto"
             },
             "architecture": {
-                "title": "PIPELINE_ARCHITECTURE",
+                "title": "ENGENHARIA DE EXECUÇÃO",
                 "status": "INSTALLED",
-                "desc": "Ferramentas Python // Automação // Render Farm"
+                "desc": "Pipelines proprietários // Automação de processo // Controle criativo total"
             }
         },
         "manifesto": {
@@ -147,15 +147,15 @@
             "cards": {
                 "control": {
                     "title": "CONTROLE > ACASO",
-                    "desc": "O 'prompt perfeito' é um mito. A consistência vem do ControlNet, IP-Adapters e scripts Python, não de sorte. Nós projetamos nossas imagens; não torcemos por elas"
+                    "desc": "O “prompt perfeito” é um mito. Consistência vem de quem dirige o processo, não da sorte de uma linha de texto. Para nós, tecnologia só faz sentido quando é submetida ao rigor do olhar artístico. Onde o mercado vê automação, nós exercemos domínio total sobre a imagem."
                 },
                 "curation": {
-                    "title": "CURADORIA É CRIAÇÃO",
-                    "desc": "Um modelo pode gerar 1.000 imagens em um minuto. A arte é saber qual está errada. Nossos diretores curam com o mesmo olhar crítico que usaram em sets de filmagem por 10 anos"
+                    "title": "QUALIDADE > VOLUME",
+                    "desc": "Não estamos aqui para produzir volume descartável. Usamos a potência da máquina como motor de busca pela imagem certa. A tecnologia amplia a capacidade, mas é o repertório que define o que merece chegar à tela."
                 },
                 "black_box": {
-                    "title": "SEM CAIXAS PRETAS",
-                    "desc": "Não dependemos de interfaces web fechadas. Construímos nossos próprios pipelines ComfyUI localmente. Isso nos dá controle em nível de pixel sobre o espaço latente que 'botões mágicos' não podem fornecer"
+                    "title": "ARTE = VIRTUOSISMO",
+                    "desc": "O que nos separa é dominar as duas pontas: olhar de set e controle técnico da nova geração. Não testamos ferramenta por curiosidade; fundimos estética e potência para entregar o que o mercado não consegue replicar. A tecnologia obedece à arte."
                 }
             }
         },

@@ -688,6 +688,10 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
                         <div className="hidden md:flex items-center gap-6 pointer-events-auto relative z-10">
                             {/* NAV STYLE: Raw Text Links */}
 
+                            <MagneticButton onClick={onHome} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
+                                <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
+                                HOME
+                            </MagneticButton>
 
                             <MagneticButton onClick={onAbout} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
                                 <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
@@ -726,6 +730,9 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
             <div className={`fixed inset-0 z-40 bg-[#050505]/95 backdrop-blur-xl flex flex-col items-center justify-center transition-all duration-500 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
                 <div className="scanline-effect absolute inset-0 z-0 opacity-20 pointer-events-none"></div>
                 <div className="flex flex-col items-center gap-8 relative z-10 w-full px-8">
+                    <button onClick={() => handleNav(onHome)} className="text-2xl font-brick text-white hover:text-[#DC2626] transition-colors w-full text-center border-b border-white/10 pb-4">
+                        HOME
+                    </button>
                     <button onClick={() => handleNav(onAbout)} className="text-2xl font-brick text-white hover:text-[#DC2626] transition-colors w-full text-center border-b border-white/10 pb-4">
                         {t('header.about')}
                     </button>
@@ -1923,20 +1930,6 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                         </div>
                     </section>
 
-                    {/* LEADERSHIP (REAL ROLES) */}
-                    <section className="pb-32 reveal">
-                        <div className="flex items-center gap-3 mb-12 border-b border-white/10 pb-4">
-                            <Database className="w-4 h-4 text-[#DC2626]" />
-                            <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.team.title')}</h2>
-                        </div>
-
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                            <TeamMember name="ALEX M." role={t('about.team.roles.alex')} id="001" />
-                            <TeamMember name="SARAH V." role={t('about.team.roles.sarah')} id="002" />
-                            <TeamMember name="GABRIEL P." role={t('about.team.roles.gabriel')} id="003" />
-                            <TeamMember name="MARCUS L." role={t('about.team.roles.marcus')} id="004" />
-                        </div>
-                    </section>
                 </div>
             </main>
             <Footer onChat={onChat} />
@@ -2622,6 +2615,10 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
 
 const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedProject, setSelectedProject, selectedPost, setSelectedPost, goHome, goWorks, goTransmissions, goChat, goAdmin, goAbout, handleSelectPost }: any) => {
     const { transmissions } = useContext(DataContext)!;
+
+    useEffect(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }, [view]);
 
     useEffect(() => {
         if (view === 'post' && !selectedPost && transmissions.length > 0) {
