@@ -317,20 +317,31 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 url: "/transmissions/latent-space",
                 content: (
                     <React.Fragment>
-                        <p className="mb-8 text-base md:text-lg font-light leading-relaxed text-[#E5E5E5] first-letter:text-4xl first-letter:font-brick first-letter:text-[#DC2626] first-letter:mr-3 first-letter:float-left">
-                            {t('transmissions.log_001.content_p1')}
-                        </p>
-                        <h3 className="text-lg md:text-xl font-brick text-white mt-10 mb-4 uppercase tracking-tight flex items-center gap-3">
-                            <span className="text-[#DC2626] text-xs align-middle font-ai">01 //</span> {t('transmissions.log_001.section_title')}
-                        </h3>
-                        <p className="mb-6 text-[#9CA3AF] leading-relaxed">
-                            {t('transmissions.log_001.content_p2')}
-                        </p>
-                        <div className="border-l-2 border-[#DC2626] pl-6 py-4 my-10 bg-white/5">
-                            <p className="text-base font-mono italic text-white/90">
-                                {t('transmissions.log_001.quote')}
+                        {(t('transmissions.log_001.content_p1') as string).split('\n\n').filter(Boolean).map((paragraph, idx) => (
+                            <p
+                                key={idx}
+                                className="mb-8 text-base md:text-lg font-light text-[#E5E5E5] leading-relaxed md:leading-loose"
+                            >
+                                {paragraph}
                             </p>
-                        </div>
+                        ))}
+                        {t('transmissions.log_001.section_title') ? (
+                            <h3 className="text-lg md:text-xl font-brick text-white mt-10 mb-4 uppercase tracking-tight flex items-center gap-3">
+                                <span className="text-[#DC2626] text-xs align-middle font-ai">01 //</span> {t('transmissions.log_001.section_title')}
+                            </h3>
+                        ) : null}
+                        {t('transmissions.log_001.content_p2') ? (
+                            <p className="mb-6 text-[#9CA3AF] leading-relaxed">
+                                {t('transmissions.log_001.content_p2')}
+                            </p>
+                        ) : null}
+                        {t('transmissions.log_001.quote') ? (
+                            <div className="border-l-2 border-[#DC2626] pl-6 py-4 my-10 bg-white/5">
+                                <p className="text-base font-mono italic text-white/90">
+                                    {t('transmissions.log_001.quote')}
+                                </p>
+                            </div>
+                        ) : null}
                     </React.Fragment>
                 )
             },
@@ -343,17 +354,21 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 url: "/transmissions/motion-vectors",
                 content: (
                     <React.Fragment>
-                        <p className="mb-6 text-[#9CA3AF] leading-relaxed">
-                            {t('transmissions.log_002.content_p1').split('<0>').map((part, index, array) => {
-                                if (index === 1) return <span key={index} className="text-white font-bold">{part}</span>;
-                                if (index === array.length - 1 && part === '') return null;
-                                return part;
-                            })}
-                            {/* Fallback simple text if interpolation is too complex for this rapid refactor or proper <Trans> component usage */}
-                        </p>
-                        <p className="mb-6 text-[#9CA3AF] leading-relaxed">
-                            {t('transmissions.log_002.content_p2')}
-                        </p>
+                        {(t('transmissions.log_002.content_p1') as string)
+                            .replace('<0>', '')
+                            .replace('</0>', '')
+                            .split('\n\n')
+                            .filter(Boolean)
+                            .map((paragraph, idx) => (
+                                <p key={idx} className="mb-8 text-[#9CA3AF] leading-relaxed md:leading-loose">
+                                    {paragraph}
+                                </p>
+                            ))}
+                        {t('transmissions.log_002.content_p2') ? (
+                            <p className="mb-8 text-[#9CA3AF] leading-relaxed md:leading-loose">
+                                {t('transmissions.log_002.content_p2')}
+                            </p>
+                        ) : null}
                     </React.Fragment>
                 )
             },
@@ -366,12 +381,19 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 url: "/transmissions/intentional-glitch",
                 content: (
                     <React.Fragment>
-                        <p className="mb-6 text-[#9CA3AF] leading-relaxed">
-                            {t('transmissions.log_003.content_p1')}
-                        </p>
-                        <p className="text-white font-brick tracking-widest uppercase border-t border-white/10 pt-6">
-                            {t('transmissions.log_003.quote')}
-                        </p>
+                        {(t('transmissions.log_003.content_p1') as string)
+                            .split('\n\n')
+                            .filter(Boolean)
+                            .map((paragraph, idx) => (
+                                <p key={idx} className="mb-8 text-[#9CA3AF] leading-relaxed md:leading-loose">
+                                    {paragraph}
+                                </p>
+                            ))}
+                        {t('transmissions.log_003.quote') ? (
+                            <p className="text-white font-brick tracking-widest uppercase border-t border-white/10 pt-6">
+                                {t('transmissions.log_003.quote')}
+                            </p>
+                        ) : null}
                     </React.Fragment>
                 )
             }
@@ -984,9 +1006,14 @@ const Philosophy = () => {
             
             <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle,transparent_40%,rgba(5,5,5,0.9)_100%)] pointer-events-none"></div>
             <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
-                <div className="mb-20 reveal flex flex-col items-center">
-                    <div className="w-5 h-5 rounded-full animate-breathe blur-[2px] mb-6 mx-auto" style={{ background: 'radial-gradient(circle, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0.18) 45%, rgba(220,38,38,0) 75%)' }}></div>
-                    <span className="text-xs font-ai text-[#9CA3AF] bg-[#050505] px-4">{t('philosophy.belief_label')}</span>
+                <div className="mb-20 reveal w-full flex flex-col items-center">
+                    <div className="w-full flex justify-center mb-6">
+                        <div className="relative w-5 h-5">
+                            <div className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full animate-breathe blur-[2px]" style={{ background: 'radial-gradient(circle at center, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0.18) 45%, rgba(220,38,38,0) 75%)' }}></div>
+                            <div className="absolute left-1/2 top-1/2 w-[2px] h-[2px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DC2626]/60"></div>
+                        </div>
+                    </div>
+                    <span className="text-xs font-ai text-[#9CA3AF] bg-[#050505] px-4 text-center">{t('philosophy.belief_label')}</span>
                 </div>
                 <div className="flex flex-col gap-24 w-full">
                     <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} />
@@ -1399,23 +1426,45 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, 
             <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_index')}
             </button>
-            <main className="pt-32 min-h-screen flex flex-col bg-[#050505] pb-32">
-                <article className="w-full max-w-3xl mx-auto px-6 md:px-12 mt-12 animate-fade-in-up">
-                    <div className="border-b border-white/10 pb-8 mb-12">
-                        <div className="flex flex-wrap gap-4 items-center mb-6 text-[10px] font-mono uppercase tracking-widest">
-                            <span className="text-[#DC2626]">LOG_ID: {post.id}</span>
-                            <span className="text-[#9CA3AF]">DATE: {post.date}</span>
-                            {post.tags.map((tag: string) => (
-                                <span key={tag} className="border border-white/10 px-2 py-0.5 text-white/50">{tag}</span>
-                            ))}
+            <main className="pt-34 md:pt-40 min-h-screen flex flex-col bg-[#050505] pb-40 md:pb-48 px-4 md:px-8" onClick={onBack}>
+                <article className="w-full max-w-5xl mx-auto mt-12 md:mt-16 animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
+                    <div className="relative border border-white/10 bg-[#070707] backdrop-blur-sm overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#DC2626] to-transparent opacity-80"></div>
+
+                        <header className="px-7 md:px-14 pt-12 md:pt-16 pb-12 border-b border-white/10">
+                            <div className="max-w-3xl mx-auto">
+                                <div className="flex flex-wrap justify-start gap-3 md:gap-4 items-center mb-7 text-[10px] font-mono uppercase tracking-widest md:-ml-8">
+                                    <span className="text-[#DC2626]">LOG_ID: {post.id}</span>
+                                    <span className="text-[#9CA3AF]">DATE: {post.date}</span>
+                                    {post.tags.map((tag: string) => (
+                                        <span key={tag} className="border border-white/15 bg-white/[0.02] px-2 py-1 text-white/60">{tag}</span>
+                                    ))}
+                                </div>
+
+                                <h1 className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-[0.95] tracking-tight mb-8 text-center">
+                                    {(post.title || '').toUpperCase() === 'A MÁQUINA NÃO TEM ALMA. NÓS TEMOS.' ? (
+                                        <>
+                                            A MÁQUINA NÃO TEM ALMA.{' '}
+                                            <span className="text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.45)]">NÓS TEMOS.</span>
+                                        </>
+                                    ) : post.title}
+                                </h1>
+
+                                <p className="text-base md:text-xl text-[#b8bcc4] font-light leading-relaxed text-center">
+                                    {post.excerpt}
+                                </p>
+                            </div>
+                        </header>
+
+                        <div className="px-7 md:px-14 py-12 md:py-16">
+                            <div className="max-w-3xl mx-auto">
+                                <div className="prose prose-invert prose-lg max-w-none prose-p:text-[#d2d5db] prose-p:leading-relaxed md:prose-p:leading-loose prose-p:mb-6 md:prose-p:mb-8 prose-headings:font-brick prose-headings:text-white prose-headings:mt-10 prose-headings:mb-4 prose-strong:text-white prose-blockquote:border-[#DC2626] prose-blockquote:text-white/85 prose-blockquote:my-8 prose-a:text-[#DC2626] hover:prose-a:text-white">
+                                    {typeof post.content === 'string'
+                                        ? <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                                        : post.content}
+                                </div>
+                            </div>
                         </div>
-                        <h1 className="text-2xl md:text-4xl lg:text-5xl font-brick text-white leading-tight tracking-tight mb-6">{post.title}</h1>
-                        <p className="text-base md:text-lg text-[#9CA3AF] font-light leading-relaxed border-l-2 border-[#DC2626] pl-6">{post.excerpt}</p>
-                    </div>
-                    <div className="prose prose-invert prose-lg max-w-none">
-                        {typeof post.content === 'string'
-                            ? <div dangerouslySetInnerHTML={{ __html: post.content }} />
-                            : post.content}
                     </div>
                 </article>
             </main>
@@ -1433,8 +1482,8 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
             <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
-            <main className="pt-24 md:pt-32 min-h-screen flex flex-col bg-[#050505]">
-                <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
+            <main className="pt-28 md:pt-36 min-h-screen flex flex-col bg-[#050505]">
+                <section className="w-full px-6 md:px-12 lg:px-24 mb-16 md:mb-20 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('transmissions_page.title')}</h1>
@@ -1442,10 +1491,10 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
                         </div>
                     </div>
                 </section>
-                <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 reveal">
-                    <div className="space-y-px bg-white/10 border-t border-white/10">
+                <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-36 md:pb-44 reveal">
+                    <div className="space-y-2 md:space-y-3 bg-transparent border-t border-white/10">
                         {transmissions.map((post) => (
-                            <div key={post.id} onClick={() => onSelectPost(post)} className="block group bg-[#050505] hover:bg-[#0a0a0a] transition-colors p-8 md:p-10 border-b border-white/10 cursor-pointer">
+                            <div key={post.id} onClick={() => onSelectPost(post)} className="block group bg-[#050505] hover:bg-[#0a0a0a] transition-colors p-9 md:p-12 border border-white/10 cursor-pointer">
                                 <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-4">
                                     <h3 className="text-xl md:text-3xl font-brick text-white tracking-tight group-hover:text-[#DC2626] transition-colors">{post.title}</h3>
                                     <span className="font-mono text-[10px] text-[#DC2626] tracking-widest whitespace-nowrap">{post.date}</span>
@@ -1468,15 +1517,11 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
 
 const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => {
     const { t } = useTranslation();
-    const footerLine = (t('footer.we_have_intelligence') as string).trim();
-    const footerParts = footerLine.split(' ');
-    const footerHighlight = footerParts.pop() || '';
-    const footerPrefix = footerParts.join(' ');
     return (
         <footer className="w-full py-24 px-6 md:px-12 lg:px-24 bg-[#050505] border-t border-white/5 relative z-10">
             <div className="flex flex-col items-center text-center gap-8 reveal">
                 <h2 className="text-xs md:text-sm font-ai text-[#9CA3AF] uppercase">{t('footer.complex_problem')}</h2>
-                <p className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-none max-w-5xl">{footerPrefix} <span className="text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">{footerHighlight}</span></p>
+                <p className="text-3xl md:text-5xl lg:text-6xl font-brick text-[#DC2626] leading-none max-w-5xl drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">{t('footer.we_have_intelligence')}</p>
                 <MagneticButton onClick={onChat} className="mt-6 text-base md:text-lg font-ai font-bold text-white hover:text-[#DC2626] group">
                     {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
                 </MagneticButton>
