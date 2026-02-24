@@ -73,6 +73,16 @@ const initDB = async (retries = 10) => {
     while (retries > 0) {
         try {
             console.log(`>> ATTEMPTING DB CONNECTION... (${retries} left)`);
+            // Cria tabela de usuários admin se não existir
+            await pool.query(`
+            CREATE TABLE IF NOT EXISTS master_users (
+                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                email TEXT UNIQUE NOT NULL,
+                username TEXT UNIQUE NOT NULL,
+                password_hash TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+        `);
             // Cria tabela de Works se não existir
             await pool.query(`
             CREATE TABLE IF NOT EXISTS works (
