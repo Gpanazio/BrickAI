@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brick AI - Instagram Posts</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;700&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --brick-black: #050505;
+            --brick-red: #DC2626;
+            --brick-alarm-red: #FF1A1A;
+            /* HAL Logic Core / Emergency Red Glow */
+            --brick-white: #E5E5E5;
+        }
+
+        body {
+            background-color: #111;
+            color: var(--brick-white);
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .slide {
+            width: 1080px;
+            height: 1080px;
+            background-color: var(--brick-black);
+            position: relative;
+            overflow: hidden;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 100px;
+        }
+
+        .font-brick {
+            font-family: 'Inter', sans-serif;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+            line-height: 1;
+        }
+
+        .font-ai {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .bg-tech-grid {
+            background-size: 40px 40px;
+            background-image: linear-gradient(to right, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+            -webkit-mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+        }
+
+        .background-layer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+        }
+
+        .content-layer {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .noise-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.15;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            mix-blend-mode: overlay;
+        }
+
+        /* --- VINTAGE CRT TERMINAL EFFECT FOR RED TEXT --- */
+        @keyframes crt-flicker {
+            0% {
+                opacity: 0.95;
+                text-shadow: 0 0 8px rgba(255, 26, 26, 0.8), 0 0 16px rgba(255, 26, 26, 0.4);
+            }
+
+            5% {
+                opacity: 0.85;
+                text-shadow: 0 0 4px rgba(255, 26, 26, 0.6), 0 0 10px rgba(255, 26, 26, 0.3);
+            }
+
+            10% {
+                opacity: 0.95;
+                text-shadow: 0 0 8px rgba(255, 26, 26, 0.8), 0 0 16px rgba(255, 26, 26, 0.4);
+            }
+
+            15% {
+                opacity: 1;
+                text-shadow: 0 0 10px rgba(255, 26, 26, 0.9), 0 0 20px rgba(255, 26, 26, 0.5);
+            }
+
+            50% {
+                opacity: 0.95;
+                text-shadow: 0 0 8px rgba(255, 26, 26, 0.8), 0 0 16px rgba(255, 26, 26, 0.4);
+            }
+
+            55% {
+                opacity: 0.9;
+                text-shadow: 0 0 6px rgba(255, 26, 26, 0.7), 0 0 12px rgba(255, 26, 26, 0.3);
+            }
+
+            100% {
+                opacity: 1;
+                text-shadow: 0 0 12px rgba(255, 26, 26, 1), 0 0 24px rgba(255, 26, 26, 0.6), 0 0 35px rgba(255, 26, 26, 0.2);
+            }
+        }
+
+        .crt-text {
+            color: var(--brick-alarm-red);
+            position: relative;
+            text-shadow: 0 0 10px rgba(255, 26, 26, 0.9), 0 0 20px rgba(255, 26, 26, 0.5);
+        }
+
+        /* Micro scanlines specifically over the text */
+        .crt-text::after {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0) 50%, rgba(0, 0, 0, 0.15) 50%, rgba(0, 0, 0, 0.15));
+            z-index: 2;
+            background-size: 100% 3px;
+            opacity: 0.6;
+            pointer-events: none;
+        }
+
+        .text-brick-red {
+            color: var(--brick-red);
+        }
+
+        .text-brick-alarm-red {
+            color: var(--brick-alarm-red);
+        }
+
+        .text-brick-white {
+            color: var(--brick-white);
+        }
+
+        .bolinha {
+            width: 24px;
+            height: 24px;
+            background-color: var(--brick-red);
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 24px rgba(220, 38, 38, 0.8);
+        }
+
+        .btn-download {
+            background-color: var(--brick-red);
+            color: white;
+            padding: 16px 32px;
+            border: none;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            text-transform: uppercase;
+            margin-top: 20px;
+            box-shadow: 0 0 20px rgba(220, 38, 38, 0.4);
+            transition: all 0.2s;
+        }
+
+        .btn-download:hover {
+            background-color: #b91c1c;
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(220, 38, 38, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+
+    <button class="btn-download" onclick="downloadAll()">Baixar Todos os Slides</button>
+
+    <!-- SLIDE 1 -->
+    <div class="slide" id="slide1">
+        <div class="background-layer bg-tech-grid"></div>
+        <div class="background-layer noise-overlay"></div>
+        <div class="content-layer">
+            <div>
+                <span class="bolinha mt-8 mb-16"></span>
+            </div>
+            <div class="mb-40">
+                <h1 class="font-brick text-[140px] text-brick-white mb-8 tracking-tighter">BRICK_AI<span
+                        class="text-brick-red">.</span></h1>
+                <h2 class="font-brick text-[85px] text-brick-alarm-red crt-text leading-[0.9] tracking-tighter">DO
+                    SET
+                    AO<br>SERVIDOR.
+                </h2>
+            </div>
+            <div class="font-ai text-[32px] text-brick-red mb-8">
+                // THE GENERATIVE DIVISION
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 2 -->
+    <div class="slide" id="slide2">
+        <div class="background-layer bg-tech-grid"></div>
+        <div class="background-layer noise-overlay"></div>
+        <div class="content-layer">
+            <div class="font-ai text-[40px] text-brick-red mt-8">
+                2026:
+            </div>
+            <div class="my-auto">
+                <h2 class="font-brick text-[76px] text-brick-alarm-red crt-text leading-[1.05] tracking-tighter">
+                    A QUALIDADE DA IA<br>
+                    DEIXOU DE SER<br>
+                    O DIFERENCIAL.
+                </h2>
+                <div class="w-32 h-3 bg-brick-red my-12 opacity-80"></div>
+                <h2 class="font-brick text-[76px] text-brick-white leading-[1.05] tracking-tighter">
+                    O DIFERENCIAL<br>
+                    VOLTOU A SER<br>
+                    DIREÇÃO.
+                </h2>
+            </div>
+            <div class="font-ai text-[32px] text-brick-red mb-8">
+                // BRICK_AI
+            </div>
+        </div>
+    </div>
+
+    <!-- SLIDE 3 -->
+    <div class="slide" id="slide3">
+        <div class="background-layer bg-tech-grid"></div>
+        <div class="background-layer noise-overlay"></div>
+        <div class="content-layer">
+            <div>
+                <span class="bolinha mt-8"></span>
+            </div>
+            <div class="my-auto">
+                <h2 class="font-brick text-[76px] text-brick-alarm-red crt-text leading-[1.05] tracking-tighter mb-8">
+                    A IA FAZ A IMAGEM.
+                </h2>
+                <h2 class="font-brick text-[115px] text-brick-white leading-[0.95] tracking-tighter mb-16">
+                    NÓS FAZEMOS<br>O CINEMA.
+                </h2>
+                <h1 class="font-ai text-[55px] text-brick-white font-bold">BRICK_AI<span class="text-brick-red">.</span>
+                </h1>
+            </div>
+            <div class="font-ai text-[32px] text-brick-red mb-8">
+                // THE GENERATIVE DIVISION
+            </div>
+        </div>
+    </div>
+
+    <script>
+        async function downloadAll() {
+            const btn = document.querySelector('.btn-download');
+            btn.innerText = 'Processando...';
+            btn.style.opacity = '0.7';
+
+            const slides = ['slide1', 'slide2', 'slide3'];
+            for (let i = 0; i < slides.length; i++) {
+                const element = document.getElementById(slides[i]);
+                const canvas = await html2canvas(element, { scale: 2, backgroundColor: '#050505' });
+                const link = document.createElement('a');
+                link.download = `brick_ai_post_${i + 1}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            }
+
+            btn.innerText = 'Baixar Todos os Slides';
+            btn.style.opacity = '1';
+        }
+    </script>
+</body>
+
+</html>

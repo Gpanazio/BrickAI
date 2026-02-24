@@ -786,35 +786,41 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                         <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-60 w-[300px] h-[300px] blur-[40px]"></div>
                         <div className="centered-layer core-atmos pointer-events-none"></div>
 
-                        {/* INTERACTIVE RED DOT SOURCE */}
-                        <div
-                            ref={lightSourceRef}
-                            className="absolute z-30 w-1.5 h-1.5 bg-[#DC2626] rounded-full pointer-events-none mix-blend-screen shadow-[0_0_8px_rgba(220,38,38,1)] transition-opacity duration-300 ease-out"
-                            style={{
-                                top: '50%',
-                                left: '50%',
-                                marginTop: '-3px',
-                                marginLeft: '-3px',
-                                opacity: 0,
-                                willChange: 'transform, opacity'
-                            }}
-                        ></div>
+                        {/* INTERACTIVE RED DOT & RADIATION (Strictly Inside Monolith) */}
+                        <div className="absolute inset-0 overflow-hidden rounded-[2px] pointer-events-none z-30">
+                            <div
+                                ref={lightSourceRef}
+                                className="absolute pointer-events-none mix-blend-screen transition-opacity duration-300 ease-out rounded-full"
+                                style={{
+                                    width: '6px',
+                                    height: '6px',
+                                    top: '50%',
+                                    left: '50%',
+                                    marginTop: '-3px',
+                                    marginLeft: '-3px',
+                                    backgroundColor: '#DC2626',
+                                    boxShadow: '0 0 10px 2px rgba(220, 38, 38, 0.6), 0 0 20px 4px rgba(220, 38, 38, 0.2)',
+                                    opacity: 0,
+                                    willChange: 'transform, opacity'
+                                }}
+                            ></div>
 
-                        <div
-                            ref={radiationRef}
-                            className="absolute w-[600px] h-[600px] -ml-[300px] -mt-[300px] top-1/2 left-1/2 pointer-events-none transition-opacity duration-700 ease-out"
-                            style={{
-                                background: 'radial-gradient(circle, rgba(220,38,38,0.2) 0%, rgba(220,38,38,0.05) 50%, transparent 80%)',
-                                filter: 'blur(60px)',
-                                zIndex: 5,
-                                opacity: 0,
-                                willChange: 'transform, opacity',
-                                backfaceVisibility: 'hidden',
-                                WebkitBackfaceVisibility: 'hidden',
-                                perspective: 1000,
-                                transformStyle: 'preserve-3d'
-                            }}
-                        ></div>
+                            <div
+                                ref={radiationRef}
+                                className="absolute w-[600px] h-[600px] -ml-[300px] -mt-[300px] top-1/2 left-1/2 pointer-events-none transition-opacity duration-700 ease-out"
+                                style={{
+                                    background: 'radial-gradient(circle, rgba(220,38,38,0.25) 0%, rgba(220,38,38,0.05) 50%, transparent 80%)',
+                                    filter: 'blur(60px)',
+                                    zIndex: 5,
+                                    opacity: 0,
+                                    willChange: 'transform, opacity',
+                                    backfaceVisibility: 'hidden',
+                                    WebkitBackfaceVisibility: 'hidden',
+                                    perspective: 1000,
+                                    transformStyle: 'preserve-3d'
+                                }}
+                            ></div>
+                        </div>
                         <div className="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10 rounded-[2px]"></div>
                     </div>
                     <div
@@ -822,7 +828,6 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                         onMouseMove={handleMouseMove}
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
-                        style={{ width: '150%', height: '150%', left: '-25%', top: '-25%' }}
                     ></div>
                 </div>
             </div>
@@ -846,7 +851,6 @@ const Philosophy = () => {
 
     return (
         <section className="relative w-full py-20 bg-[#050505] z-20 border-t border-white/5">
-            <div className="absolute left-1/2 top-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/10 to-transparent -translate-x-1/2 hidden md:block"></div>
             <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
                 <div className="mb-20 reveal flex flex-col items-center">
                     <div className="w-2 h-2 bg-[#DC2626] rounded-full animate-pulse shadow-[0_0_10px_rgba(220,38,38,0.5)] mb-6"></div>
@@ -901,7 +905,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 flexShrink: 0,
                 flexBasis: 0,
                 willChange: 'flex-grow, opacity, transform, border-color',
-                transition: `flex-grow ${isHovered ? '6s' : '2s'} linear, opacity 1.2s cubic-bezier(0.16, 1, 0.3, 1), transform 1.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 300ms ease`,
+                transition: `flex-grow 1.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.2s ease-out, transform 1.2s ease-out, border-color 500ms ease`,
             }}
         >
             {/* BACKGROUND LAYER - AUTONOMOUS PARALLAX */}
@@ -932,41 +936,35 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             <div className="absolute inset-0 z-30 transition-opacity duration-[6000ms] ease-linear opacity-90 group-hover:opacity-80" style={{ background: 'linear-gradient(to top, #050505 0%, #050505e6 15%, #05050599 40%, transparent 70%)' }}></div>
             <div className={`absolute inset-0 z-30 transition-opacity duration-[6000ms] ease-linear pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.8)] ${isHovered ? 'opacity-40' : 'opacity-60'}`}></div>
 
-            {/* CONTENT LAYER - VERTICAL TITLE ON IDLE */}
-            <div className="absolute inset-x-0 bottom-0 z-40 p-6 md:p-10 lg:p-14 flex flex-col justify-end pointer-events-none">
-                {/* HEADER TAGS (Reveal on Hover) */}
-                <div className={`flex items-center gap-4 mb-4 transform transition-all duration-500 ease-out ${isHovered ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 h-0 overflow-hidden'}`}>
-                    <span className="font-mono text-[10px] text-[#DC2626] tracking-widest bg-[#DC2626]/10 px-3 py-1 border border-[#DC2626]/20">{work.id.toUpperCase()}</span>
-                    <div className="flex gap-1">
-                        {[...Array(3)].map((_, i) => (
-                            <div key={i} className="w-1 h-1 bg-[#DC2626] animate-pulse" style={{ animationDelay: `${i * 200}ms` }}></div>
-                        ))}
-                    </div>
+            {/* CONTENT LAYER - ULTRA MINIMALIST NO BLOCKS */}
+            <div className={`absolute inset-x-0 bottom-0 z-40 p-6 md:p-10 flex flex-col justify-end transition-all duration-500 pointer-events-none ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
+                
+                {/* DECORATIVE LINE */}
+                <div className="w-12 h-[2px] bg-[#DC2626] mb-4 shadow-[0_0_8px_#DC2626]"></div>
+
+                {/* CATEGORY & META */}
+                <div className="flex items-center gap-3 mb-2">
+                    <span className="font-mono text-[10px] text-[#DC2626] tracking-[0.2em] uppercase">{work.id}</span>
+                    <span className="text-white/20 text-[10px] font-light">|</span>
+                    <span className="font-mono text-[10px] text-white/60 tracking-widest uppercase">{work.category}</span>
                 </div>
 
-                {/* MAIN TITLE (Always Visible - High Contrast) */}
-                <h3
-                    className="text-4xl md:text-[clamp(2.5rem,4vw,5rem)] font-brick text-white uppercase tracking-tighter leading-[0.85] mb-6 whitespace-normal transition-all duration-500 select-none"
-                    style={{ textShadow: '0 2px 4px rgba(0,0,0,0.9), 0 4px 12px rgba(0,0,0,0.7), 0 8px 30px rgba(0,0,0,0.5)' }}
-                >
+                {/* TITLE - CLEAN & BOLD */}
+                <h3 className="text-3xl md:text-5xl font-brick text-white leading-[0.9] tracking-tight drop-shadow-lg mb-2">
                     {work.title}
                 </h3>
 
-                {/* DETAILS CONTENT (Reveal on Hover) */}
-                <div className={`transform transition-all duration-500 ease-out ${isHovered ? 'opacity-100 max-h-[300px] translate-y-0' : 'opacity-0 max-h-0 translate-y-4'}`}>
-                    <p className="text-[#9CA3AF] text-xs md:text-sm font-mono uppercase tracking-[0.2em] mb-8 border-l-2 border-[#DC2626] pl-6 py-1 drop-shadow-md">
-                        {work.category} <span className="text-[#DC2626]/50 mx-2">//</span> {work.subtitle}
-                    </p>
+                {/* SUBTITLE - LIGHT MONOJET */}
+                <p className="text-white/70 text-[10px] md:text-xs font-mono font-light tracking-wide max-w-md drop-shadow-md uppercase opacity-80 mt-2">
+                    {work.subtitle}
+                </p>
+            </div>
 
-                    {/* Technical Decors */}
-                    <div className="flex flex-wrap gap-6 pt-8 border-t border-white/10">
-                        <DataChip label="ARCHIVE_REF" value={randomHash} />
-                        <DataChip label="RESOLUTION" value="PRORES_4444" />
-                        <div className="hidden lg:block">
-                            <DataChip label="NODE_STATUS" value="ACTIVE_SYNAPSE" />
-                        </div>
-                    </div>
-                </div>
+            {/* ID TAG - Always Visible Minimal */}
+            <div className={`absolute top-6 left-6 transition-all duration-500 ${isHovered ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'}`}>
+                 <span className="font-mono text-[10px] text-white/40 tracking-widest border border-white/10 px-2 py-1">
+                    {work.id.toUpperCase()}
+                </span>
             </div>
 
             {/* EDGE DECOR */}
@@ -1169,7 +1167,7 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
                 </div>
                 <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                     <h3 className="text-lg md:text-xl font-brick text-white leading-none mb-2 tracking-tight group-hover:text-[#DC2626] transition-colors">{work.title}</h3>
-                    <p className="text-[10px] md:text-xs text-[#9CA3AF] font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-2">{work.desc}</p>
+                    <p className="text-[10px] md:text-xs text-[#9CA3AF] font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">{work.desc}</p>
                 </div>
             </div>
             <div className="absolute top-0 left-0 w-2 h-2 border-l border-t border-white/30 group-hover:border-[#DC2626] transition-colors z-40"></div>
