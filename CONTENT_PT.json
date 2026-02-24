@@ -7,73 +7,73 @@
         "talk_to_us": "FALE CONOSCO"
     },
     "hero": {
-        "title": "DO SET AO SERVIDOR.",
-        "subtitle": "10 ANOS DE CRAFT.",
-        "scramble": "AGORA GENERATIVO.",
-        "description": "UMA NOVA DIVISÃO DA BRICK.\nDO ZERO AO TUDO DESDE 2016."
+        "title": "NASCIDOS NO SET",
+        "subtitle": "A MESMA ALMA",
+        "scramble": "UM NOVO CORPO",
+        "description": "UMA NOVA DIVISÃO DA BRICK.\nDO ZERO AO TUDO DESDE 2016"
     },
     "philosophy": {
         "belief_label": "A Crença",
         "raw": {
-            "title": "RAW.",
-            "text": "A IA cria pixels e padrões infinitos. Mas não pode criar intenção. É apenas um recurso."
+            "title": "RAW",
+            "text": "A IA cria pixels e padrões infinitos. Mas não pode criar intenção."
         },
         "noise": {
-            "title": "RUÍDO.",
-            "text": "Sem a mão humana, modelos generativos são apenas coincidência matemática. Nós fornecemos a visão."
+            "title": "RUÍDO",
+            "text": "Sem a mão humana, modelos generativos são apenas coincidência matemática. Nós fornecemos a visão"
         },
         "direct": {
-            "title": "NÓS DIRECIONAMOS A INTELIGÊNCIA.",
-            "text": "A máquina é o pincel. O banco de dados é a tinta. Ainda somos os artistas."
+            "title": "NÓS DIRIGIMOS A INTELIGÊNCIA",
+            "text": "A máquina é o pincel. O modelo é a tinta. Ainda somos os artistas."
         }
     },
     "works": {
         "inheritance": {
             "title": "INHERITANCE",
             "subtitle": "CURTA-METRAGEM",
-            "desc": "Seleção oficial Festival de Gramado 2025.",
-            "longDesc": "Um dos primeiros filmes feitos com IA a ser selecionado e exibido no Festival de Gramado. Inheritance conta a história de uma civilização que herda um mundo abandonado — e repete, passo a passo, todos os erros de seus antecessores. Uma fábula sobre ciclos, hubris e a ilusão do progresso. A versão de 5 minutos estreou em Gramado; uma versão estendida de 10 minutos permanece inédita."
+            "desc": "Seleção oficial Festival de Gramado 2025",
+            "longDesc": "Um dos primeiros filmes feitos com IA a ser selecionado e exibido no Festival de Gramado. Inheritance conta a história de uma civilização que herda um mundo abandonado — e repete, passo a passo, todos os erros de seus antecessores. Uma fábula sobre ciclos, hubris e a ilusão do progresso. A versão de 5 minutos estreou em Gramado; uma versão estendida de 10 minutos permanece inédita"
         },
         "shift": {
             "title": "VENDEMOS QUALQUER COISA",
             "subtitle": "MANIFESTO",
-            "desc": "Finalista Genero Challenge.",
-            "longDesc": "Um único personagem. Infinitos mundos. Neste manifesto, o mesmo homem aparece em um estúdio de moda, lidera uma banda marcial em um estádio lotado, passeia por palácios europeus, relaxa em uma sala tipicamente americana e enfrenta lutadores de sumô — tudo em 60 segundos. A mensagem é simples: não existem mais limites de produção. Qualquer cenário, qualquer contexto, qualquer história. Finalista no Genero Challenge."
+            "desc": "Finalista Genero Challenge",
+            "longDesc": "Um único personagem. Infinitos mundos. Neste manifesto, o mesmo homem aparece em um estúdio de moda, lidera uma banda marcial em um estádio lotado, passeia por palácios europeus, relaxa em uma sala tipicamente americana e enfrenta lutadores de sumô — tudo em 60 segundos. A mensagem é simples: não existem mais limites de produção. Qualquer cenário, qualquer contexto, qualquer história. Finalista no Genero Challenge"
         },
         "anima": {
             "title": "AUTOBOL",
             "subtitle": "HISTÓRIA REIMAGINADA",
-            "desc": "Resgatando um esporte esquecido dos anos 70.",
-            "longDesc": "Autobol existiu de verdade. Nos anos 1970, no Rio de Janeiro, carros empurravam uma bola gigante em partidas entre Flamengo, Fluminense, Vasco e Botafogo. Criado pelo médico Mário Marques Tourinho, o esporte foi um fenômeno breve e hoje quase esquecido. Este projeto reimagina o Autobol como ele poderia ter sido filmado na época — com toda a textura, o grain e a atmosfera de uma transmissão perdida dos anos 70."
+            "desc": "Resgatando um esporte esquecido dos anos 70",
+            "longDesc": "Autobol existiu de verdade. Nos anos 1970, no Rio de Janeiro, carros empurravam uma bola gigante em partidas entre Flamengo, Fluminense, Vasco e Botafogo. Criado pelo médico Mário Marques Tourinho, o esporte foi um fenômeno breve e hoje quase esquecido. Este projeto reimagina o Autobol como ele poderia ter sido filmado na época — com toda a textura, o grain e a atmosfera de uma transmissão perdida dos anos 70"
         },
         "factory": {
             "title": "FACTORY",
             "subtitle": "RETRO-FUTURISMO",
-            "desc": "Decadência industrial com visão retro-futurista.",
-            "longDesc": "Uma fábrica que nunca existiu, mas que parece lembrada. Factory combina decadência industrial com uma estética retro-futurista — como se um futuro imaginado nos anos 70 tivesse envelhecido e sido abandonado. Ferrugem, concreto, maquinário silencioso. Um espaço entre a nostalgia de um passado e a ruína de um futuro que não veio."
+            "desc": "Decadência industrial com visão retro-futurista",
+            "longDesc": "Uma fábrica que nunca existiu, mas que parece lembrada. Factory combina decadência industrial com uma estética retro-futurista — como se um futuro imaginado nos anos 70 tivesse envelhecido e sido abandonado. Ferrugem, concreto, maquinário silencioso. Um espaço entre a nostalgia de um passado e a ruína de um futuro que não veio"
         },
         "dogday": {
             "title": "DOG DAY AFTERNOON",
             "subtitle": "COMÉDIA ABSURDA",
-            "desc": "Cachorros em situações humanas.",
-            "longDesc": "Um grupo de apoio canino com a faixa 'SIT STAY HEAL'. Um chihuahua de suéter participando de uma call de Zoom. Dog Day Afternoon é comédia absurda levada a sério — cachorros em situações cotidianas humanas, filmados com a sobriedade de um drama independente. O título é uma referência ao clássico de Sidney Lumet com Al Pacino."
+            "desc": "Cachorros em situações humanas",
+            "longDesc": "Um grupo de apoio canino com a faixa 'SIT STAY HEAL'. Um chihuahua de suéter participando de uma call de Zoom. Dog Day Afternoon é comédia absurda levada a sério — cachorros em situações cotidianas humanas, filmados com a sobriedade de um drama independente. O título é uma referência ao clássico de Sidney Lumet com Al Pacino"
         }
     },
     "transmissions": {
         "when-to-use-ai": {
             "title": "QUANDO USAR IA — E QUANDO NÃO USAR",
-            "excerpt": "Nem todo projeto precisa de IA. Saber quando usar é tão importante quanto saber como.",
-            "content": "Toda semana alguém chega pedindo \"um vídeo com IA\" como se fosse um ingrediente mágico. Joga IA que fica bom. Não funciona assim.\n\nIA é uma ferramenta. Uma ferramenta muito boa pra algumas coisas e completamente inútil pra outras. Depois de alguns anos usando isso em produção real, não em experimentos de Twitter, a gente desenvolveu um senso claro de quando faz sentido e quando é desperdício de tempo e dinheiro.\n\nFunciona quando o cenário não existe. Se o roteiro pede uma fábrica soviética abandonada, um palácio que mistura três épocas diferentes, ou um lugar que só existe na cabeça do diretor, IA resolve. A alternativa seria construir um set ou torcer pra achar a locação perfeita. As duas custam mais e demoram mais.\n\nFunciona quando você precisa de escala sem orçamento de escala. Um produto em 20 contextos diferentes normalmente significa 20 diárias. Com IA, significa uma semana de trabalho. A matemática é simples.\n\nFunciona quando ninguém sabe ainda o que quer. Fase de conceito é cara em produção tradicional. Cada teste é uma mini-produção. Com IA, você apresenta 30 direções diferentes antes de comprometer centavo com equipe e equipamento.\n\nNão funciona quando a alma do vídeo é uma pessoa real. Depoimento, entrevista, talking head. Isso precisa de um rosto humano de verdade. Não porque IA não consegue gerar rostos. Consegue. Mas a conexão emocional some. O espectador sente, mesmo sem saber explicar.\n\nNão funciona quando o produto físico é o herói. Se você está vendendo um relógio, mostre o relógio. A textura do metal, o peso visual, a luz batendo no vidro. IA pode criar o cenário em volta, mas o objeto precisa ser real.\n\nNão funciona quando você tem orçamento pra fazer direito do jeito tradicional. IA não é automaticamente melhor. É uma opção. Às vezes a opção certa é câmera, luz, equipe, locação. A gente sabe fazer os dois. A gente sabe quando usar cada um.\n\nA pergunta certa nunca é \"dá pra fazer com IA?\" Quase tudo dá. A pergunta é \"vai ficar melhor, mais rápido, ou mais viável?\" Se a resposta for não, a gente filma. Simples."
+            "excerpt": "Nem todo projeto precisa de IA. Saber quando usar é tão importante quanto saber como",
+            "content": "Toda semana alguém chega pedindo \"um vídeo com IA\" como se fosse um ingrediente mágico. Joga IA que fica bom. Não funciona assim.\n\nIA é uma ferramenta. Uma ferramenta muito boa pra algumas coisas e completamente inútil pra outras. Depois de alguns anos usando isso em produção real, não em experimentos de Twitter, a gente desenvolveu um senso claro de quando faz sentido e quando é desperdício de tempo e dinheiro.\n\nFunciona quando o cenário não existe. Se o roteiro pede uma fábrica soviética abandonada, um palácio que mistura três épocas diferentes, ou um lugar que só existe na cabeça do diretor, IA resolve. A alternativa seria construir um set ou torcer pra achar a locação perfeita. As duas custam mais e demoram mais.\n\nFunciona quando você precisa de escala sem orçamento de escala. Um produto em 20 contextos diferentes normalmente significa 20 diárias. Com IA, significa uma semana de trabalho. A matemática é simples.\n\nFunciona quando ninguém sabe ainda o que quer. Fase de conceito é cara em produção tradicional. Cada teste é uma mini-produção. Com IA, você apresenta 30 direções diferentes antes de comprometer centavo com equipe e equipamento.\n\nNão funciona quando a alma do vídeo é uma pessoa real. Depoimento, entrevista, talking head. Isso precisa de um rosto humano de verdade. Não porque IA não consegue gerar rostos. Consegue. Mas a conexão emocional some. O espectador sente, mesmo sem saber explicar.\n\nNão funciona quando o produto físico é o herói. Se você está vendendo um relógio, mostre o relógio. A textura do metal, o peso visual, a luz batendo no vidro. IA pode criar o cenário em volta, mas o objeto precisa ser real.\n\nNão funciona quando você tem orçamento pra fazer direito do jeito tradicional. IA não é automaticamente melhor. É uma opção. Às vezes a opção certa é câmera, luz, equipe, locação. A gente sabe fazer os dois. A gente sabe quando usar cada um.\n\nA pergunta certa nunca é \"dá pra fazer com IA?\" Quase tudo dá. A pergunta é \"vai ficar melhor, mais rápido, ou mais viável?\" Se a resposta for não, a gente filma. Simples"
         },
         "consistency-problem": {
             "title": "O PROBLEMA DA CONSISTÊNCIA",
-            "excerpt": "Por que vídeos de IA parecem \"estranhos\" e como resolvemos isso.",
-            "content": "O maior problema de vídeo generativo não é fazer uma imagem bonita. Isso é fácil. O problema é fazer 720 imagens bonitas que pareçam o mesmo filme.\n\nCada frame é gerado do zero. O modelo não sabe o que veio antes nem o que vem depois. Sem controle, o personagem muda de rosto no frame 47. A parede troca de textura no frame 203. A luz decide vir de outro ângulo no frame 589.\n\nSeu cérebro detecta isso em milissegundos. Você não sabe explicar o que está errado, mas sabe que algo está. É o \"uncanny valley\" aplicado ao tempo, não só ao rosto.\n\nPor isso a maioria dos vídeos de IA que você vê por aí parecem... estranhos. Tecnicamente impressionantes, mas impossíveis de assistir por mais de 15 segundos sem desconforto.\n\nA solução não está no prompt. Não existe combinação de palavras que resolva isso. A solução está no pipeline: como você estrutura a geração, quais controles você impõe entre frames, como você trata a imagem depois que ela sai do modelo.\n\nÉ trabalho técnico, chato, invisível. Ninguém posta no LinkedIn. Mas é a diferença entre um experimento e um filme.\n\nQuando a consistência funciona, você nem percebe. Você só assiste. Quando não funciona, você não consegue assistir mais nada."
+            "excerpt": "Por que vídeos de IA parecem \"estranhos\" e como resolvemos isso",
+            "content": "O maior problema de vídeo generativo não é fazer uma imagem bonita. Isso é fácil. O problema é fazer 720 imagens bonitas que pareçam o mesmo filme.\n\nCada frame é gerado do zero. O modelo não sabe o que veio antes nem o que vem depois. Sem controle, o personagem muda de rosto no frame 47. A parede troca de textura no frame 203. A luz decide vir de outro ângulo no frame 589.\n\nSeu cérebro detecta isso em milissegundos. Você não sabe explicar o que está errado, mas sabe que algo está. É o \"uncanny valley\" aplicado ao tempo, não só ao rosto.\n\nPor isso a maioria dos vídeos de IA que você vê por aí parecem... estranhos. Tecnicamente impressionantes, mas impossíveis de assistir por mais de 15 segundos sem desconforto.\n\nA solução não está no prompt. Não existe combinação de palavras que resolva isso. A solução está no pipeline: como você estrutura a geração, quais controles você impõe entre frames, como você trata a imagem depois que ela sai do modelo.\n\nÉ trabalho técnico, chato, invisível. Ninguém posta no LinkedIn. Mas é a diferença entre um experimento e um filme.\n\nQuando a consistência funciona, você nem percebe. Você só assiste. Quando não funciona, você não consegue assistir mais nada"
         },
         "direction-over-prompt": {
             "title": "DIREÇÃO > PROMPT",
-            "excerpt": "Por que dominar prompts não faz de você um diretor.",
-            "content": "Tem uma indústria inteira vendendo a ideia de que o segredo da IA está nas palavras certas. Pacotes com \"10.000 prompts profissionais\". Cursos de \"engenharia de prompt\". Gurus explicando a ordem exata dos adjetivos.\n\nIsso é como vender uma lista de palavras em inglês e chamar de curso de roteiro.\n\nO prompt é a parte mais superficial do processo. É só a interface, o campo de texto onde você digita. O que determina o resultado de verdade é tudo que vem antes e tudo que vem depois.\n\nAntes: qual é a referência visual? Qual o mood board? Existe um storyboard? A direção de arte está definida? O cliente sabe o que quer ou acha que sabe? Essas perguntas existem há cem anos. A IA não inventou nenhuma delas.\n\nDepois: de 500 imagens geradas, quais prestam? O que precisa de correção? Como compor os elementos? Qual o tratamento de cor? Isso é curadoria, é pós-produção, é olhar treinado. Também existe há décadas.\n\nA IA é uma ferramenta no meio do processo. Uma ferramenta poderosa, mas ainda uma ferramenta. Quem acha que dominar o prompt é dominar a IA está confundindo o volante com o carro inteiro.\n\nA diferença entre trabalho amador e profissional nunca foi a ferramenta. É o olhar de quem usa. Isso não mudou."
+            "excerpt": "Por que dominar prompts não faz de você um diretor",
+            "content": "Tem uma indústria inteira vendendo a ideia de que o segredo da IA está nas palavras certas. Pacotes com \"10.000 prompts profissionais\". Cursos de \"engenharia de prompt\". Gurus explicando a ordem exata dos adjetivos.\n\nIsso é como vender uma lista de palavras em inglês e chamar de curso de roteiro.\n\nO prompt é a parte mais superficial do processo. É só a interface, o campo de texto onde você digita. O que determina o resultado de verdade é tudo que vem antes e tudo que vem depois.\n\nAntes: qual é a referência visual? Qual o mood board? Existe um storyboard? A direção de arte está definida? O cliente sabe o que quer ou acha que sabe? Essas perguntas existem há cem anos. A IA não inventou nenhuma delas.\n\nDepois: de 500 imagens geradas, quais prestam? O que precisa de correção? Como compor os elementos? Qual o tratamento de cor? Isso é curadoria, é pós-produção, é olhar treinado. Também existe há décadas.\n\nA IA é uma ferramenta no meio do processo. Uma ferramenta poderosa, mas ainda uma ferramenta. Quem acha que dominar o prompt é dominar a IA está confundindo o volante com o carro inteiro.\n\nA diferença entre trabalho amador e profissional nunca foi a ferramenta. É o olhar de quem usa. Isso não mudou"
         }
     },
     "common": {
@@ -85,17 +85,17 @@
         "loading": "CARREGANDO..."
     },
     "legacy": {
-        "title": "APOIADO PELA BRICK.",
-        "title_mobile_br": "APOIADO <br /> PELA BRICK.",
-        "text": "Isto não é um experimento. Esta é uma nova lente de uma produtora com 10 anos de experiência.",
+        "title": "APOIADO PELA BRICK",
+        "title_mobile_br": "APOIADO <br /> PELA BRICK",
+        "text": "Não é um experimento. É uma produtora com 10 anos de set reinventando o que é possível produzir.",
         "trusted_by": "Parceiros"
     },
     "footer": {
-        "complex_problem": "Tem um projeto complexo?",
-        "we_have_intelligence": "NÓS TEMOS A VISÃO.",
+        "complex_problem": "TEM UMA IDEIA IMPOSSÍVEL?",
+        "we_have_intelligence": "NÓS TEMOS A VISÃO",
         "talk_to_us": "FALE CONOSCO",
         "network": "Rede",
-        "rights_reserved": "Todos os Direitos Reservados.",
+        "rights_reserved": "Todos os Direitos Reservados",
         "generative_division": "A Divisão Generativa",
         "system_admin": "SYSTEM_ADMIN"
     },
@@ -104,8 +104,8 @@
         "est": "DESDE 2016",
         "title_primary": "NASCIDOS NO",
         "title_highlight": "SET",
-        "title_secondary": ".",
-        "description": "Antes de escrever um prompt, passamos uma década em sets de filmagem. Sabemos enquadrar, iluminar, contar histórias — porque fizemos isso centenas de vezes com câmeras reais, atores reais, problemas reais. A IA não substituiu esse conhecimento. Ela amplificou.",
+        "title_secondary": "",
+        "description": "Antes de escrever um prompt, passamos uma década em sets de filmagem. Sabemos enquadrar, iluminar, contar histórias — porque fizemos isso centenas de vezes com câmeras reais, atores reais, problemas reais. A IA não substituiu esse conhecimento. Ela amplificou",
         "core_modules": "CAPACIDADES",
         "modules": {
             "cinematography": {
@@ -130,15 +130,15 @@
             "cards": {
                 "control": {
                     "title": "CONTROLE > ACASO",
-                    "desc": "O 'prompt perfeito' é um mito. Consistência vem de método e direção, não de palavras mágicas. Nós engenheiramos imagens — não torcemos por elas."
+                    "desc": "O 'prompt perfeito' é um mito. Consistência vem de método e direção, não de palavras mágicas. Nós engenheiramos imagens — não torcemos por elas"
                 },
                 "curation": {
                     "title": "CURADORIA É CRIAÇÃO",
-                    "desc": "Um modelo gera 1.000 imagens por minuto. A arte é saber qual está errada. Nossos diretores curam com o mesmo olhar crítico de uma década em sets de filmagem."
+                    "desc": "Um modelo gera 1.000 imagens por minuto. A arte é saber qual está errada. Nossos diretores curam com o mesmo olhar crítico de uma década em sets de filmagem"
                 },
                 "black_box": {
                     "title": "TRANSPARÊNCIA TOTAL",
-                    "desc": "Não dependemos de interfaces fechadas. Construímos nossos próprios pipelines. Isso nos dá controle total sobre o resultado — algo que 'botões mágicos' não oferecem."
+                    "desc": "Não dependemos de interfaces fechadas. Construímos nossos próprios pipelines. Isso nos dá controle total sobre o resultado — algo que 'botões mágicos' não oferecem"
                 }
             }
         }
@@ -158,28 +158,28 @@
         "placeholder": "Digite sua mensagem...",
         "execute": "ENVIAR",
         "initial_messages": {
-            "online": "Olá! Estou aqui para ajudar com seu projeto.",
-            "protocol": "Me conte sobre o que você precisa."
+            "online": "Olá! Estou aqui para ajudar com seu projeto",
+            "protocol": "Me conte sobre o que você precisa"
         },
         "suggestions": {
             "philosophy": "Qual é a abordagem da Brick AI?",
-            "audit": "Quero discutir um projeto.",
+            "audit": "Quero discutir um projeto",
             "synthesis": "Como funciona o processo criativo?",
-            "humans": "Prefiro falar com alguém da equipe."
+            "humans": "Prefiro falar com alguém da equipe"
         }
     },
     "works_page": {
         "title": "TRABALHOS SELECIONADOS",
         "archive_index": "ÍNDICE",
         "accessing": "CARREGANDO PROJETOS...",
-        "entries_found": "PROJETOS ENCONTRADOS.",
-        "no_data": "NENHUM PROJETO NESTA CATEGORIA.",
+        "entries_found": "PROJETOS ENCONTRADOS",
+        "no_data": "NENHUM PROJETO NESTA CATEGORIA",
         "protocols": "FILTROS"
     },
     "transmissions_page": {
         "title": "TRANSMISSÕES",
         "incoming": "ATUALIZAÇÕES...",
-        "records": "POSTS."
+        "records": "POSTS"
     },
     "project_modal": {
         "neural_active": "PREVIEW",
