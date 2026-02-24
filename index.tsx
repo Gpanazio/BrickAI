@@ -1612,15 +1612,15 @@ const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void 
                 <MagneticButton onClick={onChat} className="mt-6 text-base md:text-lg font-ai font-bold text-white hover:text-[#DC2626] group">
                     {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
                 </MagneticButton>
-                <div className="flex gap-6 mt-4">
+            </div>
+            <div className="mt-16 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-start gap-4 reveal">
+                <div className="flex gap-6">
                     {['LinkedIn', 'Instagram'].map((social) => (
                         <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors">{social}</a>
                     ))}
                 </div>
-            </div>
-            <div className="mt-16 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-end gap-4 reveal">
-                <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-center md:text-right w-full">
-                    <span className="block mb-2">&copy; 2025 Brick AI.</span>
+                <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-right">
+                    <span className="block mb-2">&copy; 2026 Brick AI.</span>
                     <span className="hidden md:inline">{t('footer.generative_division')}</span>
                     <span className="block mt-1">{t('footer.rights_reserved')}</span>
                     {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">{t('footer.system_admin')}</button>}
