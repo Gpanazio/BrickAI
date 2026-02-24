@@ -665,7 +665,7 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
 
     return (
         <React.Fragment>
-            <header className="fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none transition-all duration-300">
+            <header className="fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none transition-all duration-300 bg-gradient-to-b from-[#050505]/70 from-[45%] to-transparent">
                 <div onClick={onHome} className="pointer-events-auto flex items-baseline group cursor-pointer select-none z-50 relative">
                     <img src="/01.png" alt="BRICK" className="h-6 md:h-8 w-auto object-contain mr-1" />
                     <span className="text-[#DC2626] font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[2px]">_</span>
@@ -1532,17 +1532,14 @@ const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void 
                 <MagneticButton onClick={onChat} className="mt-6 text-base md:text-lg font-ai font-bold text-white hover:text-[#DC2626] group">
                     {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
                 </MagneticButton>
-            </div>
-            <div className="mt-24 border-t border-white/5 pt-12 flex flex-col md:flex-row justify-between items-end gap-8 reveal">
-                <div className="flex flex-col gap-4 items-center md:items-start w-full md:w-auto">
-                    <span className="text-[9px] font-mono text-[#DC2626] tracking-widest uppercase">{t('footer.network')}</span>
-                    <div className="flex gap-6">
-                        {['LinkedIn', 'Instagram', 'Twitter'].map((social) => (
-                            <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors">{social}</a>
-                        ))}
-                    </div>
+                <div className="flex gap-6 mt-4">
+                    {['LinkedIn', 'Instagram'].map((social) => (
+                        <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors">{social}</a>
+                    ))}
                 </div>
-                <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-center md:text-right w-full md:w-auto">
+            </div>
+            <div className="mt-16 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-end gap-4 reveal">
+                <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-center md:text-right w-full">
                     <span className="block mb-2">&copy; 2025 Brick AI.</span>
                     <span className="hidden md:inline">{t('footer.generative_division')}</span>
                     <span className="block mt-1">{t('footer.rights_reserved')}</span>
@@ -1844,63 +1841,43 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                 <section className="pt-36 md:pt-48 pb-20 border-b border-white/10 reveal">
                     <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
 
-                        {/* META HEADER */}
-                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-4 border-b border-white/10 pb-6">
-                            <div className="flex items-center gap-4">
-                                <div className="w-2 h-2 bg-[#DC2626] animate-pulse"></div>
-                                <span className="font-mono text-[10px] tracking-[0.4em] text-white uppercase">{t('about.origin')} // ACCESS_GRANTED</span>
+                        {/* PAGE HEADER */}
+                        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-6">
+                            <div>
+                                <h1 className="text-4xl md:text-6xl font-brick text-white mb-2">
+                                    {t('about.origin').split('_')[0]}_<span className="text-[#DC2626]">{t('about.origin').split('_').slice(1).join('_')}</span>
+                                </h1>
+                                <p className="text-[#9CA3AF] font-mono text-xs tracking-widest uppercase">ACCESS_GRANTED // {t('about.est')}</p>
                             </div>
-                            <div className="font-mono text-[10px] tracking-[0.2em] text-[#9CA3AF] uppercase">
-                                <span className="text-white/40 mr-2">TIMESTAMP:</span> {t('about.est')}
+                            <div className="hidden md:block text-right">
+                                <span className="text-[10px] font-mono text-[#9CA3AF]/60 uppercase tracking-widest">{t('common.system_status')}: {t('common.online')}</span>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                            {/* LEFT: GLITCH TITLE */}
-                            <div className="lg:col-span-7">
-                                <h1 className="font-brick text-6xl md:text-8xl lg:text-9xl text-white leading-[0.85] tracking-tighter uppercase mb-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                            {/* LEFT: CONTENT LABEL */}
+                            <div className="flex flex-col justify-center">
+                                <p className="font-brick text-3xl md:text-4xl lg:text-5xl text-white/20 leading-tight tracking-tight uppercase mb-3">
                                     {t('about.title_primary')}<br />
-                                    <span className="text-[#DC2626] inline-block hover:translate-x-2 transition-transform duration-100 cursor-default">{t('about.title_highlight')}</span><br />
-                                    <span className="text-sm md:text-xl font-mono tracking-[0.5em] text-white/30 block mt-4">{t('about.title_secondary')}</span>
-                                </h1>
+                                    <span className="text-[#DC2626]/60">{t('about.title_highlight')}</span>
+                                </p>
+                                <span className="font-mono text-[10px] tracking-[0.4em] text-white/20 uppercase">{t('about.title_secondary')}</span>
                             </div>
 
-                            {/* RIGHT: DATA DUMP DESC */}
-                            <div className="lg:col-span-5 flex flex-col justify-start">
-                                <div className="font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed space-y-6">
-                                    {(() => {
-                                        const fullDesc = t('about.description');
-                                        const half = Math.ceil(fullDesc.length / 2);
-                                        // Tenta quebrar no fim de uma frase próxima da metade
-                                        const splitIndex = fullDesc.indexOf('.', half) !== -1 ? fullDesc.indexOf('.', half) + 1 : half;
-                                        const p1 = fullDesc.substring(0, splitIndex).trim();
-                                        const p2 = fullDesc.substring(splitIndex).trim();
-
-                                        return (
-                                            <>
-                                                <div className="flex gap-4 group">
-                                                    <span className="text-[#DC2626] font-bold shrink-0 opacity-50 group-hover:opacity-100">[01]</span>
-                                                    <p className="border-l border-white/10 pl-4 group-hover:border-[#DC2626] transition-colors">
-                                                        {p1}
-                                                    </p>
-                                                </div>
-                                                {p2 && (
-                                                    <div className="flex gap-4 group">
-                                                        <span className="text-[#DC2626] font-bold shrink-0 opacity-50 group-hover:opacity-100">[02]</span>
-                                                        <p className="border-l border-white/10 pl-4 group-hover:border-[#DC2626] transition-colors">
-                                                            {p2}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                            </>
-                                        );
-                                    })()}
-                                    
+                            {/* RIGHT: DESC */}
+                            <div className="flex flex-col justify-center">
+                                <div className="font-mono text-sm md:text-base text-[#9CA3AF] leading-relaxed space-y-6">
+                                    <div className="flex gap-4 group">
+                                        <span className="text-[#DC2626] font-bold shrink-0 opacity-50 group-hover:opacity-100">[01]</span>
+                                        <p className="border-l border-white/10 pl-4 group-hover:border-[#DC2626] transition-colors">
+                                            {t('about.description')}
+                                        </p>
+                                    </div>
                                     <div className="pt-8 flex items-center gap-4">
                                         <div className="flex-1 h-px bg-white/5"></div>
                                         <div className="flex items-center gap-2">
                                             <span className="w-1 h-1 bg-green-500 rounded-full animate-pulse"></span>
-                                            <span className="text-[9px] uppercase tracking-[0.3em] text-white/40">Active_Protocol</span>
+                                            <span className="text-[10px] uppercase tracking-[0.3em] text-white/40">Active_Protocol</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1910,57 +1887,76 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                 </section>
 
                 {/* ── CAPACIDADES: INDUSTRIAL GRID ── */}
-                <section className="reveal bg-[#080808]">
+                <section className="py-24 md:py-32 reveal bg-[#080808]">
                     <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
-                        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10 border-x border-white/10">
+                        <div className="flex items-center justify-between mb-16 border-b border-white/10 pb-6">
+                            <div className="flex items-center gap-4">
+                                <div className="w-2 h-2 bg-[#DC2626]"></div>
+                                <span className="font-mono text-[10px] tracking-[0.4em] text-white uppercase">{t('about.core_modules')}</span>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
                             {['cinematography', 'training', 'architecture'].map((mod, idx) => (
                                 <div key={idx} className="group p-10 hover:bg-[#DC2626]/[0.02] transition-all duration-500 min-h-[320px] flex flex-col justify-between relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-4 font-mono text-[8px] text-white/10 group-hover:text-[#DC2626]/40 transition-colors uppercase tracking-[0.5em]">
+                                    <div className="absolute top-0 right-0 p-4 font-mono text-[10px] text-white/10 group-hover:text-[#DC2626]/40 transition-colors uppercase tracking-[0.5em]">
                                         Unit_0{idx + 1}
                                     </div>
-                                    
+
                                     <div>
                                         <div className="mb-8 flex items-center gap-2">
                                             <div className="w-4 h-px bg-[#DC2626]"></div>
-                                            <span className="font-mono text-[9px] text-[#DC2626] tracking-[0.3em] uppercase">
+                                            <span className="font-mono text-[10px] text-[#DC2626] tracking-[0.3em] uppercase">
                                                 {t(`about.modules.${mod}.status`)}
                                             </span>
                                         </div>
-                                        <h3 className="font-brick text-2xl text-white mb-4 uppercase group-hover:tracking-widest transition-all duration-500">
+                                        <h3 className="font-brick text-xl md:text-2xl text-white mb-4 uppercase group-hover:text-[#DC2626] transition-colors duration-500">
                                             {t(`about.modules.${mod}.title`)}
                                         </h3>
                                     </div>
-                                    
-                                    <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-loose opacity-60 group-hover:opacity-100 transition-opacity border-t border-white/5 pt-6">
+
+                                    <p className="font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity border-t border-white/5 pt-6">
                                         {t(`about.modules.${mod}.desc`)}
                                     </p>
                                 </div>
                             ))}
                         </div>
+
                     </div>
                 </section>
 
                 {/* ── MANIFESTO: BRUTALIST BLOCKS ── */}
                 <section className="py-24 md:py-32 reveal bg-[#050505]">
                     <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
-                        <div className="flex flex-row justify-between items-baseline mb-16 border-b border-white/10 pb-6">
-                            <h2 className="text-xl md:text-3xl font-brick text-white uppercase tracking-tight">{t('about.manifesto.title')}</h2>
-                            <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.manifesto.subtitle')}</span>
+                        <div className="flex items-center justify-between mb-16 border-b border-white/10 pb-6">
+                            <div className="flex items-center gap-4">
+                                <div className="w-2 h-2 bg-[#DC2626]"></div>
+                                <span className="font-mono text-[10px] tracking-[0.4em] text-white uppercase">{t('about.manifesto.title')}</span>
+                            </div>
+                            <span className="font-mono text-[10px] tracking-[0.2em] text-[#9CA3AF] uppercase">{t('about.manifesto.subtitle')}</span>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-white/10 divide-y md:divide-y-0 md:divide-x divide-white/10 bg-[#080808] max-w-5xl mx-auto">
+                        <div className="divide-y divide-white/10">
                             {['control', 'curation', 'black_box'].map((key, i) => (
-                                <div key={i} className="group relative bg-[#050505] p-6 md:p-8 hover:bg-[#0D0D0D] transition-colors duration-500 min-h-[200px] flex flex-col justify-start">
-                                    <div className="relative z-10">
-                                        <h3 className="text-lg md:text-xl font-brick text-white mb-3 uppercase leading-tight group-hover:text-[#DC2626] transition-colors duration-500">
-                                            {t(`about.manifesto.cards.${key}.title`)}
-                                        </h3>
-                                        <p className="text-[10px] md:text-xs font-mono text-[#9CA3AF] leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity">
-                                            {t(`about.manifesto.cards.${key}.desc`)}
-                                        </p>
+                                <div key={i} className="group grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 py-10 hover:bg-[#DC2626]/[0.02] transition-all duration-500 px-2">
+                                    <div className="md:col-span-1 font-mono text-[10px] text-[#DC2626]/50 group-hover:text-[#DC2626] tracking-[0.3em] uppercase pt-1 transition-colors">
+                                        0{i + 1}
                                     </div>
+                                    <h3 className="md:col-span-4 font-brick text-xl md:text-2xl text-white uppercase group-hover:text-[#DC2626] transition-colors duration-500 leading-tight">
+                                        {t(`about.manifesto.cards.${key}.title`)}
+                                    </h3>
+                                    <p className="md:col-span-7 font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity">
+                                        {t(`about.manifesto.cards.${key}.desc`)}
+                                    </p>
                                 </div>
                             ))}
+                        </div>
+
+                        {/* SYSTEM LOG */}
+                        <div className="flex justify-end pt-10 mt-10 border-t border-white/10">
+                            <div className="font-mono text-[10px] text-white/40 uppercase tracking-[0.25em] text-right space-y-1.5">
+                                <div><span className="text-[#DC2626]/60 mr-2">&gt;&gt;</span>CORE_MODULES_LOADED</div>
+                                <div><span className="text-[#DC2626]/60 mr-2">&gt;&gt;</span>INITIATING_PROTOCOL...</div>
+                            </div>
                         </div>
                     </div>
                 </section>
