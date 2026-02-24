@@ -102,26 +102,26 @@
     "about": {
         "origin": "ORIGEM",
         "est": "DESDE 2016",
-        "title_primary": "NASCIDOS NO",
-        "title_highlight": "SET",
-        "title_secondary": "",
-        "description": "Antes de escrever um prompt, passamos uma década em sets de filmagem. Sabemos enquadrar, iluminar, contar histórias — porque fizemos isso centenas de vezes com câmeras reais, atores reais, problemas reais. A IA não substituiu esse conhecimento. Ela amplificou",
-        "core_modules": "CAPACIDADES",
+        "title_primary": "BAGAGEM DE",
+        "title_highlight": "CINEMA",
+        "title_secondary": "EXECUÇÃO DE FUTURO",
+        "description": "Nossa visão não veio do ChatGPT. Ela é o resultado de anos de set, direção e execução no mundo real. Muito antes do primeiro prompt, nossa trajetória já era pautada pela produção visual de alta complexidade. Entendemos narrativa e estética porque o nosso olhar foi refinado no dia a dia do set e no rigor técnico da pós-produção clássica. Para nós, a tecnologia não é um atalho para o medíocre, mas um multiplicador de potência: o critério artístico continua sendo puramente humano, mas agora a execução final alcança o que a nossa imaginação sempre buscou.",
+        "core_modules": "CAPACIDADES-CHAVE",
         "modules": {
             "cinematography": {
-                "title": "CINEMATOGRAFIA SINTÉTICA",
+                "title": "CINEMATOGRAFIA EXPANDIDA",
                 "status": "ATIVO",
-                "desc": "Criamos cenas e ambientes que não existem fisicamente"
+                "desc": "Direção visual com IA // Construção de cena // Precisão estética"
             },
             "training": {
-                "title": "CONSISTÊNCIA VISUAL",
+                "title": "LINGUAGEM VISUAL PRÓPRIA",
                 "status": "ATIVO",
-                "desc": "Garantimos coerência estética em cada frame do projeto"
+                "desc": "Modelos personalizados // Consistência de estilo // Assinatura por projeto"
             },
             "architecture": {
-                "title": "PRODUÇÃO ESCALÁVEL",
+                "title": "ENGENHARIA DE EXECUÇÃO",
                 "status": "ATIVO",
-                "desc": "Infraestrutura para entregar volume sem perder qualidade"
+                "desc": "Pipelines proprietários // Automação de processo // Controle criativo total"
             }
         },
         "manifesto": {
@@ -130,15 +130,15 @@
             "cards": {
                 "control": {
                     "title": "CONTROLE > ACASO",
-                    "desc": "O 'prompt perfeito' é um mito. Consistência vem de método e direção, não de palavras mágicas. Nós engenheiramos imagens — não torcemos por elas"
+                    "desc": "O “prompt perfeito” é um mito. Consistência vem de quem dirige o processo, não da sorte de uma linha de texto. Para nós, tecnologia só faz sentido quando é submetida ao rigor do olhar artístico. Onde o mercado vê automação, nós exercemos domínio total sobre a imagem."
                 },
                 "curation": {
-                    "title": "CURADORIA É CRIAÇÃO",
-                    "desc": "Um modelo gera 1.000 imagens por minuto. A arte é saber qual está errada. Nossos diretores curam com o mesmo olhar crítico de uma década em sets de filmagem"
+                    "title": "QUALIDADE > VOLUME",
+                    "desc": "Não estamos aqui para produzir volume descartável. Usamos a potência da máquina como motor de busca pela imagem certa. A tecnologia amplia a capacidade, mas é o repertório que define o que merece chegar à tela."
                 },
                 "black_box": {
-                    "title": "TRANSPARÊNCIA TOTAL",
-                    "desc": "Não dependemos de interfaces fechadas. Construímos nossos próprios pipelines. Isso nos dá controle total sobre o resultado — algo que 'botões mágicos' não oferecem"
+                    "title": "ARTE = VIRTUOSISMO",
+                    "desc": "O que nos separa é dominar as duas pontas: olhar de set e controle técnico da nova geração. Não testamos ferramenta por curiosidade; fundimos estética e potência para entregar o que o mercado não consegue replicar. A tecnologia obedece à arte."
                 }
             }
         }
