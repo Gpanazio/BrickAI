@@ -248,8 +248,8 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                     { role: "Tech", name: "Stable Diffusion XL + ComfyUI" }
                 ],
                 gradient: "from-neutral-900 to-neutral-800",
-                imageHome: "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80&w=2670&auto=format&fit=crop",
-                imageWorks: "https://images.unsplash.com/photo-1682687220742-aba13b6e50ba?q=80&w=2670&auto=format&fit=crop",
+                imageHome: "/uploads/f4c60c38-6176-4c5c-bf36-86fada4b9470.jpeg",
+                imageWorks: "/uploads/f4c60c38-6176-4c5c-bf36-86fada4b9470.jpeg",
                 hasDetail: true
             },
             {
@@ -267,8 +267,8 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                     { role: "Tech", name: "Nuke + Generative Fill" }
                 ],
                 gradient: "from-neutral-900 via-[#DC2626]/10 to-neutral-900",
-                imageHome: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=2670&auto=format&fit=crop",
-                imageWorks: "https://images.unsplash.com/photo-1555680202-c86f0e12f086?q=80&w=2670&auto=format&fit=crop",
+                imageHome: "/uploads/30e2d6e0-e967-4204-a455-ae1bb91dec1e.jpeg",
+                imageWorks: "/uploads/30e2d6e0-e967-4204-a455-ae1bb91dec1e.jpeg",
                 hasDetail: true
             },
             {
@@ -286,13 +286,13 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                     { role: "Tech", name: "Ebsynth + SD Video" }
                 ],
                 gradient: "from-neutral-900 to-neutral-950",
-                imageHome: "https://images.unsplash.com/photo-1614850523060-8da1d56ae167?q=80&w=2670&auto=format&fit=crop",
-                imageWorks: "https://images.unsplash.com/photo-1614850523060-8da1d56ae167?q=80&w=2670&auto=format&fit=crop",
+                imageHome: "/uploads/f33570ab-0d3b-4eee-9fe9-59818dcdcd9f.jpeg",
+                imageWorks: "/uploads/f33570ab-0d3b-4eee-9fe9-59818dcdcd9f.jpeg",
                 hasDetail: true
             },
             {
                 id: "factory",
-                orientation: "horizontal",
+                orientation: "vertical",
                 subtitle: t('works.factory.subtitle'),
                 category: "GENERATIVE",
                 title: t('works.factory.title'),
@@ -304,12 +304,25 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                     { role: "Style", name: "Retro-Futurism" },
                     { role: "Tech", name: "Stable Diffusion + ControlNet" }
                 ],
-                gradient: "from-neutral-900 to-neutral-950",
-                imageHome: "/factory_thumb.jpg",
-                imageWorks: "/factory_thumb.jpg",
+                gradient: "from-neutral-950 to-[#DC2626]/20",
+                imageHome: "/uploads/adfee249-a46b-44ca-8d7b-b7b5db4ba60b.jpg",
+                imageWorks: "/uploads/adfee249-a46b-44ca-8d7b-b7b5db4ba60b.jpg",
                 hasDetail: true
             },
-
+            {
+                id: "DOG DAY AFTERNOON",
+                orientation: "vertical",
+                subtitle: t('works.dogday.subtitle'),
+                category: "DATA ART",
+                title: t('works.dogday.title'),
+                desc: t('works.dogday.desc'),
+                longDesc: t('works.dogday.longDesc'),
+                credits: [],
+                gradient: "from-neutral-950 to-[#DC2626]/20",
+                imageHome: "/uploads/f9c13e36-0abe-43c9-8161-805cd9f2d1f3.jpeg",
+                imageWorks: "/uploads/f9c13e36-0abe-43c9-8161-805cd9f2d1f3.jpeg",
+                hasDetail: true
+            },
         ];
 
         const generatedTransmissions: Post[] = [
