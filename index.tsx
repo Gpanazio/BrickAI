@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useMemo, useContext } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ArrowRight, Database, Globe, Menu, X } from 'lucide-react';
 import * as THREE from 'three';
@@ -2660,8 +2660,10 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
 const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedProject, setSelectedProject, selectedPost, setSelectedPost, goHome, goWorks, goTransmissions, goChat, goAdmin, goAbout, handleSelectPost }: any) => {
     const { transmissions } = useContext(DataContext)!;
 
-    useEffect(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    useLayoutEffect(() => {
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
     }, [view]);
 
     useEffect(() => {
