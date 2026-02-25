@@ -65,23 +65,3 @@ export const SEO_DATA = {
     }
 };
 
-export const JSON_LD_ORG = {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "Brick AI",
-    "alternateName": "Brick - The Generative Division",
-    "url": "https://ai.brick.mov",
-    "logo": "https://ai.brick.mov/logo.png",
-    "description": "Video production house with 10 years of experience, specializing in generative AI for films, commercials and visual content.",
-    "foundingDate": "2016",
-    "contactPoint": {
-        "@type": "ContactPoint",
-        "email": "brick@brick.mov",
-        "contactType": "sales"
-    },
-    "sameAs": [
-        "https://www.linkedin.com/company/brick",
-        "https://www.instagram.com/brick.mov",
-        "https://twitter.com/brick_mov"
-    ]
-};
