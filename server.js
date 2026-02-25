@@ -9,7 +9,7 @@ import cookieParser from 'cookie-parser';
 import multer from 'multer';
 import fs from 'fs';
 import 'dotenv/config';
-import { SEO_DATA, JSON_LD_ORG } from './seo-data.js';
+import { SEO_DATA } from './seo-data.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -415,9 +415,10 @@ app.get('/sitemap.xml', async (req, res) => {
         // Fetch transmissions from DB for dynamic URLs
         let postUrls = [];
         try {
-            const result = await pool.query('SELECT id, data FROM transmissions ORDER BY created_at DESC');
+            const result = await pool.query('SELECT id, created_at FROM transmissions ORDER BY created_at DESC');
             postUrls = result.rows.map(row => ({
                 loc: `https://ai.brick.mov/transmissions/${row.id}`,
+                lastmod: new Date(row.created_at).toISOString().split('T')[0],
                 priority: '0.6',
                 changefreq: 'monthly'
             }));
@@ -432,7 +433,7 @@ app.get('/sitemap.xml', async (req, res) => {
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${allPages.map(p => `  <url>
     <loc>${p.loc}</loc>
-    <lastmod>${today}</lastmod>
+    <lastmod>${p.lastmod || today}</lastmod>
     <changefreq>${p.changefreq}</changefreq>
     <priority>${p.priority}</priority>
   </url>`).join('\n')}
@@ -492,11 +493,14 @@ app.get('*', async (req, res) => {
     let ogTitle = seoData.ogTitle || seoData.title;
     let ogDescription = seoData.ogDescription || seoData.description;
 
+    // Extract post title/excerpt once for reuse in meta tags and JSON-LD
+    let postTitle = '';
+    let postExcerpt = '';
     if (view === 'post' && postData) {
-        const postTitle = typeof postData.title === 'string' ? postData.title :
-                         (postData.title && postData.title[lang]) ? postData.title[lang] : 'Article';
-        const postExcerpt = typeof postData.excerpt === 'string' ? postData.excerpt :
-                           (postData.excerpt && postData.excerpt[lang]) ? postData.excerpt[lang] : '';
+        postTitle = typeof postData.title === 'string' ? postData.title :
+                   (postData.title && postData.title[lang]) ? postData.title[lang] : 'Article';
+        postExcerpt = typeof postData.excerpt === 'string' ? postData.excerpt :
+                     (postData.excerpt && postData.excerpt[lang]) ? postData.excerpt[lang] : '';
         title = `${postTitle} | Brick AI`;
         description = postExcerpt || description;
         ogTitle = postTitle;
@@ -507,14 +511,10 @@ app.get('*', async (req, res) => {
     const canonicalUrl = `https://ai.brick.mov/${canonicalPath}`;
     const langParam = lang === 'en' ? '?lang=en' : '';
 
-    // Build JSON-LD
-    const jsonLdScripts = [`<script type="application/ld+json">${JSON.stringify(JSON_LD_ORG)}</script>`];
+    // Build route-specific JSON-LD (Organization + FAQ are static in index.html)
+    const jsonLdScripts = [];
 
     if (view === 'post' && postData) {
-        const postTitle = typeof postData.title === 'string' ? postData.title :
-                         (postData.title && postData.title[lang]) ? postData.title[lang] : 'Article';
-        const postExcerpt = typeof postData.excerpt === 'string' ? postData.excerpt :
-                           (postData.excerpt && postData.excerpt[lang]) ? postData.excerpt[lang] : '';
         jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Article",
