@@ -9,6 +9,7 @@ import cookieParser from 'cookie-parser';
 import multer from 'multer';
 import fs from 'fs';
 import 'dotenv/config';
+import { SEO_DATA } from './seo-data.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -67,6 +68,12 @@ app.use(express.json({ limit: '50mb' })); // Limite alto para imagens em Base64
 app.use(cookieParser());
 app.use('/uploads', express.static(UPLOADS_DIR)); // Serve as imagens salvas
 app.use(express.static(path.join(__dirname, 'dist'))); // Serve o frontend buildado
+
+// Cache headers for static assets
+app.use('/assets', express.static(path.join(__dirname, 'dist', 'assets'), {
+    maxAge: '1y',
+    immutable: true
+}));
 
 // --- INICIALIZAÇÃO DO DB (Cria apenas as tabelas de conteúdo) ---
 const initDB = async (retries = 10) => {
@@ -394,9 +401,146 @@ app.delete('/api/transmissions/:id', authenticateToken, async (req, res) => {
     } catch (err) { res.status(500).json({ error: err.message }); }
 });
 
-// Fallback para SPA (qualquer outra rota serve o index.html)
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+// Dynamic sitemap
+app.get('/sitemap.xml', async (req, res) => {
+    try {
+        const staticPages = [
+            { loc: 'https://ai.brick.mov/', priority: '1.0', changefreq: 'weekly' },
+            { loc: 'https://ai.brick.mov/works', priority: '0.9', changefreq: 'weekly' },
+            { loc: 'https://ai.brick.mov/about', priority: '0.8', changefreq: 'monthly' },
+            { loc: 'https://ai.brick.mov/transmissions', priority: '0.8', changefreq: 'weekly' },
+            { loc: 'https://ai.brick.mov/chat', priority: '0.7', changefreq: 'monthly' },
+        ];
+
+        // Fetch transmissions from DB for dynamic URLs
+        let postUrls = [];
+        try {
+            const result = await pool.query('SELECT id, created_at FROM transmissions ORDER BY created_at DESC');
+            postUrls = result.rows.map(row => ({
+                loc: `https://ai.brick.mov/transmissions/${row.id}`,
+                lastmod: new Date(row.created_at).toISOString().split('T')[0],
+                priority: '0.6',
+                changefreq: 'monthly'
+            }));
+        } catch (e) {
+            console.error('Sitemap: Could not fetch transmissions', e.message);
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+        const allPages = [...staticPages, ...postUrls];
+
+        const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${allPages.map(p => `  <url>
+    <loc>${p.loc}</loc>
+    <lastmod>${p.lastmod || today}</lastmod>
+    <changefreq>${p.changefreq}</changefreq>
+    <priority>${p.priority}</priority>
+  </url>`).join('\n')}
+</urlset>`;
+
+        res.set('Content-Type', 'application/xml');
+        res.send(xml);
+    } catch (err) {
+        console.error('Sitemap generation error:', err);
+        res.status(500).send('Error generating sitemap');
+    }
+});
+
+// Read HTML template once at startup
+let htmlTemplate = '';
+try {
+    htmlTemplate = fs.readFileSync(path.join(__dirname, 'dist', 'index.html'), 'utf-8');
+} catch (e) {
+    console.error('Could not read dist/index.html template:', e.message);
+}
+
+// SEO meta tag injection for SPA routes
+app.get('*', async (req, res) => {
+    if (!htmlTemplate) {
+        return res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    }
+
+    const urlPath = req.path.replace(/^\/+|\/+$/g, '');
+    const lang = req.query.lang === 'en' ? 'en' : 'pt';
+
+    // Determine the view from the URL
+    let view = 'home';
+    let postData = null;
+
+    if (urlPath === 'works') view = 'works';
+    else if (urlPath === 'about') view = 'about';
+    else if (urlPath === 'transmissions') view = 'transmissions';
+    else if (urlPath === 'chat') view = 'chat';
+    else if (urlPath.startsWith('transmissions/')) {
+        view = 'post';
+        const postId = urlPath.split('/')[1];
+        try {
+            const result = await pool.query('SELECT data FROM transmissions WHERE id = $1', [postId]);
+            if (result.rows.length > 0) {
+                postData = result.rows[0].data;
+            }
+        } catch (e) {
+            console.error('Could not fetch post for SEO:', e.message);
+        }
+    }
+
+    const seoData = SEO_DATA[lang][view] || SEO_DATA[lang].home;
+
+    // For individual posts, use post data
+    let title = seoData.title;
+    let description = seoData.description;
+    let ogTitle = seoData.ogTitle || seoData.title;
+    let ogDescription = seoData.ogDescription || seoData.description;
+
+    // Extract post title/excerpt once for reuse in meta tags and JSON-LD
+    let postTitle = '';
+    let postExcerpt = '';
+    if (view === 'post' && postData) {
+        postTitle = typeof postData.title === 'string' ? postData.title :
+                   (postData.title && postData.title[lang]) ? postData.title[lang] : 'Article';
+        postExcerpt = typeof postData.excerpt === 'string' ? postData.excerpt :
+                     (postData.excerpt && postData.excerpt[lang]) ? postData.excerpt[lang] : '';
+        title = `${postTitle} | Brick AI`;
+        description = postExcerpt || description;
+        ogTitle = postTitle;
+        ogDescription = postExcerpt || ogDescription;
+    }
+
+    const canonicalPath = view === 'home' ? '' : urlPath;
+    const canonicalUrl = `https://ai.brick.mov/${canonicalPath}`;
+    const langParam = lang === 'en' ? '?lang=en' : '';
+
+    // Build route-specific JSON-LD (Organization + FAQ are static in index.html)
+    const jsonLdScripts = [];
+
+    if (view === 'post' && postData) {
+        jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Article",
+            "headline": postTitle,
+            "description": postExcerpt,
+            "author": { "@type": "Organization", "name": "Brick AI" },
+            "publisher": { "@type": "Organization", "name": "Brick AI", "logo": "https://ai.brick.mov/logo.png" },
+            "url": canonicalUrl
+        })}</script>`);
+    }
+
+    const html = htmlTemplate
+        .replace(/__LANG__/g, lang === 'pt' ? 'pt-BR' : 'en')
+        .replace(/__META_TITLE__/g, title)
+        .replace(/__META_DESCRIPTION__/g, description)
+        .replace(/__OG_TITLE__/g, ogTitle)
+        .replace(/__OG_DESCRIPTION__/g, ogDescription)
+        .replace(/__OG_URL__/g, canonicalUrl + langParam)
+        .replace(/__OG_LOCALE__/g, lang === 'pt' ? 'pt_BR' : 'en_US')
+        .replace(/__OG_LOCALE_ALT__/g, lang === 'pt' ? 'en_US' : 'pt_BR')
+        .replace(/__CANONICAL_URL__/g, canonicalUrl)
+        .replace(/__HREFLANG_PT__/g, `https://ai.brick.mov/${canonicalPath}`)
+        .replace(/__HREFLANG_EN__/g, `https://ai.brick.mov/${canonicalPath}?lang=en`)
+        .replace(/<!--__JSON_LD__-->/g, jsonLdScripts.join('\n    '));
+
+    res.send(html);
 });
 
 app.listen(port, '0.0.0.0', () => {

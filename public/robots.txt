@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin
+Disallow: /api/
 
 # AI Crawlers — explicitly allowed for GEO
 User-agent: GPTBot
@@ -24,3 +26,6 @@ User-agent: Bytespider
 Allow: /
 
 Sitemap: https://ai.brick.mov/sitemap.xml
+
+# For AI crawlers and LLMs
+# See also: https://ai.brick.mov/llms.txt
