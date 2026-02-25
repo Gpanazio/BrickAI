@@ -591,6 +591,7 @@ const ScrambleText = ({ text, className, hoverTrigger = false, delay = 0 }: { te
     };
 
     useEffect(() => {
+        setDisplayText(text);
         if (!hoverTrigger) {
             if (delay > 0) {
                 const t = setTimeout(scramble, delay);
@@ -599,7 +600,7 @@ const ScrambleText = ({ text, className, hoverTrigger = false, delay = 0 }: { te
                 scramble();
             }
         }
-    }, []);
+    }, [text]);
 
     return (
         <span
