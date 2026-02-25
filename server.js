@@ -538,7 +538,7 @@ app.get('*', async (req, res) => {
         .replace(/__CANONICAL_URL__/g, canonicalUrl)
         .replace(/__HREFLANG_PT__/g, `https://ai.brick.mov/${canonicalPath}`)
         .replace(/__HREFLANG_EN__/g, `https://ai.brick.mov/${canonicalPath}?lang=en`)
-        .replace(/__JSON_LD__/g, jsonLdScripts.join('\n    '));
+        .replace(/<!--__JSON_LD__-->/g, jsonLdScripts.join('\n    '));
 
     res.send(html);
 });
