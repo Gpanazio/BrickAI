@@ -2548,10 +2548,14 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
         updateMeta('og:image', 'https://ai.brick.mov/og-image.jpg');
         updateMeta('og:url', `https://ai.brick.mov/${view === 'home' ? '' : view}`);
         updateMeta('og:type', 'website');
+        updateMeta('og:site_name', 'Brick AI');
+        updateMeta('og:locale', lang === 'pt' ? 'pt_BR' : 'en_US');
+        updateMeta('og:locale:alternate', lang === 'pt' ? 'en_US' : 'pt_BR');
         updateMeta('twitter:card', 'summary_large_image', 'name');
         updateMeta('twitter:title', data.ogTitle || data.title, 'name');
         updateMeta('twitter:description', data.ogDescription || data.description, 'name');
         updateMeta('twitter:image', 'https://ai.brick.mov/og-image.jpg', 'name');
+        updateMeta('theme-color', '#050505', 'name');
 
         // Update Canonical
         let linkCanonical = document.querySelector('link[rel="canonical"]');
