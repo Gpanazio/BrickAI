@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
+  <!-- Background -->
+  <rect width="32" height="32" fill="#050505"/>
+
+  <!-- Ambient red glow -->
+  <circle cx="16" cy="16" r="12" fill="#DC2626" opacity="0.06"/>
+  <circle cx="16" cy="16" r="7"  fill="#DC2626" opacity="0.08"/>
+
+  <!-- Monolith body -->
+  <rect x="11" y="4" width="10" height="24" rx="0.5" fill="#0e0e0e"/>
+
+  <!-- Monolith inner texture gradient (top to bottom) -->
+  <rect x="11" y="4" width="10" height="24" rx="0.5"
+        fill="url(#tex)" opacity="0.4"/>
+
+  <!-- Monolith subtle border -->
+  <rect x="11" y="4" width="10" height="24" rx="0.5"
+        stroke="rgba(255,255,255,0.07)" stroke-width="0.5" fill="none"/>
+
+  <!-- Red inner glow rings -->
+  <circle cx="16" cy="16" r="4"   fill="#DC2626" opacity="0.12"/>
+  <circle cx="16" cy="16" r="2"   fill="#DC2626" opacity="0.2"/>
+
+  <!-- Red dot core -->
+  <circle cx="16" cy="16" r="1"   fill="#DC2626" opacity="0.9"/>
+
+  <defs>
+    <linearGradient id="tex" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.04"/>
+      <stop offset="50%"  stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.02"/>
+    </linearGradient>
+  </defs>
+</svg>
