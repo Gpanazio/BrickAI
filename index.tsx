@@ -81,6 +81,11 @@ const GlobalStyles = () => (
             0% { opacity: 0; transform: translateY(10px); }
             100% { opacity: 1; transform: translateY(0); }
         }
+        @keyframes soul-breathe {
+            0%, 100% { opacity: 0.5; letter-spacing: 0.25em; }
+            50% { opacity: 1; letter-spacing: 0.38em; }
+        }
+        .animate-soul { animation: soul-breathe 5s ease-in-out infinite; }
         @keyframes scan {
             0% { top: 0%; opacity: 0; }
             10% { opacity: 1; }
@@ -103,8 +108,8 @@ const GlobalStyles = () => (
             width: 200%;
             height: 200%;
             pointer-events: none;
-            z-index: 30; 
-            opacity: 0.04; 
+            z-index: 30;
+            opacity: 0.04;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             animation: grain 6s steps(10) infinite;
         }
@@ -467,6 +472,83 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 // --- UTILS COMPONENTS ---
+const GlitchText = ({ text, className }: { text: string, className?: string }) => {
+    const glitchChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_#@!";
+    const [displayed, setDisplayed] = useState('');
+    const [ready, setReady] = useState(false);
+    const [chars, setChars] = useState<{ char: string; glitched: boolean }[]>([]);
+
+    // Phase 1: typewriter
+    useEffect(() => {
+        let i = 0;
+        const interval = setInterval(() => {
+            i++;
+            setDisplayed(text.slice(0, i));
+            if (i >= text.length) {
+                clearInterval(interval);
+                setChars(text.split('').map(c => ({ char: c, glitched: false })));
+                setTimeout(() => setReady(true), 200);
+            }
+        }, 80);
+        return () => clearInterval(interval);
+    }, [text]);
+
+    // Phase 2: glitch after typewriter done
+    useEffect(() => {
+        if (!ready) return;
+        const positions = text.split('').reduce((acc: number[], c, i) => c !== ' ' ? [...acc, i] : acc, []);
+        let timeout: any;
+
+        const glitch = () => {
+            const count = 2 + Math.floor(Math.random() * 2);
+            const picked = [...positions].sort(() => Math.random() - 0.5).slice(0, count);
+            setChars(text.split('').map((c, i) => ({
+                char: picked.includes(i) ? glitchChars[Math.floor(Math.random() * glitchChars.length)] : c,
+                glitched: picked.includes(i),
+            })));
+            setTimeout(() => setChars(text.split('').map(c => ({ char: c, glitched: false }))), 150);
+            timeout = setTimeout(glitch, 600 + Math.random() * 600);
+        };
+
+        timeout = setTimeout(glitch, 600);
+        return () => clearTimeout(timeout);
+    }, [ready, text]);
+
+    return (
+        <span className={className}>
+            {ready
+                ? chars.map(({ char, glitched }, i) => (
+                    <span key={i} style={glitched ? { color: '#DC2626' } : undefined}>{char}</span>
+                ))
+                : displayed}
+        </span>
+    );
+};
+
+const TypewriterText = ({ text, className }: { text: string, className?: string }) => {
+    const [displayed, setDisplayed] = useState('');
+    const [done, setDone] = useState(false);
+
+    useEffect(() => {
+        let i = 0;
+        const interval = setInterval(() => {
+            i++;
+            setDisplayed(text.slice(0, i));
+            if (i >= text.length) {
+                clearInterval(interval);
+                setDone(true);
+            }
+        }, 80);
+        return () => clearInterval(interval);
+    }, [text]);
+
+    return (
+        <span className={className}>
+            {displayed}<span className={`text-[#DC2626] ${done ? 'animate-blink' : 'opacity-100'}`}>_</span>
+        </span>
+    );
+};
+
 const ScrambleText = ({ text, className, hoverTrigger = false }: { text: string, className?: string, hoverTrigger?: boolean }) => {
     const [displayText, setDisplayText] = useState(text);
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*";
@@ -665,7 +747,7 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
 
     return (
         <React.Fragment>
-            <header className="fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none transition-all duration-300">
+            <header className="fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none transition-all duration-300 bg-gradient-to-b from-[#050505]/70 from-[45%] to-transparent">
                 <div onClick={onHome} className="pointer-events-auto flex items-baseline group cursor-pointer select-none z-50 relative">
                     <img src="/01.png" alt="BRICK" className="h-6 md:h-8 w-auto object-contain mr-1" />
                     <span className="text-[#DC2626] font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[2px]">_</span>
@@ -862,14 +944,12 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                 </div>
             </div>
             <div className="reveal delay-200 text-center z-20 max-w-6xl px-4 flex flex-col items-center pointer-events-none">
-                <h1 className="text-4xl md:text-6xl lg:text-7xl font-brick text-white mb-4 md:mb-6 drop-shadow-2xl">
-                    {t('hero.title')}
-                </h1>
-                <p className="text-base md:text-xl lg:text-2xl font-light tracking-[0.3em] text-[#E5E5E5]/80 mb-2 md:mb-4">{t('hero.subtitle')}</p>
+                <p className="text-base md:text-xl lg:text-2xl font-mono text-white drop-shadow-2xl mb-2 md:mb-4">
+                    <TypewriterText text={t('hero.scramble') as string} />
+                </p>
                 <h2 className="text-2xl md:text-4xl lg:text-5xl font-brick text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
-                    <ScrambleText text={t('hero.scramble') as string} />
+                    <ScrambleText text={t('hero.subtitle') as string} />
                 </h2>
-                <p className="mt-8 text-[#9CA3AF] text-[10px] md:text-xs font-light tracking-[0.2em] uppercase opacity-60 max-w-md border-t border-white/10 pt-4 whitespace-pre-line">{t('hero.description')}</p>
             </div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
         </section>
@@ -1533,17 +1613,14 @@ const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void 
                     {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
                 </MagneticButton>
             </div>
-            <div className="mt-24 border-t border-white/5 pt-12 flex flex-col md:flex-row justify-between items-end gap-8 reveal">
-                <div className="flex flex-col gap-4 items-center md:items-start w-full md:w-auto">
-                    <span className="text-[9px] font-mono text-[#DC2626] tracking-widest uppercase">{t('footer.network')}</span>
-                    <div className="flex gap-6">
-                        {['LinkedIn', 'Instagram', 'Twitter'].map((social) => (
-                            <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors">{social}</a>
-                        ))}
-                    </div>
+            <div className="mt-16 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-start gap-4 reveal">
+                <div className="flex gap-6">
+                    {['LinkedIn', 'Instagram'].map((social) => (
+                        <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors">{social}</a>
+                    ))}
                 </div>
-                <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-center md:text-right w-full md:w-auto">
-                    <span className="block mb-2">&copy; 2025 Brick AI.</span>
+                <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-right">
+                    <span className="block mb-2">&copy; 2026 Brick AI.</span>
                     <span className="hidden md:inline">{t('footer.generative_division')}</span>
                     <span className="block mt-1">{t('footer.rights_reserved')}</span>
                     {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">{t('footer.system_admin')}</button>}
@@ -1844,63 +1921,43 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                 <section className="pt-36 md:pt-48 pb-20 border-b border-white/10 reveal">
                     <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
 
-                        {/* META HEADER */}
-                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-16 gap-4 border-b border-white/10 pb-6">
-                            <div className="flex items-center gap-4">
-                                <div className="w-2 h-2 bg-[#DC2626] animate-pulse"></div>
-                                <span className="font-mono text-[10px] tracking-[0.4em] text-white uppercase">{t('about.origin')} // ACCESS_GRANTED</span>
+                        {/* PAGE HEADER */}
+                        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-6">
+                            <div>
+                                <h1 className="text-4xl md:text-6xl font-brick text-white mb-2">
+                                    {t('about.origin').split('_')[0]}_<span className="text-[#DC2626]">{t('about.origin').split('_').slice(1).join('_')}</span>
+                                </h1>
+                                <p className="text-[#9CA3AF] font-mono text-xs tracking-widest uppercase">ACCESS_GRANTED // {t('about.est')}</p>
                             </div>
-                            <div className="font-mono text-[10px] tracking-[0.2em] text-[#9CA3AF] uppercase">
-                                <span className="text-white/40 mr-2">TIMESTAMP:</span> {t('about.est')}
+                            <div className="hidden md:block text-right">
+                                <span className="text-[10px] font-mono text-[#9CA3AF]/60 uppercase tracking-widest">{t('common.system_status')}: {t('common.online')}</span>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
-                            {/* LEFT: GLITCH TITLE */}
-                            <div className="lg:col-span-7">
-                                <h1 className="font-brick text-6xl md:text-8xl lg:text-9xl text-white leading-[0.85] tracking-tighter uppercase mb-8">
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                            {/* LEFT: CONTENT LABEL */}
+                            <div className="flex flex-col justify-center">
+                                <p className="font-brick text-3xl md:text-4xl lg:text-5xl text-white/20 leading-tight tracking-tight uppercase mb-3">
                                     {t('about.title_primary')}<br />
-                                    <span className="text-[#DC2626] inline-block hover:translate-x-2 transition-transform duration-100 cursor-default">{t('about.title_highlight')}</span><br />
-                                    <span className="text-sm md:text-xl font-mono tracking-[0.5em] text-white/30 block mt-4">{t('about.title_secondary')}</span>
-                                </h1>
+                                    <span className="text-[#DC2626]/60">{t('about.title_highlight')}</span>
+                                </p>
+                                <span className="font-mono text-[10px] tracking-[0.4em] text-white/20 uppercase">{t('about.title_secondary')}</span>
                             </div>
 
-                            {/* RIGHT: DATA DUMP DESC */}
-                            <div className="lg:col-span-5 flex flex-col justify-start">
-                                <div className="font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed space-y-6">
-                                    {(() => {
-                                        const fullDesc = t('about.description');
-                                        const half = Math.ceil(fullDesc.length / 2);
-                                        // Tenta quebrar no fim de uma frase próxima da metade
-                                        const splitIndex = fullDesc.indexOf('.', half) !== -1 ? fullDesc.indexOf('.', half) + 1 : half;
-                                        const p1 = fullDesc.substring(0, splitIndex).trim();
-                                        const p2 = fullDesc.substring(splitIndex).trim();
-
-                                        return (
-                                            <>
-                                                <div className="flex gap-4 group">
-                                                    <span className="text-[#DC2626] font-bold shrink-0 opacity-50 group-hover:opacity-100">[01]</span>
-                                                    <p className="border-l border-white/10 pl-4 group-hover:border-[#DC2626] transition-colors">
-                                                        {p1}
-                                                    </p>
-                                                </div>
-                                                {p2 && (
-                                                    <div className="flex gap-4 group">
-                                                        <span className="text-[#DC2626] font-bold shrink-0 opacity-50 group-hover:opacity-100">[02]</span>
-                                                        <p className="border-l border-white/10 pl-4 group-hover:border-[#DC2626] transition-colors">
-                                                            {p2}
-                                                        </p>
-                                                    </div>
-                                                )}
-                                            </>
-                                        );
-                                    })()}
-                                    
+                            {/* RIGHT: DESC */}
+                            <div className="flex flex-col justify-center">
+                                <div className="font-mono text-sm md:text-base text-[#9CA3AF] leading-relaxed space-y-6">
+                                    <div className="flex gap-4 group">
+                                        <span className="text-[#DC2626] font-bold shrink-0 opacity-50 group-hover:opacity-100">[01]</span>
+                                        <p className="border-l border-white/10 pl-4 group-hover:border-[#DC2626] transition-colors">
+                                            {t('about.description')}
+                                        </p>
+                                    </div>
                                     <div className="pt-8 flex items-center gap-4">
                                         <div className="flex-1 h-px bg-white/5"></div>
                                         <div className="flex items-center gap-2">
                                             <span className="w-1 h-1 bg-green-500 rounded-full animate-pulse"></span>
-                                            <span className="text-[9px] uppercase tracking-[0.3em] text-white/40">Active_Protocol</span>
+                                            <span className="text-[10px] uppercase tracking-[0.3em] text-white/40">Active_Protocol</span>
                                         </div>
                                     </div>
                                 </div>
@@ -1910,57 +1967,76 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                 </section>
 
                 {/* ── CAPACIDADES: INDUSTRIAL GRID ── */}
-                <section className="reveal bg-[#080808]">
+                <section className="py-24 md:py-32 reveal bg-[#080808]">
                     <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
-                        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10 border-x border-white/10">
+                        <div className="flex items-center justify-between mb-16 border-b border-white/10 pb-6">
+                            <div className="flex items-center gap-4">
+                                <div className="w-2 h-2 bg-[#DC2626]"></div>
+                                <span className="font-mono text-[10px] tracking-[0.4em] text-white uppercase">{t('about.core_modules')}</span>
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
                             {['cinematography', 'training', 'architecture'].map((mod, idx) => (
                                 <div key={idx} className="group p-10 hover:bg-[#DC2626]/[0.02] transition-all duration-500 min-h-[320px] flex flex-col justify-between relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-4 font-mono text-[8px] text-white/10 group-hover:text-[#DC2626]/40 transition-colors uppercase tracking-[0.5em]">
+                                    <div className="absolute top-0 right-0 p-4 font-mono text-[10px] text-white/10 group-hover:text-[#DC2626]/40 transition-colors uppercase tracking-[0.5em]">
                                         Unit_0{idx + 1}
                                     </div>
-                                    
+
                                     <div>
                                         <div className="mb-8 flex items-center gap-2">
                                             <div className="w-4 h-px bg-[#DC2626]"></div>
-                                            <span className="font-mono text-[9px] text-[#DC2626] tracking-[0.3em] uppercase">
+                                            <span className="font-mono text-[10px] text-[#DC2626] tracking-[0.3em] uppercase">
                                                 {t(`about.modules.${mod}.status`)}
                                             </span>
                                         </div>
-                                        <h3 className="font-brick text-2xl text-white mb-4 uppercase group-hover:tracking-widest transition-all duration-500">
+                                        <h3 className="font-brick text-xl md:text-2xl text-white mb-4 uppercase group-hover:text-[#DC2626] transition-colors duration-500">
                                             {t(`about.modules.${mod}.title`)}
                                         </h3>
                                     </div>
-                                    
-                                    <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-loose opacity-60 group-hover:opacity-100 transition-opacity border-t border-white/5 pt-6">
+
+                                    <p className="font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity border-t border-white/5 pt-6">
                                         {t(`about.modules.${mod}.desc`)}
                                     </p>
                                 </div>
                             ))}
                         </div>
+
                     </div>
                 </section>
 
                 {/* ── MANIFESTO: BRUTALIST BLOCKS ── */}
                 <section className="py-24 md:py-32 reveal bg-[#050505]">
                     <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
-                        <div className="flex flex-row justify-between items-baseline mb-16 border-b border-white/10 pb-6">
-                            <h2 className="text-xl md:text-3xl font-brick text-white uppercase tracking-tight">{t('about.manifesto.title')}</h2>
-                            <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.manifesto.subtitle')}</span>
+                        <div className="flex items-center justify-between mb-16 border-b border-white/10 pb-6">
+                            <div className="flex items-center gap-4">
+                                <div className="w-2 h-2 bg-[#DC2626]"></div>
+                                <span className="font-mono text-[10px] tracking-[0.4em] text-white uppercase">{t('about.manifesto.title')}</span>
+                            </div>
+                            <span className="font-mono text-[10px] tracking-[0.2em] text-[#9CA3AF] uppercase">{t('about.manifesto.subtitle')}</span>
                         </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-0 border border-white/10 divide-y md:divide-y-0 md:divide-x divide-white/10 bg-[#080808] max-w-5xl mx-auto">
+                        <div className="divide-y divide-white/10">
                             {['control', 'curation', 'black_box'].map((key, i) => (
-                                <div key={i} className="group relative bg-[#050505] p-6 md:p-8 hover:bg-[#0D0D0D] transition-colors duration-500 min-h-[200px] flex flex-col justify-start">
-                                    <div className="relative z-10">
-                                        <h3 className="text-lg md:text-xl font-brick text-white mb-3 uppercase leading-tight group-hover:text-[#DC2626] transition-colors duration-500">
-                                            {t(`about.manifesto.cards.${key}.title`)}
-                                        </h3>
-                                        <p className="text-[10px] md:text-xs font-mono text-[#9CA3AF] leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity">
-                                            {t(`about.manifesto.cards.${key}.desc`)}
-                                        </p>
+                                <div key={i} className="group grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 py-10 hover:bg-[#DC2626]/[0.02] transition-all duration-500 px-2">
+                                    <div className="md:col-span-1 font-mono text-[10px] text-[#DC2626]/50 group-hover:text-[#DC2626] tracking-[0.3em] uppercase pt-1 transition-colors">
+                                        0{i + 1}
                                     </div>
+                                    <h3 className="md:col-span-4 font-brick text-xl md:text-2xl text-white uppercase group-hover:text-[#DC2626] transition-colors duration-500 leading-tight">
+                                        {t(`about.manifesto.cards.${key}.title`)}
+                                    </h3>
+                                    <p className="md:col-span-7 font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity">
+                                        {t(`about.manifesto.cards.${key}.desc`)}
+                                    </p>
                                 </div>
                             ))}
+                        </div>
+
+                        {/* SYSTEM LOG */}
+                        <div className="flex justify-end pt-10 mt-10 border-t border-white/10">
+                            <div className="font-mono text-[10px] text-white/40 uppercase tracking-[0.25em] text-right space-y-1.5">
+                                <div><span className="text-[#DC2626]/60 mr-2">&gt;&gt;</span>CORE_MODULES_LOADED</div>
+                                <div><span className="text-[#DC2626]/60 mr-2">&gt;&gt;</span>INITIATING_PROTOCOL...</div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -2451,68 +2527,8 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
 };
 
 // --- SEO COMPONENT ---
-const SEO_DATA: any = {
-    pt: {
-        home: {
-            title: "Brick AI | Produtora de Vídeo com IA Generativa",
-            description: "Produtora de vídeo com 10 anos de experiência, agora com IA generativa. Criamos filmes, comerciais e conteúdo visual que não existe em lugar nenhum.",
-            ogTitle: "Brick AI - A Divisão Generativa",
-            ogDescription: "Do set ao servidor. 10 anos de craft, agora generativo."
-        },
-        works: {
-            title: "Portfólio | Brick AI - Vídeos e Filmes com IA Generativa",
-            description: "Nossos projetos de vídeo com IA: Inheritance (Seleção Gramado 2025), Vendemos Qualquer Coisa (Finalista Genero), Autobol, Dog Day Afternoon e Factory.",
-            ogTitle: "Portfólio | Brick AI",
-            ogDescription: "Filmes e vídeos criados com IA generativa por uma produtora com 10 anos de experiência."
-        },
-        about: {
-            title: "Sobre | Brick AI - 10 Anos de Produção Audiovisual",
-            description: "Nascidos no set. Antes de IA, passamos uma década em filmagens reais. Sabemos enquadrar, iluminar e contar histórias. A IA amplificou esse conhecimento.",
-            ogTitle: "Sobre a Brick AI",
-            ogDescription: "Uma produtora de vídeo que domina IA, não uma empresa de tecnologia."
-        },
-        transmissions: {
-            title: "Transmissions | Brick AI - Blog sobre Vídeo e IA",
-            description: "Artigos sobre produção de vídeo com IA: quando usar, o problema da consistência, e por que direção importa mais que prompt.",
-            ogTitle: "Transmissions | Brick AI",
-            ogDescription: "Insights sobre produção de vídeo generativo."
-        },
-        chat: {
-            title: "Contato | Brick AI - Fale com a Equipe",
-            description: "Entre em contato com a Brick AI. Fale com Mason, nossa IA, ou diretamente com a equipe por email, telefone ou redes sociais."
-        }
-    },
-    en: {
-        home: {
-            title: "Brick AI | Generative AI Video Production",
-            description: "Video production house with 10 years of experience, now with generative AI. We create films, commercials and visual content that doesn't exist anywhere else.",
-            ogTitle: "Brick AI - The Generative Division",
-            ogDescription: "From set to server. 10 years of craft, now generative."
-        },
-        works: {
-            title: "Portfolio | Brick AI - Generative AI Films and Videos",
-            description: "Our AI video projects: Inheritance (Gramado 2025 Selection), We Can Sell Anything (Genero Finalist), Autobol, Dog Day Afternoon and Factory.",
-            ogTitle: "Portfolio | Brick AI",
-            ogDescription: "Films and videos created with generative AI by a production house with 10 years of experience."
-        },
-        about: {
-            title: "About | Brick AI - 10 Years of Video Production",
-            description: "Born on set. Before AI, we spent a decade on real film sets. We know how to frame, light, and tell stories. AI amplified that knowledge.",
-            ogTitle: "About Brick AI",
-            ogDescription: "A video production house that masters AI, not a tech company."
-        },
-        transmissions: {
-            title: "Transmissions | Brick AI - Blog on AI Video Production",
-            description: "Articles on AI video production: when to use it, the consistency problem, and why direction matters more than prompts.",
-            ogTitle: "Transmissions | Brick AI",
-            ogDescription: "Insights on generative video production."
-        },
-        chat: {
-            title: "Contact | Brick AI - Talk to the Team",
-            description: "Get in touch with Brick AI. Talk to Mason, our AI, or directly with the team via email, phone or social media."
-        }
-    }
-};
+// SEO data imported from shared module (also used by server.js for SSR meta injection)
+import { SEO_DATA } from './seo-data.js';
 
 const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }) => {
     const { i18n } = useTranslation();
@@ -2585,39 +2601,16 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
         upsertAlt('pt-BR', `https://ai.brick.mov/${view === 'home' ? '' : view}`);
         upsertAlt('en', `https://ai.brick.mov/${view === 'home' ? '' : view}?lang=en`);
 
-        // Update JSON-LD (Schema.org)
-        const oldScripts = document.querySelectorAll('script[type="application/ld+json"]');
-        oldScripts.forEach(s => s.remove());
-
-        const jsonLdOrg = {
-            "@context": "https://schema.org",
-            "@type": "Organization",
-            "name": "Brick AI",
-            "alternateName": "Brick - The Generative Division",
-            "url": "https://ai.brick.mov",
-            "logo": "https://ai.brick.mov/logo.png",
-            "description": "Video production house with 10 years of experience, specializing in generative AI for films, commercials and visual content.",
-            "foundingDate": "2016",
-            "contactPoint": {
-                "@type": "ContactPoint",
-                "email": "brick@brick.mov",
-                "contactType": "sales"
-            },
-            "sameAs": [
-                "https://www.linkedin.com/company/brick",
-                "https://www.instagram.com/brick.mov",
-                "https://twitter.com/brick_mov"
-            ]
-        };
+        // Update route-specific JSON-LD (Organization + FAQ are static in index.html)
+        document.querySelectorAll('script[data-dynamic-ld]').forEach(s => s.remove());
 
         const addJsonLd = (data: any) => {
             const script = document.createElement('script');
             script.type = 'application/ld+json';
+            script.setAttribute('data-dynamic-ld', 'true');
             script.text = JSON.stringify(data);
             document.head.appendChild(script);
         };
-
-        addJsonLd(jsonLdOrg);
 
         if (view === 'works') {
             addJsonLd({
