@@ -511,18 +511,52 @@ app.get('*', async (req, res) => {
     const canonicalUrl = `https://ai.brick.mov/${canonicalPath}`;
     const langParam = lang === 'en' ? '?lang=en' : '';
 
-    // Build route-specific JSON-LD (Organization + FAQ are static in index.html)
+    // Build route-specific JSON-LD
     const jsonLdScripts = [];
 
+    // FAQPage — injected in correct language for home view
+    if (view === 'home') {
+        const faqEntitiesPt = [
+            { "@type": "Question", "name": "O que é a Brick AI?", "acceptedAnswer": { "@type": "Answer", "text": "Brick AI é a divisão de produção generativa da Brick, uma produtora de vídeo com 10+ anos de set. Combinamos direção cinematográfica humana com sistemas de IA para criar filmes, campanhas e conteúdo visual premium." } },
+            { "@type": "Question", "name": "O que a Brick AI produz?", "acceptedAnswer": { "@type": "Answer", "text": "Produzimos filmes e campanhas com IA, desenvolvimento visual e conceito, execução completa de pipeline (geração, consistência, pós-produção e finalização) e projetos híbridos combinando set real com geração sintética." } },
+            { "@type": "Question", "name": "Quais marcas já trabalharam com a Brick AI?", "acceptedAnswer": { "@type": "Answer", "text": "A Brick tem histórico com marcas Tier 1 como Stone, Visa, BBC, Record TV, AliExpress, Facebook, O Boticário e L'Oréal." } },
+            { "@type": "Question", "name": "Quando vale a pena usar produção com IA?", "acceptedAnswer": { "@type": "Answer", "text": "IA faz sentido para cenários que não existem fisicamente, quando há necessidade de escala sem orçamento proporcional, ou para iteração rápida na fase de conceito. Não indicamos IA para depoimentos com rostos reais, produto físico como protagonista ou quando o orçamento permite produção tradicional." } },
+            { "@type": "Question", "name": "Qual é o diferencial da Brick AI em relação a outras empresas de IA?", "acceptedAnswer": { "@type": "Answer", "text": "Somos antes uma produtora de cinema, depois uma empresa de IA. 10 anos de set nos deram o olhar de direção artística que transforma geração sintética em produção cinematográfica de alto padrão. Não vendemos prompts, entregamos filmes." } },
+            { "@type": "Question", "name": "Como entrar em contato para um projeto?", "acceptedAnswer": { "@type": "Answer", "text": "Entre em contato pelo e-mail brick@brick.mov ou pelo formulário em ai.brick.mov. Cada projeto é tratado de forma personalizada." } },
+            { "@type": "Question", "name": "A Brick AI já teve reconhecimento em festivais?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. O filme 'Inheritance' foi selecionado oficialmente para o Festival de Cinema de Gramado 2025, um dos festivais mais importantes da América Latina. O projeto 'Vendemos Qualquer Coisa' foi finalista no Genero Challenge." } }
+        ];
+        const faqEntitiesEn = [
+            { "@type": "Question", "name": "What is Brick AI?", "acceptedAnswer": { "@type": "Answer", "text": "Brick AI is the generative production division of Brick, a video production house with 10+ years of real-world filmmaking experience. We combine human cinematic direction with AI systems to create films, campaigns, and premium visual content." } },
+            { "@type": "Question", "name": "What does Brick AI produce?", "acceptedAnswer": { "@type": "Answer", "text": "We produce AI-generated films and campaigns, visual development and concept art, full pipeline execution (generation, consistency, post-production, and finishing), and hybrid projects combining real sets with synthetic generation." } },
+            { "@type": "Question", "name": "Which brands have worked with Brick AI?", "acceptedAnswer": { "@type": "Answer", "text": "Brick has a track record with Tier 1 brands including Stone, Visa, BBC, Record TV, AliExpress, Facebook, O Boticário, and L'Oréal." } },
+            { "@type": "Question", "name": "When does AI production make sense?", "acceptedAnswer": { "@type": "Answer", "text": "AI makes sense for scenarios that don't physically exist, when scale is needed without proportional budget, or for rapid iteration in the concept phase. We don't recommend AI for real human testimonials, physical products as protagonists, or when budget allows for traditional production done right." } },
+            { "@type": "Question", "name": "What sets Brick AI apart from other AI companies?", "acceptedAnswer": { "@type": "Answer", "text": "We are a film production company first, an AI company second. 10 years on real sets gave us the artistic direction eye that transforms synthetic generation into high-standard cinematic production. We don't sell prompts — we deliver films." } },
+            { "@type": "Question", "name": "How can I contact Brick AI for a project?", "acceptedAnswer": { "@type": "Answer", "text": "Contact us at brick@brick.mov or through the form at ai.brick.mov. Each project is handled individually." } },
+            { "@type": "Question", "name": "Has Brick AI received festival recognition?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The film 'Inheritance' was officially selected for the Gramado Film Festival 2025, one of the most important festivals in Latin America. 'Vendemos Qualquer Coisa' (We Can Sell Anything) was a finalist in the Genero Challenge." } }
+        ];
+        jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": lang === 'en' ? faqEntitiesEn : faqEntitiesPt
+        })}</script>`);
+    }
+
+    // Article schema — fixed with datePublished, dateModified, mainEntityOfPage
     if (view === 'post' && postData) {
+        const isoDate = typeof postData.date === 'string'
+            ? postData.date.replace(/\./g, '-')
+            : new Date().toISOString().split('T')[0];
         jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Article",
             "headline": postTitle,
             "description": postExcerpt,
-            "author": { "@type": "Organization", "name": "Brick AI" },
-            "publisher": { "@type": "Organization", "name": "Brick AI", "logo": "https://ai.brick.mov/logo.png" },
-            "url": canonicalUrl
+            "author": { "@type": "Organization", "name": "Brick AI", "url": "https://ai.brick.mov" },
+            "publisher": { "@type": "Organization", "name": "Brick AI", "logo": { "@type": "ImageObject", "url": "https://ai.brick.mov/og-image.jpg" } },
+            "datePublished": isoDate,
+            "dateModified": isoDate,
+            "url": canonicalUrl,
+            "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalUrl }
         })}</script>`);
     }
 

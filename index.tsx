@@ -2649,7 +2649,7 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
         upsertAlt('pt-BR', `https://ai.brick.mov/${view === 'home' ? '' : view}`);
         upsertAlt('en', `https://ai.brick.mov/${view === 'home' ? '' : view}?lang=en`);
 
-        // Update route-specific JSON-LD (Organization + FAQ are static in index.html)
+        // Remove all previously injected dynamic JSON-LD scripts
         document.querySelectorAll('script[data-dynamic-ld]').forEach(s => s.remove());
 
         const addJsonLd = (data: any) => {
@@ -2660,30 +2660,69 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
             document.head.appendChild(script);
         };
 
+        const isEn = lang.startsWith('en');
+
+        // FAQPage — injected dynamically so it matches the current UI language
+        if (view === 'home') {
+            const faqEntities = isEn ? [
+                { "@type": "Question", "name": "What is Brick AI?", "acceptedAnswer": { "@type": "Answer", "text": "Brick AI is a Brazilian generative production company founded in 2016. We combine human artistic and cinematic direction with synthetic generation systems to create advertising campaigns, VFX, and premium visual content. We are a specialized division of Brick, a production company with a proven track record with clients like Stone, Visa, BBC, and L'Oréal." } },
+                { "@type": "Question", "name": "What sets Brick AI apart from traditional production companies?", "acceptedAnswer": { "@type": "Answer", "text": "Brick AI operates what we call an 'Infinite Set': any scenario, context or aesthetic, produced with cinematic quality in a fraction of the time and cost of conventional production. While traditional companies are limited by physical logistics — locations, equipment, travel — we remove those barriers without compromising human creative direction." } },
+                { "@type": "Question", "name": "How does Brick AI ensure the result won't look generic or AI-generated?", "acceptedAnswer": { "@type": "Answer", "text": "Most AI-generated content without artistic direction results in automation without authorship. At Brick AI, every production goes through rigorous human curation: art direction, color grading, sound design and editing are led by professionals with over 10 years of on-set experience. Generative systems create the structural base; elite finishing is applied by our team." } },
+                { "@type": "Question", "name": "Has Brick AI worked with major brands?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. Our portfolio includes projects for Stone, Visa, BBC, Record TV, AliExpress, Keeta, Facebook, O Boticário and L'Oréal. The short film 'Inheritance', produced by Brick AI, was an official selection of the Gramado Film Festival 2025 — one of the first generative films to compete at the festival." } },
+                { "@type": "Question", "name": "What is Hybrid Production?", "acceptedAnswer": { "@type": "Answer", "text": "Hybrid Production is Brick AI's methodology that combines traditional filming, classical post-production, and synthetic generation systems in a single workflow. The result is content with the quality and artistic intent of a major production, with the agility and budget viability of digital generation." } },
+                { "@type": "Question", "name": "How long does a generative AI production take at Brick AI?", "acceptedAnswer": { "@type": "Answer", "text": "Generative production significantly reduces timelines compared to traditional production. Projects that would take 45 days in a conventional setup can be delivered in 10 to 15 business days. Briefing, visual reference approval and creative alignment are the most decisive steps in determining the final timeline." } },
+                { "@type": "Question", "name": "Is using generative AI in video production legally safe?", "acceptedAnswer": { "@type": "Answer", "text": "Brick AI operates as a production company, not a software vendor. Every deliverable is an audiovisual work licensed by Brick, with the same contracts and legal security as any traditional production. Projects for Visa and Stone follow the same compliance standards required by these companies in their conventional productions." } }
+            ] : [
+                { "@type": "Question", "name": "O que é a Brick AI?", "acceptedAnswer": { "@type": "Answer", "text": "Brick AI é uma produtora generativa brasileira fundada em 2016. Combinamos direção artística e cinematográfica humana com sistemas de geração sintética para criar campanhas publicitárias, VFX e conteúdo visual premium. Somos uma divisão especializada da Brick, produtora com histórico em clientes como Stone, Visa, BBC e L'Oréal." } },
+                { "@type": "Question", "name": "Qual é o diferencial da Brick AI em relação a produtoras tradicionais?", "acceptedAnswer": { "@type": "Answer", "text": "A Brick AI opera no que chamamos de 'Set Infinito': qualquer cenário, contexto ou estética, produzido com qualidade cinematográfica e em uma fração do tempo e custo da produção convencional. Enquanto produtoras tradicionais estão limitadas por logística física — locações, equipamento, viagens —, nós removemos essas barreiras sem abrir mão do padrão de direção humana." } },
+                { "@type": "Question", "name": "Como a Brick AI garante que o resultado não vai parecer genérico ou estranho?", "acceptedAnswer": { "@type": "Answer", "text": "A maior parte do conteúdo gerado sem direção artística resulta em automação sem autoria. Na Brick AI, toda produção passa por curadoria humana rigorosa: direção de arte, color grading, sound design e montagem são conduzidos por profissionais com mais de 10 anos de experiência em set. Os sistemas de geração criam a base estrutural; a finalização de elite é aplicada pela equipe." } },
+                { "@type": "Question", "name": "A Brick AI já trabalhou com grandes marcas?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. O portfólio da Brick inclui projetos para Stone, Visa, BBC, Record TV, AliExpress, Keeta, Facebook, O Boticário e L'Oréal. O curta 'Inheritance', produzido pela Brick AI, foi seleção oficial do Festival de Cinema de Gramado 2025, sendo um dos primeiros filmes gerativos a competir no festival." } },
+                { "@type": "Question", "name": "O que é Produção Híbrida?", "acceptedAnswer": { "@type": "Answer", "text": "Produção Híbrida é a metodologia da Brick AI que combina filmagem tradicional, pós-produção clássica e sistemas de geração sintética em um único fluxo de trabalho. O resultado é conteúdo com a qualidade e intenção artística de uma grande produção, com a agilidade e viabilidade de orçamento da geração digital." } },
+                { "@type": "Question", "name": "Quanto tempo leva uma produção com sistemas generativos na Brick AI?", "acceptedAnswer": { "@type": "Answer", "text": "O processo generativo reduz significativamente os prazos em relação à produção tradicional. Projetos que levariam 45 dias em uma produção convencional podem ser entregues em 10 a 15 dias úteis. O briefing, a aprovação de referências visuais e o alinhamento criativo são as etapas mais determinantes do prazo total." } },
+                { "@type": "Question", "name": "Usar sistemas de geração sintética na produção de vídeo é seguro juridicamente?", "acceptedAnswer": { "@type": "Answer", "text": "A Brick AI opera como produtora, não como fornecedora de software. Toda entrega é uma obra audiovisual licenciada pela Brick, com os mesmos contratos e segurança jurídica de qualquer produção tradicional. Os projetos para Visa e Stone seguem os mesmos padrões de compliance exigidos por essas empresas em suas produções convencionais." } }
+            ];
+            addJsonLd({ "@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faqEntities });
+        }
+
         if (view === 'works') {
+            const itemList = isEn ? [
+                { "@type": "CreativeWork", "position": 1, "name": "Inheritance", "description": "One of the first AI-made films selected at the Gramado Film Festival 2025. A fable about cycles, hubris, and the illusion of progress.", "award": "Official Selection — Gramado Film Festival 2025", "dateCreated": "2025", "url": "https://ai.brick.mov/transmissions/inheritance" },
+                { "@type": "CreativeWork", "position": 2, "name": "We Can Sell Anything", "description": "One character, infinite worlds. A production manifesto showing any scenario in 60 seconds.", "award": "Genero Challenge Finalist" },
+                { "@type": "CreativeWork", "position": 3, "name": "Autobol", "description": "Reimagination of a forgotten 1970s Brazilian sport where cars pushed a giant ball between Rio clubs." },
+                { "@type": "CreativeWork", "position": 4, "name": "Dog Day Afternoon", "description": "Absurdist comedy played completely straight — dogs in everyday human situations." },
+                { "@type": "CreativeWork", "position": 5, "name": "Factory", "description": "Industrial decay with a retro-futuristic aesthetic — a future imagined in the 70s, aged and abandoned." }
+            ] : [
+                { "@type": "CreativeWork", "position": 1, "name": "Inheritance", "description": "Um dos primeiros filmes feitos com IA selecionado no Festival de Gramado 2025. Uma fábula sobre ciclos, hubris e a ilusão do progresso.", "award": "Seleção Oficial Festival de Gramado 2025", "dateCreated": "2025", "url": "https://ai.brick.mov/transmissions/inheritance" },
+                { "@type": "CreativeWork", "position": 2, "name": "Vendemos Qualquer Coisa", "description": "Um personagem, infinitos mundos. Manifesto de produção mostrando qualquer cenário em 60 segundos.", "award": "Finalista Genero Challenge" },
+                { "@type": "CreativeWork", "position": 3, "name": "Autobol", "description": "Reimaginação do esporte brasileiro dos anos 70 onde carros empurravam uma bola gigante entre clubes cariocas." },
+                { "@type": "CreativeWork", "position": 4, "name": "Dog Day Afternoon", "description": "Comédia absurda levada a sério — cachorros em situações cotidianas humanas." },
+                { "@type": "CreativeWork", "position": 5, "name": "Factory", "description": "Decadência industrial com estética retro-futurista — um futuro imaginado nos anos 70, envelhecido e abandonado." }
+            ];
             addJsonLd({
                 "@context": "https://schema.org",
                 "@type": "ItemList",
-                "name": "Portfólio Brick AI",
-                "itemListElement": [
-                    { "@type": "CreativeWork", "position": 1, "name": "Inheritance", "description": "Um dos primeiros filmes feitos com IA a ser selecionado no Festival de Gramado 2025.", "award": "Seleção Oficial Festival de Gramado 2025", "dateCreated": "2025" },
-                    { "@type": "CreativeWork", "position": 2, "name": "Vendemos Qualquer Coisa", "description": "Um personagem, infinitos mundos. Finalista no Genero Challenge.", "award": "Finalista Genero Challenge" },
-                    { "@type": "CreativeWork", "position": 3, "name": "Autobol", "description": "Reimaginação do esporte brasileiro dos anos 70 onde carros empurravam uma bola gigante." },
-                    { "@type": "CreativeWork", "position": 4, "name": "Dog Day Afternoon", "description": "Comédia absurda com cachorros em situações humanas cotidianas." },
-                    { "@type": "CreativeWork", "position": 5, "name": "Factory", "description": "Decadência industrial com estética retro-futurista dos anos 70." }
-                ]
+                "name": isEn ? "Brick AI Portfolio" : "Portfólio Brick AI",
+                "itemListElement": itemList
             });
         }
 
         if (view === 'post' && selectedPost) {
+            const postUrl = `https://ai.brick.mov/transmissions/${selectedPost.url || selectedPost.id}`;
+            // Convert post.date ("2025.01.15") to ISO ("2025-01-15")
+            const isoDate = typeof selectedPost.date === 'string'
+                ? selectedPost.date.replace(/\./g, '-')
+                : new Date().toISOString().split('T')[0];
             addJsonLd({
                 "@context": "https://schema.org",
                 "@type": "Article",
                 "headline": typeof selectedPost.title === 'string' ? selectedPost.title : "Article",
-                "description": typeof selectedPost.excerpt === 'string' ? selectedPost.excerpt : "Details about the article",
-                "author": { "@type": "Organization", "name": "Brick AI" },
-                "publisher": { "@type": "Organization", "name": "Brick AI", "logo": "https://ai.brick.mov/logo.png" },
-                "datePublished": "2026-01-27"
+                "description": typeof selectedPost.excerpt === 'string' ? selectedPost.excerpt : "",
+                "author": { "@type": "Organization", "name": "Brick AI", "url": "https://ai.brick.mov" },
+                "publisher": { "@type": "Organization", "name": "Brick AI", "logo": { "@type": "ImageObject", "url": "https://ai.brick.mov/og-image.jpg" } },
+                "datePublished": isoDate,
+                "dateModified": isoDate,
+                "url": postUrl,
+                "mainEntityOfPage": { "@type": "WebPage", "@id": postUrl }
             });
         }
 
