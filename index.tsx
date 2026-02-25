@@ -109,7 +109,7 @@ const GlobalStyles = () => (
             height: 200%;
             pointer-events: none;
             z-index: 30;
-            opacity: 0.04;
+            opacity: 0.02;
             background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
             animation: grain 6s steps(10) infinite;
         }
@@ -2300,70 +2300,98 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                         <div className="w-full max-w-5xl bg-[#0a0a0a] border border-white/10 my-8">
                             {/* Header */}
                             <div className="flex justify-between items-center p-6 border-b border-white/10">
-                                <h2 className="text-lg font-brick text-white">EDIT_PROJECT</h2>
+                                <h2 className="text-lg font-brick text-white">{activeTab === 'works' ? 'EDIT_PROJECT' : 'EDIT_TRANSMISSION'}</h2>
                                 <button onClick={() => setEditingItem(null)} className="text-[#9CA3AF] hover:text-white text-2xl">&times;</button>
                             </div>
 
                             <div className="flex flex-col lg:flex-row">
                                 {/* Left Side - Form Fields */}
                                 <div className="lg:w-1/2 p-6 space-y-4 border-r border-white/10">
-                                    <h3 className="text-xs font-mono text-[#DC2626] mb-4 uppercase tracking-widest">Project Info</h3>
 
-                                    {/* Basic Fields */}
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">ID</label>
-                                            <input type="text" value={editingItem.id || ''} onChange={e => setEditingItem({ ...editingItem, id: e.target.value })} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
-                                        </div>
-                                        <div>
-                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Category</label>
-                                            <select value={editingItem.category || ''} onChange={e => setEditingItem({ ...editingItem, category: e.target.value })} className="w-full bg-[#0a0a0a] border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]">
-                                                <option value="GENERATIVE">GENERATIVE</option>
-                                                <option value="VFX">VFX</option>
-                                                <option value="STYLE TRANSFER">STYLE TRANSFER</option>
-                                                <option value="DATA ART">DATA ART</option>
-                                                <option value="EXPERIENCE">EXPERIENCE</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Title</label>
-                                        <input type="text" value={editingItem.title || ''} onChange={e => setEditingItem({ ...editingItem, title: e.target.value })} className="w-full bg-transparent border border-white/20 p-3 text-white font-mono text-sm focus:outline-none focus:border-[#DC2626]" />
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Subtitle</label>
-                                        <input type="text" value={editingItem.subtitle || ''} onChange={e => setEditingItem({ ...editingItem, subtitle: e.target.value })} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Description</label>
-                                        <textarea value={editingItem.desc || ''} onChange={e => setEditingItem({ ...editingItem, desc: e.target.value })} rows={2} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626] resize-none" />
-                                    </div>
-
-                                    <div>
-                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Long Description</label>
-                                        <textarea value={editingItem.longDesc || ''} onChange={e => setEditingItem({ ...editingItem, longDesc: e.target.value })} rows={3} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626] resize-none" />
-                                    </div>
-
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <div>
-                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Orientation</label>
-                                            <select value={editingItem.orientation || 'horizontal'} onChange={e => setEditingItem({ ...editingItem, orientation: e.target.value })} className="w-full bg-[#0a0a0a] border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]">
-                                                <option value="horizontal">Horizontal</option>
-                                                <option value="vertical">Vertical</option>
-                                            </select>
-                                        </div>
-                                        <div>
-                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Video URL</label>
-                                            <input type="text" value={editingItem.videoUrl || ''} onChange={e => setEditingItem({ ...editingItem, videoUrl: e.target.value })} placeholder="Vimeo or MP4 URL" className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
-                                        </div>
-                                    </div>
+                                    {activeTab === 'works' ? (
+                                        <>
+                                            <h3 className="text-xs font-mono text-[#DC2626] mb-4 uppercase tracking-widest">Project Info</h3>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">ID</label>
+                                                    <input type="text" value={editingItem.id || ''} onChange={e => setEditingItem({ ...editingItem, id: e.target.value })} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Category</label>
+                                                    <select value={editingItem.category || ''} onChange={e => setEditingItem({ ...editingItem, category: e.target.value })} className="w-full bg-[#0a0a0a] border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]">
+                                                        <option value="GENERATIVE">GENERATIVE</option>
+                                                        <option value="VFX">VFX</option>
+                                                        <option value="STYLE TRANSFER">STYLE TRANSFER</option>
+                                                        <option value="DATA ART">DATA ART</option>
+                                                        <option value="EXPERIENCE">EXPERIENCE</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Title</label>
+                                                <input type="text" value={editingItem.title || ''} onChange={e => setEditingItem({ ...editingItem, title: e.target.value })} className="w-full bg-transparent border border-white/20 p-3 text-white font-mono text-sm focus:outline-none focus:border-[#DC2626]" />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Subtitle</label>
+                                                <input type="text" value={editingItem.subtitle || ''} onChange={e => setEditingItem({ ...editingItem, subtitle: e.target.value })} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Description</label>
+                                                <textarea value={editingItem.desc || ''} onChange={e => setEditingItem({ ...editingItem, desc: e.target.value })} rows={2} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626] resize-none" />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Long Description</label>
+                                                <textarea value={editingItem.longDesc || ''} onChange={e => setEditingItem({ ...editingItem, longDesc: e.target.value })} rows={3} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626] resize-none" />
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Orientation</label>
+                                                    <select value={editingItem.orientation || 'horizontal'} onChange={e => setEditingItem({ ...editingItem, orientation: e.target.value })} className="w-full bg-[#0a0a0a] border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]">
+                                                        <option value="horizontal">Horizontal</option>
+                                                        <option value="vertical">Vertical</option>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Video URL</label>
+                                                    <input type="text" value={editingItem.videoUrl || ''} onChange={e => setEditingItem({ ...editingItem, videoUrl: e.target.value })} placeholder="Vimeo or MP4 URL" className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
+                                                </div>
+                                            </div>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <h3 className="text-xs font-mono text-[#DC2626] mb-4 uppercase tracking-widest">Transmission Info</h3>
+                                            <div>
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Title</label>
+                                                <input type="text" value={editingItem.title || ''} onChange={e => setEditingItem({ ...editingItem, title: e.target.value })} className="w-full bg-transparent border border-white/20 p-3 text-white font-mono text-sm focus:outline-none focus:border-[#DC2626]" />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Excerpt</label>
+                                                <textarea value={editingItem.excerpt || ''} onChange={e => setEditingItem({ ...editingItem, excerpt: e.target.value })} rows={2} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626] resize-none" />
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Content</label>
+                                                <textarea value={typeof editingItem.content === 'string' ? editingItem.content : ''} onChange={e => setEditingItem({ ...editingItem, content: e.target.value })} rows={8} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626] resize-none" placeholder="Full article content..." />
+                                            </div>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Date</label>
+                                                    <input type="text" value={editingItem.date || ''} onChange={e => setEditingItem({ ...editingItem, date: e.target.value })} placeholder="2025.01.01" className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
+                                                </div>
+                                                <div>
+                                                    <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Tags (comma sep.)</label>
+                                                    <input type="text" value={Array.isArray(editingItem.tags) ? editingItem.tags.join(', ') : ''} onChange={e => setEditingItem({ ...editingItem, tags: e.target.value.split(',').map((t: string) => t.trim()).filter(Boolean) })} placeholder="TAG1, TAG2" className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">URL (slug)</label>
+                                                <input type="text" value={editingItem.url || ''} onChange={e => setEditingItem({ ...editingItem, url: e.target.value })} placeholder="article-slug" className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
+                                            </div>
+                                        </>
+                                    )}
                                 </div>
 
-                                {/* Right Side - Image Editor */}
-                                <div className="lg:w-1/2 p-6 space-y-6">
+                                {/* Right Side - Image Editor (works only) */}
+                                <div className={`${activeTab === 'works' ? 'lg:w-1/2' : 'hidden'} p-6 space-y-6`}>
                                     <h3 className="text-xs font-mono text-[#DC2626] mb-4 uppercase tracking-widest">Image Settings</h3>
 
                                     {/* Image Upload */}
@@ -2422,12 +2450,12 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                                             {editingItem.imageHome ? (
                                                 <>
                                                     <div
-                                                        className="absolute inset-0 transition-all duration-300 opacity-80 filter saturate-[0.6] brightness-[0.9]"
+                                                        className="absolute inset-0 transition-all duration-300 opacity-100 filter saturate-[0.8] contrast-[1.05] brightness-[1.0]"
                                                         style={{
                                                             backgroundImage: `url('${editingItem.imageHome}')`,
                                                             backgroundSize: 'cover',
                                                             backgroundPosition: 'center center',
-                                                            transform: `scale(${editingItem.imageSettingsHome?.scale || 1.2}) translate(${((editingItem.imageSettingsHome?.x || 50) - 50) * 2}%, ${((editingItem.imageSettingsHome?.y || 50) - 50) * 2}%)`
+                                                            transform: `scale(${editingItem.imageSettingsHome?.scale || 1.2}) translate(${((editingItem.imageSettingsHome?.x || 50) - 50) * 2}%, ${((editingItem.imageSettingsHome?.y || 50) - 50) * 2}%) translateZ(0)`
                                                         }}
                                                     />
                                                     <div className="absolute inset-0 opacity-90" style={{ background: 'linear-gradient(to top, #050505 0%, #050505e6 15%, #05050599 40%, transparent 70%)' }} />
