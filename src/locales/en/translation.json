@@ -7,10 +7,10 @@
         "talk_to_us": "TALK TO US"
     },
     "hero": {
-        "title": "FROM SET TO SERVER",
-        "subtitle": "10 YEARS OF CRAFT",
-        "scramble": "NOW GENERATIVE",
-        "description": "A NEW DIVISION BY BRICK.\nFROM ZERO TO ALL SINCE 2016"
+        "title": "BORN ON SET",
+        "subtitle": "THE SAME SOUL",
+        "scramble": "A NEW BODY",
+        "description": "A NEW DIVISION BY BRICK.\nFROM ZERO TO EVERYTHING SINCE 2016"
     },
     "philosophy": {
         "belief_label": "The Belief",
@@ -31,84 +31,84 @@
         "inheritance": {
             "title": "INHERITANCE",
             "subtitle": "SHORT FILM",
-            "desc": "Official Selection Gramado Film Festival 2025",
-            "longDesc": "One of the first AI-made films to be selected and exhibited at the Gramado Film Festival. Inheritance tells the story of a civilization that inherits an abandoned world — and repeats, step by step, all the mistakes of its predecessors. A fable about cycles, hubris, and the illusion of progress. The 5-minute version premiered at Gramado; an extended 10-minute version remains unreleased"
+            "desc": "Official Selection — Gramado Film Festival 2025",
+            "longDesc": "One of the first AI-made films to be selected and screened at the Gramado Film Festival. Inheritance tells the story of a civilization that inherits an abandoned world — and repeats, step by step, every mistake its predecessors made. A fable about cycles, hubris, and the illusion of progress. The 5-minute version premiered at Gramado; an extended 10-minute cut remains unreleased"
         },
         "shift": {
             "title": "WE CAN SELL ANYTHING",
             "subtitle": "MANIFESTO",
             "desc": "Genero Challenge Finalist",
-            "longDesc": "One character. Infinite worlds. In this manifesto, the same man appears in a fashion studio, leads a marching band in a packed stadium, strolls through European palaces, relaxes in a typical American living room, and faces sumo wrestlers — all in 60 seconds. The message is simple: there are no more production limits. Any scenario, any context, any story. Genero Challenge Finalist"
+            "longDesc": "One character. Infinite worlds. In this manifesto, the same man appears in a fashion studio, leads a marching band in a packed stadium, strolls through European palaces, unwinds in a classic American living room, and faces sumo wrestlers — all in 60 seconds. The message is clear: production limits no longer exist. Any scenario, any context, any story. Genero Challenge Finalist"
         },
         "anima": {
             "title": "AUTOBOL",
             "subtitle": "REIMAGINED HISTORY",
-            "desc": "Bringing back a forgotten sport from the 70s",
-            "longDesc": "Autobol was real. In the 1970s, in Rio de Janeiro, cars pushed a giant ball in matches between Flamengo, Fluminense, Vasco, and Botafogo. Created by doctor Mário Marques Tourinho, the sport was a brief phenomenon and is now almost forgotten. This project reimagines Autobol as it could have been filmed back then — with all the texture, grain, and atmosphere of lost 70s footage"
+            "desc": "Reviving a forgotten sport from the 70s",
+            "longDesc": "Autobol was real. In 1970s Rio de Janeiro, cars pushed a giant ball in matches between Flamengo, Fluminense, Vasco, and Botafogo. Created by physician Mário Marques Tourinho, the sport was a brief phenomenon — almost entirely forgotten today. This project reimagines Autobol as it could have been captured back then: with all the texture, grain, and atmosphere of lost 70s broadcast footage"
         },
         "void": {
             "title": "VOID GAZING",
             "subtitle": "DATA VISUALIZATION",
             "desc": "Translating cosmic radiation into visible spectrums",
-            "longDesc": "A data-driven installation that visualizes real-time cosmic radiation data via the NASA Open API. We wrote Python scripts to parse numerical noise into fluid dynamics parameters within TouchDesigner. The AI then textures this simulation in real-time, effectively allowing the audience to 'see' the invisible universe through a human-curated aesthetic lens"
+            "longDesc": "A data-driven installation that visualizes real-time cosmic radiation via NASA Open API. We wrote Python scripts to convert numerical noise into fluid dynamics parameters inside TouchDesigner. AI then textures the simulation in real time — effectively letting audiences see the invisible universe through a human-curated aesthetic lens"
         },
         "urban": {
             "title": "URBAN REEF",
             "subtitle": "PROCEDURAL ENV",
             "desc": "Growing cities like coral. Biological algorithms applied",
-            "longDesc": "Urban Reef explores bio-mimicry in architecture. Using differential growth algorithms in Houdini, we 'grew' city structures that seek light like coral. These procedural meshes were then texturized using AI upscaling, creating a vision of a city that feels grown rather than built, challenging traditional architectural design processes"
+            "longDesc": "Urban Reef explores biomimicry in architecture. Using differential growth algorithms in Houdini, we grew city structures that seek light the way coral does. These procedural meshes were then textured using AI upscaling — producing a vision of a city that feels cultivated rather than constructed, challenging how architectural design is conceived"
         },
         "factory": {
             "title": "FACTORY",
             "subtitle": "RETRO-FUTURISM",
             "desc": "Industrial decay with a retro-futuristic vision",
-            "longDesc": "A factory that never existed, but feels remembered. Factory combines industrial decay with a retro-futuristic aesthetic — as if a future imagined in the 70s had aged and been abandoned. Rust, concrete, silent machinery. A space between the nostalgia of a past and the ruins of a future that never came"
+            "longDesc": "A factory that never existed, but feels remembered. Factory combines industrial decay with a retro-futuristic aesthetic — as though a future imagined in the 70s had aged and been abandoned. Rust, concrete, silent machinery. A space suspended between the nostalgia of a past and the ruins of a future that never arrived"
         },
         "dogday": {
             "title": "DOG DAY AFTERNOON",
             "subtitle": "ABSURDIST COMEDY",
             "desc": "Dogs in human situations",
-            "longDesc": "A canine support group with a 'SIT STAY HEAL' banner. A chihuahua in a sweater on a Zoom call. Dog Day Afternoon is absurdist comedy played straight — dogs in everyday human situations, filmed with the sobriety of an indie drama. The title is a reference to Sidney Lumet's classic with Al Pacino"
+            "longDesc": "A canine support group with a 'SIT STAY HEAL' banner. A chihuahua in a sweater on a Zoom call. Dog Day Afternoon is absurdist comedy played completely straight — dogs in everyday human situations, filmed with the sobriety of an indie drama. The title is a nod to Sidney Lumet's classic with Al Pacino"
         }
     },
     "transmissions": {
         "log_001": {
-            "title": "THE LATENT SPACE IS A LOCATION",
-            "excerpt": "Why we stopped scouting physical ruins and started training LoRAs on brutalist blueprints",
-            "content_p1": "We tend to think of generative models as engines of creation. Input prompt, output image. A linear manufacturing process. But this metaphor is insufficient for high-end production. At Brick, we treat the model not as a factory, but as a territory",
-            "section_title": "The Topography of Noise",
-            "content_p2": "Stable Diffusion XL does not \"draw\". It denoises. It subtracts chaos to reveal order. This implies that the image already exists within the high-dimensional noise, mathematically waiting to be uncovered",
-            "quote": "\"We do not build the set. We navigate to the coordinates where the set is statistically most likely to exist.\""
+            "title": "THE MACHINE HAS NO SOUL. WE DO.",
+            "excerpt": "Technology without artistic intent is just expensive noise. Art directs. The machine executes.",
+            "content_p1": "The stack of bytes that powers artificial intelligence has no idea what a narrative that hurts feels like, or why a slightly tilted frame is sometimes the thing that saves a scene. It doesn't sense aesthetics. It only processes statistics.\n\nBut Brick has been breathing this for decades. As creators, we know that technology without artistic intent is just expensive noise. We are artists who chose to master the technological chaos.\n\nWhat we deliver is not an automated process. It is authorial execution pushed to its absolute limit. While the market drowns in easy prompts, we use AI as a surgical brush to materialize concepts that, until yesterday, were trapped by budget or physical constraints.\n\nThe soul of the scene, the mood that grips the viewer, the edit that actually makes sense — those are human. Those are ours. The machine is simply the tool that lets us deliver the client's vision with a visual force nobody else can match.\n\nThat distinction wasn't born from a screen. It was born on set. From years of calibrating light, building performance, understanding what makes a scene breathe.\n\nBrick didn't arrive at AI through technology. We arrived through the pursuit of scale without giving up authorship. The models were trained on the cinema this industry produced. Our job is to define what comes next.",
+            "section_title": "",
+            "content_p2": "",
+            "quote": ""
         },
         "log_002": {
-            "title": "MOTION VECTORS IN STYLE TRANSFER",
-            "excerpt": "Solving the flickering problem in diffusion models. How we use optical flow to enforce temporal consistency",
-            "content_p1": "The jitter. The flicker. The \"boiling\" texture. This is the hallmark of raw AI video. It reveals the frame-by-frame independence of the diffusion process. For <0>Project: Anima</0>, this artifact was unacceptable",
-            "content_p2": "Our solution involved extracting optical flow maps from the source footage using Nuke. These motion vectors act as a temporal skeleton"
+            "title": "VIDEO ISN'T A PROMPT. IT'S VISION AND EXECUTION.",
+            "excerpt": "A prompt starts it. Vision and execution finish it — with the aesthetic of cinema.",
+            "content_p1": "The market got seduced by the idea that anyone with a line of text can be a filmmaker. We know that's a fantasy. The prompt is the starting point — but without the eye of someone who understands lens, depth of field, and narrative, it dies in seconds.\n\nAt Brick, we don't play at typing sentences. We produce video with visual authority. Artificial Intelligence in our hands is not a luck generator — it's a heavy brush. Brick is a video production company that masters this technology to deliver what the traditional setup can no longer reach.\n\nWe use years of set experience and post-production discipline to filter out the generic AI garbage and extract only what carries the aesthetic of cinema. We don't deliver an algorithm-generated file. We deliver refined art direction, elite post-production, and an execution that only those who've felt the weight of a camera in their hands can truly provide.\n\nThe client isn't buying technology. They're buying our artistic judgment powered by tools that give scale to the impossible. If the goal is to do the obvious, there are plenty of people pressing buttons out there. If the goal is to build a piece with serious video direction and real impact, the path is the vision and execution we put into every frame. Here, art gives the order — and the software figures out how to keep up.",
+            "content_p2": ""
         },
         "log_003": {
-            "title": "INTENTIONAL GLITCH: THE HUMAN SIGNATURE",
-            "excerpt": "When perfection is the error. Injecting noise back into the clean output of commercial models to reclaim the 'cinema' feel",
-            "content_p1": "Modern models are converging towards a \"mid-journey mean\". A polished, plastic aesthetic that screams \"synthetic\". Paradoxically, to make AI imagery feel real, we must break it",
-            "quote": "The artifact is the art"
+            "title": "RESISTANCE IS AN OBITUARY",
+            "excerpt": "Those who resist technological change don't preserve art. They sign their own irrelevance.",
+            "content_p1": "When Pixar released Toy Story, hand-drawn purism became a footnote. Those who resisted 3D didn't save the soul of animation — they signed their own professional obituary while the world discovered that software, in the hands of someone with vision, was the new artillery of art. The machine didn't create the characters. It gave directors the scale to materialize what had been impossible until then.\n\nWe look at Artificial Intelligence with that same clarity. The system doesn't understand scene direction. It doesn't know the dramatic weight of a silence. It doesn't know why that backlit shot changes everything at the end. AI is a brutal tool: if you are mediocre, the result is mediocre. If you have vision, it becomes a multiplier.\n\nWhat separates a generic video from a film that grips the viewer is still the mind doing the directing. We are not here to automate sensitivity — we are here to give superpowers to our authorial execution. Whoever resists what AI enables in scene direction and post-production today is simply choosing the path of irrelevance.\n\nWe use the most powerful technology available to ensure your project carries an impact that nobody else in the market can even simulate. The machine doesn't understand cinema. It only understands mathematics. The craft, the light, and the cut that makes the viewer feel the punch — those remain purely human and entirely ours.\n\nAt Brick, we don't apologize for being at the edge. Cinema has always been an evolution of tools — and those who don't understand that the new digital era has already arrived have already become the past.",
+            "quote": ""
         }
     },
     "common": {
-        "return_surface": "RETURN TO SURFACE",
+        "return_surface": "RETURN",
         "return_index": "RETURN TO INDEX",
-        "system_status": "SYSTEM_STATUS",
+        "system_status": "STATUS",
         "online": "ONLINE",
         "secure_connection": "SECURE CONNECTION",
-        "loading": "LOADING SYSTEM..."
+        "loading": "LOADING..."
     },
     "legacy": {
         "title": "BACKED BY BRICK",
         "title_mobile_br": "BACKED <br /> BY BRICK",
-        "text": "This isn't a beta test. This is a new lens from a production house with 10 years of experience",
-        "trusted_by": "Trusted By"
+        "text": "This isn't an experiment. It's a production company with 10 years on set reinventing what's possible to produce.",
+        "trusted_by": "Partners"
     },
     "footer": {
-        "complex_problem": "Have a complex project?",
+        "complex_problem": "GOT AN IMPOSSIBLE IDEA?",
         "we_have_intelligence": "WE HAVE THE VISION",
         "talk_to_us": "TALK TO US",
         "network": "Network",
@@ -117,55 +117,46 @@
         "system_admin": "SYSTEM_ADMIN"
     },
     "about": {
-        "origin": "SYSTEM_ORIGIN",
-        "est": "EST. 2016",
-        "title_primary": "FORGED IN",
-        "title_highlight": "OLD SCHOOL",
-        "title_secondary": "VFX",
-        "description": "Before we ever wrote a prompt, we spent 7 years pushing pixels in Nuke and Maya. We understand light, composition, and storytelling because we built them by hand for a decade. We didn't adopt AI to replace the craft. We adopted it to break the speed limit",
-        "core_modules": "CORE_MODULES",
+        "origin": "DNA_ORIGIN",
+        "est": "EST_2016",
+        "title_primary": "CINEMATIC",
+        "title_highlight": "VISION",
+        "title_secondary": "NEURAL EXECUTION",
+        "description": "Our vision didn't come from ChatGPT. It's the result of years on set, directing and executing in the real world. Long before anyone wrote a prompt, our path was already defined by high-complexity visual production. We understand narrative and aesthetics because our eye was refined in the daily grind of set life and the technical rigor of classical post-production. For us, technology is not a shortcut to mediocrity — it's a power multiplier: the artistic judgment stays purely human, but the final execution now reaches what our imagination always pursued.",
+        "core_modules": "AUTHORIAL VISION",
         "modules": {
             "cinematography": {
-                "title": "SYNTHETIC_CINEMATOGRAPHY",
-                "status": "INSTALLED",
-                "desc": "Video Generation // ComfyUI // 4K Upscaling"
+                "title": "ARTISTIC CONCEPTION",
+                "status": "CALIBRATED",
+                "desc": "AI hallucinates images. We design intent. Every film is conceived in repertoire, where each frame serves the narrative. Technology is the brush — but the command is purely authorial."
             },
             "training": {
-                "title": "MODEL_TRAINING",
-                "status": "INSTALLED",
-                "desc": "Custom LoRAs // Style Consistency // Fine-Tuning"
+                "title": "VISUAL DIRECTION",
+                "status": "ONLINE",
+                "desc": "The end of generative amateurism. We apply the rigor of cinematic lighting and lens precision to ensure aesthetics are never an accident — but an unmistakable signature."
             },
             "architecture": {
-                "title": "PIPELINE_ARCHITECTURE",
-                "status": "INSTALLED",
-                "desc": "Python Tooling // Automation // Render Farm"
+                "title": "FULL EXECUTION",
+                "status": "STABLE",
+                "desc": "We don't deliver generated files. We deliver finished works. We combine neural power with the elite finishing of those who've owned the set for a decade. The result: the impossible, materialized."
             }
         },
         "manifesto": {
-            "title": "THE ANTI-PROMPT MANIFESTO",
-            "subtitle": "Why Magic Doesn't Scale",
+            "title": "ANTI-SLOP PROTOCOL",
+            "subtitle": "SYSTEM_DIRECTIVES",
             "cards": {
                 "control": {
                     "title": "CONTROL > CHANCE",
-                    "desc": "The 'perfect prompt' is a myth. Consistency comes from ControlNet, IP-Adapters, and Python scripts, not lucky words. We engineer our images; we don't wish for them"
+                    "desc": "The 'perfect prompt' is a myth. Consistency comes from those who direct the process — not from the luck of a line of text. For us, technology only makes sense when it's subjected to the rigor of the artistic eye. Where the market sees automation, we exercise total dominance over the image."
                 },
                 "curation": {
-                    "title": "CURATION IS CREATION",
-                    "desc": "A model can generate 1,000 images in a minute. The art is knowing which one is wrong. Our directors curate with the same critical eye they used on film sets for 10 years"
+                    "title": "QUALITY > VOLUME",
+                    "desc": "We are not here to produce disposable volume. We use the power of the machine as a search engine for the right image. Technology expands capacity — but it's the repertoire that decides what deserves to reach the screen."
                 },
                 "black_box": {
-                    "title": "NO BLACK BOXES",
-                    "desc": "We don't rely on closed web-interfaces. We build our own ComfyUI pipelines locally. This gives us pixel-level control over the latent space that 'magic buttons' can't provide"
+                    "title": "ART = VIRTUOSITY",
+                    "desc": "What sets us apart is mastering both ends: the set eye and technical control of the new generation. We don't test tools out of curiosity — we fuse aesthetics and power to deliver what the market cannot replicate. Technology obeys art."
                 }
-            }
-        },
-        "team": {
-            "title": "UNIT_LEADERS // COMMAND",
-            "roles": {
-                "alex": "EXECUTIVE PRODUCER",
-                "sarah": "CREATIVE DIRECTOR",
-                "gabriel": "HEAD OF TECHNOLOGY",
-                "marcus": "VFX SUPERVISOR"
             }
         }
     },
@@ -197,7 +188,7 @@
     "works_page": {
         "title": "PROJECT_DATABASE // Selected Works",
         "archive_index": "ARCHIVE_INDEX",
-        "accessing": "ACESSING NEURAL DATABASE...",
+        "accessing": "ACCESSING NEURAL DATABASE...",
         "entries_found": "ENTRIES FOUND",
         "no_data": "NO DATA FOUND IN THIS SECTOR",
         "protocols": "PROTOCOLS"
