@@ -562,7 +562,7 @@ const TypewriterText = ({ text, className }: { text: string, className?: string 
     );
 };
 
-const ScrambleText = ({ text, className, hoverTrigger = false }: { text: string, className?: string, hoverTrigger?: boolean }) => {
+const ScrambleText = ({ text, className, hoverTrigger = false, delay = 0 }: { text: string, className?: string, hoverTrigger?: boolean, delay?: number }) => {
     const [displayText, setDisplayText] = useState(text);
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*";
     const intervalRef = useRef<any>(null);
@@ -591,7 +591,14 @@ const ScrambleText = ({ text, className, hoverTrigger = false }: { text: string,
     };
 
     useEffect(() => {
-        if (!hoverTrigger) scramble();
+        if (!hoverTrigger) {
+            if (delay > 0) {
+                const t = setTimeout(scramble, delay);
+                return () => clearTimeout(t);
+            } else {
+                scramble();
+            }
+        }
     }, []);
 
     return (
@@ -956,12 +963,12 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                     ></div>
                 </div>
             </div>
-            <div className="reveal delay-200 text-center z-20 max-w-6xl px-4 flex flex-col items-center pointer-events-none">
-                <p className="text-base md:text-xl lg:text-2xl font-mono text-white drop-shadow-2xl mb-2 md:mb-4">
+            <div className="text-center z-20 max-w-6xl px-4 flex flex-col items-center pointer-events-none">
+                <p className="reveal delay-200 text-base md:text-xl lg:text-2xl font-mono text-white drop-shadow-2xl mb-2 md:mb-4">
                     <TypewriterText text={t('hero.scramble') as string} />
                 </p>
-                <h2 className="text-2xl md:text-4xl lg:text-5xl font-brick text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
-                    <ScrambleText text={t('hero.subtitle') as string} />
+                <h2 className="reveal delay-[1000ms] text-2xl md:text-4xl lg:text-5xl font-brick text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
+                    <ScrambleText text={t('hero.subtitle') as string} delay={800} />
                 </h2>
             </div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
