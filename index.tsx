@@ -897,7 +897,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
     }, [monolithHover]);
 
     return (
-        <section className="relative w-full flex flex-col items-center justify-start pt-32 md:pt-40 pb-20 md:pb-32 overflow-visible">
+        <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-visible">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-40"></div>
 
             <div className="reveal relative z-10 w-full flex justify-center mb-8 md:mb-12">
