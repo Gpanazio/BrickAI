@@ -20,11 +20,11 @@
         },
         "noise": {
             "title": "RUÍDO",
-            "text": "Sem uma mão humana, modelos generativos são apenas coincidência matemática. Nós fornecemos a visão"
+            "text": "Sem a mão humana, modelos generativos são apenas coincidência matemática. Nós fornecemos a visão"
         },
         "direct": {
             "title": "NÓS DIRIGIMOS A INTELIGÊNCIA",
-            "text": "A máquina é o pincel. O banco de dados é a tinta. Nós continuamos sendo os artistas"
+            "text": "A máquina processa dados. Quem imprime alma no filme é o olhar humano"
         }
     },
     "works": {
@@ -68,7 +68,7 @@
             "title": "DOG DAY AFTERNOON",
             "subtitle": "COMÉDIA ABSURDA",
             "desc": "Cachorros em situações humanas",
-            "longDesc": "Um grupo de apoio canino com a faixa 'SIT STAY HEAL'. Um chihuahua de suéter participando de uma call de Zoom. Dog Day Afternoon é comédia absurda levada a sério — cachorros em situações cotidianas humanas, filmados com a sobriedade de um drama independente. O título é uma referência ao clássico de Sidney Lumet com Al Pacino"
+            "longDesc": "O que acontece quando o melhor amigo do homem herda suas piores neuroses? Sob a luz fluorescente de uma sala comunitária, um círculo de cadeiras dobráveis acomoda o rito do desabafo: um grupo de apoio onde o latido deu lugar a um inglês articulado e denso."
         }
     },
     "transmissions": {
