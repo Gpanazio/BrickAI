@@ -166,6 +166,7 @@
         "status_online": "STATUS: ONLINE",
         "email_streams": "EMAIL_STREAMS",
         "voice_link": "VOICE_LINK",
+        "direct_message": "DIRECT_MESSAGE",
         "network_nodes": "NETWORK_NODES",
         "mason_intro": "I AM MASON",
         "generative_core": "The Generative Core",
