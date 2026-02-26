@@ -93,6 +93,14 @@ const GlobalStyles = () => (
             100% { top: 100%; opacity: 0; }
         }
         
+        @keyframes system-type-in {
+            from { clip-path: inset(0 100% 0 0); }
+            to { clip-path: inset(0 0% 0 0); }
+        }
+        .animate-system-input {
+            animation: system-type-in 0.5s steps(30, end) 0.2s forwards;
+            clip-path: inset(0 100% 0 0);
+        }
         .animate-blink { animation: terminal-blink 1s step-end infinite; }
         .animate-breathe { animation: atmos-breathe 6s ease-in-out infinite; }
         .animate-grain { animation: grain 8s steps(10) infinite; }
@@ -328,6 +336,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 gradient: "from-neutral-950 to-[#DC2626]/20",
                 imageHome: "/uploads/f9c13e36-0abe-43c9-8161-805cd9f2d1f3.jpeg",
                 imageWorks: "/uploads/f9c13e36-0abe-43c9-8161-805cd9f2d1f3.jpeg",
+                videoUrl: "https://review.brick.mov/portfolio/player/7",
                 hasDetail: true
             },
         ];
@@ -449,7 +458,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                                     imageWorks: w.imageWorks,
                                     imageSettingsHome: w.imageSettingsHome,
                                     imageSettingsWorks: w.imageSettingsWorks,
-                                    videoUrl: w.videoUrl,
+                                    videoUrl: w.videoUrl || finalWorks[idx].videoUrl,
                                     orientation: w.orientation,
                                     gradient: w.gradient,
                                     hasDetail: w.hasDetail,
@@ -1311,6 +1320,7 @@ const Legacy = () => {
 const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void }) => {
     const { t } = useTranslation();
     const [isLoaded, setIsLoaded] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
     const settings = project.imageSettingsHome || { x: 50, y: 50, scale: 1.2 };
 
     useEffect(() => {
@@ -1327,6 +1337,7 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
         return match ? match[1] : null;
     };
     const vimeoId = project.videoUrl ? getVimeoId(project.videoUrl) : null;
+    const isVideoFile = project.videoUrl ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(project.videoUrl) : false;
 
     const modalClasses = isHorizontal
         ? 'max-w-7xl w-[95%] h-[80vh] md:h-auto md:max-h-[85vh] md:aspect-[16/7]'
@@ -1341,7 +1352,7 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                 </button>
                 <div className={`w-full md:w-2/3 bg-[#050505] relative border-b md:border-b-0 md:border-r border-white/10 group overflow-hidden flex items-center justify-center`}>
                     <div className="absolute inset-0 w-full h-full">
-                        {project.videoUrl ? (
+                        {project.videoUrl && isPlaying ? (
                             vimeoId ? (
                                 <iframe
                                     src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&background=1&muted=1`}
@@ -1351,30 +1362,42 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                                     allowFullScreen
                                     title={project.title}
                                 ></iframe>
-                            ) : (
+                            ) : isVideoFile ? (
                                 <video
                                     src={project.videoUrl}
                                     className="w-full h-full object-cover opacity-80"
                                     autoPlay loop muted playsInline
                                 />
+                            ) : (
+                                <iframe
+                                    src={project.videoUrl}
+                                    className="w-full h-full"
+                                    frameBorder="0"
+                                    allow="autoplay; fullscreen"
+                                    allowFullScreen
+                                    title={project.title}
+                                ></iframe>
                             )
                         ) : (
                             <div className="placeholder-video w-full h-full flex items-center justify-center relative">
                                 <div
-                                    className="absolute inset-0 opacity-40 bg-cover transition-transform duration-1000 group-hover:scale-105"
+                                    className="absolute inset-0 opacity-40 bg-cover transition-transform duration-1000 group-hover:scale-105 pointer-events-none"
                                     style={{
                                         backgroundImage: `url('${project.imageHome}')`,
                                         backgroundPosition: 'center center',
                                         transform: `scale(${settings.scale}) translate(${(settings.x - 50) * 2}%, ${(settings.y - 50) * 2}%)`
                                     }}
                                 ></div>
-                                <div className="z-10 w-16 h-16 rounded-full border border-white/20 flex items-center justify-center group-hover:scale-110 group-hover:border-[#DC2626] transition-all duration-300 cursor-pointer backdrop-blur-sm bg-[#050505]/30">
+                                <button
+                                    onClick={() => setIsPlaying(true)}
+                                    className="relative z-10 w-16 h-16 rounded-full border border-white/20 flex items-center justify-center hover:scale-110 hover:border-[#DC2626] transition-all duration-300 cursor-pointer backdrop-blur-sm bg-[#050505]/30"
+                                >
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-white ml-1"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                                </div>
+                                </button>
                             </div>
                         )}
                         <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end text-[10px] font-mono tracking-widest text-white/50 pointer-events-none z-20">
-                            <span>{project.videoUrl ? t('project_modal.neural_active') : t('project_modal.static_preview')}</span>
+                            <span>{project.videoUrl && isPlaying ? t('project_modal.neural_active') : t('project_modal.static_preview')}</span>
                             <span>{isHorizontal ? '16:9' : '9:16'} // 4K</span>
                         </div>
                     </div>
@@ -1391,7 +1414,7 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                         <p className="text-[#E5E5E5]/80 font-light text-xs md:text-sm leading-relaxed">{project.longDesc || project.desc}</p>
                     </div>
                     <div className="border-t border-white/10 pt-4 mt-auto">
-                        <h4 className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#9CA3AF] mb-3">{t('project_modal.system_data')}</h4>
+                        <h4 className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#9CA3AF] mb-3"></h4>
                         <div className="space-y-2">
                             {project.credits && project.credits.map((credit, idx) => (
                                 <div key={idx} className="flex justify-between items-baseline text-[10px] md:text-xs font-mono">
@@ -1504,19 +1527,19 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
-            <main className="pt-24 md:pt-32 min-h-screen flex flex-col">
+            <main className="pt-32 md:pt-40 min-h-screen flex flex-col">
                 <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('works_page.archive_index')}</h1>
-                            <p className="text-[#9CA3AF] font-mono text-[10px] md:text-xs tracking-widest max-w-xl">{t('works_page.accessing')} {works.length} {t('works_page.entries_found')}</p>
+                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('works_page.archive_index').split('_').slice(0,-1).join('_')}_<span className="text-[#DC2626]">{t('works_page.archive_index').split('_').slice(-1)[0]}</span></h1>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest max-w-xl animate-system-input"><span className="text-[#DC2626]">&gt;&gt;</span> <span className="text-[#9CA3AF]">{t('works_page.accessing')} <span className="text-white">{works.length}</span> {t('works_page.entries_found')}</span></p>
                         </div>
                     </div>
                 </section>
-                <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32">
+                <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 md:pb-40">
                     <WorksFilter categories={categories} activeCategory={activeCategory} onSelect={setActiveCategory} />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
                         {filteredWorks.map((work, idx) => (
@@ -1538,7 +1561,7 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, 
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
-            <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+            <button onClick={onBack} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_index')}
             </button>
             <main className="pt-34 md:pt-40 min-h-screen flex flex-col bg-[#050505] pb-40 md:pb-48 px-4 md:px-8" onClick={onBack}>
@@ -1594,19 +1617,19 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
-            <main className="pt-28 md:pt-36 min-h-screen flex flex-col bg-[#050505]">
-                <section className="w-full px-6 md:px-12 lg:px-24 mb-16 md:mb-20 reveal">
+            <main className="pt-32 md:pt-40 min-h-screen flex flex-col bg-[#050505]">
+                <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('transmissions_page.title')}</h1>
-                            <p className="text-[#9CA3AF] font-mono text-[10px] md:text-xs tracking-widest max-w-xl">{t('transmissions_page.incoming')} {transmissions.length} {t('transmissions_page.records')}</p>
+                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('transmissions_page.title').split('_').slice(0,-1).join('_')}_<span className="text-[#DC2626]">{t('transmissions_page.title').split('_').slice(-1)[0]}</span></h1>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest max-w-xl animate-system-input"><span className="text-[#DC2626]">&gt;&gt;</span> <span className="text-[#9CA3AF]">{t('transmissions_page.incoming')} <span className="text-white">{transmissions.length}</span> {t('transmissions_page.records')}</span></p>
                         </div>
                     </div>
                 </section>
-                <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-36 md:pb-44 reveal">
+                <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 md:pb-40 reveal">
                     <div className="space-y-2 md:space-y-3 bg-transparent border-t border-white/10">
                         {transmissions.map((post) => (
                             <div key={post.id} onClick={() => onSelectPost(post)} className="block group bg-[#050505] hover:bg-[#0a0a0a] transition-colors p-9 md:p-12 border border-white/10 cursor-pointer">
@@ -1659,7 +1682,7 @@ const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void 
 };
 
 const SystemChat = ({ onBack }: { onBack: () => void }) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const [messages, setMessages] = useState<{ role: string, content: string }[]>([
         { role: 'mono', content: t('chat.initial_messages.online') },
         { role: 'mono', content: t('chat.initial_messages.protocol') }
@@ -1674,11 +1697,25 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
         t('chat.suggestions.humans')
     ];
 
+    const isFirstRender = useRef(true);
+    const isLangFirstRender = useRef(true);
+
     const scrollToBottom = () => {
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     };
 
-    useEffect(scrollToBottom, [messages]);
+    useEffect(() => {
+        if (isFirstRender.current) { isFirstRender.current = false; return; }
+        scrollToBottom();
+    }, [messages]);
+
+    useEffect(() => {
+        if (isLangFirstRender.current) { isLangFirstRender.current = false; return; }
+        setMessages([
+            { role: 'mono', content: t('chat.initial_messages.online') },
+            { role: 'mono', content: t('chat.initial_messages.protocol') }
+        ]);
+    }, [i18n.language]);
 
     const handleSend = async (textInput: string | React.FormEvent) => {
         if (typeof textInput !== 'string') textInput.preventDefault();
@@ -1696,24 +1733,21 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
     };
 
     return (
-        <div className="min-h-screen pt-24 md:pt-40 pb-20 flex flex-col items-center justify-start font-mono relative bg-[#050505] overflow-x-hidden">
+        <div className="min-h-screen pt-32 md:pt-40 pb-32 md:pb-40 flex flex-col items-center justify-start font-mono relative bg-[#050505] overflow-x-hidden">
 
             {/* RETURN BUTTON */}
             <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
-            <main className="w-full max-w-7xl mx-auto px-6 md:px-12 relative z-10 flex flex-col gap-24">
+            <main className="w-full px-6 md:px-12 lg:px-24 relative z-10 flex flex-col gap-24">
 
                 {/* 1. CONTACT SECTION (Humans) */}
                 <section className="w-full animate-fade-in-up">
-                    <div className="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-white/10 pb-6">
+                    <div className="flex flex-col md:flex-row justify-between items-end mb-12">
                         <div>
-                            <h1 className="text-4xl md:text-6xl font-brick text-white mb-2">REACH_<span className="text-[#DC2626]">HUMANS</span></h1>
-                            <p className="text-[#9CA3AF] font-mono text-xs tracking-widest uppercase">{t('chat.manual_override')}</p>
-                        </div>
-                        <div className="hidden md:block text-right">
-                            <span className="text-[10px] font-mono text-[#9CA3AF]/60 uppercase tracking-widest">{t('chat.status_online')}</span>
+                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">REACH_<span className="text-[#DC2626]">HUMANS</span></h1>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input"><span className="text-[#DC2626]">&gt;&gt;</span> <span className="text-[#9CA3AF]">{t('chat.manual_override')}</span></p>
                         </div>
                     </div>
 
@@ -1727,13 +1761,13 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             <p className="text-[#9CA3AF] text-xs font-mono tracking-widest">BRICK@BRICK.MOV</p>
                         </a>
 
-                        {/* PHONE */}
-                        <a href="tel:+5511999999999" className="group block bg-[#0A0A0A] border border-white/5 p-8 hover:border-[#DC2626] transition-colors duration-500">
+                        {/* WHATSAPP */}
+                        <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="group block bg-[#0A0A0A] border border-white/5 p-8 hover:border-[#DC2626] transition-colors duration-500">
                             <div className="mb-4 text-[#DC2626] opacity-50 group-hover:opacity-100 transition-opacity">
                                 <span className="text-[10px] uppercase tracking-widest border border-[#DC2626] px-2 py-1">Channel_02</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-[#DC2626] transition-colors">{t('chat.voice_link')}</h3>
-                            <p className="text-[#9CA3AF] text-xs font-mono tracking-widest">+55 11 99999-9999</p>
+                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-[#DC2626] transition-colors">DIRECT_MESSAGE</h3>
+                            <p className="text-[#9CA3AF] text-xs font-mono tracking-widest">WHATSAPP</p>
                         </a>
 
                         {/* SOCIAL */}
@@ -1743,7 +1777,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             </div>
                             <h3 className="text-2xl font-brick text-white mb-4 group-hover:text-[#DC2626] transition-colors">{t('chat.network_nodes')}</h3>
                             <div className="flex flex-wrap gap-4">
-                                {['LinkedIn', 'Instagram', 'Twitter'].map(social => (
+                                {['LinkedIn', 'Instagram'].map(social => (
                                     <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-[#9CA3AF] hover:text-white uppercase tracking-wider underline decoration-white/20 hover:decoration-white">{social}</a>
                                 ))}
                             </div>
@@ -1938,66 +1972,69 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
-            <main className="min-h-screen flex flex-col bg-[#050505] relative overflow-hidden">
+            <main className="min-h-screen pt-32 md:pt-40 flex flex-col bg-[#050505] relative overflow-hidden">
                 <div className="scanline-effect opacity-10 pointer-events-none"></div>
 
                 {/* ── HERO: DOSSIER STYLE ── */}
-                <section className="pt-36 md:pt-48 pb-20 border-b border-white/10 reveal">
-                    <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
+                <section className="pb-20 border-b border-white/10 reveal relative overflow-hidden">
+                    {/* Background breathing glow — bleeds like home */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none animate-breathe"></div>
+                    <div className="w-full px-6 md:px-12 lg:px-24">
 
                         {/* PAGE HEADER */}
-                        <div className="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-white/10 pb-6">
+                        <div className="flex flex-col md:flex-row justify-between items-end mb-12">
                             <div>
-                                <h1 className="text-4xl md:text-6xl font-brick text-white mb-2">
+                                <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">
                                     {t('about.origin').split('_')[0]}_<span className="text-[#DC2626]">{t('about.origin').split('_').slice(1).join('_')}</span>
                                 </h1>
-                                <p className="text-[#9CA3AF] font-mono text-xs tracking-widest uppercase">ACCESS_GRANTED // {t('about.est')}</p>
-                            </div>
-                            <div className="hidden md:block text-right">
-                                <span className="text-[10px] font-mono text-[#9CA3AF]/60 uppercase tracking-widest">{t('common.system_status')}: {t('common.online')}</span>
+                                <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input"><span className="text-[#DC2626]">&gt;&gt;</span> <span className="text-[#9CA3AF]">ACCESS_GRANTED // <span className="text-white">{t('about.est')}</span></span></p>
                             </div>
                         </div>
 
-                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                            {/* LEFT: CONTENT LABEL */}
-                            <div className="flex flex-col justify-center">
-                                <p className="font-brick text-3xl md:text-4xl lg:text-5xl text-white/20 leading-tight tracking-tight uppercase mb-3">
-                                    {t('about.title_primary')}<br />
-                                    <span className="text-[#DC2626]/60">{t('about.title_highlight')}</span>
-                                </p>
-                                <span className="font-mono text-[10px] tracking-[0.4em] text-white/20 uppercase">{t('about.title_secondary')}</span>
-                            </div>
+                        {/* CENTERED: MONOLITH + TITLE + DESC */}
+                        <div className="flex flex-col items-center text-center gap-10 py-8">
 
-                            {/* RIGHT: DESC */}
-                            <div className="flex flex-col justify-center">
-                                <div className="font-mono text-sm md:text-base text-[#9CA3AF] leading-relaxed space-y-6">
-                                    <div className="flex gap-4 group">
-                                        <span className="text-[#DC2626] font-bold shrink-0 opacity-50 group-hover:opacity-100">[01]</span>
-                                        <p className="border-l border-white/10 pl-4 group-hover:border-[#DC2626] transition-colors">
-                                            {t('about.description')}
-                                        </p>
-                                    </div>
-                                    <div className="pt-8 flex items-center gap-4">
-                                        <div className="flex-1 h-px bg-white/5"></div>
-                                        <div className="flex items-center gap-2">
-                                            <span className="w-1 h-1 bg-green-500 rounded-full animate-pulse"></span>
-                                            <span className="text-[10px] uppercase tracking-[0.3em] text-white/40">Active_Protocol</span>
-                                        </div>
-                                    </div>
+                            {/* MONOLITH */}
+                            <div className="relative">
+                                <div className="monolith-structure w-[100px] h-[200px] md:w-[130px] md:h-[260px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
+                                    <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
+                                    <div className="centered-layer aura-atmos pointer-events-none opacity-60 w-[300px] h-[300px] blur-[60px]"></div>
+                                    <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-60 w-[200px] h-[200px] blur-[40px]"></div>
+                                    <div className="centered-layer core-atmos pointer-events-none"></div>
+                                    <div className="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10 rounded-[2px]"></div>
                                 </div>
                             </div>
+
+                            {/* VISÃO DE CINEMA */}
+                            <div className="flex flex-col items-center gap-3">
+                                <p className="font-brick text-5xl md:text-6xl lg:text-7xl text-white leading-tight tracking-tight uppercase">
+                                    {t('about.title_primary')}<br />
+                                    <span className="text-[#DC2626]">{t('about.title_highlight')}</span>
+                                </p>
+                            </div>
+
+                            {/* DESCRIPTION */}
+                            <div className="max-w-xl font-mono text-sm text-[#9CA3AF] leading-relaxed">
+                                <div className="flex gap-4 group text-left">
+                                    <span className="text-[#DC2626] font-bold shrink-0 opacity-50 group-hover:opacity-100">[01]</span>
+                                    <p className="border-l border-white/10 pl-4 group-hover:border-[#DC2626] transition-colors">
+                                        {t('about.description')}
+                                    </p>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </section>
 
                 {/* ── CAPACIDADES: INDUSTRIAL GRID ── */}
-                <section className="py-24 md:py-32 reveal bg-[#080808]">
+                <section className="pt-12 md:pt-16 pb-24 md:pb-32 reveal bg-[#080808]">
                     <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
-                        <div className="flex items-center justify-between mb-16 border-b border-white/10 pb-6">
+                        <div className="flex items-center justify-between mb-16">
                             <div className="flex items-center gap-4">
                                 <div className="w-2 h-2 bg-[#DC2626]"></div>
                                 <span className="font-mono text-[10px] tracking-[0.4em] text-white uppercase">{t('about.core_modules')}</span>
@@ -2033,7 +2070,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                 </section>
 
                 {/* ── MANIFESTO: BRUTALIST BLOCKS ── */}
-                <section className="py-24 md:py-32 reveal bg-[#050505]">
+                <section className="pt-12 md:pt-16 pb-12 md:pb-16 reveal bg-[#050505]">
                     <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
                         <div className="flex items-center justify-between mb-16 border-b border-white/10 pb-6">
                             <div className="flex items-center gap-4">
@@ -2059,13 +2096,6 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                             ))}
                         </div>
 
-                        {/* SYSTEM LOG */}
-                        <div className="flex justify-end pt-10 mt-10 border-t border-white/10">
-                            <div className="font-mono text-[10px] text-white/40 uppercase tracking-[0.25em] text-right space-y-1.5">
-                                <div><span className="text-[#DC2626]/60 mr-2">&gt;&gt;</span>CORE_MODULES_LOADED</div>
-                                <div><span className="text-[#DC2626]/60 mr-2">&gt;&gt;</span>INITIATING_PROTOCOL...</div>
-                            </div>
-                        </div>
                     </div>
                 </section>
 
