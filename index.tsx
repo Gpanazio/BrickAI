@@ -1159,6 +1159,13 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 
     const { t } = useTranslation();
     const randomHash = useMemo(() => Math.random().toString(36).substring(7).toUpperCase(), []);
+    const [categoryLabel, categoryMeta] = useMemo(() => {
+        if (work.category.includes(':')) {
+            const parts = work.category.split(':');
+            return [parts[0].trim(), parts.slice(1).join(':').trim()];
+        }
+        return [work.id, work.category];
+    }, [work.category, work.id]);
 
     return (
         <div
@@ -1210,9 +1217,9 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 
                 {/* CATEGORY & META */}
                 <div className="flex items-center gap-3 mb-2">
-                    <span className="font-mono text-[10px] text-[#DC2626] tracking-[0.2em] uppercase">{work.category.includes(':') ? work.category.split(':')[0].trim() : work.id}</span>
+                    <span className="font-mono text-[10px] text-[#DC2626] tracking-[0.2em] uppercase">{categoryLabel}</span>
                     <span className="text-white/20 text-[10px] font-light">|</span>
-                    <span className="font-mono text-[10px] text-white/60 tracking-widest uppercase">{work.category.includes(':') ? work.category.split(':').slice(1).join(':').trim() : work.category}</span>
+                    <span className="font-mono text-[10px] text-white/60 tracking-widest uppercase">{categoryMeta}</span>
                 </div>
 
                 {/* TITLE - CLEAN & BOLD */}
@@ -1312,6 +1319,12 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
         return () => { document.body.style.overflow = 'unset'; };
     }, []);
 
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [onClose]);
+
     if (!project) return null;
 
     const isHorizontal = project.orientation === 'horizontal';
@@ -1319,11 +1332,16 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
         const match = url.match(/(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)/);
         return match ? match[1] : null;
     };
+    const getYoutubeId = (url: string) => {
+        const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+        return match ? match[1] : null;
+    };
     const vimeoId = project.videoUrl ? getVimeoId(project.videoUrl) : null;
+    const youtubeId = project.videoUrl ? getYoutubeId(project.videoUrl) : null;
     const isVideoFile = project.videoUrl ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(project.videoUrl) : false;
 
     const modalClasses = isHorizontal
-        ? 'max-w-7xl w-[95%] h-[80vh] md:h-auto md:max-h-[85vh] md:aspect-[16/7]'
+        ? 'max-w-md md:max-w-7xl w-[95%] h-[90vh] md:h-auto md:max-h-[85vh] md:aspect-[16/7]'
         : 'max-w-md w-[95%] h-[90vh] md:max-h-[92vh]';
 
     return (
@@ -1333,12 +1351,21 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                 <button onClick={onClose} className="absolute top-4 right-4 z-50 text-white/50 hover:text-[#DC2626] transition-colors p-2 mix-blend-difference">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
-                <div className={`w-full ${isHorizontal ? 'md:w-2/3 border-b md:border-b-0 md:border-r' : 'aspect-[9/16] max-h-[55vh] border-b'} bg-[#050505] relative border-white/10 group overflow-hidden flex items-center justify-center`}>
+                <div className={`w-full ${isHorizontal ? 'aspect-video max-h-[45vh] md:max-h-none md:aspect-auto md:w-2/3 border-b md:border-b-0 md:border-r' : 'aspect-[9/16] max-h-[55vh] border-b'} bg-[#050505] relative border-white/10 group overflow-hidden flex items-center justify-center`}>
                     <div className="absolute inset-0 w-full h-full">
                         {project.videoUrl && isPlaying ? (
                             vimeoId ? (
                                 <iframe
                                     src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&background=1&muted=1`}
+                                    className="w-full h-full"
+                                    frameBorder="0"
+                                    allow="autoplay; fullscreen; picture-in-picture"
+                                    allowFullScreen
+                                    title={project.title}
+                                ></iframe>
+                            ) : youtubeId ? (
+                                <iframe
+                                    src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&loop=1&playlist=${youtubeId}&mute=1`}
                                     className="w-full h-full"
                                     frameBorder="0"
                                     allow="autoplay; fullscreen; picture-in-picture"
@@ -1353,8 +1380,8 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                                 />
                             ) : (
                                 <iframe
-                                    src={project.videoUrl}
-                                    className="w-full h-full"
+                                    src={project.videoUrl.includes('?') ? `${project.videoUrl}&autoplay=1` : `${project.videoUrl}?autoplay=1`}
+                                    className="w-full h-full opacity-80"
                                     frameBorder="0"
                                     allow="autoplay; fullscreen"
                                     allowFullScreen
@@ -1387,7 +1414,7 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                         )}
                     </div>
                 </div>
-                <div className={`w-full ${isHorizontal ? 'md:w-1/3' : ''} bg-[#050505] flex flex-col p-6 md:p-8 ${isHorizontal ? 'h-full' : 'flex-1 min-h-0'} overflow-y-auto scrollbar-hide`}>
+                <div className={`w-full ${isHorizontal ? 'md:w-1/3' : ''} bg-[#050505] flex flex-col p-6 md:p-8 flex-1 min-h-0 overflow-y-auto scrollbar-hide`}>
                     <div>
                         <div className="flex items-center gap-3 mb-4">
                             <div className="w-1.5 h-1.5 bg-[#DC2626] animate-pulse"></div>
@@ -1399,7 +1426,6 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                         <p className="text-[#E5E5E5]/80 font-light text-xs md:text-sm leading-relaxed">{project.longDesc || project.desc}</p>
                     </div>
                     <div className="border-t border-white/10 pt-4 mt-auto">
-                        <h4 className="text-[9px] font-bold uppercase tracking-[0.2em] text-[#9CA3AF] mb-3"></h4>
                         <div className="space-y-2">
                             {project.credits && project.credits.map((credit, idx) => (
                                 <div key={idx} className="flex justify-between items-baseline text-[10px] md:text-xs font-mono">
@@ -1697,7 +1723,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
             { role: 'mono', content: t('chat.initial_messages.online') },
             { role: 'mono', content: t('chat.initial_messages.protocol') }
         ]);
-    }, [i18n.language]);
+    }, [i18n.language, t]);
 
     const handleSend = async (textInput: string | React.FormEvent) => {
         if (typeof textInput !== 'string') textInput.preventDefault();
@@ -1748,7 +1774,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             <div className="mb-4 text-[#DC2626] opacity-50 group-hover:opacity-100 transition-opacity">
                                 <span className="text-[10px] uppercase tracking-widest border border-[#DC2626] px-2 py-1">Channel_02</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-[#DC2626] transition-colors">DIRECT_MESSAGE</h3>
+                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-[#DC2626] transition-colors">{t('chat.direct_message')}</h3>
                             <p className="text-[#9CA3AF] text-xs font-mono tracking-widest">WHATSAPP</p>
                         </a>
 
