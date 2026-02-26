@@ -1445,7 +1445,6 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
             <div className="absolute inset-0 p-6 flex flex-col justify-between z-30">
                 <div className="flex justify-between items-start opacity-50 group-hover:opacity-100 transition-opacity duration-300">
                     <span className="font-mono text-[10px] tracking-widest text-[#DC2626]">{(index + 1).toString().padStart(3, '0')}</span>
-                    <span className="font-mono text-[10px] tracking-widest border border-white/20 px-2 py-0.5 rounded-full">{work.category}</span>
                 </div>
                 <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                     <h3 className="text-lg md:text-xl font-brick text-white leading-none mb-2 tracking-tight group-hover:text-[#DC2626] transition-colors">{work.title}</h3>
@@ -1525,7 +1524,6 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
                     </div>
                 </section>
                 <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 md:pb-40">
-                    <WorksFilter categories={categories} activeCategory={activeCategory} onSelect={setActiveCategory} />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
                         {filteredWorks.map((work, idx) => (
                             <WorksGridItem key={work.id} work={work} index={idx} onOpen={onSelectProject} />
