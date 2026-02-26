@@ -10,6 +10,7 @@ import multer from 'multer';
 import fs from 'fs';
 import 'dotenv/config';
 import { SEO_DATA } from './seo-data.js';
+import { buildBreadcrumbItems } from './shared/breadcrumbs.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -621,36 +622,10 @@ app.get('*', async (req, res) => {
         ]
     })}</script>`);
 
-    // BreadcrumbList — navigation hierarchy for crawlers
-    const viewLabels = {
-        works: { pt: 'Trabalhos', en: 'Works' },
-        about: { pt: 'Sobre', en: 'About' },
-        transmissions: { pt: 'Transmissões', en: 'Transmissions' },
-        chat: { pt: 'Contato', en: 'Contact' }
-    };
-    const breadcrumbItems = [
-        { "@type": "ListItem", "position": 1, "name": "Brick AI", "item": "https://ai.brick.mov" }
-    ];
-    if (view !== 'home') {
-        const parentView = view === 'post' ? 'transmissions' : view;
-        const parentLabel = viewLabels[parentView];
-        if (parentLabel) {
-            breadcrumbItems.push({
-                "@type": "ListItem",
-                "position": 2,
-                "name": lang === 'en' ? parentLabel.en : parentLabel.pt,
-                "item": `https://ai.brick.mov/${parentView}`
-            });
-        }
-        if (view === 'post' && postData) {
-            breadcrumbItems.push({
-                "@type": "ListItem",
-                "position": 3,
-                "name": postTitle || 'Article',
-                "item": canonicalUrl
-            });
-        }
-    }
+    // BreadcrumbList — navigation hierarchy for crawlers (shared logic)
+    const breadcrumbItems = buildBreadcrumbItems(view, lang,
+        (view === 'post' && postData) ? { title: postTitle, canonicalUrl } : null
+    );
     jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
