@@ -2641,8 +2641,8 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
         updateMeta('og:title', ogTitle);
         updateMeta('og:description', ogDescription);
         updateMeta('og:image', 'https://ai.brick.mov/og-image.jpg');
-        updateMeta('og:image:width', '1424');
-        updateMeta('og:image:height', '752');
+        updateMeta('og:image:width', '1200');
+        updateMeta('og:image:height', '630');
         updateMeta('og:url', canonicalUrl);
         updateMeta('og:type', view === 'post' ? 'article' : 'website');
         updateMeta('og:site_name', 'Brick AI');
