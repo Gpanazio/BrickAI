@@ -466,7 +466,21 @@ app.get('*', async (req, res) => {
     }
 
     const urlPath = req.path.replace(/^\/+|\/+$/g, '');
-    const lang = req.query.lang === 'en' ? 'en' : 'pt';
+
+    // Language detection: explicit ?lang= param takes priority,
+    // then Accept-Language header, defaulting to 'pt' for Brazilian visitors
+    let lang = 'pt';
+    if (req.query.lang === 'en') {
+        lang = 'en';
+    } else if (req.query.lang === 'pt') {
+        lang = 'pt';
+    } else {
+        // No explicit lang param — detect from Accept-Language header
+        const acceptLang = (req.headers['accept-language'] || '').toLowerCase();
+        if (acceptLang && !acceptLang.startsWith('pt')) {
+            lang = 'en';
+        }
+    }
 
     // Determine the view from the URL
     let view = 'home';
@@ -517,6 +531,131 @@ app.get('*', async (req, res) => {
 
     // Build route-specific JSON-LD
     const jsonLdScripts = [];
+    const isEn = lang === 'en';
+
+    // Organization + WebSite — language-adaptive structured data
+    jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "Organization",
+                "@id": "https://ai.brick.mov/#organization",
+                "name": "Brick AI",
+                "alternateName": isEn ? "Brick AI — The Generative Division" : "Brick AI — A Divisão Generativa",
+                "url": "https://ai.brick.mov",
+                "logo": { "@type": "ImageObject", "url": "https://ai.brick.mov/og-image.jpg" },
+                "foundingDate": "2016",
+                "description": isEn
+                    ? "Brazilian generative production company specializing in hybrid video production. We combine human cinematic direction with synthetic generation systems to deliver campaigns, VFX and premium visual content. Clients include Stone, Visa, BBC, Record TV, AliExpress, Facebook, O Boticário and L'Oréal."
+                    : "Produtora generativa brasileira especializada em produção híbrida de vídeo. Combinamos direção cinematográfica humana com sistemas de geração sintética para entregar campanhas, VFX e conteúdo visual premium. Clientes incluem Stone, Visa, BBC, Record TV, AliExpress, Facebook, O Boticário e L'Oréal.",
+                "knowsAbout": [
+                    "Generative AI Video Production",
+                    "AI Filmmaking",
+                    "VFX Automation",
+                    "AI Cinematography",
+                    "Hybrid Production",
+                    "Neural VFX",
+                    "ComfyUI",
+                    "Stable Diffusion"
+                ],
+                "hasOfferCatalog": {
+                    "@type": "OfferCatalog",
+                    "name": isEn ? "Generative Production Services" : "Serviços de Produção Generativa",
+                    "itemListElement": [
+                        {
+                            "@type": "Offer",
+                            "itemOffered": {
+                                "@type": "Service",
+                                "name": isEn ? "Hybrid Production Ad Campaigns" : "Campanhas Publicitárias com Produção Híbrida",
+                                "description": isEn
+                                    ? "High-end campaign production for major brands using synthetic generation systems under human artistic direction."
+                                    : "Produção de campanhas de alto padrão para grandes marcas usando sistemas de geração sintética sob direção artística humana."
+                            }
+                        },
+                        {
+                            "@type": "Offer",
+                            "itemOffered": {
+                                "@type": "Service",
+                                "name": isEn ? "Generative VFX" : "VFX Generativo",
+                                "description": isEn
+                                    ? "Visual effects created with generative systems, with professional post-production finishing."
+                                    : "Efeitos visuais criados com sistemas generativos, com acabamento de pós-produção profissional."
+                            }
+                        },
+                        {
+                            "@type": "Offer",
+                            "itemOffered": {
+                                "@type": "Service",
+                                "name": isEn ? "Premium Visual Content" : "Conteúdo Visual Premium",
+                                "description": isEn
+                                    ? "Audiovisual content for Tier 1 brands, with the agility of digital processes and cinematic quality."
+                                    : "Conteúdo audiovisual para marcas Tier 1, com agilidade do processo digital e qualidade cinematográfica."
+                            }
+                        },
+                        {
+                            "@type": "Offer",
+                            "itemOffered": {
+                                "@type": "Service",
+                                "name": isEn ? "Generative Short Films" : "Curtas e Filmes Generativos",
+                                "description": isEn
+                                    ? "Narrative productions with synthetic generation systems, like Inheritance — official selection at the Gramado Film Festival 2025."
+                                    : "Produções narrativas com sistemas de geração sintética, como Inheritance — seleção oficial do Festival de Cinema de Gramado 2025."
+                            }
+                        }
+                    ]
+                },
+                "sameAs": [
+                    "https://www.instagram.com/brick.mov/",
+                    "https://www.linkedin.com/company/brick",
+                    "https://twitter.com/brick_mov"
+                ]
+            },
+            {
+                "@type": "WebSite",
+                "@id": "https://ai.brick.mov/#website",
+                "name": "Brick AI",
+                "url": "https://ai.brick.mov",
+                "inLanguage": [isEn ? "en" : "pt-BR", isEn ? "pt-BR" : "en"],
+                "publisher": { "@id": "https://ai.brick.mov/#organization" }
+            }
+        ]
+    })}</script>`);
+
+    // BreadcrumbList — navigation hierarchy for crawlers
+    const viewLabels = {
+        works: { pt: 'Trabalhos', en: 'Works' },
+        about: { pt: 'Sobre', en: 'About' },
+        transmissions: { pt: 'Transmissões', en: 'Transmissions' },
+        chat: { pt: 'Contato', en: 'Contact' }
+    };
+    const breadcrumbItems = [
+        { "@type": "ListItem", "position": 1, "name": "Brick AI", "item": "https://ai.brick.mov" }
+    ];
+    if (view !== 'home') {
+        const parentView = view === 'post' ? 'transmissions' : view;
+        const parentLabel = viewLabels[parentView];
+        if (parentLabel) {
+            breadcrumbItems.push({
+                "@type": "ListItem",
+                "position": 2,
+                "name": lang === 'en' ? parentLabel.en : parentLabel.pt,
+                "item": `https://ai.brick.mov/${parentView}`
+            });
+        }
+        if (view === 'post' && postData) {
+            breadcrumbItems.push({
+                "@type": "ListItem",
+                "position": 3,
+                "name": postTitle || 'Article',
+                "item": canonicalUrl
+            });
+        }
+    }
+    jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": breadcrumbItems
+    })}</script>`);
 
     // FAQPage — injected in correct language for home view
     if (view === 'home') {
@@ -541,7 +680,8 @@ app.get('*', async (req, res) => {
         jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
             "@context": "https://schema.org",
             "@type": "FAQPage",
-            "mainEntity": lang === 'en' ? faqEntitiesEn : faqEntitiesPt
+            "inLanguage": isEn ? "en" : "pt-BR",
+            "mainEntity": isEn ? faqEntitiesEn : faqEntitiesPt
         })}</script>`);
     }
 
@@ -555,6 +695,7 @@ app.get('*', async (req, res) => {
             "@type": "Article",
             "headline": postTitle,
             "description": postExcerpt,
+            "inLanguage": isEn ? "en" : "pt-BR",
             "author": { "@type": "Organization", "name": "Brick AI", "url": "https://ai.brick.mov" },
             "publisher": { "@type": "Organization", "name": "Brick AI", "logo": { "@type": "ImageObject", "url": "https://ai.brick.mov/og-image.jpg" } },
             "datePublished": isoDate,
@@ -570,6 +711,7 @@ app.get('*', async (req, res) => {
         .replace(/__META_DESCRIPTION__/g, description)
         .replace(/__OG_TITLE__/g, ogTitle)
         .replace(/__OG_DESCRIPTION__/g, ogDescription)
+        .replace(/__OG_TYPE__/g, view === 'post' ? 'article' : 'website')
         .replace(/__OG_URL__/g, canonicalUrl + langParam)
         .replace(/__OG_LOCALE__/g, lang === 'pt' ? 'pt_BR' : 'en_US')
         .replace(/__OG_LOCALE_ALT__/g, lang === 'pt' ? 'en_US' : 'pt_BR')

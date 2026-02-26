@@ -33,34 +33,34 @@ export const SEO_DATA = {
     },
     en: {
         home: {
-            title: "Brick AI | Generative AI Video Production",
-            description: "Video production house with 10 years of experience, now with generative AI. We create films, commercials and visual content that doesn't exist anywhere else.",
-            ogTitle: "Brick AI - The Generative Division",
-            ogDescription: "From set to server. 10 years of craft, now generative."
+            title: "Brick AI | AI Video Production House — Films, Commercials & VFX",
+            description: "AI video production company with 10+ years of filmmaking experience. We produce AI-generated films, commercials and VFX for brands like Stone, Visa, BBC and L'Oréal. Gramado Film Festival 2025 selection.",
+            ogTitle: "Brick AI — The Generative Division",
+            ogDescription: "AI video production with real filmmaking craft. 10 years on set, now generative."
         },
         works: {
-            title: "Portfolio | Brick AI - Generative AI Films and Videos",
-            description: "Our AI video projects: Inheritance (Gramado 2025 Selection), We Can Sell Anything (Genero Finalist), Autobol, Dog Day Afternoon and Factory.",
+            title: "Portfolio | Brick AI — AI Films, Commercials & Generative Video",
+            description: "Award-winning AI video portfolio: Inheritance (Gramado Film Festival 2025), We Can Sell Anything (Genero Finalist), plus Autobol, Dog Day Afternoon and Factory. Generative AI meets cinematic direction.",
             ogTitle: "Portfolio | Brick AI",
-            ogDescription: "Films and videos created with generative AI by a production house with 10 years of experience."
+            ogDescription: "Award-winning AI films and commercials by a production house with 10 years of experience."
         },
         about: {
-            title: "About | Brick AI - 10 Years of Video Production",
-            description: "Born on set. Before AI, we spent a decade on real film sets. We know how to frame, light, and tell stories. AI amplified that knowledge.",
+            title: "About | Brick AI — From Film Set to AI Video Production",
+            description: "A video production house that masters AI, not a tech startup. 10 years of cinematography, lighting and storytelling before our first prompt. We direct the intelligence — the machine is the tool.",
             ogTitle: "About Brick AI",
-            ogDescription: "A video production house that masters AI, not a tech company."
+            ogDescription: "A video production house that masters AI — not a tech company playing filmmaker."
         },
         transmissions: {
-            title: "Transmissions | Brick AI - Blog on AI Video Production",
-            description: "Articles on AI video production: when to use it, the consistency problem, and why direction matters more than prompts.",
+            title: "Transmissions | Brick AI — Insights on AI Video & Filmmaking",
+            description: "Expert articles on AI video production: when AI makes sense (and when it doesn't), solving the consistency problem in generative video, and why direction matters more than prompts.",
             ogTitle: "Transmissions | Brick AI",
-            ogDescription: "Insights on generative video production."
+            ogDescription: "Expert insights on AI video production from a team with 10+ years on real film sets."
         },
         chat: {
-            title: "Contact | Brick AI - Talk to the Team",
-            description: "Get in touch with Brick AI. Talk to Mason, our AI, or directly with the team via email, phone or social media.",
+            title: "Contact | Brick AI — Start Your AI Video Project",
+            description: "Get in touch with Brick AI to discuss your next AI video project. Talk to our team directly via email, phone or social media. We work with brands worldwide.",
             ogTitle: "Contact | Brick AI",
-            ogDescription: "Get in touch with the Brick AI team via email, phone or social media."
+            ogDescription: "Start your AI video project. We work with brands worldwide."
         }
     }
 };
