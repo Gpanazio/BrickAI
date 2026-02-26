@@ -1,54 +1,59 @@
 <!DOCTYPE html>
 <html lang="__LANG__">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>__META_TITLE__</title>
-    <meta name="description" content="__META_DESCRIPTION__" />
-    <meta name="robots" content="index, follow" />
-    <meta name="author" content="Brick AI" />
-    <meta name="theme-color" content="#050505" />
-    <!-- GEO Targeting -->
-    <meta name="geo.region" content="BR" />
-    <meta name="geo.placename" content="Brazil" />
-    <!-- Webmaster Verification (replace with real codes when available) -->
-    <!--<meta name="google-site-verification" content="YOUR_GOOGLE_CODE" />-->
-    <!--<meta name="msvalidate.01" content="YOUR_BING_CODE" />-->
-    <!-- Open Graph -->
-    <meta property="og:title" content="__OG_TITLE__" />
-    <meta property="og:description" content="__OG_DESCRIPTION__" />
-    <meta property="og:type" content="__OG_TYPE__" />
-    <meta property="og:url" content="__OG_URL__" />
-    <meta property="og:image" content="https://ai.brick.mov/og-image.jpg" />
-    <meta property="og:image:width" content="1200" />
-    <meta property="og:image:height" content="630" />
-    <meta property="og:site_name" content="Brick AI" />
-    <meta property="og:locale" content="__OG_LOCALE__" />
-    <meta property="og:locale:alternate" content="__OG_LOCALE_ALT__" />
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="__OG_TITLE__" />
-    <meta name="twitter:description" content="__OG_DESCRIPTION__" />
-    <meta name="twitter:image" content="https://ai.brick.mov/og-image.jpg" />
-    <meta name="twitter:site" content="@brick_mov" />
-    <!-- Canonical & Hreflang -->
-    <link rel="canonical" href="__CANONICAL_URL__" />
-    <link rel="alternate" href="__HREFLANG_PT__" hreflang="pt-BR" />
-    <link rel="alternate" href="__HREFLANG_EN__" hreflang="en" />
-    <link rel="alternate" href="__CANONICAL_URL__" hreflang="x-default" />
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <!-- TODO: create a square 180x180 PNG for apple-touch-icon (og-image.jpg is 1424x752 rectangular) -->
-    <!-- <link rel="apple-touch-icon" href="/apple-touch-icon.png" /> -->
-    <!-- Structured Data: injected by SSR server in the correct language -->
-    <!--__JSON_LD__-->
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/index.tsx"></script>
-  </body>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>__META_TITLE__</title>
+  <meta name="description" content="__META_DESCRIPTION__" />
+  <meta name="robots" content="index, follow" />
+  <meta name="author" content="Brick AI" />
+  <meta name="theme-color" content="#050505" />
+  <!-- GEO Targeting -->
+  <meta name="geo.region" content="BR" />
+  <meta name="geo.placename" content="Brazil" />
+  <!-- Webmaster Verification (replace with real codes when available) -->
+  <!--<meta name="google-site-verification" content="YOUR_GOOGLE_CODE" />-->
+  <!--<meta name="msvalidate.01" content="YOUR_BING_CODE" />-->
+  <!-- Open Graph -->
+  <meta property="og:title" content="__OG_TITLE__" />
+  <meta property="og:description" content="__OG_DESCRIPTION__" />
+  <meta property="og:type" content="__OG_TYPE__" />
+  <meta property="og:url" content="__OG_URL__" />
+  <meta property="og:image" content="https://ai.brick.mov/og-image.jpg" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:site_name" content="Brick AI" />
+  <meta property="og:locale" content="__OG_LOCALE__" />
+  <meta property="og:locale:alternate" content="__OG_LOCALE_ALT__" />
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="__OG_TITLE__" />
+  <meta name="twitter:description" content="__OG_DESCRIPTION__" />
+  <meta name="twitter:image" content="https://ai.brick.mov/og-image.jpg" />
+  <meta name="twitter:site" content="@brick_mov" />
+  <!-- Canonical & Hreflang -->
+  <link rel="canonical" href="__CANONICAL_URL__" />
+  <link rel="alternate" href="__HREFLANG_PT__" hreflang="pt-BR" />
+  <link rel="alternate" href="__HREFLANG_EN__" hreflang="en" />
+  <link rel="alternate" href="__CANONICAL_URL__" hreflang="x-default" />
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <!-- TODO: create a square 180x180 PNG for apple-touch-icon (og-image.jpg is 1424x752 rectangular) -->
+  <!-- <link rel="apple-touch-icon" href="/apple-touch-icon.png" /> -->
+  <!-- Structured Data: injected by SSR server in the correct language -->
+  <!--__JSON_LD__-->
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;900&family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@300;400;500&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
 </html>

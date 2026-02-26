@@ -31,14 +31,16 @@ const GlobalStyles = () => (
         .font-brick { 
             font-family: 'Inter', sans-serif; 
             font-weight: 900; 
-            letter-spacing: -0.04em; 
-            line-height: 1; 
+            letter-spacing: -0.05em; 
+            line-height: 0.9; 
+            text-transform: uppercase;
         }
         
         .font-ai { 
             font-family: 'JetBrains Mono', monospace; 
             font-weight: 700; 
             letter-spacing: -0.02em; 
+            text-transform: uppercase;
         }
 
         .font-mono {
@@ -109,25 +111,9 @@ const GlobalStyles = () => (
         .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
         .animate-scan { animation: scan 3s ease-in-out infinite; }
         
-        .noise-overlay {
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            pointer-events: none;
-            z-index: 30;
-            opacity: 0.02;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            animation: grain 6s steps(10) infinite;
-        }
+        /* NOISE REMOVED BY USER REQUEST */
+        .card-noise { display: none; }
 
-        /* CARD SPECIFIC NOISE - GRITTY ANALOG FEEL */
-        .card-noise {
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.2' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-            opacity: 0.55; /* Heavy grain */
-            mix-blend-mode: overlay;
-        }
 
         /* NEW: TECH GRID PATTERN FOR PROJECTS */
         .bg-tech-grid {
@@ -171,13 +157,36 @@ const GlobalStyles = () => (
         }
         .reveal.active { opacity: 1; transform: translateY(0); }
 
-        @keyframes float-parallax {
-            from { transform: scale(1.15) translate(-2%, 1.5%); }
-            to { transform: scale(1.15) translate(2%, -1.5%); }
-        }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
+        @keyframes float-parallax {
+            from { transform: scale(1.1) translate(-1%, 1%); }
+            to { transform: scale(1.1) translate(1%, -1%); }
+        }
         .animate-float-parallax {
             animation: float-parallax 10s ease-in-out infinite alternate;
+        }
+
+        /* GEOMETRIC FONT FOR MODAL */
+        .font-geometric {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.25em;
+            line-height: 0.9;
+            text-transform: uppercase;
+        }
+
+        /* DEEP SPACE NOISE OVERLAY */
+        .modal-video-noise::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            opacity: 0.04;
+            mix-blend-mode: overlay;
+            pointer-events: none;
+            z-index: 20;
         }
     `}</style>
 );
@@ -1201,9 +1210,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 ></div>
             </div>
 
-            {/* ARTIFICIAL DEPTH OVERLAYS */}
-            <div className="absolute inset-0 card-noise z-20 pointer-events-none opacity-15 group-hover:opacity-5 transition-opacity duration-[6000ms] ease-linear"></div>
-            <div className="absolute inset-0 bg-tech-grid opacity-10 z-20 pointer-events-none group-hover:opacity-30 transition-opacity duration-[6000ms] ease-linear"></div>
+            {/* ARTIFICIAL DEPTH OVERLAYS REMOVED FOR CLEANER LOOK */}
 
             {/* VIGNETTE & GRADIENT */}
             <div className="absolute inset-0 z-30 transition-opacity duration-[6000ms] ease-linear opacity-90 group-hover:opacity-80" style={{ background: 'linear-gradient(to top, #050505 0%, #050505e6 15%, #05050599 40%, transparent 70%)' }}></div>
@@ -1266,7 +1273,7 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
                 </div>
             </div>
 
-            <div className="flex flex-col md:flex-row w-full h-auto md:h-[80vh] border-b border-white/10 px-6 md:px-12 lg:px-24">
+            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] border-b border-white/10 px-6 md:px-12 lg:px-24">
                 <ContextConsumer>
                     {({ works }) => works.slice(0, 5).map((work, idx) => (
                         <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />
@@ -1315,16 +1322,23 @@ const getYoutubeId = (url: string) => {
     const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
     return match ? match[1] : null;
 };
+const addAutoplayToUrl = (url: string): string => {
+    if (!url) return '';
+    try {
+        const u = new URL(url);
+        u.searchParams.set('autoplay', '1');
+        return u.toString();
+    } catch {
+        return url.includes('?') ? `${url}&autoplay=1` : `${url}?autoplay=1`;
+    }
+};
 
 const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void }) => {
     const { t } = useTranslation();
-    const [isLoaded, setIsLoaded] = useState(false);
     const [isPlaying, setIsPlaying] = useState(false);
-    const settings = project.imageSettingsHome || { x: 50, y: 50, scale: 1.2 };
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
-        setTimeout(() => setIsLoaded(true), 100);
         return () => { document.body.style.overflow = 'unset'; };
     }, []);
 
@@ -1341,100 +1355,143 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
     const youtubeId = project.videoUrl ? getYoutubeId(project.videoUrl) : null;
     const isVideoFile = project.videoUrl ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(project.videoUrl) : false;
 
+    // Strict orientation-based layout
     const modalClasses = isHorizontal
-        ? 'max-w-md md:max-w-7xl w-[95%] h-[90vh] md:h-auto md:max-h-[85vh] md:aspect-[16/7]'
-        : 'max-w-md w-[95%] h-[90vh] md:max-h-[92vh]';
+        ? 'max-w-[1400px] w-[95%] h-[95vh] md:h-auto md:max-h-[85vh] flex-col md:flex-row'
+        : 'max-w-[360px] w-full h-[85vh] md:max-h-[85vh] flex-col';
 
     return (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-black/95 backdrop-blur-xl transition-opacity duration-500" onClick={onClose}></div>
-            <div className={`relative w-full ${modalClasses} bg-[#050505] border border-white/10 flex ${isHorizontal ? 'flex-col md:flex-row' : 'flex-col'} shadow-2xl animate-fade-in-up overflow-hidden`}>
-                <button onClick={onClose} className="absolute top-4 right-4 z-50 text-white/50 hover:text-[#DC2626] transition-colors p-2 mix-blend-difference">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 md:p-6 lg:p-10">
+            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-700" onClick={onClose}></div>
+
+            <div className={`relative ${modalClasses} flex bg-black border border-white/20 shadow-[0_0_80px_rgba(0,0,0,0.9)] animate-fade-in-up overflow-hidden`}>
+
+                {/* CLOSE — top-right */}
+                <button
+                    onClick={onClose}
+                    className="absolute top-5 right-5 z-[120] text-white/20 hover:text-white transition-colors p-1 active:scale-95"
+                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', letterSpacing: '0.2em' }}
+                >
+                    [ESC]
                 </button>
-                <div className={`w-full ${isHorizontal ? 'aspect-video max-h-[45vh] md:max-h-none md:aspect-auto md:w-2/3 border-b md:border-b-0 md:border-r' : 'aspect-[9/16] max-h-[55vh] border-b'} bg-[#050505] relative border-white/10 group overflow-hidden flex items-center justify-center`}>
+
+                {/* ─── MEDIA PANEL ─────────────────────────────── */}
+                <div className={`modal-video-noise w-full ${isHorizontal ? 'md:w-[60%] aspect-video' : 'h-[60%] aspect-[9/16]'} bg-black relative overflow-hidden border-r border-white/10`}>
                     <div className="absolute inset-0 w-full h-full">
                         {project.videoUrl && isPlaying ? (
-                            vimeoId ? (
-                                <iframe
-                                    src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&background=1&muted=1`}
-                                    className="w-full h-full"
-                                    frameBorder="0"
-                                    allow="autoplay; fullscreen; picture-in-picture"
-                                    allowFullScreen
-                                    title={project.title}
-                                ></iframe>
-                            ) : youtubeId ? (
-                                <iframe
-                                    src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&loop=1&playlist=${youtubeId}&mute=1`}
-                                    className="w-full h-full"
-                                    frameBorder="0"
-                                    allow="autoplay; fullscreen; picture-in-picture"
-                                    allowFullScreen
-                                    title={project.title}
-                                ></iframe>
-                            ) : isVideoFile ? (
-                                <video
-                                    src={project.videoUrl}
-                                    className="w-full h-full object-cover"
-                                    autoPlay loop muted playsInline
-                                />
-                            ) : (
-                                <iframe
-                                    src={(() => { try { const u = new URL(project.videoUrl); u.searchParams.set('autoplay', '1'); return u.toString(); } catch { return project.videoUrl.includes('?') ? `${project.videoUrl}&autoplay=1` : `${project.videoUrl}?autoplay=1`; } })()}
-                                    className="w-full h-full opacity-80"
-                                    frameBorder="0"
-                                    allow="autoplay; fullscreen"
-                                    allowFullScreen
-                                    title={project.title}
-                                ></iframe>
-                            )
-                        ) : (
-                            <div className="placeholder-video w-full h-full flex items-center justify-center relative">
-                                <div
-                                    className="absolute inset-0 opacity-40 bg-cover transition-transform duration-1000 group-hover:scale-105 pointer-events-none"
-                                    style={{
-                                        backgroundImage: `url('${project.imageHome}')`,
-                                        backgroundPosition: 'center center',
-                                        transform: `scale(${settings.scale}) translate(${(settings.x - 50) * 2}%, ${(settings.y - 50) * 2}%)`
-                                    }}
-                                ></div>
-                                {project.videoUrl && (
-                                    <button
-                                        onClick={() => setIsPlaying(true)}
-                                        className="relative z-10 w-16 h-16 rounded-full border border-white/20 flex items-center justify-center hover:scale-110 hover:border-[#DC2626] transition-all duration-300 cursor-pointer backdrop-blur-sm bg-[#050505]/30"
-                                    >
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-white ml-1"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                                    </button>
+                            <div className="w-full h-full bg-black">
+                                {vimeoId ? (
+                                    <iframe src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&background=1&muted=1`} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen" title={project.title}></iframe>
+                                ) : youtubeId ? (
+                                    <iframe src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&loop=1&playlist=${youtubeId}&mute=1`} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen" title={project.title}></iframe>
+                                ) : isVideoFile ? (
+                                    <video src={project.videoUrl} className="w-full h-full object-contain" autoPlay loop muted playsInline />
+                                ) : (
+                                    <iframe src={project.videoUrl} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen" title={project.title}></iframe>
                                 )}
-                                <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end text-[10px] font-mono tracking-widest text-white/50 pointer-events-none z-20">
-                                    <span>{t('project_modal.static_preview')}</span>
-                                    <span>{isHorizontal ? '16:9' : '9:16'} // 4K</span>
+                            </div>
+                        ) : (
+                            <div className="w-full h-full relative cursor-pointer group" onClick={() => setIsPlaying(true)}>
+                                {/* Thumbnail */}
+                                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[5000ms] group-hover:scale-103" style={{ backgroundImage: `url('${project.imageHome}')` }}></div>
+                                {/* Dark vignette */}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+
+                                {/* MONOLITH PLAY BUTTON — hollow, red border only */}
+                                {project.videoUrl && (
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="relative group/mono">
+                                            {/* Outer ghost border — subtle pulse */}
+                                            <div
+                                                className="absolute -inset-3 border border-[#DC2626]/15 transition-all duration-1000 group-hover/mono:border-[#DC2626]/40"
+                                                style={{ width: 'calc(100% + 24px)', height: 'calc(100% + 24px)', top: '-12px', left: '-12px' }}
+                                            ></div>
+                                            {/* THE MONOLITH — 1:2 ratio, matches home */}
+                                            <div className="w-14 h-28 border border-[#DC2626] flex items-center justify-center group-hover/mono:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all duration-700 bg-transparent">
+                                                {/* SVG outlined play triangle */}
+                                                <svg viewBox="0 0 20 22" className="w-4 h-[18px] ml-0.5" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <polygon
+                                                        points="2,1 18,11 2,21"
+                                                        stroke="#DC2626"
+                                                        strokeWidth="1.5"
+                                                        strokeLinejoin="round"
+                                                        fill="none"
+                                                    />
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* Bottom meta */}
+                                <div className="absolute bottom-0 left-0 right-0 px-6 py-4 border-t border-white/[0.05] flex justify-between items-center">
+                                    <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '8px', letterSpacing: '0.4em', color: 'rgba(255,255,255,0.2)' }}>SIGNAL_ACTIVE</span>
+                                    <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '8px', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.15)' }}>{isHorizontal ? '16:9' : '9:16'} // 4K</span>
                                 </div>
                             </div>
                         )}
                     </div>
                 </div>
-                <div className={`w-full ${isHorizontal ? 'md:w-1/3' : ''} bg-[#050505] flex flex-col p-6 md:p-8 flex-1 min-h-0 overflow-y-auto scrollbar-hide`}>
-                    <div>
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="w-1.5 h-1.5 bg-[#DC2626] animate-pulse"></div>
-                            <span className="text-[10px] font-mono text-[#9CA3AF] tracking-[0.2em] uppercase">{project.subtitle}</span>
+
+                {/* ─── INFO PANEL — DIAGNOSTIC GRID ───────────── */}
+                <div className={`w-full ${isHorizontal ? 'md:w-[40%]' : 'flex-1'} bg-black flex flex-col overflow-hidden relative min-h-0`}>
+
+                    {/* ROW 1: HEADER — ID + CATEGORY */}
+                    <div className="flex border-b border-white/10 flex-shrink-0">
+                        <div className="flex-1 px-8 py-5 border-r border-white/10">
+                            <div className="font-mono text-[7px] text-white/20 tracking-[0.5em] uppercase mb-1">CATEGORIA</div>
+                            <div className="font-mono text-[10px] text-[#DC2626] tracking-[0.4em] uppercase font-medium">{project.subtitle}</div>
                         </div>
-                        <h2 className="text-2xl md:text-3xl lg:text-4xl font-brick text-white mb-4 leading-none">{project.title}</h2>
-                    </div>
-                    <div className="flex-1 py-4">
-                        <p className="text-[#E5E5E5]/80 font-light text-xs md:text-sm leading-relaxed">{project.longDesc || project.desc}</p>
-                    </div>
-                    <div className="border-t border-white/10 pt-4 mt-auto">
-                        <div className="space-y-2">
-                            {project.credits && project.credits.map((credit, idx) => (
-                                <div key={idx} className="flex justify-between items-baseline text-[10px] md:text-xs font-mono">
-                                    <span className="text-[#9CA3AF] opacity-60 uppercase">{credit.role}</span>
-                                    <span className="text-white text-right">{credit.name}</span>
-                                </div>
-                            ))}
+                        <div className="px-8 py-5 flex items-center">
+                            <span className="font-mono text-[7px] text-white/10 tracking-[0.4em] uppercase">{project.id.toUpperCase()}</span>
                         </div>
+                    </div>
+
+                    {/* ROW 2: TITLE */}
+                    <div className="px-8 py-8 border-b border-white/10 flex-shrink-0">
+                        <h2 className="font-brick text-white uppercase whitespace-pre-line" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.8rem)', lineHeight: '0.9', letterSpacing: '0.1em' }}>
+                            {project.title}
+                        </h2>
+                    </div>
+
+                    {/* ROW 3: SYNOPSIS LOG LABEL */}
+                    <div className="px-8 py-3 border-b border-white/10 flex-shrink-0 flex items-center gap-3">
+                        <div className="w-1.5 h-1.5 rounded-full bg-[#DC2626] shadow-[0_0_6px_#DC2626]"></div>
+                        <span className="font-mono text-[8px] text-[#DC2626] tracking-[0.5em] uppercase">SYNOPSIS_LOG // PRIORITY_01</span>
+                    </div>
+
+                    {/* ROW 4: BODY TEXT */}
+                    <div className="flex-1 overflow-y-auto scrollbar-hide px-8 py-6 border-b border-white/10">
+                        <p className="text-white/70 text-[13px] leading-[1.75] font-light tracking-wide">
+                            {project.longDesc || project.desc}
+                        </p>
+                    </div>
+
+                    {/* ROW 5: CREDITS (if any) + WAVEFORM */}
+                    <div className="px-8 py-5 flex-shrink-0 flex items-end justify-between gap-4">
+                        {project.credits && project.credits.length > 0 ? (
+                            <div className="space-y-2 flex-1">
+                                {project.credits.map((credit, idx) => (
+                                    <div key={idx} className="flex justify-between">
+                                        <span className="font-mono text-[7px] text-white/20 uppercase tracking-[0.4em]">{credit.role}</span>
+                                        <span className="font-mono text-[8px] text-white/50 tracking-wider uppercase">{credit.name}</span>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="flex-1"></div>
+                        )}
+
+                        {/* WAVEFORM DECORATION */}
+                        <svg viewBox="0 0 80 20" className="w-20 h-5 opacity-20 flex-shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <polyline
+                                points="0,10 5,6 10,14 15,3 20,17 25,8 30,12 35,4 40,16 45,7 50,13 55,5 60,15 65,9 70,11 75,6 80,10"
+                                stroke="white"
+                                strokeWidth="0.8"
+                                strokeLinejoin="round"
+                                strokeLinecap="round"
+                            />
+                        </svg>
                     </div>
                 </div>
             </div>
@@ -1447,7 +1504,7 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
 
     return (
         <div
-            className="group relative w-full aspect-square border border-white/10 bg-[#050505] overflow-hidden cursor-pointer hover:border-[#DC2626] transition-colors duration-300 reveal"
+            className={`group relative w-full ${work.orientation === 'horizontal' ? 'aspect-video' : 'aspect-[9/16]'} border border-white/10 bg-[#050505] overflow-hidden cursor-pointer hover:border-[#DC2626] transition-colors duration-300 reveal`}
             style={{ animationDelay: `${index * 50}ms` }}
             onClick={() => onOpen(work)}
         >
@@ -1545,7 +1602,7 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
                 <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('works_page.archive_index').split('_').slice(0,-1).join('_')}_<span className="text-[#DC2626]">{t('works_page.archive_index').split('_').slice(-1)[0]}</span></h1>
+                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('works_page.archive_index').split('_').slice(0, -1).join('_')}_<span className="text-[#DC2626]">{t('works_page.archive_index').split('_').slice(-1)[0]}</span></h1>
                             <p className="font-mono text-[10px] md:text-xs tracking-widest max-w-xl animate-system-input"><span className="text-[#DC2626]">&gt;&gt;</span> <span className="text-[#9CA3AF]">{t('works_page.accessing')} <span className="text-white">{works.length}</span> {t('works_page.entries_found')}</span></p>
                         </div>
                     </div>
@@ -1634,7 +1691,7 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
                 <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('transmissions_page.title').split('_').slice(0,-1).join('_')}_<span className="text-[#DC2626]">{t('transmissions_page.title').split('_').slice(-1)[0]}</span></h1>
+                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('transmissions_page.title').split('_').slice(0, -1).join('_')}_<span className="text-[#DC2626]">{t('transmissions_page.title').split('_').slice(-1)[0]}</span></h1>
                             <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input"><span className="text-[#DC2626]">&gt;&gt;</span> <span className="text-[#9CA3AF]">{t('transmissions_page.incoming')} <span className="text-white">{transmissions.length}</span> {t('transmissions_page.records')}</span></p>
                         </div>
                     </div>
