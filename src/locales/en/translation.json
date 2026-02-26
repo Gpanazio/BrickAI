@@ -128,17 +128,17 @@
             "cinematography": {
                 "title": "ARTISTIC CONCEPTION",
                 "status": "CALIBRATED",
-                "desc": "AI hallucinates images. We design intent. Every film is conceived in repertoire, where each frame serves the narrative. Technology is the brush — but the command is purely authorial."
+                "desc": "AI hallucinates images; we design intent. Every film is built from references and experience, where each frame serves the narrative. Technology without soul is worthless."
             },
             "training": {
                 "title": "VISUAL DIRECTION",
                 "status": "ONLINE",
-                "desc": "The end of generative amateurism. We apply the rigor of cinematic lighting and lens precision to ensure aesthetics are never an accident — but an unmistakable signature."
+                "desc": "Chaos has no owner. We give unity to chaos. We turn a thousand random generations into something that looks like a film, not an accident. That's the work of people who know what they're doing and have been on set for a long time."
             },
             "architecture": {
-                "title": "FULL EXECUTION",
+                "title": "DELIVERY",
                 "status": "STABLE",
-                "desc": "We don't deliver generated files. We deliver finished works. We combine neural power with the elite finishing of those who've owned the set for a decade. The result: the impossible, materialized."
+                "desc": "We're not image generators, we're creators. We oversee every step of the process so that technology serves the story, not the other way around. We don't sell generated files. We deliver a finished, complete vision."
             }
         },
         "manifesto": {
