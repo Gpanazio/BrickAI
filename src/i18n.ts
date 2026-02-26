@@ -21,7 +21,8 @@ i18n
             escapeValue: false // react already safes from xss
         },
         detection: {
-            order: ['localStorage', 'navigator'],
+            order: ['querystring', 'localStorage', 'navigator'],
+            lookupQuerystring: 'lang',
             caches: ['localStorage']
         }
     });
