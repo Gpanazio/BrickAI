@@ -32,13 +32,13 @@
             "title": "INHERITANCE",
             "subtitle": "SHORT FILM",
             "desc": "Official Selection — Gramado Film Festival 2025",
-            "longDesc": "One of the first AI-made films to be selected and screened at the Gramado Film Festival. Inheritance tells the story of a civilization that inherits an abandoned world — and repeats, step by step, every mistake its predecessors made. A fable about cycles, hubris, and the illusion of progress. The 5-minute version premiered at Gramado; an extended 10-minute cut remains unreleased"
+            "longDesc": "Inheritance observes a civilization that inherits the ruins of an abandoned world only to repeat, with precision, the mistakes of its predecessors. Selected by the Gramado Film Festival, the film is a fable about humanity's addiction to hubris and the illusion of progress. While the 5-minute cut struck audiences in southern Brazil, the visceral 10-minute version remains unreleased, awaiting the moment to reveal the full cycle."
         },
         "shift": {
-            "title": "WE CAN SELL ANYTHING",
+            "title": "SYNAPSESHEET",
             "subtitle": "MANIFESTO",
             "desc": "Genero Challenge Finalist",
-            "longDesc": "One character. Infinite worlds. In this manifesto, the same man appears in a fashion studio, leads a marching band in a packed stadium, strolls through European palaces, unwinds in a classic American living room, and faces sumo wrestlers — all in 60 seconds. The message is clear: production limits no longer exist. Any scenario, any context, any story. Genero Challenge Finalist"
+            "longDesc": "One face, sixty seconds, and the abolition of geographic borders. This film is raw proof that the physical limitations of the set have become optional. In the span of a minute, the same protagonist shifts contexts: from the elegance of a European salon to the roar of a marching band in a packed stadium, from the silence of baroque palaces to the sumo ring. A Genero Challenge finalist, the work is not just a visual exercise — it is a decree: from now on, the scale of a story is limited only by the courage of the direction, never again by logistics."
         },
         "anima": {
             "title": "AUTOBOL",
@@ -62,7 +62,7 @@
             "title": "FACTORY",
             "subtitle": "RETRO-FUTURISM",
             "desc": "Industrial decay with a retro-futuristic vision",
-            "longDesc": "A factory that never existed, but feels remembered. Factory combines industrial decay with a retro-futuristic aesthetic — as though a future imagined in the 70s had aged and been abandoned. Rust, concrete, silent machinery. A space suspended between the nostalgia of a past and the ruins of a future that never arrived"
+            "longDesc": "A future imagined in the 70s, aged and abandoned. A space between the nostalgia of a past and the ruins of a future that never arrived (yet)."
         },
         "dogday": {
             "title": "DOG DAY AFTERNOON",
@@ -180,7 +180,6 @@
         },
         "suggestions": {
             "philosophy": "How much does a project cost?",
-            "audit": "I want to see more examples",
             "synthesis": "What's the average timeline?",
             "humans": "Talk to the team"
         }

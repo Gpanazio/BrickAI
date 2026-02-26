@@ -252,83 +252,67 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 id: "inheritance",
                 orientation: "horizontal",
                 subtitle: t('works.inheritance.subtitle'),
-                category: "GENERATIVE",
+                category: "SELEÇÃO OFICIAL : FESTIVAL DE GRAMADO",
                 title: t('works.inheritance.title'),
                 desc: t('works.inheritance.desc'),
                 longDesc: t('works.inheritance.longDesc'),
-                credits: [
-                    { role: "Director", name: "Sarah V." },
-                    { role: "AI Lead", name: "Mason Core" },
-                    { role: "Sound", name: "Echo Lab" },
-                    { role: "Tech", name: "Stable Diffusion XL + ComfyUI" }
-                ],
+                credits: [],
                 gradient: "from-neutral-900 to-neutral-800",
                 imageHome: "/uploads/f4c60c38-6176-4c5c-bf36-86fada4b9470.jpeg",
                 imageWorks: "/uploads/f4c60c38-6176-4c5c-bf36-86fada4b9470.jpeg",
+                videoUrl: "https://review.brick.mov/portfolio/embed/10",
                 hasDetail: true
             },
             {
                 id: "shift",
                 orientation: "horizontal",
                 subtitle: t('works.shift.subtitle'),
-                category: "VFX",
+                category: "FINALISTA : GENERO CHALLENGE",
                 title: t('works.shift.title'),
                 desc: t('works.shift.desc'),
                 longDesc: t('works.shift.longDesc'),
-                credits: [
-                    { role: "Director", name: "Marcus L." },
-                    { role: "VFX Sup", name: "Brick Core" },
-                    { role: "Agency", name: "Future Brand" },
-                    { role: "Tech", name: "Nuke + Generative Fill" }
-                ],
+                credits: [],
                 gradient: "from-neutral-900 via-[#DC2626]/10 to-neutral-900",
                 imageHome: "/uploads/30e2d6e0-e967-4204-a455-ae1bb91dec1e.jpeg",
                 imageWorks: "/uploads/30e2d6e0-e967-4204-a455-ae1bb91dec1e.jpeg",
+                videoUrl: "https://review.brick.mov/portfolio/embed/9",
                 hasDetail: true
             },
             {
                 id: "anima",
-                orientation: "vertical",
+                orientation: "horizontal",
                 subtitle: t('works.anima.subtitle'),
-                category: "STYLE TRANSFER",
+                category: "REIMAGINAÇÃO : RESGATE HISTÓRICO",
                 title: t('works.anima.title'),
                 desc: t('works.anima.desc'),
                 longDesc: t('works.anima.longDesc'),
-                credits: [
-                    { role: "Creative", name: "Ana S." },
-                    { role: "AI Artist", name: "Mason Core" },
-                    { role: "Client", name: "Sports Global" },
-                    { role: "Tech", name: "Ebsynth + SD Video" }
-                ],
+                credits: [],
                 gradient: "from-neutral-900 to-neutral-950",
                 imageHome: "/uploads/f33570ab-0d3b-4eee-9fe9-59818dcdcd9f.jpeg",
                 imageWorks: "/uploads/f33570ab-0d3b-4eee-9fe9-59818dcdcd9f.jpeg",
+                videoUrl: "https://review.brick.mov/portfolio/embed/7",
                 hasDetail: true
             },
             {
                 id: "factory",
                 orientation: "vertical",
                 subtitle: t('works.factory.subtitle'),
-                category: "GENERATIVE",
+                category: "CONCEITO : CINEMATOGRAFIA GENERATIVA",
                 title: t('works.factory.title'),
                 desc: t('works.factory.desc'),
                 longDesc: t('works.factory.longDesc'),
-                credits: [
-                    { role: "Director", name: "Gabriel P." },
-                    { role: "AI Artist", name: "Mason Core" },
-                    { role: "Style", name: "Retro-Futurism" },
-                    { role: "Tech", name: "Stable Diffusion + ControlNet" }
-                ],
+                credits: [],
                 gradient: "from-neutral-950 to-[#DC2626]/20",
                 imageHome: "/uploads/adfee249-a46b-44ca-8d7b-b7b5db4ba60b.jpg",
                 imageWorks: "/uploads/adfee249-a46b-44ca-8d7b-b7b5db4ba60b.jpg",
+                videoUrl: "https://review.brick.mov/portfolio/embed/8",
                 hasDetail: true
             },
             {
                 id: "DOG DAY AFTERNOON",
-                orientation: "vertical",
+                orientation: "horizontal",
                 subtitle: t('works.dogday.subtitle'),
-                category: "DATA ART",
+                category: "CONCEITO : REALISMO DO ABSURDO",
                 title: t('works.dogday.title'),
                 desc: t('works.dogday.desc'),
                 longDesc: t('works.dogday.longDesc'),
@@ -336,7 +320,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 gradient: "from-neutral-950 to-[#DC2626]/20",
                 imageHome: "/uploads/f9c13e36-0abe-43c9-8161-805cd9f2d1f3.jpeg",
                 imageWorks: "/uploads/f9c13e36-0abe-43c9-8161-805cd9f2d1f3.jpeg",
-                videoUrl: "https://review.brick.mov/portfolio/player/7",
+                videoUrl: "https://review.brick.mov/portfolio/embed/6",
                 hasDetail: true
             },
         ];
@@ -459,7 +443,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                                     imageSettingsHome: w.imageSettingsHome,
                                     imageSettingsWorks: w.imageSettingsWorks,
                                     videoUrl: w.videoUrl || finalWorks[idx].videoUrl,
-                                    orientation: w.orientation,
+                                    orientation: finalWorks[idx].orientation,
                                     gradient: w.gradient,
                                     hasDetail: w.hasDetail,
                                     category: w.category
@@ -1182,11 +1166,10 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             onClick={() => work.hasDetail && onOpen(work)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={`reveal relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-[#DC2626] transition-colors duration-300 bg-[#050505] group ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
+            className={`reveal relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-[#DC2626] transition-colors duration-300 bg-[#050505] group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
             style={{
                 flexGrow: isHovered ? 1.6 : 1,
                 flexShrink: 0,
-                flexBasis: 0,
                 willChange: 'flex-grow, opacity, transform, border-color',
                 transition: `flex-grow 1.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.2s ease-out, transform 1.2s ease-out, border-color 500ms ease`,
             }}
@@ -1227,9 +1210,9 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 
                 {/* CATEGORY & META */}
                 <div className="flex items-center gap-3 mb-2">
-                    <span className="font-mono text-[10px] text-[#DC2626] tracking-[0.2em] uppercase">{work.id}</span>
+                    <span className="font-mono text-[10px] text-[#DC2626] tracking-[0.2em] uppercase">{work.category.includes(':') ? work.category.split(':')[0].trim() : work.id}</span>
                     <span className="text-white/20 text-[10px] font-light">|</span>
-                    <span className="font-mono text-[10px] text-white/60 tracking-widest uppercase">{work.category}</span>
+                    <span className="font-mono text-[10px] text-white/60 tracking-widest uppercase">{work.category.includes(':') ? work.category.split(':').slice(1).join(':').trim() : work.category}</span>
                 </div>
 
                 {/* TITLE - CLEAN & BOLD */}
@@ -1264,7 +1247,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => void }) => {
     const { t } = useTranslation();
     return (
-        <section id="works" className="w-full pt-16 pb-0 bg-[#050505] border-t border-white/5 relative z-40 overflow-hidden">
+        <section id="works" className="w-full pt-16 pb-0 bg-[#050505] border-t border-white/5 relative z-40 md:overflow-hidden">
             <div className="px-6 md:px-12 lg:px-24 mb-12 reveal flex justify-between items-end border-b border-white/10 pb-4">
                 <div className="flex items-center gap-3">
                     <Database className="w-4 h-4 text-[#DC2626]" />
@@ -1341,22 +1324,22 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
 
     const modalClasses = isHorizontal
         ? 'max-w-7xl w-[95%] h-[80vh] md:h-auto md:max-h-[85vh] md:aspect-[16/7]'
-        : 'max-w-5xl w-[95%] h-[85vh] md:h-auto md:max-h-[90vh] md:aspect-auto';
+        : 'max-w-md w-[95%] h-[90vh] md:max-h-[92vh]';
 
     return (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-black/95 backdrop-blur-xl transition-opacity duration-500" onClick={onClose}></div>
-            <div className={`relative w-full ${modalClasses} bg-[#050505] border border-white/10 flex flex-col md:flex-row shadow-2xl animate-fade-in-up overflow-hidden`}>
+            <div className={`relative w-full ${modalClasses} bg-[#050505] border border-white/10 flex ${isHorizontal ? 'flex-col md:flex-row' : 'flex-col'} shadow-2xl animate-fade-in-up overflow-hidden`}>
                 <button onClick={onClose} className="absolute top-4 right-4 z-50 text-white/50 hover:text-[#DC2626] transition-colors p-2 mix-blend-difference">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
                 </button>
-                <div className={`w-full md:w-2/3 bg-[#050505] relative border-b md:border-b-0 md:border-r border-white/10 group overflow-hidden flex items-center justify-center`}>
+                <div className={`w-full ${isHorizontal ? 'md:w-2/3 border-b md:border-b-0 md:border-r' : 'aspect-[9/16] max-h-[55vh] border-b'} bg-[#050505] relative border-white/10 group overflow-hidden flex items-center justify-center`}>
                     <div className="absolute inset-0 w-full h-full">
                         {project.videoUrl && isPlaying ? (
                             vimeoId ? (
                                 <iframe
                                     src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&background=1&muted=1`}
-                                    className="w-full h-full opacity-80"
+                                    className="w-full h-full"
                                     frameBorder="0"
                                     allow="autoplay; fullscreen; picture-in-picture"
                                     allowFullScreen
@@ -1365,7 +1348,7 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                             ) : isVideoFile ? (
                                 <video
                                     src={project.videoUrl}
-                                    className="w-full h-full object-cover opacity-80"
+                                    className="w-full h-full object-cover"
                                     autoPlay loop muted playsInline
                                 />
                             ) : (
@@ -1388,21 +1371,23 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                                         transform: `scale(${settings.scale}) translate(${(settings.x - 50) * 2}%, ${(settings.y - 50) * 2}%)`
                                     }}
                                 ></div>
-                                <button
-                                    onClick={() => setIsPlaying(true)}
-                                    className="relative z-10 w-16 h-16 rounded-full border border-white/20 flex items-center justify-center hover:scale-110 hover:border-[#DC2626] transition-all duration-300 cursor-pointer backdrop-blur-sm bg-[#050505]/30"
-                                >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-white ml-1"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
-                                </button>
+                                {project.videoUrl && (
+                                    <button
+                                        onClick={() => setIsPlaying(true)}
+                                        className="relative z-10 w-16 h-16 rounded-full border border-white/20 flex items-center justify-center hover:scale-110 hover:border-[#DC2626] transition-all duration-300 cursor-pointer backdrop-blur-sm bg-[#050505]/30"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" className="text-white ml-1"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                    </button>
+                                )}
+                                <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end text-[10px] font-mono tracking-widest text-white/50 pointer-events-none z-20">
+                                    <span>{t('project_modal.static_preview')}</span>
+                                    <span>{isHorizontal ? '16:9' : '9:16'} // 4K</span>
+                                </div>
                             </div>
                         )}
-                        <div className="absolute bottom-6 left-6 right-6 flex justify-between items-end text-[10px] font-mono tracking-widest text-white/50 pointer-events-none z-20">
-                            <span>{project.videoUrl && isPlaying ? t('project_modal.neural_active') : t('project_modal.static_preview')}</span>
-                            <span>{isHorizontal ? '16:9' : '9:16'} // 4K</span>
-                        </div>
                     </div>
                 </div>
-                <div className="w-full md:w-1/3 bg-[#050505] flex flex-col p-6 md:p-8 h-full overflow-y-auto scrollbar-hide">
+                <div className={`w-full ${isHorizontal ? 'md:w-1/3' : ''} bg-[#050505] flex flex-col p-6 md:p-8 ${isHorizontal ? 'h-full' : 'flex-1 min-h-0'} overflow-y-auto scrollbar-hide`}>
                     <div>
                         <div className="flex items-center gap-3 mb-4">
                             <div className="w-1.5 h-1.5 bg-[#DC2626] animate-pulse"></div>
@@ -1460,7 +1445,6 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
             <div className="absolute inset-0 p-6 flex flex-col justify-between z-30">
                 <div className="flex justify-between items-start opacity-50 group-hover:opacity-100 transition-opacity duration-300">
                     <span className="font-mono text-[10px] tracking-widest text-[#DC2626]">{(index + 1).toString().padStart(3, '0')}</span>
-                    <span className="font-mono text-[10px] tracking-widest border border-white/20 px-2 py-0.5 rounded-full">{work.category}</span>
                 </div>
                 <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                     <h3 className="text-lg md:text-xl font-brick text-white leading-none mb-2 tracking-tight group-hover:text-[#DC2626] transition-colors">{work.title}</h3>
@@ -1540,7 +1524,6 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
                     </div>
                 </section>
                 <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 md:pb-40">
-                    <WorksFilter categories={categories} activeCategory={activeCategory} onSelect={setActiveCategory} />
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
                         {filteredWorks.map((work, idx) => (
                             <WorksGridItem key={work.id} work={work} index={idx} onOpen={onSelectProject} />
@@ -1625,7 +1608,7 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('transmissions_page.title').split('_').slice(0,-1).join('_')}_<span className="text-[#DC2626]">{t('transmissions_page.title').split('_').slice(-1)[0]}</span></h1>
-                            <p className="font-mono text-[10px] md:text-xs tracking-widest max-w-xl animate-system-input"><span className="text-[#DC2626]">&gt;&gt;</span> <span className="text-[#9CA3AF]">{t('transmissions_page.incoming')} <span className="text-white">{transmissions.length}</span> {t('transmissions_page.records')}</span></p>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input"><span className="text-[#DC2626]">&gt;&gt;</span> <span className="text-[#9CA3AF]">{t('transmissions_page.incoming')} <span className="text-white">{transmissions.length}</span> {t('transmissions_page.records')}</span></p>
                         </div>
                     </div>
                 </section>
@@ -1692,7 +1675,6 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const SUGGESTIONS = [
         t('chat.suggestions.philosophy'),
-        t('chat.suggestions.audit'),
         t('chat.suggestions.synthesis'),
         t('chat.suggestions.humans')
     ];
