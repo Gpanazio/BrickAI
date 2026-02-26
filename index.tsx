@@ -2652,6 +2652,7 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
         updateMeta('twitter:title', ogTitle, 'name');
         updateMeta('twitter:description', ogDescription, 'name');
         updateMeta('twitter:image', 'https://ai.brick.mov/og-image.jpg', 'name');
+        updateMeta('twitter:site', '@brick_mov', 'name');
         updateMeta('theme-color', '#050505', 'name');
 
         // Article-specific OG tags for blog posts
@@ -2702,6 +2703,45 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
         };
 
         const isEn = lang.startsWith('en');
+
+        // BreadcrumbList — navigation hierarchy for Google
+        const breadcrumbItems: any[] = [
+            { "@type": "ListItem", "position": 1, "name": "Brick AI", "item": "https://ai.brick.mov" }
+        ];
+        const viewLabels: Record<string, { pt: string; en: string }> = {
+            works: { pt: 'Trabalhos', en: 'Works' },
+            about: { pt: 'Sobre', en: 'About' },
+            transmissions: { pt: 'Transmissões', en: 'Transmissions' },
+            chat: { pt: 'Contato', en: 'Contact' }
+        };
+        if (view !== 'home') {
+            const parentView = view === 'post' ? 'transmissions' : view;
+            const parentLabel = viewLabels[parentView];
+            if (parentLabel) {
+                breadcrumbItems.push({
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": isEn ? parentLabel.en : parentLabel.pt,
+                    "item": `https://ai.brick.mov/${parentView}`
+                });
+            }
+            if (view === 'post' && selectedPost) {
+                const postTitle = typeof selectedPost.title === 'string'
+                    ? selectedPost.title
+                    : (selectedPost.title && (selectedPost.title as any)[lang]) || 'Article';
+                breadcrumbItems.push({
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": postTitle,
+                    "item": canonicalUrl
+                });
+            }
+        }
+        addJsonLd({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": breadcrumbItems
+        });
 
         // FAQPage — injected dynamically so it matches the current UI language
         if (view === 'home') {
