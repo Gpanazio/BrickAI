@@ -23,7 +23,7 @@ Integrated tools for media production workflows:
 ### 🌍 Internationalization
 Full multi-language support:
 - **Languages**: English (EN) and Portuguese (PT).
-- **Translation Management**: Centralized `CONTENT_EN.json` and `CONTENT_PT.json` files for easy updates.
+- **Translation Management**: Managed via `src/locales/en/translation.json` and `src/locales/pt/translation.json` through i18next.
 - **Formatting**: Auto-detection and localized formatting for dates and currencies.
 
 ### 🎨 Monolith / Liquidglass UI
@@ -86,4 +86,5 @@ Access the app at `http://localhost:5173` (or the port shown in your terminal).
 - **/src**: React frontend application code.
 - **/dist**: Production build artifacts.
 - **server.js**: Node.js server for backend logic.
-- **CONTENT_*.json**: Master translation files used to seed the app content.
+- **src/locales/**: i18next translation files (en + pt).
+- **seo-data.js**: Per-page SEO metadata used by both SSR and client.

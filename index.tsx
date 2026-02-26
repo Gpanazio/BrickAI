@@ -2585,8 +2585,31 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
     const data = SEO_DATA[lang][view] || SEO_DATA[lang].home;
 
     useEffect(() => {
+        // Derive post-specific meta when viewing a blog post
+        let title = data.title;
+        let description = data.description;
+        let ogTitle = data.ogTitle || data.title;
+        let ogDescription = data.ogDescription || data.description;
+
+        if (view === 'post' && selectedPost) {
+            const postTitle = typeof selectedPost.title === 'string'
+                ? selectedPost.title
+                : (selectedPost.title && (selectedPost.title as any)[lang])
+                    ? (selectedPost.title as any)[lang]
+                    : 'Article';
+            const postExcerpt = typeof selectedPost.excerpt === 'string'
+                ? selectedPost.excerpt
+                : (selectedPost.excerpt && (selectedPost.excerpt as any)[lang])
+                    ? (selectedPost.excerpt as any)[lang]
+                    : '';
+            title = `${postTitle} | Brick AI`;
+            description = postExcerpt || description;
+            ogTitle = postTitle;
+            ogDescription = postExcerpt || ogDescription;
+        }
+
         // Update Title
-        document.title = data.title;
+        document.title = title;
 
         // Update Description
         let metaDesc = document.querySelector('meta[name="description"]');
@@ -2595,7 +2618,7 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
             metaDesc.setAttribute('name', 'description');
             document.head.appendChild(metaDesc);
         }
-        metaDesc.setAttribute('content', data.description);
+        metaDesc.setAttribute('content', description);
 
         // Update OG Tags
         const updateMeta = (name: string, content: string, attr: string = 'property') => {
@@ -2608,19 +2631,38 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
             meta.setAttribute('content', content);
         };
 
-        updateMeta('og:title', data.ogTitle || data.title);
-        updateMeta('og:description', data.ogDescription || data.description);
+        // Build canonical path from actual URL, not view name
+        const canonicalPath = view === 'home' ? ''
+            : view === 'post' && selectedPost
+                ? `transmissions/${(selectedPost as any).url || selectedPost.id}`
+                : view;
+        const canonicalUrl = `https://ai.brick.mov/${canonicalPath}`;
+
+        updateMeta('og:title', ogTitle);
+        updateMeta('og:description', ogDescription);
         updateMeta('og:image', 'https://ai.brick.mov/og-image.jpg');
-        updateMeta('og:url', `https://ai.brick.mov/${view === 'home' ? '' : view}`);
-        updateMeta('og:type', 'website');
+        updateMeta('og:image:width', '1200');
+        updateMeta('og:image:height', '630');
+        updateMeta('og:url', canonicalUrl);
+        updateMeta('og:type', view === 'post' ? 'article' : 'website');
         updateMeta('og:site_name', 'Brick AI');
         updateMeta('og:locale', lang === 'pt' ? 'pt_BR' : 'en_US');
         updateMeta('og:locale:alternate', lang === 'pt' ? 'en_US' : 'pt_BR');
         updateMeta('twitter:card', 'summary_large_image', 'name');
-        updateMeta('twitter:title', data.ogTitle || data.title, 'name');
-        updateMeta('twitter:description', data.ogDescription || data.description, 'name');
+        updateMeta('twitter:title', ogTitle, 'name');
+        updateMeta('twitter:description', ogDescription, 'name');
         updateMeta('twitter:image', 'https://ai.brick.mov/og-image.jpg', 'name');
+        updateMeta('twitter:site', '@brick_mov', 'name');
         updateMeta('theme-color', '#050505', 'name');
+
+        // Article-specific OG tags for blog posts
+        if (view === 'post' && selectedPost) {
+            const isoDate = typeof (selectedPost as any).date === 'string'
+                ? (selectedPost as any).date.replace(/\./g, '-')
+                : new Date().toISOString().split('T')[0];
+            updateMeta('article:published_time', isoDate);
+            updateMeta('article:author', 'https://ai.brick.mov');
+        }
 
         // Update Canonical
         let linkCanonical = document.querySelector('link[rel="canonical"]');
@@ -2629,7 +2671,6 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
             linkCanonical.setAttribute('rel', 'canonical');
             document.head.appendChild(linkCanonical);
         }
-        const canonicalUrl = `https://ai.brick.mov/${view === 'home' ? '' : view}`;
         linkCanonical.setAttribute('href', canonicalUrl);
 
         // Keep language + hreflang consistent
@@ -2647,8 +2688,8 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
         };
 
         upsertAlt('x-default', canonicalUrl);
-        upsertAlt('pt-BR', `https://ai.brick.mov/${view === 'home' ? '' : view}`);
-        upsertAlt('en', `https://ai.brick.mov/${view === 'home' ? '' : view}?lang=en`);
+        upsertAlt('pt-BR', `https://ai.brick.mov/${canonicalPath}`);
+        upsertAlt('en', `https://ai.brick.mov/${canonicalPath}?lang=en`);
 
         // Remove all previously injected dynamic JSON-LD scripts
         document.querySelectorAll('script[data-dynamic-ld]').forEach(s => s.remove());
@@ -2662,6 +2703,45 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
         };
 
         const isEn = lang.startsWith('en');
+
+        // BreadcrumbList — navigation hierarchy for Google
+        const breadcrumbItems: any[] = [
+            { "@type": "ListItem", "position": 1, "name": "Brick AI", "item": "https://ai.brick.mov" }
+        ];
+        const viewLabels: Record<string, { pt: string; en: string }> = {
+            works: { pt: 'Trabalhos', en: 'Works' },
+            about: { pt: 'Sobre', en: 'About' },
+            transmissions: { pt: 'Transmissões', en: 'Transmissions' },
+            chat: { pt: 'Contato', en: 'Contact' }
+        };
+        if (view !== 'home') {
+            const parentView = view === 'post' ? 'transmissions' : view;
+            const parentLabel = viewLabels[parentView];
+            if (parentLabel) {
+                breadcrumbItems.push({
+                    "@type": "ListItem",
+                    "position": 2,
+                    "name": isEn ? parentLabel.en : parentLabel.pt,
+                    "item": `https://ai.brick.mov/${parentView}`
+                });
+            }
+            if (view === 'post' && selectedPost) {
+                const postTitle = typeof selectedPost.title === 'string'
+                    ? selectedPost.title
+                    : (selectedPost.title && (selectedPost.title as any)[lang]) || 'Article';
+                breadcrumbItems.push({
+                    "@type": "ListItem",
+                    "position": 3,
+                    "name": postTitle,
+                    "item": canonicalUrl
+                });
+            }
+        }
+        addJsonLd({
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": breadcrumbItems
+        });
 
         // FAQPage — injected dynamically so it matches the current UI language
         if (view === 'home') {
