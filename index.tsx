@@ -297,7 +297,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 id: "factory",
                 orientation: "vertical",
                 subtitle: t('works.factory.subtitle'),
-                category: "GENERATIVE",
+                category: "CONCEITO : CINEMATOGRAFIA GENERATIVA",
                 title: t('works.factory.title'),
                 desc: t('works.factory.desc'),
                 longDesc: t('works.factory.longDesc'),
