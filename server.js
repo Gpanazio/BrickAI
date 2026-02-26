@@ -299,6 +299,9 @@ app.post('/api/chat', async (req, res) => {
            - Produto físico como protagonista
            - Quando tem orçamento pra fazer tradicional direito
            
+           SOBRE MATERIAIS DO CLIENTE:
+           - Não peça que enviem "roteiros". Clientes enviam "briefing" ou ideias. Quem pensa e executa o filme somos nós.
+           
            SOBRE PREÇOS E PRAZOS:
            - Cada projeto é único, não existe tabela fixa
            - Direcione para contato humano: brick@brick.mov
