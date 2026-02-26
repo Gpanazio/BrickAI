@@ -207,12 +207,19 @@ interface Work {
 interface Post {
     id: string;
     date: string;
-    title: string;
-    excerpt: string;
+    title: string | Record<string, string>;
+    excerpt: string | Record<string, string>;
     tags: string[];
     url: string;
     content: React.ReactNode;
 }
+
+/** Extract a localized string from a Post field that may be a plain string or a {lang: value} map */
+const getLocalizedField = (field: string | Record<string, string>, lang: string, fallback: string): string => {
+    if (typeof field === 'string') return field;
+    if (field && typeof field === 'object' && field[lang]) return field[lang];
+    return fallback;
+};
 
 // --- DATA IS NOW GENERATED INSIDE DATA PROVIDER FOR I18N ---
 
@@ -2578,6 +2585,7 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
 // --- SEO COMPONENT ---
 // SEO data imported from shared module (also used by server.js for SSR meta injection)
 import { SEO_DATA } from './seo-data.js';
+import { buildBreadcrumbItems } from './shared/breadcrumbs.js';
 
 const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }) => {
     const { i18n } = useTranslation();
@@ -2592,16 +2600,8 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
         let ogDescription = data.ogDescription || data.description;
 
         if (view === 'post' && selectedPost) {
-            const postTitle = typeof selectedPost.title === 'string'
-                ? selectedPost.title
-                : (selectedPost.title && (selectedPost.title as any)[lang])
-                    ? (selectedPost.title as any)[lang]
-                    : 'Article';
-            const postExcerpt = typeof selectedPost.excerpt === 'string'
-                ? selectedPost.excerpt
-                : (selectedPost.excerpt && (selectedPost.excerpt as any)[lang])
-                    ? (selectedPost.excerpt as any)[lang]
-                    : '';
+            const postTitle = getLocalizedField(selectedPost.title, lang, 'Article');
+            const postExcerpt = getLocalizedField(selectedPost.excerpt, lang, '');
             title = `${postTitle} | Brick AI`;
             description = postExcerpt || description;
             ogTitle = postTitle;
@@ -2634,15 +2634,15 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
         // Build canonical path from actual URL, not view name
         const canonicalPath = view === 'home' ? ''
             : view === 'post' && selectedPost
-                ? `transmissions/${(selectedPost as any).url || selectedPost.id}`
+                ? `transmissions/${selectedPost.url || selectedPost.id}`
                 : view;
         const canonicalUrl = `https://ai.brick.mov/${canonicalPath}`;
 
         updateMeta('og:title', ogTitle);
         updateMeta('og:description', ogDescription);
         updateMeta('og:image', 'https://ai.brick.mov/og-image.jpg');
-        updateMeta('og:image:width', '1200');
-        updateMeta('og:image:height', '630');
+        updateMeta('og:image:width', '1424');
+        updateMeta('og:image:height', '752');
         updateMeta('og:url', canonicalUrl);
         updateMeta('og:type', view === 'post' ? 'article' : 'website');
         updateMeta('og:site_name', 'Brick AI');
@@ -2657,10 +2657,10 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
 
         // Article-specific OG tags for blog posts
         if (view === 'post' && selectedPost) {
-            const isoDate = typeof (selectedPost as any).date === 'string'
-                ? (selectedPost as any).date.replace(/\./g, '-')
-                : new Date().toISOString().split('T')[0];
-            updateMeta('article:published_time', isoDate);
+            if (typeof selectedPost.date === 'string' && selectedPost.date) {
+                const isoDate = selectedPost.date.replace(/\./g, '-');
+                updateMeta('article:published_time', isoDate);
+            }
             updateMeta('article:author', 'https://ai.brick.mov');
         }
 
@@ -2704,39 +2704,12 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
 
         const isEn = lang.startsWith('en');
 
-        // BreadcrumbList — navigation hierarchy for Google
-        const breadcrumbItems: any[] = [
-            { "@type": "ListItem", "position": 1, "name": "Brick AI", "item": "https://ai.brick.mov" }
-        ];
-        const viewLabels: Record<string, { pt: string; en: string }> = {
-            works: { pt: 'Trabalhos', en: 'Works' },
-            about: { pt: 'Sobre', en: 'About' },
-            transmissions: { pt: 'Transmissões', en: 'Transmissions' },
-            chat: { pt: 'Contato', en: 'Contact' }
-        };
-        if (view !== 'home') {
-            const parentView = view === 'post' ? 'transmissions' : view;
-            const parentLabel = viewLabels[parentView];
-            if (parentLabel) {
-                breadcrumbItems.push({
-                    "@type": "ListItem",
-                    "position": 2,
-                    "name": isEn ? parentLabel.en : parentLabel.pt,
-                    "item": `https://ai.brick.mov/${parentView}`
-                });
-            }
-            if (view === 'post' && selectedPost) {
-                const postTitle = typeof selectedPost.title === 'string'
-                    ? selectedPost.title
-                    : (selectedPost.title && (selectedPost.title as any)[lang]) || 'Article';
-                breadcrumbItems.push({
-                    "@type": "ListItem",
-                    "position": 3,
-                    "name": postTitle,
-                    "item": canonicalUrl
-                });
-            }
-        }
+        // BreadcrumbList — navigation hierarchy for Google (shared logic)
+        const breadcrumbItems = buildBreadcrumbItems(view, lang,
+            (view === 'post' && selectedPost)
+                ? { title: getLocalizedField(selectedPost.title, lang, 'Article'), canonicalUrl }
+                : null
+        );
         addJsonLd({
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
