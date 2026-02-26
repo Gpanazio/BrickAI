@@ -570,6 +570,7 @@ app.get('*', async (req, res) => {
         .replace(/__META_DESCRIPTION__/g, description)
         .replace(/__OG_TITLE__/g, ogTitle)
         .replace(/__OG_DESCRIPTION__/g, ogDescription)
+        .replace(/__OG_TYPE__/g, view === 'post' ? 'article' : 'website')
         .replace(/__OG_URL__/g, canonicalUrl + langParam)
         .replace(/__OG_LOCALE__/g, lang === 'pt' ? 'pt_BR' : 'en_US')
         .replace(/__OG_LOCALE_ALT__/g, lang === 'pt' ? 'en_US' : 'pt_BR')
