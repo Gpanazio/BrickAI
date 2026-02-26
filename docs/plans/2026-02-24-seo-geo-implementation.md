@@ -480,12 +480,118 @@ Após fazer deploy em `https://ai.brick.mov`:
 
 ---
 
+## O que JÁ FOI FEITO (status atual)
+
+### Infraestrutura SEO
+- [x] `robots.txt` com permissões explícitas para AI crawlers (GPTBot, ClaudeBot, PerplexityBot, etc.)
+- [x] `sitemap.xml` dinâmico no server (pages estáticas + posts do DB, com hreflang PT/EN/x-default)
+- [x] `llms.txt` bilíngue (PT + EN) com pricing, proof social, preferred citations
+- [x] Server-side rendering (SSR) de meta tags dinâmicas por rota e idioma
+
+### Structured Data (JSON-LD)
+- [x] Organization + WebSite schema (agora dinâmico/bilíngue via SSR, adapta ao idioma)
+- [x] FAQPage schema bilíngue (7 perguntas PT, 7 perguntas EN, injetado via SSR)
+- [x] BreadcrumbList por rota (home → seção → post)
+- [x] Article schema para posts do blog (com datePublished, dateModified, mainEntityOfPage)
+- [x] `inLanguage` declarado em FAQPage, Article e WebSite schemas
+
+### Meta Tags
+- [x] Open Graph completo (title, description, type, url, image, site_name, locale, locale:alternate)
+- [x] Twitter Card (summary_large_image com title, description, image, @brick_mov)
+- [x] Canonical URL dinâmico por rota
+- [x] Hreflang (pt-BR, en, x-default) em HTML e sitemap
+- [x] `<html lang="">` dinâmico (pt / en)
+
+### Internacionalização
+- [x] i18next detecta `?lang=` da URL (querystring como 1ª prioridade de detecção)
+- [x] Server detecta `Accept-Language` header (visitante internacional sem `?lang=` recebe EN)
+- [x] SEO data em inglês com keywords competitivas (AI video production, AI filmmaking, AI VFX)
+- [x] Organization schema adapta descrição e serviços ao idioma do visitante
+
+---
+
+## O que NÃO FOI FEITO (pendências)
+
+### PRIORIDADE ALTA — Impacto direto em rankeamento
+
+1. **Google Search Console / Bing Webmaster — verificação pendente**
+   Sem verificação, o Google/Bing não indexa proativamente. Os meta tags de verificação estão comentados no `index.html`:
+   ```html
+   <!--<meta name="google-site-verification" content="YOUR_GOOGLE_CODE" />-->
+   <!--<meta name="msvalidate.01" content="YOUR_BING_CODE" />-->
+   ```
+   **Ação:** Cadastrar em https://search.google.com/search-console e https://www.bing.com/webmasters, pegar os códigos e descomentar.
+
+2. **VideoObject schema — ausente**
+   Para uma produtora de vídeo, é crucial. O Google mostra rich snippets de vídeo nos resultados. Cada projeto em `/works` deveria ter:
+   ```json
+   {
+     "@type": "VideoObject",
+     "name": "Inheritance",
+     "description": "...",
+     "thumbnailUrl": "...",
+     "uploadDate": "2025-01-15",
+     "duration": "PT3M",
+     "contentUrl": "https://..."
+   }
+   ```
+   **Ação:** Adicionar VideoObject schema no SSR quando `view === 'works'` ou em cada item do portfólio.
+
+3. **og:image — existência e dimensões não verificadas**
+   O arquivo `og-image.jpg` é referenciado em todos os OG tags e no logo do Organization schema.
+   **Ação:** Verificar que `public/og-image.jpg` existe e tem **1200×630px**. Se não existir, as redes sociais e crawlers mostram preview sem imagem.
+
+4. **Imagens OG por rota/projeto — não implementado**
+   Todas as páginas usam a mesma `og-image.jpg`. Compartilhar um projeto específico no LinkedIn/Twitter mostra a imagem genérica.
+   **Ação:** Gerar og-images específicas por rota (works, about, transmissions) e/ou por post/projeto individual.
+
+### PRIORIDADE MÉDIA — Bom para ter
+
+5. **CreativeWork schema para projetos individuais do portfólio**
+   Cada projeto em `/works` (Inheritance, Autobol, etc.) deveria ser um `CreativeWork` com `genre`, `award`, `director`, `productionCompany`.
+   **Ação:** Quando os projetos tiverem páginas individuais ou um JSON de dados, gerar schema por projeto.
+
+6. **og:video / Twitter Player Card para conteúdo de vídeo**
+   Páginas com vídeo deveriam usar `og:video` e `twitter:player` para embed inline no feed social.
+   **Ação:** Quando os vídeos tiverem URLs públicas (Vimeo/YouTube), adicionar os meta tags.
+
+7. **Google Analytics / GA4 — sem tracking**
+   Sem analytics, não há como medir tráfego orgânico, performance de keywords ou comportamento do visitante internacional.
+   **Ação:** Adicionar snippet GA4 no `index.html` com o Measurement ID.
+
+8. **Cache headers para assets SEO**
+   `sitemap.xml` e `robots.txt` são servidos sem cache explícito. Crawlers fazem requests desnecessários.
+   **Ação:** Adicionar `Cache-Control: public, max-age=3600` no handler do sitemap.
+
+9. **React-side fallback SEO (Helmet)**
+   Se o SSR falhar (server down, Vite dev mode), ZERO meta tags são injetados — a SPA roda sem nenhum SEO.
+   **Ação:** Adicionar `react-helmet-async` como fallback client-side para as meta tags essenciais.
+
+### PRIORIDADE BAIXA — Nice to have
+
+10. **llms-full.txt — versão expandida**
+    O `llms.txt` atual é bom mas conciso. Uma versão `llms-full.txt` com case studies detalhados, pipeline técnico e mais contexto aumentaria a profundidade das citações por LLMs.
+
+11. **GEO meta tags mais específicos**
+    Atualmente `geo.region=BR` e `geo.placename=Brazil`. Para sinalizar atendimento internacional, considerar adicionar `geo.position` e/ou remover o geo-lock para não limitar.
+
+12. **Validação de sameAs URLs**
+    O Organization schema lista Instagram, LinkedIn e Twitter como `sameAs`. Verificar que essas URLs estão corretas e acessíveis:
+    - `https://www.instagram.com/brick.mov/`
+    - `https://www.linkedin.com/company/brick`
+    - `https://twitter.com/brick_mov`
+
+13. **Sitemap index para escalabilidade**
+    Sitemap único é suficiente por enquanto (<50 URLs). Quando o blog crescer para 100+ posts, migrar para sitemap index com sub-sitemaps.
+
+---
+
 ## Notas Importantes
 
-1. **`sameAs` no Organization:** Deixado vazio `[]` — adicionar URLs do Instagram, LinkedIn e Vimeo da Brick quando disponíveis. Quanto mais perfis verificados, mais forte o Knowledge Panel.
+1. **`sameAs` no Organization:** Agora populado com Instagram, LinkedIn e Twitter. Verificar se as URLs estão corretas.
 
 2. **og:image:** O arquivo `og-image.jpg` precisa existir em produção. Dimensões ideais: **1200×630px**. Se não existir, as redes sociais vão mostrar preview sem imagem.
 
-3. **`?lang=en` no hreflang:** A URL `https://ai.brick.mov/?lang=en` precisa realmente servir a versão em inglês. Confirmar que o React Router / i18n responde corretamente a esse parâmetro.
+3. **`?lang=en` no hreflang:** ✅ RESOLVIDO — i18next agora detecta `?lang=` da URL como 1ª prioridade.
 
-4. **Twitter/X handle:** Se a Brick AI tiver conta no X (@brickai ou similar), adicionar `<meta name="twitter:site" content="@handle">` na Task 3.
+4. **Twitter/X handle:** ✅ RESOLVIDO — `@brick_mov` adicionado como `twitter:site`.
