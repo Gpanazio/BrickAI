@@ -518,6 +518,42 @@ app.get('*', async (req, res) => {
     // Build route-specific JSON-LD
     const jsonLdScripts = [];
 
+    // BreadcrumbList — navigation hierarchy for crawlers
+    const viewLabels = {
+        works: { pt: 'Trabalhos', en: 'Works' },
+        about: { pt: 'Sobre', en: 'About' },
+        transmissions: { pt: 'Transmissões', en: 'Transmissions' },
+        chat: { pt: 'Contato', en: 'Contact' }
+    };
+    const breadcrumbItems = [
+        { "@type": "ListItem", "position": 1, "name": "Brick AI", "item": "https://ai.brick.mov" }
+    ];
+    if (view !== 'home') {
+        const parentView = view === 'post' ? 'transmissions' : view;
+        const parentLabel = viewLabels[parentView];
+        if (parentLabel) {
+            breadcrumbItems.push({
+                "@type": "ListItem",
+                "position": 2,
+                "name": lang === 'en' ? parentLabel.en : parentLabel.pt,
+                "item": `https://ai.brick.mov/${parentView}`
+            });
+        }
+        if (view === 'post' && postData) {
+            breadcrumbItems.push({
+                "@type": "ListItem",
+                "position": 3,
+                "name": postTitle || 'Article',
+                "item": canonicalUrl
+            });
+        }
+    }
+    jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": breadcrumbItems
+    })}</script>`);
+
     // FAQPage — injected in correct language for home view
     if (view === 'home') {
         const faqEntitiesPt = [
