@@ -128,17 +128,17 @@
             "cinematography": {
                 "title": "CONCEPÇÃO ARTÍSTICA",
                 "status": "CALIBRADO",
-                "desc": "A IA alucina imagens; nós projetamos intenção. O filme é concebido no repertório, onde cada frame serve à narrativa. A tecnologia é o pincel, mas o comando é puramente autoral."
+                "desc": "A IA alucina imagens; nós projetamos intenção. O filme é construído de referências e experiência, onde cada frame serve à narrativa. Tecnologia sem alma não vale nada."
             },
             "training": {
                 "title": "DIREÇÃO VISUAL",
                 "status": "ONLINE",
-                "desc": "O fim do amadorismo generativo. Aplicamos o rigor da luz cinematográfica e a precisão da lente para garantir que a estética não seja um acidente, mas uma assinatura inegociável."
+                "desc": "O caos não tem dono. A gente dá unidade ao caos. Transformamos mil gerações aleatórias em algo que tem cara de filme, não de acidente. Isso é trabalho de quem sabe o que faz e que tá no set há muito tempo."
             },
             "architecture": {
-                "title": "EXECUÇÃO INTEGRAL",
+                "title": "ENTREGA",
                 "status": "ESTÁVEL",
-                "desc": "Não entregamos arquivos gerados; entregamos obras finalizadas. Unimos a potência neural com o acabamento de elite de quem domina o set há uma década. O resultado é o impossível materializado."
+                "desc": "Não somos geradores de imagem, somos criadores. Cuidamos de cada etapa do processo para que a tecnologia sirva à história, e não o contrário. Não vendemos arquivos gerados. Entregamos uma visão pronta, finalizada."
             }
         },
         "manifesto": {
@@ -166,7 +166,7 @@
         "status_online": "STATUS: ONLINE",
         "email_streams": "EMAIL_STREAMS",
         "voice_link": "VOICE_LINK",
-        "direct_message": "DIRECT_MESSAGE",
+        "direct_message": "MENSAGEM_DIRETA",
         "network_nodes": "NETWORK_NODES",
         "mason_intro": "EU SOU MASON",
         "generative_core": "O Núcleo Generativo",

@@ -1307,6 +1307,15 @@ const Legacy = () => {
     );
 };
 
+const getVimeoId = (url: string) => {
+    const match = url.match(/(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)/);
+    return match ? match[1] : null;
+};
+const getYoutubeId = (url: string) => {
+    const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+    return match ? match[1] : null;
+};
+
 const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void }) => {
     const { t } = useTranslation();
     const [isLoaded, setIsLoaded] = useState(false);
@@ -1328,14 +1337,6 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
     if (!project) return null;
 
     const isHorizontal = project.orientation === 'horizontal';
-    const getVimeoId = (url: string) => {
-        const match = url.match(/(?:vimeo\.com\/|player\.vimeo\.com\/video\/)(\d+)/);
-        return match ? match[1] : null;
-    };
-    const getYoutubeId = (url: string) => {
-        const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-        return match ? match[1] : null;
-    };
     const vimeoId = project.videoUrl ? getVimeoId(project.videoUrl) : null;
     const youtubeId = project.videoUrl ? getYoutubeId(project.videoUrl) : null;
     const isVideoFile = project.videoUrl ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(project.videoUrl) : false;
@@ -1380,7 +1381,7 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                                 />
                             ) : (
                                 <iframe
-                                    src={project.videoUrl.includes('?') ? `${project.videoUrl}&autoplay=1` : `${project.videoUrl}?autoplay=1`}
+                                    src={(() => { try { const u = new URL(project.videoUrl); u.searchParams.set('autoplay', '1'); return u.toString(); } catch { return project.videoUrl.includes('?') ? `${project.videoUrl}&autoplay=1` : `${project.videoUrl}?autoplay=1`; } })()}
                                     className="w-full h-full opacity-80"
                                     frameBorder="0"
                                     allow="autoplay; fullscreen"
