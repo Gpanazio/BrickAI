@@ -32,13 +32,13 @@
             "title": "INHERITANCE",
             "subtitle": "CURTA-METRAGEM",
             "desc": "Seleção oficial Festival de Gramado 2025",
-            "longDesc": "Um dos primeiros filmes feitos com IA a ser selecionado e exibido no Festival de Gramado. Inheritance conta a história de uma civilização que herda um mundo abandonado — e repete, passo a passo, todos os erros de seus antecessores. Uma fábula sobre ciclos, hubris e a ilusão do progresso. A versão de 5 minutos estreou em Gramado; uma versão estendida de 10 minutos permanece inédita"
+            "longDesc": "Inheritance observa uma civilização que herda as ruínas de um mundo abandonado para repetir, com precisão, os erros de seus antecessores. Selecionado pelo Festival de Gramado, o filme é uma fábula sobre o vício humano na hubris e na ilusão do progresso. Enquanto o corte de 5 minutos impactou o público gaúcho, a versão visceral de 10 minutos permanece inédita, aguardando o momento de revelar o ciclo completo."
         },
         "shift": {
-            "title": "VENDEMOS QUALQUER COISA",
+            "title": "SYNAPSESHEET",
             "subtitle": "MANIFESTO",
             "desc": "Finalista Genero Challenge",
-            "longDesc": "Um único personagem. Infinitos mundos. Neste manifesto, o mesmo homem aparece em um estúdio de moda, lidera uma banda marcial em um estádio lotado, passeia por palácios europeus, relaxa em uma sala tipicamente americana e enfrenta lutadores de sumô — tudo em 60 segundos. A mensagem é simples: não existem mais limites de produção. Qualquer cenário, qualquer contexto, qualquer história. Finalista no Genero Challenge"
+            "longDesc": "Um rosto, sessenta segundos e a abolição das fronteiras geográficas. Este filme é a prova bruta de que as limitações físicas do set tornaram-se opcionais. No intervalo de um minuto, o mesmo protagonista transmuta contextos: do requinte de um elegante salão europeu ao estrondo de uma banda marcial em um estádio lotado, do silêncio de palácios barrocos ao ringue de sumô. Finalista no Genero Challenge, a obra não é apenas um exercício visual, é um decreto: agora, a escala de uma história é limitada apenas pela coragem da direção, nunca mais pela logística."
         },
         "anima": {
             "title": "AUTOBOL",
@@ -62,7 +62,7 @@
             "title": "FACTORY",
             "subtitle": "RETRO-FUTURISMO",
             "desc": "Decadência industrial com visão retro-futurista",
-            "longDesc": "Uma fábrica que nunca existiu, mas que parece lembrada. Factory combina decadência industrial com uma estética retro-futurista — como se um futuro imaginado nos anos 70 tivesse envelhecido e sido abandonado. Ferrugem, concreto, maquinário silencioso. Um espaço entre a nostalgia de um passado e a ruína de um futuro que não veio"
+            "longDesc": "Um futuro imaginado nos anos 70, envelhecido e abandonado. Um espaço entre a nostalgia de um passado e a ruína de um futuro que não veio (ainda)."
         },
         "dogday": {
             "title": "DOG DAY AFTERNOON",
@@ -180,7 +180,6 @@
         },
         "suggestions": {
             "philosophy": "Quanto custa um projeto?",
-            "audit": "Quero ver mais exemplos",
             "synthesis": "Qual o prazo médio?",
             "humans": "Falar com a equipe"
         }
