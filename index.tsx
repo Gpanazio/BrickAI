@@ -160,6 +160,15 @@ const GlobalStyles = () => (
         .scrollbar-hide::-webkit-scrollbar { display: none; }
         .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
 
+        @media (max-width: 767px), (max-height: 650px) {
+            .modal-container {
+                width: 100% !important;
+                height: 100% !important;
+                aspect-ratio: unset !important;
+                border: none !important;
+            }
+        }
+
         @keyframes float-parallax {
             from { transform: scale(1.1) translate(-1%, 1%); }
             to { transform: scale(1.1) translate(1%, -1%); }
@@ -1333,7 +1342,7 @@ const addAutoplayToUrl = (url: string): string => {
     }
 };
 
-const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void }) => {
+const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onClose: () => void, onPrev?: () => void, onNext?: () => void }) => {
     const { t } = useTranslation();
     const [isPlaying, setIsPlaying] = useState(false);
     const [panelHidden, setPanelHidden] = useState(false);
@@ -1344,10 +1353,19 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
     }, []);
 
     useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+        setIsPlaying(false);
+        setPanelHidden(false);
+    }, [project.id]);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') onClose();
+            if (e.key === 'ArrowLeft' && onPrev) onPrev();
+            if (e.key === 'ArrowRight' && onNext) onNext();
+        };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [onClose]);
+    }, [onClose, onPrev, onNext]);
 
     useEffect(() => {
         if (isPlaying) setPanelHidden(true);
@@ -1364,8 +1382,16 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-700" onClick={onClose}></div>
 
+            {/* NAV PREV */}
+            {onPrev && (
+                <button onClick={onPrev} className="hidden md:flex items-center justify-center z-[115] text-red-500/60 hover:text-red-500 transition-all px-3 active:scale-90 shrink-0"
+                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '22px' }}>
+                    &lt;
+                </button>
+            )}
+
             <div
-                className={`relative ${isHorizontal ? 'aspect-video' : 'aspect-[9/16]'} flex bg-black border border-white/20 shadow-[0_0_80px_rgba(0,0,0,0.9)] animate-fade-in-up overflow-hidden`}
+                className={`relative ${isHorizontal ? 'aspect-video' : 'aspect-[9/16]'} flex bg-black border border-white/20 shadow-[0_0_80px_rgba(0,0,0,0.9)] animate-fade-in-up overflow-hidden modal-container`}
                 style={isHorizontal
                     ? { width: 'min(calc(100vw - 4rem), calc((100vh - 4rem) * 16 / 9), 1200px)' }
                     : { height: 'min(calc(100vh - 4rem), calc((100vw - 4rem) * 16 / 9), 860px)' }
@@ -1375,7 +1401,7 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                 {/* CLOSE — CENTERED */}
                 <button
                     onClick={onClose}
-                    className="absolute top-5 left-1/2 -translate-x-1/2 z-[120] text-white/20 hover:text-white transition-all p-1 active:scale-95"
+                    className="absolute top-5 right-5 z-[120] text-white/20 hover:text-white transition-all p-1 active:scale-95"
                     style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', letterSpacing: '0.2em' }}
                 >
                     [ESC]
@@ -1448,24 +1474,18 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                 {/* ─── INFO PANEL HUD OVERLAY ───────────────────────────── */}
                 <div className={`absolute z-20 flex flex-col overflow-hidden transition-all duration-700
                     ${isHorizontal
-                        ? `bottom-0 left-0 right-0 h-[45%] border-t border-white/10 bg-[#050505]/95 backdrop-blur-xl
-                           md:bottom-auto md:left-auto md:right-0 md:top-0 md:h-auto md:w-[380px] md:border-t-0 md:border-l md:bg-[#050505]/80
+                        ? `bottom-0 left-0 right-0 h-[55%] border-t border-white/10 bg-[#050505]/95 backdrop-blur-xl
+                           md:bottom-0 md:left-auto md:right-0 md:top-0 md:h-full md:w-[380px] md:border-t-0 md:border-l md:bg-[#050505]/80
                            ${panelHidden ? 'translate-y-full md:translate-y-0 md:translate-x-full' : 'translate-y-0 md:translate-x-0'}`
-                        : `bottom-0 left-0 right-0 h-[45%] border-t border-white/10 bg-[#050505]/95 backdrop-blur-xl
+                        : `bottom-0 left-0 right-0 h-[55%] border-t border-white/10 bg-[#050505]/95 backdrop-blur-xl
                            ${panelHidden ? 'translate-y-full' : 'translate-y-0'}`
                     }`}>
 
-                    {/* TERMINAL HEADER BAR */}
-                    <div className="h-10 bg-white/5 border-b border-white/5 flex items-center px-6 flex-shrink-0">
-                        <span className="font-mono text-[8px] text-white/30 tracking-[0.4em] uppercase">BRICK_OS // INFOLOG: {project.id.toUpperCase()}</span>
-                    </div>
-
                     <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative">
-                        <div className="px-8 pt-12 pb-6 flex-shrink-0">
+                        <div className="px-4 pt-4 pb-3 md:px-8 md:pt-12 md:pb-6 flex-shrink-0">
                             {/* System Status */}
-                            <div className="flex items-center gap-3 mb-8">
-                                <div className="w-1.5 h-1.5 bg-white/20 animate-pulse"></div>
-                                <span className="font-mono text-[9px] text-white/40 tracking-[0.4em] uppercase">ACCESSING_DATA...</span>
+                            <div className="flex items-center gap-3 mb-3 md:mb-8 animate-system-input">
+                                <span className="font-mono text-[9px] tracking-[0.4em] uppercase"><span className="text-red-500">&gt;&gt;</span><span className="text-white/40"> ACCESSING_DATA</span><span className="text-red-500 animate-blink tracking-normal">_</span></span>
                             </div>
 
                             {/* Title */}
@@ -1495,8 +1515,8 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                         </div>
 
                         {/* FOOTER: CREDITS (Simplified) */}
-                        <div className="px-10 pb-16 mt-auto">
-                            {project.credits && project.credits.length > 0 ? (
+                        {project.credits && project.credits.length > 0 && (
+                            <div className="px-4 pb-4 md:px-10 md:pb-8 mt-auto">
                                 <div className="space-y-4">
                                     <div className="font-mono text-[7px] text-white/20 mb-4 tracking-[0.4em] uppercase">COLABORADORES_PROJETO</div>
                                     {project.credits.map((credit, idx) => (
@@ -1506,16 +1526,26 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                                         </div>
                                     ))}
                                 </div>
-                            ) : (
-                                <div className="flex items-center justify-between font-mono text-[9px] text-white/20 tracking-[0.5em] uppercase">
-                                    <span>GEN_DIVISION // AUTHENTICATED</span>
-                                    <span className="text-white/5">0XBRK_772</span>
-                                </div>
-                            )}
+                            </div>
+                        )}
+                    </div>
+                    {/* FIXED FOOTER: GEN_DIVISION */}
+                    <div className="flex-shrink-0 px-4 pb-4 md:px-10 md:pb-6 border-t border-white/5 pt-3">
+                        <div className="flex items-center justify-between font-mono text-[9px] text-white/20 tracking-[0.5em] uppercase">
+                            <span>GEN_DIVISION // AUTHENTICATED</span>
+                            <span className="text-white/5">0XBRK_772</span>
                         </div>
                     </div>
                 </div>
             </div>
+
+            {/* NAV NEXT */}
+            {onNext && (
+                <button onClick={onNext} className="hidden md:flex items-center justify-center z-[115] text-red-500/60 hover:text-red-500 transition-all px-3 active:scale-90 shrink-0"
+                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '22px' }}>
+                    &gt;
+                </button>
+            )}
         </div>
     );
 };
@@ -2908,7 +2938,14 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
 };
 
 const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedProject, setSelectedProject, selectedPost, setSelectedPost, goHome, goWorks, goTransmissions, goChat, goAdmin, goAbout, handleSelectPost }: any) => {
-    const { transmissions } = useContext(DataContext)!;
+    const { works, transmissions } = useContext(DataContext)!;
+
+    const navigateProject = (dir: -1 | 1) => {
+        if (!selectedProject || !works.length) return;
+        const idx = works.findIndex((w: Work) => w.id === selectedProject.id);
+        const next = (idx + dir + works.length) % works.length;
+        setSelectedProject(works[next]);
+    };
 
     useLayoutEffect(() => {
         document.documentElement.scrollTop = 0;
@@ -2933,7 +2970,7 @@ const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedPr
             <div className="noise-overlay"></div>
             <CustomCursor active={monolithHover || selectedProject !== null} />
             {selectedProject && (
-                <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} />
+                <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} onPrev={() => navigateProject(-1)} onNext={() => navigateProject(1)} />
             )}
             {view === 'home' && (
                 <HomePage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} onAdmin={goAdmin} onAbout={goAbout} />
