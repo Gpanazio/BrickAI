@@ -13,5 +13,11 @@
       "runtimeArgs": ["run", "dev:server"],
       "port": 3002
     }
+    ,{
+      "name": "carousels",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "-p", "4444", "--no-clipboard"],
+      "port": 4444
+    }
   ]
 }
