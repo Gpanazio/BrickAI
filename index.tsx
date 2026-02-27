@@ -109,7 +109,7 @@ const GlobalStyles = () => (
         .animate-thinking { animation: thinking-pulse 1.5s ease-in-out infinite; }
         .animate-talking { animation: talking-glitch 0.15s infinite; }
         .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
-        .animate-scan { animation: scan 3s ease-in-out infinite; }
+        .animate-scan { animation: scan 3s ease-in-out forwards; }
         
         /* NOISE REMOVED BY USER REQUEST */
         .card-noise { display: none; }
@@ -1355,37 +1355,32 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
     const youtubeId = project.videoUrl ? getYoutubeId(project.videoUrl) : null;
     const isVideoFile = project.videoUrl ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(project.videoUrl) : false;
 
-    // Strict orientation-based layout
-    const modalClasses = isHorizontal
-        ? 'max-w-[1400px] w-[95%] h-[95vh] md:h-auto md:max-h-[85vh] flex-col md:flex-row'
-        : 'max-w-[360px] w-full h-[85vh] md:max-h-[85vh] flex-col';
-
     return (
         <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 md:p-6 lg:p-10">
-            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm transition-opacity duration-700" onClick={onClose}></div>
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-700" onClick={onClose}></div>
 
-            <div className={`relative ${modalClasses} flex bg-black border border-white/20 shadow-[0_0_80px_rgba(0,0,0,0.9)] animate-fade-in-up overflow-hidden`}>
+            <div className={`relative ${isHorizontal ? 'max-w-[1240px] aspect-video' : 'max-w-[420px] aspect-[9/16]'} w-[95%] flex bg-black border border-white/20 shadow-[0_0_80px_rgba(0,0,0,0.9)] animate-fade-in-up overflow-hidden`}>
 
-                {/* CLOSE — top-right */}
+                {/* CLOSE — CENTERED */}
                 <button
                     onClick={onClose}
-                    className="absolute top-5 right-5 z-[120] text-white/20 hover:text-white transition-colors p-1 active:scale-95"
+                    className="absolute top-5 left-1/2 -translate-x-1/2 z-[120] text-white/20 hover:text-white transition-all p-1 active:scale-95"
                     style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', letterSpacing: '0.2em' }}
                 >
                     [ESC]
                 </button>
 
-                {/* ─── MEDIA PANEL ─────────────────────────────── */}
-                <div className={`modal-video-noise w-full ${isHorizontal ? 'md:w-[60%] aspect-video' : 'h-[60%] aspect-[9/16]'} bg-black relative overflow-hidden border-r border-white/10`}>
-                    <div className="absolute inset-0 w-full h-full">
+                {/* ─── MEDIA PANEL (FULL BACKGROUND) ───────────────── */}
+                <div className="absolute inset-0 z-0 bg-black">
+                    <div className="absolute inset-0 w-full h-full modal-video-noise">
                         {project.videoUrl && isPlaying ? (
-                            <div className="w-full h-full bg-black">
+                            <div className="w-full h-full">
                                 {vimeoId ? (
                                     <iframe src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&background=1&muted=1`} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen" title={project.title}></iframe>
                                 ) : youtubeId ? (
                                     <iframe src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&loop=1&playlist=${youtubeId}&mute=1`} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen" title={project.title}></iframe>
                                 ) : isVideoFile ? (
-                                    <video src={project.videoUrl} className="w-full h-full object-contain" autoPlay loop muted playsInline />
+                                    <video src={project.videoUrl} className="w-full h-full object-cover" autoPlay loop muted playsInline />
                                 ) : (
                                     <iframe src={project.videoUrl} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen" title={project.title}></iframe>
                                 )}
@@ -1397,101 +1392,97 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                                 {/* Dark vignette */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
 
-                                {/* MONOLITH PLAY BUTTON — hollow, red border only */}
+                                {/* MONOLITH PLAY BUTTON */}
                                 {project.videoUrl && (
                                     <div className="absolute inset-0 flex items-center justify-center">
                                         <div className="relative group/mono">
-                                            {/* Outer ghost border — subtle pulse */}
-                                            <div
-                                                className="absolute -inset-3 border border-[#DC2626]/15 transition-all duration-1000 group-hover/mono:border-[#DC2626]/40"
-                                                style={{ width: 'calc(100% + 24px)', height: 'calc(100% + 24px)', top: '-12px', left: '-12px' }}
-                                            ></div>
-                                            {/* THE MONOLITH — 1:2 ratio, matches home */}
+                                            <div className="absolute -inset-3 border border-[#DC2626]/20 transition-all duration-1000 group-hover/mono:border-[#DC2626]/50"></div>
                                             <div className="w-14 h-28 border border-[#DC2626] flex items-center justify-center group-hover/mono:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all duration-700 bg-transparent">
-                                                {/* SVG outlined play triangle */}
                                                 <svg viewBox="0 0 20 22" className="w-4 h-[18px] ml-0.5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <polygon
-                                                        points="2,1 18,11 2,21"
-                                                        stroke="#DC2626"
-                                                        strokeWidth="1.5"
-                                                        strokeLinejoin="round"
-                                                        fill="none"
-                                                    />
+                                                    <polygon points="2,1 18,11 2,21" stroke="#DC2626" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
                                                 </svg>
                                             </div>
                                         </div>
                                     </div>
                                 )}
 
-                                {/* Bottom meta */}
-                                <div className="absolute bottom-0 left-0 right-0 px-6 py-4 border-t border-white/[0.05] flex justify-between items-center">
-                                    <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '8px', letterSpacing: '0.4em', color: 'rgba(255,255,255,0.2)' }}>SIGNAL_ACTIVE</span>
-                                    <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '8px', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.15)' }}>{isHorizontal ? '16:9' : '9:16'} // 4K</span>
+                                {/* Bottom meta HUD */}
+                                <div className="absolute bottom-8 left-8 flex flex-col gap-1">
+                                    <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '8px', letterSpacing: '0.4em', color: 'rgba(255,255,255,0.4)' }}>SIGNAL_ACTIVE</span>
+                                    <span style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '8px', letterSpacing: '0.3em', color: 'rgba(255,255,255,0.2)' }}>{isHorizontal ? '16:9' : '9:16'} // 4K // SOURCE_NODE_{project.id.split('_')[0].toUpperCase()}</span>
                                 </div>
                             </div>
                         )}
                     </div>
                 </div>
 
-                {/* ─── INFO PANEL — DIAGNOSTIC GRID ───────────── */}
-                <div className={`w-full ${isHorizontal ? 'md:w-[40%]' : 'flex-1'} bg-black flex flex-col overflow-hidden relative min-h-0`}>
+                {/* ─── INFO PANEL HUD OVERLAY ───────────────────────────── */}
+                <div className={`absolute z-20 flex flex-col overflow-hidden transition-all duration-700 delay-300 ${isHorizontal
+                    ? 'right-0 top-0 bottom-0 w-[320px] md:w-[380px] border-l border-white/10 bg-[#050505]/80 backdrop-blur-xl'
+                    : 'bottom-0 left-0 right-0 h-[45%] border-t border-white/10 bg-[#050505]/95 backdrop-blur-xl'
+                    }`}>
 
-                    {/* ROW 1: HEADER — ID + CATEGORY */}
-                    <div className="flex border-b border-white/10 flex-shrink-0">
-                        <div className="flex-1 px-8 py-5 border-r border-white/10">
-                            <div className="font-mono text-[7px] text-white/20 tracking-[0.5em] uppercase mb-1">CATEGORIA</div>
-                            <div className="font-mono text-[10px] text-[#DC2626] tracking-[0.4em] uppercase font-medium">{project.subtitle}</div>
-                        </div>
-                        <div className="px-8 py-5 flex items-center">
-                            <span className="font-mono text-[7px] text-white/10 tracking-[0.4em] uppercase">{project.id.toUpperCase()}</span>
-                        </div>
+                    {/* TERMINAL HEADER BAR */}
+                    <div className="h-10 bg-white/5 border-b border-white/5 flex items-center px-6 flex-shrink-0">
+                        <span className="font-mono text-[8px] text-white/30 tracking-[0.4em] uppercase">BRICK_OS // INFOLOG: {project.id.toUpperCase()}</span>
                     </div>
 
-                    {/* ROW 2: TITLE */}
-                    <div className="px-8 py-8 border-b border-white/10 flex-shrink-0">
-                        <h2 className="font-brick text-white uppercase whitespace-pre-line" style={{ fontSize: 'clamp(1.6rem, 3vw, 2.8rem)', lineHeight: '0.9', letterSpacing: '0.1em' }}>
-                            {project.title}
-                        </h2>
-                    </div>
+                    <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative">
+                        {/* Scanning effect line */}
+                        <div className="absolute top-0 left-0 w-full h-[2px] bg-[#DC2626]/20 animate-scan pointer-events-none z-10 shadow-[0_0_15px_#DC2626]" />
 
-                    {/* ROW 3: SYNOPSIS LOG LABEL */}
-                    <div className="px-8 py-3 border-b border-white/10 flex-shrink-0 flex items-center gap-3">
-                        <div className="w-1.5 h-1.5 rounded-full bg-[#DC2626] shadow-[0_0_6px_#DC2626]"></div>
-                        <span className="font-mono text-[8px] text-[#DC2626] tracking-[0.5em] uppercase">SYNOPSIS_LOG // PRIORITY_01</span>
-                    </div>
-
-                    {/* ROW 4: BODY TEXT */}
-                    <div className="flex-1 overflow-y-auto scrollbar-hide px-8 py-6 border-b border-white/10">
-                        <p className="text-white/70 text-[13px] leading-[1.75] font-light tracking-wide">
-                            {project.longDesc || project.desc}
-                        </p>
-                    </div>
-
-                    {/* ROW 5: CREDITS (if any) + WAVEFORM */}
-                    <div className="px-8 py-5 flex-shrink-0 flex items-end justify-between gap-4">
-                        {project.credits && project.credits.length > 0 ? (
-                            <div className="space-y-2 flex-1">
-                                {project.credits.map((credit, idx) => (
-                                    <div key={idx} className="flex justify-between">
-                                        <span className="font-mono text-[7px] text-white/20 uppercase tracking-[0.4em]">{credit.role}</span>
-                                        <span className="font-mono text-[8px] text-white/50 tracking-wider uppercase">{credit.name}</span>
-                                    </div>
-                                ))}
+                        <div className="px-8 pt-12 pb-6 flex-shrink-0">
+                            {/* System Status */}
+                            <div className="flex items-center gap-3 mb-8">
+                                <div className="w-1.5 h-1.5 bg-white/20 animate-pulse"></div>
+                                <span className="font-mono text-[9px] text-white/40 tracking-[0.4em] uppercase">ACCESSING_DATA...</span>
                             </div>
-                        ) : (
-                            <div className="flex-1"></div>
-                        )}
 
-                        {/* WAVEFORM DECORATION */}
-                        <svg viewBox="0 0 80 20" className="w-20 h-5 opacity-20 flex-shrink-0" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <polyline
-                                points="0,10 5,6 10,14 15,3 20,17 25,8 30,12 35,4 40,16 45,7 50,13 55,5 60,15 65,9 70,11 75,6 80,10"
-                                stroke="white"
-                                strokeWidth="0.8"
-                                strokeLinejoin="round"
-                                strokeLinecap="round"
-                            />
-                        </svg>
+                            {/* Title */}
+                            <div className="relative">
+                                <h2
+                                    className="font-brick text-white uppercase"
+                                    style={{
+                                        fontSize: 'clamp(2rem, 3.5vw, 3.2rem)',
+                                        lineHeight: '0.82',
+                                        letterSpacing: '-0.03em',
+                                    }}
+                                >
+                                    {project.title}
+                                </h2>
+                                <div className="flex items-center gap-4 mt-4">
+                                    <div className="h-px w-6 bg-white/20"></div>
+                                    <span className="font-mono text-[9px] text-white/40 tracking-[0.3em] uppercase">{project.subtitle}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="px-8 py-4 mb-8">
+                            <div className="font-mono text-[8px] text-white/20 mb-4 tracking-[0.4em]">// SYSTEM_LOG</div>
+                            <p className="text-white/70 text-[13px] leading-[1.8] font-light tracking-wide max-w-md italic font-mono border-l border-white/5 pl-5">
+                                {project.longDesc || project.desc}
+                            </p>
+                        </div>
+
+                        {/* FOOTER: CREDITS (Simplified) */}
+                        <div className="px-10 pb-16 mt-auto">
+                            {project.credits && project.credits.length > 0 ? (
+                                <div className="space-y-4">
+                                    <div className="font-mono text-[7px] text-white/20 mb-4 tracking-[0.4em] uppercase">COLABORADORES_PROJETO</div>
+                                    {project.credits.map((credit, idx) => (
+                                        <div key={idx} className="flex justify-between items-baseline border-b border-white/5 pb-2">
+                                            <span className="font-mono text-[8px] text-white/30 uppercase tracking-[0.2em]">{credit.role}</span>
+                                            <span className="font-mono text-[10px] text-white/80 tracking-wider uppercase">{credit.name}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            ) : (
+                                <div className="flex items-center justify-between font-mono text-[9px] text-white/20 tracking-[0.5em] uppercase">
+                                    <span>GEN_DIVISION // AUTHENTICATED</span>
+                                    <span className="text-white/5">0XBRK_772</span>
+                                </div>
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -1504,7 +1495,7 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
 
     return (
         <div
-            className={`group relative w-full ${work.orientation === 'horizontal' ? 'aspect-video' : 'aspect-[9/16]'} border border-white/10 bg-[#050505] overflow-hidden cursor-pointer hover:border-[#DC2626] transition-colors duration-300 reveal`}
+            className={`group relative w-full aspect-[2/3] md:aspect-[9/16] border border-white/10 bg-[#050505] overflow-hidden cursor-pointer hover:border-[#DC2626] transition-colors duration-300 reveal`}
             style={{ animationDelay: `${index * 50}ms` }}
             onClick={() => onOpen(work)}
         >
@@ -1679,7 +1670,7 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, 
 };
 
 const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectPost, onAbout }: any) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
     const { transmissions } = useContext(DataContext)!;
     return (
         <React.Fragment>
@@ -1701,10 +1692,14 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
                         {transmissions.map((post) => (
                             <div key={post.id} onClick={() => onSelectPost(post)} className="block group bg-[#050505] hover:bg-[#0a0a0a] transition-colors p-9 md:p-12 border border-white/10 cursor-pointer">
                                 <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-4">
-                                    <h3 className="text-xl md:text-3xl font-brick text-white tracking-tight group-hover:text-[#DC2626] transition-colors">{post.title}</h3>
+                                    <h3 className="text-xl md:text-3xl font-brick text-white tracking-tight group-hover:text-[#DC2626] transition-colors">
+                                        {getLocalizedField(post.title, i18n.language, 'UNTITLED')}
+                                    </h3>
                                     <span className="font-mono text-[10px] text-[#DC2626] tracking-widest whitespace-nowrap">{post.date}</span>
                                 </div>
-                                <p className="text-[#9CA3AF] text-sm md:text-base font-light max-w-3xl mb-6 leading-relaxed">{post.excerpt}</p>
+                                <p className="text-[#9CA3AF] text-sm md:text-base font-light max-w-3xl mb-6 leading-relaxed">
+                                    {getLocalizedField(post.excerpt, i18n.language, '')}
+                                </p>
                                 <div className="flex gap-3">
                                     {post.tags.map(tag => (
                                         <span key={tag} className="text-[9px] font-mono border border-white/10 px-3 py-1.5 text-[#9CA3AF]/60 uppercase tracking-wider">{tag}</span>
@@ -2173,6 +2168,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
 
 // --- ADMIN PAGE ---
 const AdminPage = ({ onHome }: { onHome: () => void }) => {
+    const { t, i18n } = useTranslation();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
     const [loginError, setLoginError] = useState('');
@@ -2392,7 +2388,7 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                             {transmissions.map(post => (
                                 <div key={post.id} className="flex justify-between items-center p-4 border border-white/10 hover:border-white/20 transition-colors">
                                     <div>
-                                        <h3 className="text-white font-mono text-sm">{post.title}</h3>
+                                        <h3 className="text-white font-mono text-sm">{getLocalizedField(post.title, i18n.language, 'UNTITLED')}</h3>
                                         <p className="text-[#9CA3AF] text-xs font-mono">{post.date} // {post.tags.join(', ')}</p>
                                     </div>
                                     <div className="flex gap-2">
