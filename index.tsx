@@ -1336,6 +1336,7 @@ const addAutoplayToUrl = (url: string): string => {
 const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void }) => {
     const { t } = useTranslation();
     const [isPlaying, setIsPlaying] = useState(false);
+    const [panelHidden, setPanelHidden] = useState(false);
 
     useEffect(() => {
         document.body.style.overflow = 'hidden';
@@ -1348,6 +1349,10 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
         return () => window.removeEventListener('keydown', handleKeyDown);
     }, [onClose]);
 
+    useEffect(() => {
+        if (isPlaying) setPanelHidden(true);
+    }, [isPlaying]);
+
     if (!project) return null;
 
     const isHorizontal = project.orientation === 'horizontal';
@@ -1356,10 +1361,16 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
     const isVideoFile = project.videoUrl ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(project.videoUrl) : false;
 
     return (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center p-2 md:p-6 lg:p-10">
+        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-700" onClick={onClose}></div>
 
-            <div className={`relative ${isHorizontal ? 'max-w-[1240px] aspect-video' : 'max-w-[420px] aspect-[9/16]'} w-[95%] flex bg-black border border-white/20 shadow-[0_0_80px_rgba(0,0,0,0.9)] animate-fade-in-up overflow-hidden`}>
+            <div
+                className={`relative ${isHorizontal ? 'aspect-video' : 'aspect-[9/16]'} flex bg-black border border-white/20 shadow-[0_0_80px_rgba(0,0,0,0.9)] animate-fade-in-up overflow-hidden`}
+                style={isHorizontal
+                    ? { width: 'min(calc(100vw - 4rem), calc((100vh - 4rem) * 16 / 9), 1200px)' }
+                    : { height: 'min(calc(100vh - 4rem), calc((100vw - 4rem) * 16 / 9), 860px)' }
+                }
+            >
 
                 {/* CLOSE — CENTERED */}
                 <button
@@ -1394,7 +1405,7 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
 
                                 {/* MONOLITH PLAY BUTTON */}
                                 {project.videoUrl && (
-                                    <div className="absolute inset-0 flex items-center justify-center">
+                                    <div className={`absolute flex items-center justify-center top-0 left-0 right-0 bottom-[45%] ${isHorizontal ? 'md:bottom-0 md:right-[380px]' : ''}`}>
                                         <div className="relative group/mono">
                                             <div className="absolute -inset-3 border border-[#DC2626]/20 transition-all duration-1000 group-hover/mono:border-[#DC2626]/50"></div>
                                             <div className="w-14 h-28 border border-[#DC2626] flex items-center justify-center group-hover/mono:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all duration-700 bg-transparent">
@@ -1416,10 +1427,32 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                     </div>
                 </div>
 
+                {/* ─── INFO PANEL PULL-BACK TAB (só quando escondido) ───── */}
+                {panelHidden && (
+                    <button
+                        onClick={() => setPanelHidden(false)}
+                        className={`absolute z-30 flex items-center justify-center transition-all duration-300
+                            border border-white/20 bg-[#050505]/80 backdrop-blur-sm hover:bg-white/10 hover:border-white/40
+                            ${isHorizontal
+                                ? 'hidden md:flex top-1/2 -translate-y-1/2 right-0 w-5 h-14 rounded-l-sm'
+                                : 'left-1/2 -translate-x-1/2 bottom-0 h-5 w-14 rounded-t-sm'
+                            }`}
+                    >
+                        <span className="font-mono text-[9px] text-white/40 hover:text-white/70 transition-colors"
+                            style={{ writingMode: isHorizontal ? 'vertical-rl' : 'horizontal-tb' }}>
+                            {isHorizontal ? '◀' : '▲'}
+                        </span>
+                    </button>
+                )}
+
                 {/* ─── INFO PANEL HUD OVERLAY ───────────────────────────── */}
-                <div className={`absolute z-20 flex flex-col overflow-hidden transition-all duration-700 delay-300 ${isHorizontal
-                    ? 'right-0 top-0 bottom-0 w-[320px] md:w-[380px] border-l border-white/10 bg-[#050505]/80 backdrop-blur-xl'
-                    : 'bottom-0 left-0 right-0 h-[45%] border-t border-white/10 bg-[#050505]/95 backdrop-blur-xl'
+                <div className={`absolute z-20 flex flex-col overflow-hidden transition-all duration-700
+                    ${isHorizontal
+                        ? `bottom-0 left-0 right-0 h-[45%] border-t border-white/10 bg-[#050505]/95 backdrop-blur-xl
+                           md:bottom-auto md:left-auto md:right-0 md:top-0 md:h-auto md:w-[380px] md:border-t-0 md:border-l md:bg-[#050505]/80
+                           ${panelHidden ? 'translate-y-full md:translate-y-0 md:translate-x-full' : 'translate-y-0 md:translate-x-0'}`
+                        : `bottom-0 left-0 right-0 h-[45%] border-t border-white/10 bg-[#050505]/95 backdrop-blur-xl
+                           ${panelHidden ? 'translate-y-full' : 'translate-y-0'}`
                     }`}>
 
                     {/* TERMINAL HEADER BAR */}
@@ -1428,9 +1461,6 @@ const ProjectModal = ({ project, onClose }: { project: Work, onClose: () => void
                     </div>
 
                     <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative">
-                        {/* Scanning effect line */}
-                        <div className="absolute top-0 left-0 w-full h-[2px] bg-[#DC2626]/20 animate-scan pointer-events-none z-10 shadow-[0_0_15px_#DC2626]" />
-
                         <div className="px-8 pt-12 pb-6 flex-shrink-0">
                             {/* System Status */}
                             <div className="flex items-center gap-3 mb-8">
