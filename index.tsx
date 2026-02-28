@@ -1432,18 +1432,17 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                 {/* ─── MEDIA PANEL (FULL BACKGROUND) ───────────────── */}
                 <div className="absolute inset-0 z-0 bg-black">
                     <div className="absolute inset-0 w-full h-full modal-video-noise">
-                        {/* Always mount iframe for Safari to have time to load, but hide it visually until played */}
-                        {project.videoUrl && (
-                            <div className={`absolute inset-0 z-10 w-full h-full transition-opacity duration-700 ${isPlaying ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+                        {project.videoUrl && isPlaying ? (
+                            <div className="w-full h-full">
                                 {vimeoId ? (
                                     <iframe src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&background=1&muted=1&playsinline=1`} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen" title={project.title}></iframe>
                                 ) : youtubeId ? (
                                     <iframe src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&loop=1&playlist=${youtubeId}&mute=1&playsinline=1`} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen" title={project.title}></iframe>
                                 ) : (
-                                    <iframe ref={iframeRef} src={addAutoplayToUrl(project.videoUrl)} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" title={project.title}></iframe>
+                                    <iframe src={addAutoplayToUrl(project.videoUrl)} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" title={project.title}></iframe>
                                 )}
                             </div>
-                        )}
+                        ) : null}
 
                         {(!isPlaying || !project.videoUrl) && (
                             <div className="w-full h-full relative cursor-pointer group" onClick={handlePlay}>
