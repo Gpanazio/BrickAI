@@ -114,6 +114,20 @@ const GlobalStyles = () => (
         /* NOISE REMOVED BY USER REQUEST */
         .card-noise { display: none; }
 
+        @keyframes crt-glitch-text {
+            0% { text-shadow: 2px 0 0 rgba(220,38,38,0.8), -2px 0 0 rgba(0,255,255,0.5), 0 0 10px rgba(220,38,38,0.6); }
+            20% { text-shadow: -2px 0 0 rgba(220,38,38,0.8), 2px 0 0 rgba(0,255,255,0.5), 0 0 15px rgba(220,38,38,0.6); }
+            40% { text-shadow: 2px 0 0 rgba(220,38,38,0.8), -2px 0 0 rgba(0,255,255,0.5), 0 0 10px rgba(220,38,38,0.8); }
+            60% { text-shadow: -2px 0 0 rgba(220,38,38,0.8), 2px 0 0 rgba(0,255,255,0.5), 0 0 15px rgba(220,38,38,0.5); }
+            80% { text-shadow: 2px 0 0 rgba(220,38,38,0.8), -2px 0 0 rgba(0,255,255,0.5), 0 0 20px rgba(220,38,38,0.8); }
+            100% { text-shadow: -2px 0 0 rgba(220,38,38,0.8), 2px 0 0 rgba(0,255,255,0.5), 0 0 10px rgba(220,38,38,0.6); }
+        }
+        .nav-btn-crt:hover {
+            animation: crt-glitch-text 0.12s infinite;
+            color: #ffffff;
+            opacity: 1;
+        }
+
 
         /* NEW: TECH GRID PATTERN FOR PROJECTS */
         .bg-tech-grid {
@@ -1222,7 +1236,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             {/* ARTIFICIAL DEPTH OVERLAYS REMOVED FOR CLEANER LOOK */}
 
             {/* VIGNETTE & GRADIENT */}
-            <div className="absolute inset-0 z-30 transition-opacity duration-[6000ms] ease-linear opacity-90 group-hover:opacity-80" style={{ background: 'linear-gradient(to top, #050505 0%, #050505e6 15%, #05050599 40%, transparent 70%)' }}></div>
+            <div className="absolute inset-0 z-30 transition-opacity duration-[6000ms] ease-linear opacity-90 group-hover:opacity-80" style={{ background: 'linear-gradient(to top, #050505cc 0%, #05050580 20%, #05050540 40%, transparent 65%)' }}></div>
             <div className={`absolute inset-0 z-30 transition-opacity duration-[6000ms] ease-linear pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.8)] ${isHovered ? 'opacity-40' : 'opacity-60'}`}></div>
 
             {/* CONTENT LAYER - ULTRA MINIMALIST NO BLOCKS */}
@@ -1336,9 +1350,12 @@ const addAutoplayToUrl = (url: string): string => {
     try {
         const u = new URL(url);
         u.searchParams.set('autoplay', '1');
+        u.searchParams.set('muted', '1');
+        u.searchParams.set('playsinline', '1');
         return u.toString();
     } catch {
-        return url.includes('?') ? `${url}&autoplay=1` : `${url}?autoplay=1`;
+        // Fallback para URLs relativas
+        return url.includes('?') ? `${url}&autoplay=1&muted=1&playsinline=1` : `${url}?autoplay=1&muted=1&playsinline=1`;
     }
 };
 
@@ -1346,7 +1363,12 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
     const { t } = useTranslation();
     const [isPlaying, setIsPlaying] = useState(false);
     const [panelHidden, setPanelHidden] = useState(false);
+    const [videoWasHovered, setVideoWasHovered] = useState(false);
+    const iframeRef = useRef<HTMLIFrameElement>(null);
 
+    const handlePlay = () => {
+        setIsPlaying(true);
+    };
     useEffect(() => {
         document.body.style.overflow = 'hidden';
         return () => { document.body.style.overflow = 'unset'; };
@@ -1384,8 +1406,8 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
 
             {/* NAV PREV */}
             {onPrev && (
-                <button onClick={onPrev} className="hidden md:flex items-center justify-center z-[115] text-red-500/60 hover:text-red-500 transition-all px-3 active:scale-90 shrink-0"
-                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '22px' }}>
+                <button onClick={onPrev} className="hidden md:flex items-center justify-center z-[115] text-red-500/60 nav-btn-crt transition-all duration-300 hover:scale-125 hover:-translate-x-1 px-4 active:scale-90 shrink-0"
+                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '36px' }}>
                     &lt;
                 </button>
             )}
@@ -1410,20 +1432,21 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                 {/* ─── MEDIA PANEL (FULL BACKGROUND) ───────────────── */}
                 <div className="absolute inset-0 z-0 bg-black">
                     <div className="absolute inset-0 w-full h-full modal-video-noise">
-                        {project.videoUrl && isPlaying ? (
-                            <div className="w-full h-full">
+                        {/* Always mount iframe for Safari to have time to load, but hide it visually until played */}
+                        {project.videoUrl && (
+                            <div className={`absolute inset-0 z-10 w-full h-full transition-opacity duration-700 ${isPlaying ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
                                 {vimeoId ? (
-                                    <iframe src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&background=1&muted=1`} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen" title={project.title}></iframe>
+                                    <iframe src={`https://player.vimeo.com/video/${vimeoId}?autoplay=1&loop=1&background=1&muted=1&playsinline=1`} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen" title={project.title}></iframe>
                                 ) : youtubeId ? (
-                                    <iframe src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&loop=1&playlist=${youtubeId}&mute=1`} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen" title={project.title}></iframe>
-                                ) : isVideoFile ? (
-                                    <video src={project.videoUrl} className="w-full h-full object-cover" autoPlay loop muted playsInline />
+                                    <iframe src={`https://www.youtube.com/embed/${youtubeId}?autoplay=1&loop=1&playlist=${youtubeId}&mute=1&playsinline=1`} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen" title={project.title}></iframe>
                                 ) : (
-                                    <iframe src={project.videoUrl} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen" title={project.title}></iframe>
+                                    <iframe ref={iframeRef} src={addAutoplayToUrl(project.videoUrl)} className="w-full h-full" frameBorder="0" allow="autoplay; fullscreen; encrypted-media; picture-in-picture" title={project.title}></iframe>
                                 )}
                             </div>
-                        ) : (
-                            <div className="w-full h-full relative cursor-pointer group" onClick={() => setIsPlaying(true)}>
+                        )}
+
+                        {(!isPlaying || !project.videoUrl) && (
+                            <div className="w-full h-full relative cursor-pointer group" onClick={handlePlay}>
                                 {/* Thumbnail */}
                                 <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[5000ms] group-hover:scale-103" style={{ backgroundImage: `url('${project.imageHome}')` }}></div>
                                 {/* Dark vignette */}
@@ -1431,7 +1454,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
 
                                 {/* MONOLITH PLAY BUTTON */}
                                 {project.videoUrl && (
-                                    <div className={`absolute flex items-center justify-center top-0 left-0 right-0 bottom-[45%] ${isHorizontal ? 'md:bottom-0 md:right-[380px]' : ''}`}>
+                                    <div className={`absolute top-0 left-0 flex items-center justify-center right-0 bottom-[55%] ${isHorizontal ? 'md:bottom-0 md:right-[380px]' : ''}`}>
                                         <div className="relative group/mono">
                                             <div className="absolute -inset-3 border border-[#DC2626]/20 transition-all duration-1000 group-hover/mono:border-[#DC2626]/50"></div>
                                             <div className="w-14 h-28 border border-[#DC2626] flex items-center justify-center group-hover/mono:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all duration-700 bg-transparent">
@@ -1485,7 +1508,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                         <div className="px-4 pt-4 pb-3 md:px-8 md:pt-12 md:pb-6 flex-shrink-0">
                             {/* System Status */}
                             <div className="flex items-center gap-3 mb-3 md:mb-8 animate-system-input">
-                                <span className="font-mono text-[9px] tracking-[0.4em] uppercase"><span className="text-red-500">&gt;&gt;</span><span className="text-white/40"> ACCESSING_DATA</span><span className="text-red-500 animate-blink tracking-normal">_</span></span>
+                                <span className="font-mono text-[9px] tracking-[0.4em] uppercase"><span className="text-red-500">&gt;&gt; </span><span className="text-white/40"> ACCESSING_DATA</span><span className="text-red-500 animate-blink tracking-normal">_</span></span>
                             </div>
 
                             {/* Title */}
@@ -1541,8 +1564,8 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
 
             {/* NAV NEXT */}
             {onNext && (
-                <button onClick={onNext} className="hidden md:flex items-center justify-center z-[115] text-red-500/60 hover:text-red-500 transition-all px-3 active:scale-90 shrink-0"
-                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '22px' }}>
+                <button onClick={onNext} className="hidden md:flex items-center justify-center z-[115] text-red-500/60 nav-btn-crt transition-all duration-300 hover:scale-125 hover:translate-x-1 px-4 active:scale-90 shrink-0"
+                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '36px' }}>
                     &gt;
                 </button>
             )}
@@ -1654,7 +1677,7 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('works_page.archive_index').split('_').slice(0, -1).join('_')}_<span className="text-[#DC2626]">{t('works_page.archive_index').split('_').slice(-1)[0]}</span></h1>
-                            <p className="font-mono text-[10px] md:text-xs tracking-widest max-w-xl animate-system-input"><span className="text-[#DC2626]">&gt;&gt;</span> <span className="text-[#9CA3AF]">{t('works_page.accessing')} <span className="text-white">{works.length}</span> {t('works_page.entries_found')}</span></p>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest max-w-xl animate-system-input"><span className="text-[#DC2626]">&gt;&gt; </span> <span className="text-[#9CA3AF]">{t('works_page.accessing')} <span className="text-white">{works.length}</span> {t('works_page.entries_found')}</span></p>
                         </div>
                     </div>
                 </section>
@@ -1743,7 +1766,7 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('transmissions_page.title').split('_').slice(0, -1).join('_')}_<span className="text-[#DC2626]">{t('transmissions_page.title').split('_').slice(-1)[0]}</span></h1>
-                            <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input"><span className="text-[#DC2626]">&gt;&gt;</span> <span className="text-[#9CA3AF]">{t('transmissions_page.incoming')} <span className="text-white">{transmissions.length}</span> {t('transmissions_page.records')}</span></p>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input"><span className="text-[#DC2626]">&gt;&gt; </span> <span className="text-[#9CA3AF]">{t('transmissions_page.incoming')} <span className="text-white">{transmissions.length}</span> {t('transmissions_page.records')}</span></p>
                         </div>
                     </div>
                 </section>
@@ -1868,7 +1891,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                     <div className="flex flex-col md:flex-row justify-between items-end mb-12">
                         <div>
                             <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">REACH_<span className="text-[#DC2626]">HUMANS</span></h1>
-                            <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input"><span className="text-[#DC2626]">&gt;&gt;</span> <span className="text-[#9CA3AF]">{t('chat.manual_override')}</span></p>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input"><span className="text-[#DC2626]">&gt;&gt; </span> <span className="text-[#9CA3AF]">{t('chat.manual_override')}</span></p>
                         </div>
                     </div>
 
@@ -2112,7 +2135,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                                 <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">
                                     {t('about.origin').split('_')[0]}_<span className="text-[#DC2626]">{t('about.origin').split('_').slice(1).join('_')}</span>
                                 </h1>
-                                <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input"><span className="text-[#DC2626]">&gt;&gt;</span> <span className="text-[#9CA3AF]">ACCESS_GRANTED // <span className="text-white">{t('about.est')}</span></span></p>
+                                <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input"><span className="text-[#DC2626]">&gt;&gt; </span> <span className="text-[#9CA3AF]">ACCESS_GRANTED // <span className="text-white">{t('about.est')}</span></span></p>
                             </div>
                         </div>
 
