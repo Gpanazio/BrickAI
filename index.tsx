@@ -1284,7 +1284,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => void }) => {
     const { t } = useTranslation();
     return (
-        <section id="works" className="w-full pt-16 pb-0 bg-[#050505] border-t border-white/5 relative z-40 md:overflow-hidden">
+        <section id="works" className="w-full pt-20 pb-0 bg-[#050505] border-t border-white/5 relative z-40 md:overflow-hidden">
             <div className="px-6 md:px-12 lg:px-24 mb-12 reveal flex justify-between items-end border-b border-white/10 pb-4">
                 <div className="flex items-center gap-3">
                     <Database className="w-4 h-4 text-[#DC2626]" />
@@ -1704,7 +1704,7 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, 
             <button onClick={onBack} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_index')}
             </button>
-            <main className="pt-34 md:pt-40 min-h-screen flex flex-col bg-[#050505] pb-40 md:pb-48 px-4 md:px-8" onClick={onBack}>
+            <main className="pt-32 md:pt-40 min-h-screen flex flex-col bg-[#050505] pb-32 md:pb-40 px-4 md:px-8" onClick={onBack}>
                 <article className="w-full max-w-5xl mx-auto mt-12 md:mt-16 animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
                     <div className="relative border border-white/10 bg-[#070707] backdrop-blur-sm overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#DC2626] to-transparent opacity-80"></div>
@@ -2123,7 +2123,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                 <div className="scanline-effect opacity-10 pointer-events-none"></div>
 
                 {/* ── HERO: DOSSIER STYLE ── */}
-                <section className="pb-20 border-b border-white/10 reveal relative overflow-hidden">
+                <section className="pb-24 md:pb-32 border-b border-white/10 reveal relative overflow-hidden">
                     {/* Background breathing glow — bleeds like home */}
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none animate-breathe"></div>
                     <div className="w-full px-6 md:px-12 lg:px-24">
