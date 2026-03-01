@@ -1420,14 +1420,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                 }
             >
 
-                {/* CLOSE — CENTERED */}
-                <button
-                    onClick={onClose}
-                    className="absolute top-5 right-5 z-[120] text-white/20 hover:text-white transition-all p-1 active:scale-95"
-                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', letterSpacing: '0.2em' }}
-                >
-                    [ESC]
-                </button>
+                {/* CLOSE — handled inside info panel header */}
 
                 {/* ─── MEDIA PANEL (FULL BACKGROUND) ───────────────── */}
                 <div className="absolute inset-0 z-0 bg-black">
@@ -1504,10 +1497,17 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                     }`}>
 
                     <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative">
-                        <div className="px-4 pt-4 pb-3 md:px-8 md:pt-12 md:pb-6 flex-shrink-0">
+                        <div className="px-4 pt-4 pb-3 md:px-8 md:pt-5 md:pb-6 flex-shrink-0">
                             {/* System Status */}
-                            <div className="flex items-center gap-3 mb-3 md:mb-8 animate-system-input">
+                            <div className="flex items-center justify-between mb-3 md:mb-8 animate-system-input pt-px">
                                 <span className="font-mono text-[9px] tracking-[0.4em] uppercase"><span className="text-red-500">&gt;&gt; </span><span className="text-white/40"> ACCESSING_DATA</span><span className="text-red-500 animate-blink tracking-normal">_</span></span>
+                                <button
+                                    onClick={onClose}
+                                    className="text-white/20 hover:text-white transition-all p-1 active:scale-95 flex-shrink-0"
+                                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', letterSpacing: '0.2em' }}
+                                >
+                                    [ESC]
+                                </button>
                             </div>
 
                             {/* Title */}
@@ -1531,7 +1531,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
 
                         <div className="px-8 py-4 mb-8">
                             <div className="font-mono text-[8px] text-white/20 mb-4 tracking-[0.4em]">// SYSTEM_LOG</div>
-                            <p className="text-white/70 text-[13px] leading-[1.8] font-light tracking-wide max-w-md italic font-mono border-l border-white/5 pl-5">
+                            <p className="text-white/50 text-[11px] leading-[1.7] tracking-[0.04em] max-w-md font-mono border-l border-white/5 pl-5">
                                 {project.longDesc || project.desc}
                             </p>
                         </div>
@@ -2175,7 +2175,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                 </section>
 
                 {/* ── CAPACIDADES: INDUSTRIAL GRID ── */}
-                <section className="pt-12 md:pt-16 pb-24 md:pb-32 reveal bg-[#080808]">
+                <section className="pt-24 md:pt-32 pb-24 md:pb-32 reveal bg-[#080808]">
                     <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
                         <div className="flex items-center justify-between mb-16">
                             <div className="flex items-center gap-4">
@@ -2213,7 +2213,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                 </section>
 
                 {/* ── MANIFESTO: BRUTALIST BLOCKS ── */}
-                <section className="pt-12 md:pt-16 pb-12 md:pb-16 reveal bg-[#050505]">
+                <section className="pt-24 md:pt-32 pb-24 md:pb-32 reveal bg-[#050505]">
                     <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
                         <div className="flex items-center justify-between mb-16 border-b border-white/10 pb-6">
                             <div className="flex items-center gap-4">
