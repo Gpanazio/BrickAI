@@ -38,7 +38,10 @@ const upload = multer({ storage });
 // Conexão com o Banco de Dados (Railway fornece DATABASE_URL)
 const pool = new pg.Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false } // Necessário para Railway
+    ssl: { rejectUnauthorized: false }, // Necessário para Railway
+    connectionTimeoutMillis: 10000,     // Desiste de uma tentativa após 10s
+    idleTimeoutMillis: 30000,           // Fecha conexões ociosas após 30s
+    max: 5                              // Limita conexões simultâneas no proxy Railway
 });
 
 // Evita crash da aplicação quando o banco desconecta por inatividade
@@ -77,7 +80,9 @@ app.use('/assets', express.static(path.join(__dirname, 'dist', 'assets'), {
 }));
 
 // --- INICIALIZAÇÃO DO DB (Cria apenas as tabelas de conteúdo) ---
-const initDB = async (retries = 10) => {
+const initDB = async (retries = 15) => {
+    // Aguarda 3s para o proxy Railway estar pronto antes da primeira tentativa
+    await new Promise(res => setTimeout(res, 3000));
     while (retries > 0) {
         try {
             console.log(`>> ATTEMPTING DB CONNECTION... (${retries} left)`);
@@ -122,7 +127,7 @@ const initDB = async (retries = 10) => {
         } catch (err) {
             console.error(">> DB INIT ERROR:", err.message);
             retries -= 1;
-            await new Promise(res => setTimeout(res, 5000)); // Espera 5s antes de tentar de novo
+            if (retries > 0) await new Promise(res => setTimeout(res, 8000)); // Espera 8s antes de tentar de novo
         }
     }
 };
