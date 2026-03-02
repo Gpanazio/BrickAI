@@ -195,38 +195,10 @@ const GlobalStyles = () => (
             color: transparent;
         }
 
-        @keyframes marqueeVertical {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-50%); }
-        }
-        .animate-marquee-vertical {
-            animation: marqueeVertical 40s linear infinite;
-        }
-        .animate-marquee-vertical-reverse {
-            animation: marqueeVertical 50s linear infinite reverse;
-        }
-        @keyframes rgb-shift {
-            0% { text-shadow: 1px 0 0 rgba(220,38,38,0.5), -1px 0 0 rgba(0,255,255,0.3); transform: translate(0,0); }
-            20% { text-shadow: -1px 0 0 rgba(220,38,38,0.5), 1px 0 0 rgba(0,255,255,0.3); transform: translate(-1px, 1px); }
-            40% { text-shadow: 1px 0 0 rgba(220,38,38,0.5), -1px 0 0 rgba(0,255,255,0.3); transform: translate(1px, -1px); }
-            60% { text-shadow: -1px 0 0 rgba(220,38,38,0.5), 1px 0 0 rgba(0,255,255,0.3); transform: translate(-1px, -1px); }
-            100% { text-shadow: 1px 0 0 rgba(220,38,38,0.5), -1px 0 0 rgba(0,255,255,0.3); transform: translate(0,0); }
-        }
-        .animate-rgb-glitch {
-            animation: rgb-shift 0.2s steps(2) infinite;
-        }
-        @keyframes particle-float {
-            0% { transform: translateY(0) translateX(0); opacity: 0; }
-            50% { opacity: 0.5; }
-            100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
-        }
-        .neural-particle {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            background: #DC2626;
-            pointer-events: none;
-            animation: particle-float 15s linear infinite;
+        /* LEGACY SECTION UTILS */
+        .text-stroke {
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
+            color: transparent;
         }
 
         /* DEEP SPACE NOISE OVERLAY */
@@ -1263,121 +1235,35 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
 };
 
 const Legacy = () => {
-    const { t } = useTranslation();
-    const [isHovered, setIsHovered] = useState<string | null>(null);
-    const sectionRef = useRef<HTMLElement>(null);
-    const [isActive, setIsActive] = useState(false);
-
-    useEffect(() => {
-        const observer = new IntersectionObserver(([entry]) => {
-            if (entry.isIntersecting) setIsActive(true);
-        }, { threshold: 0.2 });
-        if (sectionRef.current) observer.observe(sectionRef.current);
-        return () => observer.disconnect();
-    }, []);
-
-    // Split clients into 3 columns for vertical marquee
-    const col1 = CLIENTS.slice(0, 3);
-    const col2 = CLIENTS.slice(3, 6);
-    const col3 = CLIENTS.slice(6, 9);
+    const clients = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO"];
 
     return (
-        <section
-            ref={sectionRef}
-            className={`w-full py-40 px-6 md:px-12 lg:px-24 bg-[#050505] text-white relative overflow-hidden border-t border-white/5 transition-all duration-1000 ${isActive ? 'active shadow-[inset_0_0_100px_rgba(220,38,38,0.05)]' : ''}`}
-        >
-            {/* Neural Particles Background */}
-            <div className="absolute inset-0 pointer-events-none opacity-20">
-                {[...Array(20)].map((_, i) => (
-                    <div
-                        key={i}
-                        className="neural-particle"
-                        style={{
-                            left: `${Math.random() * 100}%`,
-                            top: `${Math.random() * 100}%`,
-                            animationDelay: `${Math.random() * 15}s`,
-                            animationDuration: `${10 + Math.random() * 10}s`
-                        }}
-                    ></div>
-                ))}
-            </div>
+        <section className="w-full py-40 px-6 md:px-12 lg:px-24 bg-brick-white text-brick-black relative overflow-hidden border-t border-black/5">
+            <div className="max-w-6xl mx-auto reveal">
+                <h2 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-16 leading-[0.85] uppercase">
+                    Backed <br className="md:hidden" /> By Brick.
+                </h2>
 
-            {/* Aperture Frame - "L" Shapes */}
-            <div className={`absolute top-10 left-10 w-24 h-24 border-l-2 border-t-2 border-[#DC2626]/40 transition-all duration-1000 ${isActive ? 'top-6 left-6 opacity-100' : 'opacity-0'}`}></div>
-            <div className={`absolute top-10 right-10 w-24 h-24 border-r-2 border-t-2 border-[#DC2626]/40 transition-all duration-1000 ${isActive ? 'top-6 right-6 opacity-100' : 'opacity-0'}`}></div>
-            <div className={`absolute bottom-10 left-10 w-24 h-24 border-l-2 border-b-2 border-[#DC2626]/40 transition-all duration-1000 ${isActive ? 'bottom-6 left-6 opacity-100' : 'opacity-0'}`}></div>
-            <div className={`absolute bottom-10 right-10 w-24 h-24 border-r-2 border-b-2 border-[#DC2626]/40 transition-all duration-1000 ${isActive ? 'bottom-6 right-6 opacity-100' : 'opacity-0'}`}></div>
+                <div className="flex flex-col md:flex-row gap-16 border-t-4 border-brick-black pt-12">
+                    <p className="text-xl md:text-2xl font-medium leading-tight max-w-md">
+                        This isn't a beta test. This is a new lens from a production house with 10 years of experience. Same directors. Same producers. New tools.
+                    </p>
 
-            <div className="max-w-[1400px] mx-auto relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+                    <div className="flex-1">
+                        <h4 className="text-xs font-bold tracking-[0.2em] uppercase mb-10 text-neutral-500 border-b border-neutral-300 pb-4 inline-block">Trusted By</h4>
 
-                    {/* Left Column: Title & Logic */}
-                    <div className="lg:col-span-5 reveal">
-                        <div className="mb-12 relative">
-                            <div className="font-mono text-[11px] text-[#DC2626] mb-6 tracking-[0.4em] flex items-center gap-4">
-                                <span className={`w-1.5 h-1.5 bg-[#DC2626] ${isActive ? 'animate-ping' : ''}`}></span>
-                                PROTOCOL: BRICK_LEGACY_v2.0
-                            </div>
-                            <h2 className="text-6xl md:text-8xl font-brick leading-[0.8] mb-10 tracking-tighter">
-                                <span className="block hover:animate-rgb-glitch transition-all cursor-crosshair">
-                                    <ScrambleText text={t('legacy.title')} triggerOnReveal={true} />
-                                </span>
-                            </h2>
-                            <div className="space-y-6">
-                                <p className="text-xl md:text-2xl text-white font-light leading-snug max-w-lg">
-                                    {t('legacy.text')}
-                                </p>
-                                <div className="flex items-center gap-6">
-                                    <div className="h-px flex-1 bg-gradient-to-r from-[#DC2626] to-transparent opacity-30"></div>
-                                    <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-[0.5em]">AUTH.VERIFIED</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Right Column: Vertical Cinematic Credits/Marquee */}
-                    <div className="lg:col-span-7 reveal delay-300 relative h-[500px] md:h-[600px] overflow-hidden rounded-sm border border-white/5 bg-black/40 backdrop-blur-sm shadow-2xl">
-                        <div className="absolute inset-0 bg-tech-grid opacity-10 pointer-events-none"></div>
-                        <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505] z-20 pointer-events-none"></div>
-
-                        <div className="grid grid-cols-3 h-full px-4 md:px-8">
-                            {[col1, col2, col3].map((column, colIdx) => (
-                                <div key={colIdx} className={`flex flex-col gap-8 py-10 ${colIdx === 1 ? 'animate-marquee-vertical-reverse' : 'animate-marquee-vertical'}`}>
-                                    {[...column, ...column, ...column, ...column, ...column].map((client, i) => (
-                                        <div
-                                            key={i}
-                                            onMouseEnter={() => setIsHovered(`${colIdx}-${i}`)}
-                                            onMouseLeave={() => setIsHovered(null)}
-                                            className="group/client relative py-6 flex flex-col items-center justify-center border-y border-white/0 hover:border-white/5 transition-all duration-300"
-                                        >
-                                            <span className="text-base md:text-xl font-ai text-white/30 group-hover/client:text-[#DC2626] transition-all duration-500 uppercase tracking-tighter text-center">
-                                                <ScrambleText text={client} hoverTrigger={true} />
-                                            </span>
-
-                                            {/* HUD Metadata Overlay on Hover */}
-                                            {isHovered === `${colIdx}-${i}` && (
-                                                <div className="absolute -right-4 md:-right-8 top-0 flex flex-col gap-1 pointer-events-none z-30 slide-in-right">
-                                                    <div className="bg-[#DC2626] text-[8px] font-mono px-2 py-0.5 text-white">TARGET_LOCK</div>
-                                                    <div className="bg-black/80 border border-white/10 text-[7px] font-mono px-2 py-0.5 text-[#9CA3AF]">COORD: {(1000 + Math.random() * 9000).toFixed(0)}</div>
-                                                    <div className="bg-black/80 border border-white/10 text-[7px] font-mono px-2 py-0.5 text-[#9CA3AF]">STATUS: DECRYPTED</div>
-                                                </div>
-                                            )}
-
-                                            <div className="absolute inset-0 bg-[#DC2626]/0 group-hover/client:bg-[#DC2626]/5 transition-colors pointer-events-none"></div>
-                                        </div>
-                                    ))}
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-8">
+                            {clients.map((client, i) => (
+                                <div key={i} className="group flex items-center">
+                                    <span className="text-xl md:text-2xl font-black text-neutral-400 group-hover:text-brick-black transition-colors duration-300 cursor-default tracking-tighter uppercase whitespace-nowrap">
+                                        {client}
+                                    </span>
                                 </div>
                             ))}
                         </div>
-
-                        {/* Visual Scanning Line */}
-                        <div className="absolute top-0 left-0 w-full h-[2px] bg-[#DC2626] opacity-30 shadow-[0_0_15px_#DC2626] animate-scan z-30 pointer-events-none"></div>
                     </div>
                 </div>
             </div>
-
-            {/* Bottom Gradient Seal */}
-            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#050505] to-transparent z-20 pointer-events-none"></div>
         </section>
     );
 };

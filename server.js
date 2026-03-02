@@ -93,58 +93,75 @@ app.use('/assets', express.static(path.join(__dirname, 'dist', 'assets'), {
 }));
 
 // --- INICIALIZAÇÃO DO DB (Cria apenas as tabelas de conteúdo) ---
-const initDB = async (retries = 5) => {
-    // Aguarda 1s para o proxy Railway estar pronto antes da primeira tentativa
-    await new Promise(res => setTimeout(res, 1000));
+const initDB = async (retries = 10) => {
+    // No Railway, o proxy pode demorar alguns segundos a mais que o sinal do container
+    await new Promise(res => setTimeout(res, 2000));
+
     while (retries > 0) {
         try {
-            console.log(`>> ATTEMPTING DB CONNECTION... (${retries} left)`);
+            console.log(`>> ATTEMPTING DB CONNECTION... (UID: ${process.env.RAILWAY_SERVICE_ID || 'local'}) (${retries} left)`);
+
+            // Check if we are using the proxy URL inside Railway (which is discouraged)
+            if (process.env.DATABASE_URL && process.env.DATABASE_URL.includes('proxy.rlwy.net') && process.env.RAILWAY_ENVIRONMENT) {
+                console.warn(">> WARNING: Detected Railway Proxy URL inside Railway environment. Use internal URL for better stability.");
+            }
+
+            // Test connection first
+            const client = await pool.connect();
+            console.log(">> DB CONNECTION ESTABLISHED");
+            client.release();
+
             // Cria tabela de usuários admin se não existir
             await pool.query(`
-            CREATE TABLE IF NOT EXISTS master_users (
-                id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-                email TEXT UNIQUE NOT NULL,
-                username TEXT UNIQUE NOT NULL,
-                password_hash TEXT NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        `);
+                CREATE TABLE IF NOT EXISTS master_users (
+                    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                    email TEXT UNIQUE NOT NULL,
+                    username TEXT UNIQUE NOT NULL,
+                    password_hash TEXT NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            `);
             // Cria tabela de Works se não existir
             await pool.query(`
-            CREATE TABLE IF NOT EXISTS works (
-                id TEXT PRIMARY KEY,
-                data JSONB NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        `);
+                CREATE TABLE IF NOT EXISTS works (
+                    id TEXT PRIMARY KEY,
+                    data JSONB NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            `);
             // Cria tabela de Transmissions se não existir
             await pool.query(`
-            CREATE TABLE IF NOT EXISTS transmissions (
-                id TEXT PRIMARY KEY,
-                data JSONB NOT NULL,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        `);
+                CREATE TABLE IF NOT EXISTS transmissions (
+                    id TEXT PRIMARY KEY,
+                    data JSONB NOT NULL,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            `);
             // Tabela de Leads (Contatos)
             await pool.query(`
-            CREATE TABLE IF NOT EXISTS leads (
-                id UUID PRIMARY KEY,
-                email TEXT NOT NULL,
-                message TEXT,
-                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            );
-        `);
+                CREATE TABLE IF NOT EXISTS leads (
+                    id UUID PRIMARY KEY,
+                    email TEXT NOT NULL,
+                    message TEXT,
+                    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+            `);
 
-            console.log(">> DB TABLES CHECKED");
-            break; // Sucesso, sai do loop
+            console.log(">> DB TABLES VERIFIED");
+            return true;
         } catch (err) {
             console.error(">> DB INIT ERROR:", err.message);
             retries -= 1;
-            if (retries > 0) await new Promise(res => setTimeout(res, 3000)); // Espera 3s antes de tentar de novo
+            if (retries > 0) {
+                const wait = 5000;
+                console.log(`>> Retrying in ${wait / 1000}s...`);
+                await new Promise(res => setTimeout(res, wait));
+            }
         }
     }
+    console.error(">> CRITICAL: Could not connect to database after several attempts.");
+    return false;
 };
-initDB();
 
 // --- MIDDLEWARE DE AUTENTICAÇÃO ---
 const authenticateToken = async (req, res, next) => {
@@ -302,7 +319,7 @@ app.post('/api/chat', async (req, res) => {
            - Sabemos enquadrar, iluminar, contar histórias porque fizemos centenas de vezes com câmeras reais
            
            O MANIFESTO ANTI-PROMPT:
-           - Existe uma indústria vendendo a ilusão de que o segredo está no "prompt perfeito"
+           - Existe uma indústria vendendo a illusions de que o segredo está no "prompt perfeito"
            - Bundles com "10.000 prompts profissionais" são o equivalente a vender lista de palavras e chamar de curso de roteiro
            - O prompt é só a interface. O que importa é o que vem antes (referências, direção de arte, storyboard) e depois (curadoria, correção, composição)
            - A diferença entre amador e profissional nunca foi a ferramenta. É o olhar.
@@ -719,6 +736,24 @@ app.get('*', async (req, res) => {
     res.send(html);
 });
 
-app.listen(port, '0.0.0.0', () => {
-    console.log(`>> SERVER ONLINE ON PORT ${port}`);
-});
+// --- STARTUP LOGIC ---
+const start = async () => {
+    console.log("--------------------------------------------------");
+    console.log(`>> BOOT: Brick AI Platform v1.1`);
+    console.log(`>> NODE_ENV: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`>> DATABASE_URL: ${process.env.DATABASE_URL ? 'PRESENT (Masked)' : 'MISSING'}`);
+    console.log(`>> JWT_SECRET: ${process.env.JWT_SECRET ? 'PRESENT' : 'MISSING (Using Default)'}`);
+    console.log(`>> GEMINI_API_KEY: ${process.env.GEMINI_API_KEY ? 'PRESENT' : 'MISSING'}`);
+    console.log("--------------------------------------------------");
+
+    // 1. Bind to port IMMEDIATELY so Railway sees the application is alive
+    app.listen(port, '0.0.0.0', () => {
+        console.log(`>> [HEALTH_CHECK] SERVER LISTENING ON PORT ${port}`);
+        console.log(`>> [HEALTH_CHECK] Endpoint at /health is now active`);
+    });
+
+    // 2. Initialize DB in background
+    initDB();
+};
+
+start();
