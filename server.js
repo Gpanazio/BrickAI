@@ -49,11 +49,20 @@ pool.on('error', (err) => {
     console.error('>> DB POOL ERROR:', err);
 });
 
-// Graceful Shutdown
+// Graceful Shutdown (com timeout para não travar se DB estiver fora)
 const shutdown = async () => {
     console.log(">> SHUTTING DOWN SERVER...");
-    await pool.end();
-    console.log(">> DB POOL CLOSED");
+    const forceExit = setTimeout(() => {
+        console.log(">> FORCED EXIT (pool.end timeout)");
+        process.exit(0);
+    }, 5000);
+    try {
+        await pool.end();
+        console.log(">> DB POOL CLOSED");
+    } catch (e) {
+        console.error(">> Error closing pool:", e.message);
+    }
+    clearTimeout(forceExit);
     process.exit(0);
 };
 
@@ -70,6 +79,10 @@ if (process.env.DATABASE_URL) {
 
 app.use(express.json({ limit: '50mb' })); // Limite alto para imagens em Base64
 app.use(cookieParser());
+
+// Health check — responde 200 sem depender do DB (Railway precisa disso)
+app.get('/health', (req, res) => res.status(200).json({ status: 'ok', uptime: process.uptime() }));
+
 app.use('/uploads', express.static(UPLOADS_DIR)); // Serve as imagens salvas
 app.use(express.static(path.join(__dirname, 'dist'))); // Serve o frontend buildado
 
@@ -80,9 +93,9 @@ app.use('/assets', express.static(path.join(__dirname, 'dist', 'assets'), {
 }));
 
 // --- INICIALIZAÇÃO DO DB (Cria apenas as tabelas de conteúdo) ---
-const initDB = async (retries = 15) => {
-    // Aguarda 3s para o proxy Railway estar pronto antes da primeira tentativa
-    await new Promise(res => setTimeout(res, 3000));
+const initDB = async (retries = 5) => {
+    // Aguarda 1s para o proxy Railway estar pronto antes da primeira tentativa
+    await new Promise(res => setTimeout(res, 1000));
     while (retries > 0) {
         try {
             console.log(`>> ATTEMPTING DB CONNECTION... (${retries} left)`);
@@ -127,7 +140,7 @@ const initDB = async (retries = 15) => {
         } catch (err) {
             console.error(">> DB INIT ERROR:", err.message);
             retries -= 1;
-            if (retries > 0) await new Promise(res => setTimeout(res, 8000)); // Espera 8s antes de tentar de novo
+            if (retries > 0) await new Promise(res => setTimeout(res, 3000)); // Espera 3s antes de tentar de novo
         }
     }
 };
@@ -525,9 +538,9 @@ app.get('*', async (req, res) => {
     let postExcerpt = '';
     if (view === 'post' && postData) {
         postTitle = typeof postData.title === 'string' ? postData.title :
-                   (postData.title && postData.title[lang]) ? postData.title[lang] : 'Article';
+            (postData.title && postData.title[lang]) ? postData.title[lang] : 'Article';
         postExcerpt = typeof postData.excerpt === 'string' ? postData.excerpt :
-                     (postData.excerpt && postData.excerpt[lang]) ? postData.excerpt[lang] : '';
+            (postData.excerpt && postData.excerpt[lang]) ? postData.excerpt[lang] : '';
         title = `${postTitle} | Brick AI`;
         description = postExcerpt || description;
         ogTitle = postTitle;
