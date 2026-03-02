@@ -1437,7 +1437,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
 
                         <div className="px-8 py-4 mb-8">
                             <div className="font-mono text-[8px] text-white/20 mb-4 tracking-[0.4em]">// SYSTEM_LOG</div>
-                            <p className="text-white/50 text-[11px] leading-[1.7] tracking-[0.04em] max-w-md font-mono border-l border-white/5 pl-5">
+                            <p className="text-white/50 text-[12px] leading-[1.7] tracking-[0.04em] max-w-md font-mono border-l border-white/5 pl-5">
                                 {project.longDesc || project.desc}
                             </p>
                         </div>
@@ -1483,7 +1483,7 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
 
     return (
         <div
-            className={`group relative w-full aspect-[2/3] md:aspect-[9/16] border border-white/10 bg-[#050505] overflow-hidden cursor-pointer hover:border-[#DC2626] transition-colors duration-300 reveal`}
+            className={`group relative w-full aspect-square border border-white/10 bg-[#050505] overflow-hidden cursor-pointer hover:border-[#DC2626] transition-colors duration-300 reveal`}
             style={{ animationDelay: `${index * 50}ms` }}
             onClick={() => onOpen(work)}
         >
@@ -1505,13 +1505,13 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
             {/* UPDATED GRADIENT OPACITY */}
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-transparent to-transparent group-hover:opacity-70 transition-opacity duration-300 z-20"></div>
 
-            <div className="absolute inset-0 p-6 flex flex-col justify-between z-30">
+            <div className="absolute inset-0 p-4 flex flex-col justify-between z-30">
                 <div className="flex justify-between items-start opacity-50 group-hover:opacity-100 transition-opacity duration-300">
-                    <span className="font-mono text-[10px] tracking-widest text-[#DC2626]">{(index + 1).toString().padStart(3, '0')}</span>
+                    <span className="font-mono text-[9px] tracking-widest text-[#DC2626]">{(index + 1).toString().padStart(3, '0')}</span>
                 </div>
                 <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                    <h3 className="text-lg md:text-xl font-brick text-white leading-none mb-2 tracking-tight group-hover:text-[#DC2626] transition-colors">{work.title}</h3>
-                    <p className="text-[10px] md:text-xs text-[#9CA3AF] font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">{work.desc}</p>
+                    <h3 className="text-sm font-brick text-white leading-tight mb-1.5 tracking-tight group-hover:text-[#DC2626] transition-colors line-clamp-2">{work.title}</h3>
+                    <p className="text-[9px] text-[#9CA3AF] font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-1">{work.desc}</p>
                 </div>
             </div>
             <div className="absolute top-0 left-0 w-2 h-2 border-l border-t border-white/30 group-hover:border-[#DC2626] transition-colors z-40"></div>
@@ -1587,7 +1587,7 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
                     </div>
                 </section>
                 <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 md:pb-40">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-px bg-white/5">
                         {filteredWorks.map((work, idx) => (
                             <WorksGridItem key={work.id} work={work} index={idx} onOpen={onSelectProject} />
                         ))}
