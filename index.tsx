@@ -357,103 +357,13 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
             },
         ];
 
-        const generatedTransmissions: Post[] = [
-            {
-                id: "log_001",
-                date: "2025.02.14",
-                title: t('transmissions.log_001.title'),
-                excerpt: t('transmissions.log_001.excerpt'),
-                tags: ["THEORY", "NEURAL_RENDERING"],
-                url: "/transmissions/latent-space",
-                content: (
-                    <React.Fragment>
-                        {(t('transmissions.log_001.content_p1') as string).split('\n\n').filter(Boolean).map((paragraph, idx) => (
-                            <p
-                                key={idx}
-                                className="mb-8 text-base md:text-lg font-light text-[#E5E5E5] leading-relaxed md:leading-loose"
-                            >
-                                {paragraph}
-                            </p>
-                        ))}
-                        {t('transmissions.log_001.section_title') ? (
-                            <h3 className="text-lg md:text-xl font-brick text-white mt-10 mb-4 uppercase tracking-tight flex items-center gap-3">
-                                <span className="text-[#DC2626] text-xs align-middle font-ai">01 //</span> {t('transmissions.log_001.section_title')}
-                            </h3>
-                        ) : null}
-                        {t('transmissions.log_001.content_p2') ? (
-                            <p className="mb-6 text-[#9CA3AF] leading-relaxed">
-                                {t('transmissions.log_001.content_p2')}
-                            </p>
-                        ) : null}
-                        {t('transmissions.log_001.quote') ? (
-                            <div className="border-l-2 border-[#DC2626] pl-6 py-4 my-10 bg-white/5">
-                                <p className="text-base font-mono italic text-white/90">
-                                    {t('transmissions.log_001.quote')}
-                                </p>
-                            </div>
-                        ) : null}
-                    </React.Fragment>
-                )
-            },
-            {
-                id: "log_002",
-                date: "2025.01.28",
-                title: t('transmissions.log_002.title'),
-                excerpt: t('transmissions.log_002.excerpt'),
-                tags: ["R&D", "WORKFLOW"],
-                url: "/transmissions/motion-vectors",
-                content: (
-                    <React.Fragment>
-                        {(t('transmissions.log_002.content_p1') as string)
-                            .replace('<0>', '')
-                            .replace('</0>', '')
-                            .split('\n\n')
-                            .filter(Boolean)
-                            .map((paragraph, idx) => (
-                                <p key={idx} className="mb-8 text-[#9CA3AF] leading-relaxed md:leading-loose">
-                                    {paragraph}
-                                </p>
-                            ))}
-                        {t('transmissions.log_002.content_p2') ? (
-                            <p className="mb-8 text-[#9CA3AF] leading-relaxed md:leading-loose">
-                                {t('transmissions.log_002.content_p2')}
-                            </p>
-                        ) : null}
-                    </React.Fragment>
-                )
-            },
-            {
-                id: "log_003",
-                date: "2025.01.10",
-                title: t('transmissions.log_003.title'),
-                excerpt: t('transmissions.log_003.excerpt'),
-                tags: ["PHILOSOPHY", "VFX"],
-                url: "/transmissions/intentional-glitch",
-                content: (
-                    <React.Fragment>
-                        {(t('transmissions.log_003.content_p1') as string)
-                            .split('\n\n')
-                            .filter(Boolean)
-                            .map((paragraph, idx) => (
-                                <p key={idx} className="mb-8 text-[#9CA3AF] leading-relaxed md:leading-loose">
-                                    {paragraph}
-                                </p>
-                            ))}
-                        {t('transmissions.log_003.quote') ? (
-                            <p className="text-white font-brick tracking-widest uppercase border-t border-white/10 pt-6">
-                                {t('transmissions.log_003.quote')}
-                            </p>
-                        ) : null}
-                    </React.Fragment>
-                )
-            }
-        ];
+        // Transmissions are loaded 100% from the DB (no hardcoded fallback).
 
 
         const syncData = async () => {
-            // Start with defaults
+            // Works start from hardcoded defaults (i18n texts preserved), transmissions come 100% from DB
             let finalWorks = [...generatedWorks];
-            let finalTrans = [...generatedTransmissions];
+            let finalTrans: Post[] = [];
 
             try {
                 const [wRes, tRes] = await Promise.all([
@@ -490,11 +400,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 if (tRes.ok) {
                     const dbTrans = await tRes.json();
                     if (Array.isArray(dbTrans)) {
-                        dbTrans.forEach((tr: Post) => {
-                            const idx = finalTrans.findIndex(ft => ft.id === tr.id);
-                            if (idx >= 0) finalTrans[idx] = tr;
-                            else finalTrans.push(tr);
-                        });
+                        finalTrans = dbTrans;
                     }
                 }
 
@@ -1738,7 +1644,11 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, 
                             <div className="max-w-3xl mx-auto">
                                 <div className="prose prose-invert prose-lg max-w-none prose-p:text-[#d2d5db] prose-p:leading-relaxed md:prose-p:leading-loose prose-p:mb-6 md:prose-p:mb-8 prose-headings:font-brick prose-headings:text-white prose-headings:mt-10 prose-headings:mb-4 prose-strong:text-white prose-blockquote:border-[#DC2626] prose-blockquote:text-white/85 prose-blockquote:my-8 prose-a:text-[#DC2626] hover:prose-a:text-white">
                                     {typeof post.content === 'string'
-                                        ? <div dangerouslySetInnerHTML={{ __html: post.content }} />
+                                        ? (post.content as string).split('\n\n').filter(Boolean).map((paragraph, idx) => (
+                                            <p key={idx} className="mb-8 text-base md:text-lg font-light text-[#d2d5db] leading-relaxed md:leading-loose">
+                                                {paragraph}
+                                            </p>
+                                        ))
                                         : post.content}
                                 </div>
                             </div>
