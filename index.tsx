@@ -110,7 +110,18 @@ const GlobalStyles = () => (
         .animate-talking { animation: talking-glitch 0.15s infinite; }
         .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
         .animate-scan { animation: scan 3s ease-in-out forwards; }
-        
+
+        @keyframes ticker-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        @keyframes ticker-right {
+            0% { transform: translateX(-50%); }
+            100% { transform: translateX(0); }
+        }
+        .animate-ticker-left { animation: ticker-left 28s linear infinite; }
+        .animate-ticker-right { animation: ticker-right 35s linear infinite; }
+
         /* NOISE REMOVED BY USER REQUEST */
         .card-noise { display: none; }
 
@@ -1309,47 +1320,65 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
 
 const Legacy = () => {
     const { t } = useTranslation();
+    const tickerRow1 = [...CLIENTS, ...CLIENTS, ...CLIENTS];
+    const tickerRow2 = [...CLIENTS].reverse().concat([...CLIENTS].reverse()).concat([...CLIENTS].reverse());
     return (
-        <section className="w-full py-20 px-6 md:px-12 lg:px-24 bg-[#080808] relative overflow-hidden reveal">
-            <div className="scanline-effect opacity-5 pointer-events-none absolute inset-0"></div>
-            <div className="max-w-[1400px] mx-auto">
+        <section className="w-full bg-[#050505] relative overflow-hidden reveal border-t border-white/5">
 
-                {/* Terminal label */}
-                <div className="flex items-center gap-3 mb-12">
-                    <div className="w-2 h-2 bg-[#DC2626]"></div>
-                    <span className="font-mono text-[10px] tracking-[0.4em] text-white/30 uppercase">// LEGACY_DATA</span>
+            {/* Atmospheric red glow */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
+                <div className="w-[800px] h-[500px] rounded-full blur-[150px] animate-breathe" style={{ background: 'radial-gradient(ellipse, rgba(220,38,38,0.10) 0%, transparent 70%)' }}></div>
+            </div>
+
+            {/* Scanline */}
+            <div className="scanline-effect opacity-[0.03] pointer-events-none absolute inset-0 z-[1]"></div>
+
+            {/* Header content */}
+            <div className="px-6 md:px-12 lg:px-24 pt-20 pb-16 relative z-10">
+                <div className="flex items-center gap-3 mb-14">
+                    <div className="w-1.5 h-1.5 rounded-full bg-[#DC2626] animate-blink"></div>
+                    <span className="font-mono text-[10px] tracking-[0.4em] text-white/25 uppercase">CLIENT_ARCHIVE // {CLIENTS.length}_ENTRIES</span>
+                </div>
+                <div className="grid md:grid-cols-2 gap-10 items-end">
+                    <h2 className="text-5xl md:text-7xl lg:text-[6rem] font-brick text-white leading-[0.85] tracking-tight">
+                        {t('legacy.title').split(' ').slice(0, -2).join(' ')}<br/>
+                        <span className="text-[#DC2626]" style={{ textShadow: '0 0 60px rgba(220,38,38,0.45), 0 0 120px rgba(220,38,38,0.2)' }}>
+                            {t('legacy.title').split(' ').slice(-2).join(' ')}
+                        </span>
+                    </h2>
+                    <p className="font-mono text-sm text-white/40 leading-relaxed max-w-sm border-l-2 border-[#DC2626]/20 pl-6 md:pb-1">
+                        {t('legacy.text')}
+                    </p>
+                </div>
+            </div>
+
+            {/* Ticker rows */}
+            <div className="relative z-10 select-none pb-20">
+
+                {/* Row 1 — left */}
+                <div className="flex overflow-hidden border-t border-white/[0.06] py-5">
+                    <div className="flex shrink-0 animate-ticker-left">
+                        {tickerRow1.map((client, i) => (
+                            <div key={i} className="flex items-center shrink-0 px-10 gap-10">
+                                <span className="font-brick text-4xl md:text-5xl text-white/20 hover:text-[#DC2626] transition-colors duration-500 uppercase tracking-tight cursor-default whitespace-nowrap">{client}</span>
+                                <span className="text-[#DC2626]/25 text-2xl font-brick leading-none">◈</span>
+                            </div>
+                        ))}
+                    </div>
                 </div>
 
-                <div className="flex flex-col lg:flex-row gap-16 border-t border-white/10 pt-16">
-
-                    {/* Left: Title + Description */}
-                    <div className="lg:w-1/2 flex flex-col justify-between gap-12">
-                        <h2 className="text-4xl md:text-6xl lg:text-7xl font-brick text-white leading-[0.85]">
-                            {t('legacy.title').split(' ').slice(0, -2).join(' ')}<br />
-                            <span className="text-[#DC2626]">{t('legacy.title').split(' ').slice(-2).join(' ')}</span>
-                        </h2>
-                        <p className="font-mono text-sm text-[#9CA3AF] leading-relaxed max-w-lg border-l border-white/10 pl-6">
-                            {t('legacy.text')}
-                        </p>
+                {/* Row 2 — right */}
+                <div className="flex overflow-hidden border-t border-b border-white/[0.06] py-5">
+                    <div className="flex shrink-0 animate-ticker-right">
+                        {tickerRow2.map((client, i) => (
+                            <div key={i} className="flex items-center shrink-0 px-10 gap-10">
+                                <span className="font-brick text-4xl md:text-5xl text-white/[0.08] hover:text-white/40 transition-colors duration-500 uppercase tracking-tight cursor-default whitespace-nowrap">{client}</span>
+                                <span className="text-white/[0.08] text-2xl font-brick leading-none">◈</span>
+                            </div>
+                        ))}
                     </div>
-
-                    {/* Right: Client matrix */}
-                    <div className="lg:w-1/2">
-                        <div className="flex items-center gap-3 mb-8">
-                            <span className="text-[#DC2626] font-mono text-xs">&gt;&gt;</span>
-                            <span className="font-mono text-[10px] tracking-[0.3em] text-white/30 uppercase">{t('legacy.trusted_by')}</span>
-                        </div>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-white/5">
-                            {CLIENTS.map((client, i) => (
-                                <div key={i} className="group bg-[#080808] p-5 md:p-6 hover:bg-[#DC2626]/[0.04] transition-colors duration-300 cursor-default">
-                                    <span className="font-mono text-[9px] text-white/20 block mb-2 tracking-widest group-hover:text-[#DC2626]/50 transition-colors">SYS_{String(i + 1).padStart(2, '0')}</span>
-                                    <span className="text-xs md:text-sm font-black text-white/50 group-hover:text-white transition-colors duration-300 tracking-tight uppercase whitespace-nowrap">{client}</span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
                 </div>
+
             </div>
         </section>
     );
