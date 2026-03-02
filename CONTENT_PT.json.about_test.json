@@ -1,0 +1,47 @@
+{
+  "about": {
+    "origin": "DNA_ORIGIN",
+    "est": "EST_2016",
+    "title_primary": "BORN ON",
+    "title_highlight": "SET",
+    "title_secondary": "THE MACHINE HAS NO SOUL.",
+    "description_p1": "Nossa visão não veio do ChatGPT. Ela é o resultado de anos de set, direção e execução no mundo real. Muito antes do primeiro prompt, nossa trajetória já era pautada pela produção visual de alta complexidade.",
+    "description_p2": "Entendemos narrativa e estética porque o nosso olhar foi refinado no rigor técnico da pós-produção clássica. Para nós, a tecnologia é um multiplicador de potência: o critério artístico continua puramente humano.",
+    "core_modules": "CORE_SYSTEMS",
+    "modules": {
+      "cinematography": {
+        "title": "SÍNTESE VISUAL",
+        "status": "CALIBRADO",
+        "desc": "Direção visual com IA // Construção de cena // Precisão estética"
+      },
+      "training": {
+        "title": "NEURAL BRANDING",
+        "status": "ONLINE",
+        "desc": "Modelos personalizados // Consistência de estilo // Assinatura por projeto"
+      },
+      "architecture": {
+        "title": "ENGENHARIA DE EXECUÇÃO",
+        "status": "STABLE",
+        "desc": "Pipelines proprietários // Automação de processo // Controle criativo total"
+      }
+    },
+    "manifesto": {
+      "title": "ANTI-SLOP PROTOCOL",
+      "subtitle": "SYSTEM_DIRECTIVES",
+      "cards": {
+        "control": {
+          "title": "DOMÍNIO > ACASO",
+          "desc": "O acaso é para amadores. Na Brick, cada pixel é uma decisão técnica submetida ao rigor do olhar artístico."
+        },
+        "curation": {
+          "title": "CRITÉRIO > VOLUME",
+          "desc": "A máquina amplia a capacidade, mas é o repertório que define o que merece chegar à tela. Qualidade é inegociável."
+        },
+        "black_box": {
+          "title": "VIRTUOSISMO",
+          "desc": "Fundimos a estética clássica com a potência da nova geração. A tecnologia obedece à arte, sempre."
+        }
+      }
+    }
+  }
+}

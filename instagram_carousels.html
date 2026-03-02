@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Brick AI — Carrossel</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <style>
+    :root {
+      --black: #050505;
+      --red: #DC2626;
+      --alarm: #FF1A1A;
+      --white: #E5E5E5;
+      --muted: #3a3a3a;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0a0a0a;
+      font-family: 'Inter', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 32px;
+      padding: 56px 40px;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
+    }
+    .header-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; font-weight: 700;
+      color: #252525; letter-spacing: 0.3em; text-transform: uppercase;
+    }
+    .btn-all {
+      background: var(--red); color: #fff; border: none;
+      padding: 16px 48px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px; font-weight: 700;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; border-radius: 2px;
+      box-shadow: 0 0 28px rgba(220,38,38,0.22);
+      transition: all 0.15s;
+    }
+    .btn-all:hover { background: #b91c1c; box-shadow: 0 0 44px rgba(220,38,38,0.38); }
+
+    /* SLIDES ROW */
+    .slides-row {
+      display: flex; flex-direction: row; gap: 18px;
+      align-items: flex-start;
+    }
+
+    /* SLIDE BASE */
+    .slide {
+      width: 1350px; height: 1080px;
+      background: var(--black);
+      position: relative; overflow: hidden; flex-shrink: 0;
+    }
+
+    /* TEXTURES */
+    .noise {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.88' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      opacity: 0.055; mix-blend-mode: overlay;
+    }
+    .grid {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background-size: 54px 54px;
+      background-image:
+        linear-gradient(to right, rgba(255,255,255,0.028) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.028) 1px, transparent 1px);
+    }
+
+    /* CONTENT */
+    .content {
+      position: relative; z-index: 10;
+      height: 100%; display: flex; flex-direction: column;
+      justify-content: space-between;
+      padding: 88px 108px;
+    }
+
+    /* TYPE */
+    .f-brick {
+      font-family: 'Inter', sans-serif; font-weight: 900;
+      letter-spacing: -0.04em; line-height: 0.9;
+      color: var(--white);
+    }
+    .f-mono {
+      font-family: 'JetBrains Mono', monospace; font-weight: 700;
+      letter-spacing: -0.01em;
+    }
+    .red { color: var(--red); }
+    .crt {
+      color: var(--alarm);
+      text-shadow: 0 0 14px rgba(255,26,26,0.85), 0 0 36px rgba(255,26,26,0.3);
+    }
+
+    /* ATOMS */
+    .dot {
+      width: 16px; height: 16px; border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 14px rgba(220,38,38,0.9), 0 0 36px rgba(220,38,38,0.35);
+      display: inline-block;
+    }
+    .rule {
+      height: 4px; background: var(--red);
+      box-shadow: 0 0 14px rgba(220,38,38,0.55);
+    }
+
+    /* SLIDE COUNTER */
+    .counter {
+      font-family: 'JetBrains Mono', monospace; font-weight: 700;
+      font-size: 13px; color: #1e1e1e; letter-spacing: 0.1em;
+    }
+
+    /* MONOLITH */
+    .monolith {
+      width: 88px; height: 176px;
+      background: linear-gradient(160deg, #0b0b0b 0%, #000 100%);
+      border: 1px solid #191919; border-radius: 2px;
+      position: relative;
+      box-shadow: inset 0 0 50px rgba(0,0,0,0.97);
+      flex-shrink: 0;
+    }
+
+    /* DOWNLOAD LABEL */
+    .dl-row {
+      display: flex; gap: 12px; align-items: center; justify-content: center;
+      margin-top: 4px;
+    }
+    .btn-dl {
+      background: transparent; color: var(--red);
+      border: 1px solid rgba(220,38,38,0.25);
+      padding: 9px 22px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      cursor: pointer; border-radius: 2px;
+      transition: all 0.15s;
+    }
+    .btn-dl:hover { border-color: var(--red); background: rgba(220,38,38,0.06); }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <p class="header-label">BRICK_AI — CARROSSEL DE LANÇAMENTO · 2026</p>
+  <button class="btn-all" onclick="downloadAll()">↓ BAIXAR OS 3 SLIDES</button>
+</div>
+
+<div class="slides-row">
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 1 — VISION OVER PROMPT.
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s1">
+    <div class="noise"></div>
+    <div class="grid"></div>
+    <!-- glow top-left -->
+    <div style="position:absolute;top:-180px;left:-180px;width:780px;height:780px;border-radius:50%;background:radial-gradient(circle,rgba(220,38,38,0.08) 0%,transparent 65%);filter:blur(90px);z-index:0;pointer-events:none;"></div>
+
+    <div class="content">
+      <!-- top -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <span class="dot"></span>
+        <span class="counter">01 / 03</span>
+      </div>
+
+      <!-- main -->
+      <div>
+        <h1 class="f-brick" style="font-size:168px;margin-bottom:0;">
+          VISION<br><span class="red">OVER</span><br>PROMPT.
+        </h1>
+      </div>
+
+      <!-- bottom stats -->
+      <div style="display:flex;flex-direction:column;gap:14px;">
+        <div class="rule" style="width:56px;margin-bottom:4px;"></div>
+        <p class="f-mono" style="font-size:28px;color:var(--white);">10 anos de cinema.</p>
+        <p class="f-mono" style="font-size:28px;color:var(--muted);">+150 produções entregues.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 2 — IA SEM DIREÇÃO É SÓ SLOP.
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s2">
+    <div class="noise"></div>
+    <div class="grid"></div>
+    <!-- glow center-right -->
+    <div style="position:absolute;top:50%;right:-160px;transform:translateY(-50%);width:700px;height:700px;border-radius:50%;background:radial-gradient(circle,rgba(220,38,38,0.07) 0%,transparent 65%);filter:blur(100px);z-index:0;pointer-events:none;"></div>
+
+    <div class="content">
+      <!-- top -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <span class="dot"></span>
+        <span class="counter">02 / 03</span>
+      </div>
+
+      <!-- main -->
+      <div style="display:flex;flex-direction:column;gap:48px;">
+        <!-- statement -->
+        <div>
+          <h2 class="f-brick" style="font-size:96px;">
+            IA SEM DIREÇÃO<br>DE ARTE É SÓ <span class="crt">SLOP.</span>
+          </h2>
+        </div>
+
+        <!-- divider -->
+        <div class="rule" style="width:80px;"></div>
+
+        <!-- answer -->
+        <div>
+          <p class="f-mono red" style="font-size:24px;margin-bottom:18px;letter-spacing:0.04em;">A RESPOSTA:</p>
+          <h3 class="f-brick" style="font-size:80px;color:var(--white);">DIREÇÃO TÉCNICA,<br>NÃO PROMPT<br>MÁGICO.</h3>
+        </div>
+      </div>
+
+      <!-- bottom -->
+      <p class="f-mono" style="font-size:18px;color:#222;">// BRICK_AI</p>
+    </div>
+  </div>
+
+  <!-- ─────────────────────────────────────────
+       SLIDE 3 — BRICK AI. (HERO)
+  ───────────────────────────────────────── -->
+  <div class="slide" id="s3">
+    <div class="noise"></div>
+    <div class="grid"></div>
+    <!-- central glow -->
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:0;pointer-events:none;">
+      <div style="width:860px;height:860px;border-radius:50%;background:radial-gradient(circle,rgba(220,38,38,0.11) 0%,rgba(220,38,38,0.03) 45%,transparent 70%);filter:blur(100px);"></div>
+    </div>
+
+    <div class="content" style="justify-content:space-between;">
+
+      <!-- top: counter -->
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+        <span class="dot"></span>
+        <span class="counter">03 / 03</span>
+      </div>
+
+      <!-- center: monolith + logo -->
+      <div style="display:flex;flex-direction:column;align-items:center;gap:52px;flex:1;justify-content:center;">
+        <!-- MONOLITH -->
+        <div class="monolith">
+          <div style="position:absolute;width:260px;height:260px;border-radius:50%;background:radial-gradient(circle,rgba(220,38,38,0.3) 0%,rgba(153,0,0,0.07) 55%,transparent 72%);filter:blur(34px);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+          <div style="position:absolute;width:7px;height:7px;border-radius:50%;background:#DC2626;filter:blur(3px);top:50%;left:50%;transform:translate(-50%,-50%);opacity:0.95;"></div>
+        </div>
+
+        <!-- LOGO + TAGLINE -->
+        <div style="text-align:center;display:flex;flex-direction:column;gap:24px;">
+          <h1 class="f-brick" style="font-size:120px;letter-spacing:-0.04em;">
+            BRICK <span class="red">AI.</span>
+          </h1>
+          <div class="rule" style="width:48px;margin:0 auto;"></div>
+          <p class="f-mono" style="font-size:22px;color:var(--white);opacity:0.7;letter-spacing:0.02em;line-height:1.5;">
+            Produção de vídeo publicitário com IA,<br>sob direção de cinema.
+          </p>
+          <p class="f-brick red" style="font-size:30px;letter-spacing:-0.03em;">
+            METADE DO TEMPO DE PRODUÇÃO TRADICIONAL.
+          </p>
+        </div>
+      </div>
+
+      <!-- bottom: tag -->
+      <p class="f-mono" style="font-size:15px;color:#1e1e1e;letter-spacing:0.1em;text-align:center;">
+        // THE GENERATIVE DIVISION · AI.BRICK.MOV
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<!-- download row -->
+<div class="dl-row">
+  <button class="btn-dl" onclick="dlSingle('s1','brick_ai_01_vision')">↓ slide 1</button>
+  <button class="btn-dl" onclick="dlSingle('s2','brick_ai_02_slop')">↓ slide 2</button>
+  <button class="btn-dl" onclick="dlSingle('s3','brick_ai_03_hero')">↓ slide 3</button>
+</div>
+
+<script>
+  async function dlSingle(id, name) {
+    const el = document.getElementById(id);
+    const canvas = await html2canvas(el, { scale: 2, backgroundColor: '#050505', useCORS: true, logging: false });
+    const a = document.createElement('a');
+    a.download = `${name}.png`;
+    a.href = canvas.toDataURL('image/png');
+    a.click();
+  }
+
+  async function downloadAll() {
+    const btn = event.target;
+    btn.innerText = '⟳ gerando...'; btn.style.opacity = '0.55';
+    await dlSingle('s1','brick_ai_01_vision');
+    await new Promise(r => setTimeout(r, 500));
+    await dlSingle('s2','brick_ai_02_slop');
+    await new Promise(r => setTimeout(r, 500));
+    await dlSingle('s3','brick_ai_03_hero');
+    btn.innerText = '↓ BAIXAR OS 3 SLIDES'; btn.style.opacity = '1';
+  }
+</script>
+</body>
+</html>
