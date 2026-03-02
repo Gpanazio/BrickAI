@@ -111,17 +111,6 @@ const GlobalStyles = () => (
         .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
         .animate-scan { animation: scan 3s ease-in-out forwards; }
 
-        @keyframes ticker-left {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-        @keyframes ticker-right {
-            0% { transform: translateX(-50%); }
-            100% { transform: translateX(0); }
-        }
-        .animate-ticker-left { animation: ticker-left 28s linear infinite; }
-        .animate-ticker-right { animation: ticker-right 35s linear infinite; }
-
         /* NOISE REMOVED BY USER REQUEST */
         .card-noise { display: none; }
 
@@ -1320,65 +1309,29 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
 
 const Legacy = () => {
     const { t } = useTranslation();
-    const tickerRow1 = [...CLIENTS, ...CLIENTS, ...CLIENTS];
-    const tickerRow2 = [...CLIENTS].reverse().concat([...CLIENTS].reverse()).concat([...CLIENTS].reverse());
     return (
-        <section className="w-full bg-[#050505] relative overflow-hidden reveal border-t border-white/5">
-
-            {/* Atmospheric red glow */}
-            <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-0">
-                <div className="w-[800px] h-[500px] rounded-full blur-[150px] animate-breathe" style={{ background: 'radial-gradient(ellipse, rgba(220,38,38,0.10) 0%, transparent 70%)' }}></div>
-            </div>
-
-            {/* Scanline */}
-            <div className="scanline-effect opacity-[0.03] pointer-events-none absolute inset-0 z-[1]"></div>
-
-            {/* Header content */}
-            <div className="px-6 md:px-12 lg:px-24 pt-20 pb-16 relative z-10">
-                <div className="flex items-center gap-3 mb-14">
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#DC2626] animate-blink"></div>
-                    <span className="font-mono text-[10px] tracking-[0.4em] text-white/25 uppercase">CLIENT_ARCHIVE // {CLIENTS.length}_ENTRIES</span>
-                </div>
-                <div className="grid md:grid-cols-2 gap-10 items-end">
-                    <h2 className="text-5xl md:text-7xl lg:text-[6rem] font-brick text-white leading-[0.85] tracking-tight">
-                        {t('legacy.title').split(' ').slice(0, -2).join(' ')}<br/>
-                        <span className="text-[#DC2626]" style={{ textShadow: '0 0 60px rgba(220,38,38,0.45), 0 0 120px rgba(220,38,38,0.2)' }}>
-                            {t('legacy.title').split(' ').slice(-2).join(' ')}
-                        </span>
-                    </h2>
-                    <p className="font-mono text-sm text-white/40 leading-relaxed max-w-sm border-l-2 border-[#DC2626]/20 pl-6 md:pb-1">
-                        {t('legacy.text')}
-                    </p>
-                </div>
-            </div>
-
-            {/* Ticker rows */}
-            <div className="relative z-10 select-none pb-20">
-
-                {/* Row 1 — left */}
-                <div className="flex overflow-hidden border-t border-white/[0.06] py-5">
-                    <div className="flex shrink-0 animate-ticker-left">
-                        {tickerRow1.map((client, i) => (
-                            <div key={i} className="flex items-center shrink-0 px-10 gap-10">
-                                <span className="font-brick text-4xl md:text-5xl text-white/20 hover:text-[#DC2626] transition-colors duration-500 uppercase tracking-tight cursor-default whitespace-nowrap">{client}</span>
-                                <span className="text-[#DC2626]/25 text-2xl font-brick leading-none">◈</span>
-                            </div>
-                        ))}
+        <section className="w-full py-20 px-6 md:px-12 lg:px-24 bg-[#E5E5E5] text-[#050505] relative overflow-hidden">
+            <div className="max-w-[1400px] mx-auto reveal">
+                <h2 className="text-4xl md:text-6xl lg:text-7xl font-brick mb-12 leading-[0.85]">{t('legacy.title')}</h2>
+                <div className="flex flex-col lg:flex-row gap-12 border-t-4 border-[#050505] pt-12">
+                    <div className="lg:w-1/2">
+                        <p className="text-lg md:text-xl font-light leading-tight max-w-lg">
+                            {t('legacy.text')}
+                        </p>
+                    </div>
+                    <div className="lg:w-1/2">
+                        <h4 className="text-xs font-bold tracking-[0.2em] uppercase mb-8 text-neutral-400 border-b border-neutral-200 pb-4 inline-block">{t('legacy.trusted_by')}</h4>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 w-full">
+                            {CLIENTS.map((client, i) => (
+                                <div key={i} className="flex items-start justify-start group">
+                                    <span className="text-sm md:text-base font-black text-neutral-300 group-hover:text-[#050505] transition-colors duration-300 cursor-default tracking-tighter uppercase whitespace-nowrap">
+                                        {client}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
-
-                {/* Row 2 — right */}
-                <div className="flex overflow-hidden border-t border-b border-white/[0.06] py-5">
-                    <div className="flex shrink-0 animate-ticker-right">
-                        {tickerRow2.map((client, i) => (
-                            <div key={i} className="flex items-center shrink-0 px-10 gap-10">
-                                <span className="font-brick text-4xl md:text-5xl text-white/[0.08] hover:text-white/40 transition-colors duration-500 uppercase tracking-tight cursor-default whitespace-nowrap">{client}</span>
-                                <span className="text-white/[0.08] text-2xl font-brick leading-none">◈</span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
             </div>
         </section>
     );
