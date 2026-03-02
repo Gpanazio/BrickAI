@@ -195,6 +195,40 @@ const GlobalStyles = () => (
             color: transparent;
         }
 
+        @keyframes marqueeVertical {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+        .animate-marquee-vertical {
+            animation: marqueeVertical 40s linear infinite;
+        }
+        .animate-marquee-vertical-reverse {
+            animation: marqueeVertical 50s linear infinite reverse;
+        }
+        @keyframes rgb-shift {
+            0% { text-shadow: 1px 0 0 rgba(220,38,38,0.5), -1px 0 0 rgba(0,255,255,0.3); transform: translate(0,0); }
+            20% { text-shadow: -1px 0 0 rgba(220,38,38,0.5), 1px 0 0 rgba(0,255,255,0.3); transform: translate(-1px, 1px); }
+            40% { text-shadow: 1px 0 0 rgba(220,38,38,0.5), -1px 0 0 rgba(0,255,255,0.3); transform: translate(1px, -1px); }
+            60% { text-shadow: -1px 0 0 rgba(220,38,38,0.5), 1px 0 0 rgba(0,255,255,0.3); transform: translate(-1px, -1px); }
+            100% { text-shadow: 1px 0 0 rgba(220,38,38,0.5), -1px 0 0 rgba(0,255,255,0.3); transform: translate(0,0); }
+        }
+        .animate-rgb-glitch {
+            animation: rgb-shift 0.2s steps(2) infinite;
+        }
+        @keyframes particle-float {
+            0% { transform: translateY(0) translateX(0); opacity: 0; }
+            50% { opacity: 0.5; }
+            100% { transform: translateY(-100vh) translateX(20px); opacity: 0; }
+        }
+        .neural-particle {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            background: #DC2626;
+            pointer-events: none;
+            animation: particle-float 15s linear infinite;
+        }
+
         /* DEEP SPACE NOISE OVERLAY */
         .modal-video-noise::after {
             content: '';
@@ -1230,70 +1264,119 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
 
 const Legacy = () => {
     const { t } = useTranslation();
+    const [isHovered, setIsHovered] = useState<string | null>(null);
+    const sectionRef = useRef<HTMLElement>(null);
+    const [isActive, setIsActive] = useState(false);
+
+    useEffect(() => {
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting) setIsActive(true);
+        }, { threshold: 0.2 });
+        if (sectionRef.current) observer.observe(sectionRef.current);
+        return () => observer.disconnect();
+    }, []);
+
+    // Split clients into 3 columns for vertical marquee
+    const col1 = CLIENTS.slice(0, 3);
+    const col2 = CLIENTS.slice(3, 6);
+    const col3 = CLIENTS.slice(6, 9);
+
     return (
-        <section className="w-full py-32 px-6 md:px-12 lg:px-24 bg-[#050505] text-white relative overflow-hidden border-t border-white/5">
-            {/* Background Marquee for WOW factor */}
-            <div className="absolute top-1/2 -translate-y-1/2 left-0 w-full pointer-events-none opacity-[0.03] select-none">
-                <div className="flex whitespace-nowrap animate-marquee">
-                    {[1, 2, 3, 4].map((n) => (
-                        <span key={n} className="text-[15rem] font-brick text-stroke px-20">
-                            {t('legacy.title')}
-                        </span>
-                    ))}
-                </div>
+        <section
+            ref={sectionRef}
+            className={`w-full py-40 px-6 md:px-12 lg:px-24 bg-[#050505] text-white relative overflow-hidden border-t border-white/5 transition-all duration-1000 ${isActive ? 'active shadow-[inset_0_0_100px_rgba(220,38,38,0.05)]' : ''}`}
+        >
+            {/* Neural Particles Background */}
+            <div className="absolute inset-0 pointer-events-none opacity-20">
+                {[...Array(20)].map((_, i) => (
+                    <div
+                        key={i}
+                        className="neural-particle"
+                        style={{
+                            left: `${Math.random() * 100}%`,
+                            top: `${Math.random() * 100}%`,
+                            animationDelay: `${Math.random() * 15}s`,
+                            animationDuration: `${10 + Math.random() * 10}s`
+                        }}
+                    ></div>
+                ))}
             </div>
 
+            {/* Aperture Frame - "L" Shapes */}
+            <div className={`absolute top-10 left-10 w-24 h-24 border-l-2 border-t-2 border-[#DC2626]/40 transition-all duration-1000 ${isActive ? 'top-6 left-6 opacity-100' : 'opacity-0'}`}></div>
+            <div className={`absolute top-10 right-10 w-24 h-24 border-r-2 border-t-2 border-[#DC2626]/40 transition-all duration-1000 ${isActive ? 'top-6 right-6 opacity-100' : 'opacity-0'}`}></div>
+            <div className={`absolute bottom-10 left-10 w-24 h-24 border-l-2 border-b-2 border-[#DC2626]/40 transition-all duration-1000 ${isActive ? 'bottom-6 left-6 opacity-100' : 'opacity-0'}`}></div>
+            <div className={`absolute bottom-10 right-10 w-24 h-24 border-r-2 border-b-2 border-[#DC2626]/40 transition-all duration-1000 ${isActive ? 'bottom-6 right-6 opacity-100' : 'opacity-0'}`}></div>
+
             <div className="max-w-[1400px] mx-auto relative z-10">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
-                    {/* Left Column: Decrypt Title and Text */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+
+                    {/* Left Column: Title & Logic */}
                     <div className="lg:col-span-5 reveal">
-                        <div className="mb-10">
-                            <div className="font-mono text-[10px] text-[#DC2626] mb-4 tracking-[0.3em] flex items-center gap-3">
-                                <span className="w-2 h-2 bg-[#DC2626] animate-pulse"></span>
-                                // LEGACY_PROTOCOL_02
+                        <div className="mb-12 relative">
+                            <div className="font-mono text-[11px] text-[#DC2626] mb-6 tracking-[0.4em] flex items-center gap-4">
+                                <span className={`w-1.5 h-1.5 bg-[#DC2626] ${isActive ? 'animate-ping' : ''}`}></span>
+                                PROTOCOL: BRICK_LEGACY_v2.0
                             </div>
-                            <h2 className="text-5xl md:text-7xl font-brick leading-[0.85] mb-8">
-                                <ScrambleText text={t('legacy.title')} triggerOnReveal={true} />
+                            <h2 className="text-6xl md:text-8xl font-brick leading-[0.8] mb-10 tracking-tighter">
+                                <span className="block hover:animate-rgb-glitch transition-all cursor-crosshair">
+                                    <ScrambleText text={t('legacy.title')} triggerOnReveal={true} />
+                                </span>
                             </h2>
+                            <div className="space-y-6">
+                                <p className="text-xl md:text-2xl text-white font-light leading-snug max-w-lg">
+                                    {t('legacy.text')}
+                                </p>
+                                <div className="flex items-center gap-6">
+                                    <div className="h-px flex-1 bg-gradient-to-r from-[#DC2626] to-transparent opacity-30"></div>
+                                    <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-[0.5em]">AUTH.VERIFIED</span>
+                                </div>
+                            </div>
                         </div>
-                        <p className="text-lg md:text-xl text-[#9CA3AF] font-light leading-relaxed max-w-xl border-l border-[#DC2626]/30 pl-8">
-                            {t('legacy.text')}
-                        </p>
                     </div>
 
-                    {/* Right Column: HUD Grid Clients */}
-                    <div className="lg:col-span-7 reveal delay-300">
-                        <div className="flex items-center gap-4 mb-10">
-                            <h4 className="text-[10px] font-mono font-bold tracking-[0.3em] uppercase text-[#9CA3AF]/50 whitespace-nowrap">
-                                {t('legacy.trusted_by')} //
-                            </h4>
-                            <div className="h-px w-full bg-white/10"></div>
-                        </div>
+                    {/* Right Column: Vertical Cinematic Credits/Marquee */}
+                    <div className="lg:col-span-7 reveal delay-300 relative h-[500px] md:h-[600px] overflow-hidden rounded-sm border border-white/5 bg-black/40 backdrop-blur-sm shadow-2xl">
+                        <div className="absolute inset-0 bg-tech-grid opacity-10 pointer-events-none"></div>
+                        <div className="absolute inset-0 bg-gradient-to-b from-[#050505] via-transparent to-[#050505] z-20 pointer-events-none"></div>
 
-                        <div className="grid grid-cols-2 md:grid-cols-3 border-l border-t border-white/10">
-                            {CLIENTS.map((client, i) => (
-                                <div
-                                    key={i}
-                                    className="p-8 border-r border-b border-white/10 group hover:bg-white/[0.02] transition-colors relative transition-all duration-300 h-28 flex items-center justify-center overflow-hidden"
-                                >
-                                    <div className="absolute inset-0 bg-tech-grid opacity-0 group-hover:opacity-10 transition-opacity"></div>
-                                    <div className="absolute inset-0 bg-gradient-to-br from-[#DC2626]/0 to-[#DC2626]/2 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                        <div className="grid grid-cols-3 h-full px-4 md:px-8">
+                            {[col1, col2, col3].map((column, colIdx) => (
+                                <div key={colIdx} className={`flex flex-col gap-8 py-10 ${colIdx === 1 ? 'animate-marquee-vertical-reverse' : 'animate-marquee-vertical'}`}>
+                                    {[...column, ...column, ...column, ...column, ...column].map((client, i) => (
+                                        <div
+                                            key={i}
+                                            onMouseEnter={() => setIsHovered(`${colIdx}-${i}`)}
+                                            onMouseLeave={() => setIsHovered(null)}
+                                            className="group/client relative py-6 flex flex-col items-center justify-center border-y border-white/0 hover:border-white/5 transition-all duration-300"
+                                        >
+                                            <span className="text-base md:text-xl font-ai text-white/30 group-hover/client:text-[#DC2626] transition-all duration-500 uppercase tracking-tighter text-center">
+                                                <ScrambleText text={client} hoverTrigger={true} />
+                                            </span>
 
-                                    <span className="text-sm md:text-base font-ai text-white/40 group-hover:text-white group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] transition-all duration-300 relative z-10 text-center uppercase tracking-tighter">
-                                        <ScrambleText text={client} hoverTrigger={true} />
-                                    </span>
+                                            {/* HUD Metadata Overlay on Hover */}
+                                            {isHovered === `${colIdx}-${i}` && (
+                                                <div className="absolute -right-4 md:-right-8 top-0 flex flex-col gap-1 pointer-events-none z-30 slide-in-right">
+                                                    <div className="bg-[#DC2626] text-[8px] font-mono px-2 py-0.5 text-white">TARGET_LOCK</div>
+                                                    <div className="bg-black/80 border border-white/10 text-[7px] font-mono px-2 py-0.5 text-[#9CA3AF]">COORD: {(1000 + Math.random() * 9000).toFixed(0)}</div>
+                                                    <div className="bg-black/80 border border-white/10 text-[7px] font-mono px-2 py-0.5 text-[#9CA3AF]">STATUS: DECRYPTED</div>
+                                                </div>
+                                            )}
 
-                                    {/* Corner Accents */}
-                                    <div className="absolute top-0 right-0 w-1 h-1 bg-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity"></div>
-                                    <div className="absolute bottom-0 left-0 w-1 h-1 bg-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                            <div className="absolute inset-0 bg-[#DC2626]/0 group-hover/client:bg-[#DC2626]/5 transition-colors pointer-events-none"></div>
+                                        </div>
+                                    ))}
                                 </div>
                             ))}
                         </div>
+
+                        {/* Visual Scanning Line */}
+                        <div className="absolute top-0 left-0 w-full h-[2px] bg-[#DC2626] opacity-30 shadow-[0_0_15px_#DC2626] animate-scan z-30 pointer-events-none"></div>
                     </div>
                 </div>
             </div>
 
-            {/* Tech Scanlines */}
+            {/* Bottom Gradient Seal */}
             <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#050505] to-transparent z-20 pointer-events-none"></div>
         </section>
     );
