@@ -1310,27 +1310,45 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
 const Legacy = () => {
     const { t } = useTranslation();
     return (
-        <section className="w-full py-20 px-6 md:px-12 lg:px-24 bg-[#E5E5E5] text-[#050505] relative overflow-hidden">
-            <div className="max-w-[1400px] mx-auto reveal">
-                <h2 className="text-4xl md:text-6xl lg:text-7xl font-brick mb-12 leading-[0.85]">{t('legacy.title')}</h2>
-                <div className="flex flex-col lg:flex-row gap-12 border-t-4 border-[#050505] pt-12">
-                    <div className="lg:w-1/2">
-                        <p className="text-lg md:text-xl font-light leading-tight max-w-lg">
+        <section className="w-full py-20 px-6 md:px-12 lg:px-24 bg-[#080808] relative overflow-hidden reveal">
+            <div className="scanline-effect opacity-5 pointer-events-none absolute inset-0"></div>
+            <div className="max-w-[1400px] mx-auto">
+
+                {/* Terminal label */}
+                <div className="flex items-center gap-3 mb-12">
+                    <div className="w-2 h-2 bg-[#DC2626]"></div>
+                    <span className="font-mono text-[10px] tracking-[0.4em] text-white/30 uppercase">// LEGACY_DATA</span>
+                </div>
+
+                <div className="flex flex-col lg:flex-row gap-16 border-t border-white/10 pt-16">
+
+                    {/* Left: Title + Description */}
+                    <div className="lg:w-1/2 flex flex-col justify-between gap-12">
+                        <h2 className="text-4xl md:text-6xl lg:text-7xl font-brick text-white leading-[0.85]">
+                            {t('legacy.title').split(' ').slice(0, -2).join(' ')}<br />
+                            <span className="text-[#DC2626]">{t('legacy.title').split(' ').slice(-2).join(' ')}</span>
+                        </h2>
+                        <p className="font-mono text-sm text-[#9CA3AF] leading-relaxed max-w-lg border-l border-white/10 pl-6">
                             {t('legacy.text')}
                         </p>
                     </div>
+
+                    {/* Right: Client matrix */}
                     <div className="lg:w-1/2">
-                        <h4 className="text-xs font-bold tracking-[0.2em] uppercase mb-8 text-neutral-400 border-b border-neutral-200 pb-4 inline-block">{t('legacy.trusted_by')}</h4>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 w-full">
+                        <div className="flex items-center gap-3 mb-8">
+                            <span className="text-[#DC2626] font-mono text-xs">&gt;&gt;</span>
+                            <span className="font-mono text-[10px] tracking-[0.3em] text-white/30 uppercase">{t('legacy.trusted_by')}</span>
+                        </div>
+                        <div className="grid grid-cols-2 md:grid-cols-3 gap-px bg-white/5">
                             {CLIENTS.map((client, i) => (
-                                <div key={i} className="flex items-start justify-start group">
-                                    <span className="text-sm md:text-base font-black text-neutral-300 group-hover:text-[#050505] transition-colors duration-300 cursor-default tracking-tighter uppercase whitespace-nowrap">
-                                        {client}
-                                    </span>
+                                <div key={i} className="group bg-[#080808] p-5 md:p-6 hover:bg-[#DC2626]/[0.04] transition-colors duration-300 cursor-default">
+                                    <span className="font-mono text-[9px] text-white/20 block mb-2 tracking-widest group-hover:text-[#DC2626]/50 transition-colors">SYS_{String(i + 1).padStart(2, '0')}</span>
+                                    <span className="text-xs md:text-sm font-black text-white/50 group-hover:text-white transition-colors duration-300 tracking-tight uppercase whitespace-nowrap">{client}</span>
                                 </div>
                             ))}
                         </div>
                     </div>
+
                 </div>
             </div>
         </section>
