@@ -183,21 +183,16 @@ const GlobalStyles = () => (
             }
         }
 
-        @keyframes float-parallax {
-            from { transform: scale(1.1) translate(-1%, 1%); }
-            to { transform: scale(1.1) translate(1%, -1%); }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
         }
-        .animate-float-parallax {
-            animation: float-parallax 10s ease-in-out infinite alternate;
+        .animate-marquee {
+            animation: marquee 60s linear infinite;
         }
-
-        /* GEOMETRIC FONT FOR MODAL */
-        .font-geometric {
-            font-family: 'Space Grotesk', 'Inter', sans-serif;
-            font-weight: 700;
-            letter-spacing: 0.25em;
-            line-height: 0.9;
-            text-transform: uppercase;
+        .text-stroke {
+            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
+            color: transparent;
         }
 
         /* DEEP SPACE NOISE OVERLAY */
@@ -500,10 +495,12 @@ const TypewriterText = ({ text, className }: { text: string, className?: string 
     );
 };
 
-const ScrambleText = ({ text, className, hoverTrigger = false, delay = 0 }: { text: string, className?: string, hoverTrigger?: boolean, delay?: number }) => {
+const ScrambleText = ({ text, className, hoverTrigger = false, triggerOnReveal = false, delay = 0 }: { text: string, className?: string, hoverTrigger?: boolean, triggerOnReveal?: boolean, delay?: number }) => {
     const [displayText, setDisplayText] = useState(text);
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*";
     const intervalRef = useRef<any>(null);
+    const containerRef = useRef<HTMLSpanElement>(null);
+    const [hasBeenRevealed, setHasBeenRevealed] = useState(false);
 
     const scramble = () => {
         let iteration = 0;
@@ -515,6 +512,7 @@ const ScrambleText = ({ text, className, hoverTrigger = false, delay = 0 }: { te
                     .split("")
                     .map((letter, index) => {
                         if (index < iteration) return text[index];
+                        if (letter === " ") return " ";
                         return chars[Math.floor(Math.random() * chars.length)];
                     })
                     .join("")
@@ -529,23 +527,40 @@ const ScrambleText = ({ text, className, hoverTrigger = false, delay = 0 }: { te
     };
 
     useEffect(() => {
-        setDisplayText(text);
-        if (!hoverTrigger) {
-            if (delay > 0) {
-                const t = setTimeout(scramble, delay);
-                return () => clearTimeout(t);
-            } else {
-                scramble();
+        if (triggerOnReveal) {
+            const observer = new IntersectionObserver(([entry]) => {
+                if (entry.isIntersecting && !hasBeenRevealed) {
+                    setHasBeenRevealed(true);
+                    setTimeout(scramble, delay);
+                }
+            }, { threshold: 0.1 });
+
+            if (containerRef.current) observer.observe(containerRef.current);
+            return () => observer.disconnect();
+        }
+    }, [triggerOnReveal, hasBeenRevealed, delay]);
+
+    useEffect(() => {
+        if (!triggerOnReveal) {
+            setDisplayText(text);
+            if (!hoverTrigger) {
+                if (delay > 0) {
+                    const t = setTimeout(scramble, delay);
+                    return () => clearTimeout(t);
+                } else {
+                    scramble();
+                }
             }
         }
-    }, [text]);
+    }, [text, triggerOnReveal]);
 
     return (
         <span
+            ref={containerRef}
             className={className}
             onMouseEnter={hoverTrigger ? scramble : undefined}
         >
-            {displayText}
+            {triggerOnReveal && !hasBeenRevealed ? text.split("").map(c => c === " " ? " " : chars[Math.floor(Math.random() * chars.length)]).join("") : displayText}
         </span>
     );
 };
@@ -1216,29 +1231,70 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
 const Legacy = () => {
     const { t } = useTranslation();
     return (
-        <section className="w-full py-20 px-6 md:px-12 lg:px-24 bg-[#E5E5E5] text-[#050505] relative overflow-hidden">
-            <div className="max-w-[1400px] mx-auto reveal">
-                <h2 className="text-4xl md:text-6xl lg:text-7xl font-brick mb-12 leading-[0.85]">{t('legacy.title')}</h2>
-                <div className="flex flex-col lg:flex-row gap-12 border-t-4 border-[#050505] pt-12">
-                    <div className="lg:w-1/2">
-                        <p className="text-lg md:text-xl font-light leading-tight max-w-lg">
+        <section className="w-full py-32 px-6 md:px-12 lg:px-24 bg-[#050505] text-white relative overflow-hidden border-t border-white/5">
+            {/* Background Marquee for WOW factor */}
+            <div className="absolute top-1/2 -translate-y-1/2 left-0 w-full pointer-events-none opacity-[0.03] select-none">
+                <div className="flex whitespace-nowrap animate-marquee">
+                    {[1, 2, 3, 4].map((n) => (
+                        <span key={n} className="text-[15rem] font-brick text-stroke px-20">
+                            {t('legacy.title')}
+                        </span>
+                    ))}
+                </div>
+            </div>
+
+            <div className="max-w-[1400px] mx-auto relative z-10">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-start">
+                    {/* Left Column: Decrypt Title and Text */}
+                    <div className="lg:col-span-5 reveal">
+                        <div className="mb-10">
+                            <div className="font-mono text-[10px] text-[#DC2626] mb-4 tracking-[0.3em] flex items-center gap-3">
+                                <span className="w-2 h-2 bg-[#DC2626] animate-pulse"></span>
+                                // LEGACY_PROTOCOL_02
+                            </div>
+                            <h2 className="text-5xl md:text-7xl font-brick leading-[0.85] mb-8">
+                                <ScrambleText text={t('legacy.title')} triggerOnReveal={true} />
+                            </h2>
+                        </div>
+                        <p className="text-lg md:text-xl text-[#9CA3AF] font-light leading-relaxed max-w-xl border-l border-[#DC2626]/30 pl-8">
                             {t('legacy.text')}
                         </p>
                     </div>
-                    <div className="lg:w-1/2">
-                        <h4 className="text-xs font-bold tracking-[0.2em] uppercase mb-8 text-neutral-400 border-b border-neutral-200 pb-4 inline-block">{t('legacy.trusted_by')}</h4>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-x-4 gap-y-8 w-full">
+
+                    {/* Right Column: HUD Grid Clients */}
+                    <div className="lg:col-span-7 reveal delay-300">
+                        <div className="flex items-center gap-4 mb-10">
+                            <h4 className="text-[10px] font-mono font-bold tracking-[0.3em] uppercase text-[#9CA3AF]/50 whitespace-nowrap">
+                                {t('legacy.trusted_by')} //
+                            </h4>
+                            <div className="h-px w-full bg-white/10"></div>
+                        </div>
+
+                        <div className="grid grid-cols-2 md:grid-cols-3 border-l border-t border-white/10">
                             {CLIENTS.map((client, i) => (
-                                <div key={i} className="flex items-start justify-start group">
-                                    <span className="text-sm md:text-base font-black text-neutral-300 group-hover:text-[#050505] transition-colors duration-300 cursor-default tracking-tighter uppercase whitespace-nowrap">
-                                        {client}
+                                <div
+                                    key={i}
+                                    className="p-8 border-r border-b border-white/10 group hover:bg-white/[0.02] transition-colors relative transition-all duration-300 h-28 flex items-center justify-center overflow-hidden"
+                                >
+                                    <div className="absolute inset-0 bg-tech-grid opacity-0 group-hover:opacity-10 transition-opacity"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-br from-[#DC2626]/0 to-[#DC2626]/2 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+
+                                    <span className="text-sm md:text-base font-ai text-white/40 group-hover:text-white group-hover:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)] transition-all duration-300 relative z-10 text-center uppercase tracking-tighter">
+                                        <ScrambleText text={client} hoverTrigger={true} />
                                     </span>
+
+                                    {/* Corner Accents */}
+                                    <div className="absolute top-0 right-0 w-1 h-1 bg-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                                    <div className="absolute bottom-0 left-0 w-1 h-1 bg-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity"></div>
                                 </div>
                             ))}
                         </div>
                     </div>
                 </div>
             </div>
+
+            {/* Tech Scanlines */}
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#050505] to-transparent z-20 pointer-events-none"></div>
         </section>
     );
 };
