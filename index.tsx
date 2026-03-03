@@ -122,9 +122,41 @@ const GlobalStyles = () => (
                 opacity: 1;
             }
         }
+        @keyframes red-emanation {
+            0%, 100% {
+                opacity: 0.14;
+                transform: translate3d(0, 0, 0) scaleX(0.96);
+            }
+            46% {
+                opacity: 0.42;
+                transform: translate3d(2.2%, 0, 0) scaleX(1.03);
+            }
+            62% {
+                opacity: 0.28;
+                transform: translate3d(1.1%, 0, 0) scaleX(1.0);
+            }
+        }
+        @keyframes breath-release-glow {
+            0%, 35%, 100% {
+                opacity: 0.12;
+                transform: scale(0.95);
+            }
+            50% {
+                opacity: 0.72;
+                transform: scale(1.08);
+            }
+            62% {
+                opacity: 0.42;
+                transform: scale(1.03);
+            }
+        }
         @keyframes twinkle {
             from { opacity: 0.1; transform: scale(0.8); }
             to   { opacity: 1;   transform: scale(1.2); box-shadow: 0 0 4px rgba(255,255,255,0.8); }
+        }
+        @keyframes red-grid-drift {
+            0% { background-position: 0 0, 0 0, center; }
+            100% { background-position: 0 26px, 26px 0, center; }
         }
 
         /* NOISE REMOVED BY USER REQUEST */
@@ -952,7 +984,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
     );
 };
 
-const ParticleBackground = () => {
+const ParticleBackground = ({ reactToMouse = true }: { reactToMouse?: boolean }) => {
     const mountRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -969,7 +1001,7 @@ const ParticleBackground = () => {
         mountRef.current.appendChild(renderer.domElement);
 
         // Particles
-        const particlesCount = 3200;
+        const particlesCount = 5200;
         const posArray = new Float32Array(particlesCount * 3);
 
         for (let i = 0; i < particlesCount; i++) {
@@ -1026,7 +1058,9 @@ const ParticleBackground = () => {
             mouseY = (event.clientY / window.innerHeight) - 0.5;
         };
 
-        window.addEventListener('mousemove', handleMouseMove);
+        if (reactToMouse) {
+            window.addEventListener('mousemove', handleMouseMove);
+        }
 
         // Animation
         let animationFrameId: number;
@@ -1037,8 +1071,8 @@ const ParticleBackground = () => {
             particlesMesh.rotation.y += 0.0008;
 
             // Mouse influence
-            const targetX = mouseX * 0.5;
-            const targetY = mouseY * 0.5;
+            const targetX = reactToMouse ? mouseX * 0.5 : 0;
+            const targetY = reactToMouse ? mouseY * 0.5 : 0;
 
             particlesMesh.rotation.x += 0.05 * (targetY - particlesMesh.rotation.x);
             particlesMesh.rotation.y += 0.05 * (targetX - particlesMesh.rotation.y);
@@ -1062,7 +1096,9 @@ const ParticleBackground = () => {
         window.addEventListener('resize', handleResize);
 
         return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
+            if (reactToMouse) {
+                window.removeEventListener('mousemove', handleMouseMove);
+            }
             window.removeEventListener('resize', handleResize);
             cancelAnimationFrame(animationFrameId);
             if (mountRef.current && renderer.domElement) {
@@ -1104,13 +1140,14 @@ const Philosophy = () => {
     const { t } = useTranslation();
 
     return (
-        <section className="relative w-full py-20 bg-[#050505] z-20 border-t border-white/5 overflow-hidden">
+        <section className="relative w-full pt-20 pb-0 bg-[#050505] z-20 border-t border-white/5 overflow-hidden">
             <ParticleBackground />
 
             {/* NOISE OVERLAY */}
             <div className="absolute inset-0 z-[2] opacity-20 pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
 
             <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle,transparent_40%,rgba(5,5,5,0.9)_100%)] pointer-events-none"></div>
+            <div className="absolute -bottom-44 left-[-12%] w-[95vw] h-[70vh] bg-red-700/10 blur-[180px] pointer-events-none z-[3] origin-left" style={{ animation: 'red-emanation 9.5s ease-in-out infinite' }}></div>
             <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
                 <div className="mb-20 reveal w-full flex flex-col items-center">
                     <div className="w-full flex justify-center mb-6">
@@ -1518,6 +1555,7 @@ const StarGateBackground = () => {
 const FinalOrbit = () => {
     const ref = useRef<HTMLElement>(null);
     const { t } = useTranslation();
+    const clients = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO"];
     const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
 
     const planetX  = useTransform(scrollYProgress, [0, 1], ["-80%", "-76%"]);
@@ -1525,70 +1563,74 @@ const FinalOrbit = () => {
     const textY    = useTransform(scrollYProgress, [0, 1], ["30px", "0px"]);
 
     return (
-        <section ref={ref} className="relative h-[80vh] w-full overflow-hidden bg-black flex items-start justify-center pt-20">
-
-            {/* Cinema grain — animated, oversized to avoid edge gaps */}
-            <div className="absolute inset-0 z-[5] pointer-events-none overflow-hidden">
-                <svg className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] animate-grain opacity-[0.15] mix-blend-screen" xmlns="http://www.w3.org/2000/svg">
-                    <filter id="cinema-grain-fo">
-                        <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="4" stitchTiles="stitch"/>
-                        <feColorMatrix type="saturate" values="0"/>
-                    </filter>
-                    <rect width="100%" height="100%" filter="url(#cinema-grain-fo)"/>
-                </svg>
-            </div>
+        <section ref={ref} className="relative h-[80vh] w-full overflow-hidden bg-[#050505] flex items-start justify-center pt-0">
+            <ParticleBackground />
 
             {/* Full-width base glow — spreads across entire section bottom */}
-            <div className="absolute bottom-[-20%] left-[-10%] w-[110vw] h-[70vh] bg-red-900/25 blur-[200px] pointer-events-none z-[6]" />
+            <div className="absolute bottom-[-20%] left-[-10%] w-[110vw] h-[70vh] bg-red-900/25 blur-[200px] pointer-events-none z-[6] origin-left" style={{ animation: 'red-emanation 9.5s ease-in-out infinite' }} />
             {/* Wide mid glow — left half */}
-            <div className="absolute bottom-[-10%] left-[-5%] w-[75vw] h-[60vh] bg-red-700/20 blur-[150px] pointer-events-none z-[6]" />
+            <div className="absolute bottom-[-10%] left-[-5%] w-[75vw] h-[60vh] bg-red-700/20 blur-[150px] pointer-events-none z-[6] origin-left" style={{ animation: 'red-emanation 9.5s ease-in-out 0.2s infinite' }} />
             {/* Concentrated glow near planet edge */}
-            <div className="absolute bottom-[-5%] left-[-2%] w-[40vw] h-[50vh] bg-red-600/30 blur-[100px] pointer-events-none z-[6]" />
+            <div className="absolute bottom-[-5%] left-[-2%] w-[40vw] h-[50vh] bg-red-600/30 blur-[100px] pointer-events-none z-[6] origin-left" style={{ animation: 'red-emanation 9.5s ease-in-out 0.35s infinite' }} />
             {/* Core glow on planet rim */}
-            <div className="absolute bottom-[5%] left-[-2%] w-[18vw] h-[30vh] bg-red-500/45 blur-[55px] pointer-events-none z-[6]" />
+            <div className="absolute bottom-[5%] left-[-2%] w-[18vw] h-[30vh] bg-red-500/45 blur-[55px] pointer-events-none z-[6] origin-left" style={{ animation: 'red-emanation 9.5s ease-in-out 0.5s infinite' }} />
 
             {/* Planet */}
-            <motion.div style={{ x: planetX, opacity }} className="absolute top-[35%] -translate-y-1/2 left-0 z-20 w-[200vh] h-[200vh] rounded-full">
+            <motion.div style={{ x: planetX, opacity }} className="absolute top-[15%] -translate-y-1/2 left-0 z-20 w-[200vh] h-[200vh] rounded-full">
                 <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_92%_50%,#cc2222_0%,#8b1a1a_15%,#3a0a0a_40%,#000000_65%)]" />
                 <div className="absolute inset-0 rounded-full shadow-[inset_-10px_0_80px_rgba(255,80,80,0.35)]" />
                 <div className="absolute inset-0 rounded-full shadow-[inset_-60px_0_120px_rgba(0,0,0,0.85)]" />
-                <div className="absolute top-0 left-0 w-full h-full rounded-full opacity-90" style={{ animation: 'pulse-halo 8s ease-in-out infinite' }} />
+                <div className="absolute inset-[-6%] rounded-full bg-[radial-gradient(circle,rgba(220,38,38,0.2)_42%,rgba(220,38,38,0.1)_56%,rgba(220,38,38,0.04)_66%,transparent_76%)] blur-[22px] opacity-75" />
+                <div className="absolute inset-[-10%] rounded-full bg-[radial-gradient(circle,rgba(220,38,38,0.09)_48%,rgba(220,38,38,0.03)_66%,transparent_82%)] blur-[36px] opacity-60" />
+                <div className="absolute inset-0 rounded-full" style={{ animation: 'pulse-halo 9.5s ease-in-out infinite' }} />
+                <div
+                    className="absolute inset-[-4%] rounded-full bg-[radial-gradient(circle_at_88%_50%,rgba(255,120,120,0.6)_0%,rgba(220,38,38,0.3)_24%,rgba(220,38,38,0.08)_42%,transparent_62%)] blur-[18px]"
+                    style={{ animation: 'breath-release-glow 9.5s ease-in-out infinite' }}
+                />
             </motion.div>
 
             {/* Content */}
-            <motion.div style={{ opacity, y: textY }} className="relative z-30 flex flex-col items-center text-center px-4">
-                <h2 className="font-sans font-black text-5xl md:text-8xl text-white tracking-tighter mb-4 drop-shadow-2xl leading-tight uppercase">
-                    Backed<br />By Brick.
+            <motion.div style={{ opacity, y: textY }} className="relative z-30 flex flex-col items-center text-center px-4 mt-10 md:mt-14">
+                <span className="mb-4 font-mono text-[10px] md:text-xs text-white/45 tracking-[0.45em] uppercase border border-white/15 px-3 py-1 bg-black/25">
+                    Signal Authority
+                </span>
+                <h2 className="font-mono font-black text-5xl md:text-8xl text-white tracking-[0.04em] md:tracking-[0.06em] mb-5 leading-[0.95] uppercase drop-shadow-[0_0_18px_rgba(0,0,0,0.65)]">
+                    <span className="text-[#E5E7EB]">Backed</span><br />
+                    <span className="text-[#DC2626]">By Brick</span>
                 </h2>
                 <p className="font-sans font-light text-white/50 tracking-[0.05em] text-sm md:text-base max-w-sm leading-relaxed mt-2">
                     {t('legacy.text')}
                 </p>
+                <div className="mt-8 md:mt-10 w-full max-w-4xl">
+                    <div className="flex items-center justify-center gap-3 mb-5">
+                        <span className="h-px w-12 bg-gradient-to-r from-transparent to-[#DC2626]/70"></span>
+                        <span className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-[0.35em]">Clientes Brick</span>
+                        <span className="h-px w-12 bg-gradient-to-l from-transparent to-[#DC2626]/70"></span>
+                    </div>
+                    <div className="relative grid w-full grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-3 max-w-5xl mx-auto">
+                        <div className="absolute -inset-6 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.12)_0%,rgba(220,38,38,0.04)_42%,transparent_75%)] blur-2xl pointer-events-none" />
+                        {clients.map((client, i) => (
+                            <div
+                                key={i}
+                                className="group relative h-[68px] md:h-[78px] px-3 md:px-4 flex items-center justify-center text-center border border-[#DC2626]/45 hover:border-[#ff5a5a]/80 transition-all duration-500 overflow-hidden [clip-path:polygon(0_0,calc(100%-10px)_0,100%_10px,100%_100%,10px_100%,0_calc(100%-10px))] hover:shadow-[0_0_38px_rgba(220,38,38,0.34)]"
+                                style={{
+                                    backgroundImage: 'linear-gradient(180deg, rgba(30,0,0,0.88) 0%, rgba(8,0,0,0.92) 100%), repeating-linear-gradient(to bottom, rgba(255,45,45,0.22) 0px, rgba(255,45,45,0.22) 1px, transparent 1px, transparent 13px), repeating-linear-gradient(to right, rgba(255,45,45,0.16) 0px, rgba(255,45,45,0.16) 1px, transparent 1px, transparent 13px)',
+                                    animation: 'red-grid-drift 8s linear infinite',
+                                }}
+                            >
+                                <span className="absolute top-1.5 left-2 font-mono text-[8px] text-white/35 tracking-[0.2em]">NODE_{String(i + 1).padStart(2, '0')}</span>
+                                <span className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,0,0,0.2)_0%,rgba(255,0,0,0.08)_35%,transparent_72%)] opacity-80 pointer-events-none" />
+                                <span className="absolute inset-0 opacity-35 bg-[linear-gradient(to_bottom,transparent_0%,rgba(255,255,255,0.08)_48%,transparent_100%)] pointer-events-none" />
+                                <span className="absolute left-0 top-0 h-[1px] w-8 bg-[#ff6464]" />
+                                <span className="absolute right-0 bottom-0 h-[1px] w-8 bg-[#ff6464]/70" />
+                                <span className="font-mono text-[10px] md:text-xs text-white uppercase tracking-[0.14em] group-hover:text-[#ffe4e4] transition-colors leading-tight drop-shadow-[0_0_8px_rgba(255,40,40,0.55)]">
+                                    {client}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
             </motion.div>
-        </section>
-    );
-};
-
-const Legacy = () => {
-    const { t } = useTranslation();
-    const clients = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO"];
-
-    return (
-        <section className="relative w-full bg-[#050505] border-t border-white/10 px-6 md:px-12 lg:px-24 py-10">
-            <div className="flex flex-col items-center gap-5">
-                <div className="flex items-center gap-2">
-                    <svg width="7" height="7" viewBox="0 0 10 10" className="flex-shrink-0">
-                        <polygon points="3,0 7,0 10,3 10,7 7,10 3,10 0,7 0,3" fill="none" stroke="#DC2626" strokeWidth="1.5"/>
-                    </svg>
-                    <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-widest">{t('legacy.trusted_by')}</span>
-                </div>
-                <div className="flex flex-wrap justify-center gap-x-8 gap-y-3">
-                    {clients.map((client, i) => (
-                        <span key={i} className="text-sm font-black text-white/25 hover:text-white/70 transition-colors duration-500 uppercase tracking-tighter cursor-default">
-                            {client}
-                        </span>
-                    ))}
-                </div>
-            </div>
         </section>
     );
 };
@@ -2309,7 +2351,6 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, o
             <SelectedWorks onSelectProject={onSelectProject} />
             <Philosophy />
             <FinalOrbit />
-            <Legacy />
         </main>
         <Footer onChat={onChat} onAdmin={onAdmin} />
     </React.Fragment>
