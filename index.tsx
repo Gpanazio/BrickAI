@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { ArrowRight, Database, Globe, Menu, X } from 'lucide-react';
 import * as THREE from 'three';
 import { useTranslation } from 'react-i18next';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import './src/i18n';
 import './src/index.css';
 
@@ -110,6 +111,21 @@ const GlobalStyles = () => (
         .animate-talking { animation: talking-glitch 0.15s infinite; }
         .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
         .animate-scan { animation: scan 3s ease-in-out forwards; }
+
+        @keyframes pulse-halo {
+            0%, 100% {
+                box-shadow: inset -4px 0 8px rgba(220,38,38,0.2), 0 0 8px rgba(220,38,38,0.05), 0 0 20px rgba(220,38,38,0.02);
+                opacity: 0.3;
+            }
+            50% {
+                box-shadow: inset -8px 0 35px rgba(255,80,80,0.95), 0 0 50px rgba(220,38,38,0.35), 0 0 100px rgba(220,38,38,0.18);
+                opacity: 1;
+            }
+        }
+        @keyframes twinkle {
+            from { opacity: 0.1; transform: scale(0.8); }
+            to   { opacity: 1;   transform: scale(1.2); box-shadow: 0 0 4px rgba(255,255,255,0.8); }
+        }
 
         /* NOISE REMOVED BY USER REQUEST */
         .card-noise { display: none; }
@@ -1061,6 +1077,29 @@ const ParticleBackground = () => {
     return <div ref={mountRef} className="absolute inset-0 pointer-events-none z-0" />;
 };
 
+const TwinkleStars = ({ count = 200 }: { count?: number }) => {
+    const stars = useMemo(() => Array.from({ length: count }).map(() => ({
+        top: `${Math.random() * 100}%`,
+        left: `${Math.random() * 100}%`,
+        size: Math.random() * 2 + 1,
+        opacity: Math.random() * 0.8 + 0.2,
+        duration: `${Math.random() * 3 + 2}s`,
+        delay: `${Math.random() * 4}s`,
+    })), []);
+    return (
+        <div className="absolute inset-0 z-0 pointer-events-none">
+            {stars.map((star, i) => (
+                <div key={i} className="absolute rounded-full bg-white" style={{
+                    top: star.top, left: star.left,
+                    width: `${star.size}px`, height: `${star.size}px`,
+                    opacity: star.opacity,
+                    animation: `twinkle ${star.duration} ease-in-out ${star.delay} infinite alternate`,
+                }} />
+            ))}
+        </div>
+    );
+};
+
 const Philosophy = () => {
     const { t } = useTranslation();
 
@@ -1234,34 +1273,320 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
     );
 };
 
+const TunnelBackground = () => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        const dpr = Math.min(window.devicePixelRatio, 2);
+        let width = canvas.offsetWidth;
+        let height = canvas.offsetHeight;
+
+        const resize = () => {
+            width = canvas.offsetWidth;
+            height = canvas.offsetHeight;
+            canvas.width = width * dpr;
+            canvas.height = height * dpr;
+            ctx.scale(dpr, dpr);
+        };
+        resize();
+
+        const NUM_RINGS = 24;
+        const FOCAL = 0.8;
+        const Z_NEAR = 0.05;
+        const Z_FAR = 2.2;
+        const SPEED = 0.006;
+        const CORNER_RATIO = 0.22;
+
+        const rings = Array.from({ length: NUM_RINGS }, (_, i) => ({
+            z: Z_NEAR + (i / NUM_RINGS) * (Z_FAR - Z_NEAR),
+            isAccent: i % 5 === 0,
+        }));
+
+        const getOctPoints = (cx: number, cy: number, w: number, h: number) => {
+            const c = Math.min(w, h) * CORNER_RATIO;
+            return [
+                [cx - w / 2 + c, cy - h / 2],
+                [cx + w / 2 - c, cy - h / 2],
+                [cx + w / 2,     cy - h / 2 + c],
+                [cx + w / 2,     cy + h / 2 - c],
+                [cx + w / 2 - c, cy + h / 2],
+                [cx - w / 2 + c, cy + h / 2],
+                [cx - w / 2,     cy + h / 2 - c],
+                [cx - w / 2,     cy - h / 2 + c],
+            ];
+        };
+
+        const drawOctagon = (cx: number, cy: number, w: number, h: number) => {
+            const pts = getOctPoints(cx, cy, w, h);
+            ctx.beginPath();
+            ctx.moveTo(pts[0][0], pts[0][1]);
+            for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]);
+            ctx.closePath();
+            ctx.stroke();
+        };
+
+        let animId: number;
+
+        const draw = () => {
+            ctx.clearRect(0, 0, width, height);
+            const cx = width / 2;
+            const cy = height / 2;
+            const baseW = width * 0.55;
+            const baseH = height * 0.55;
+
+            rings.forEach(r => {
+                r.z -= SPEED;
+                if (r.z < Z_NEAR) r.z += Z_FAR - Z_NEAR;
+            });
+
+            const sorted = [...rings].sort((a, b) => b.z - a.z);
+
+            const computed = sorted.map(r => {
+                const scale = FOCAL / r.z;
+                const w = baseW * scale;
+                const h = baseH * scale;
+                const nd = 1 - (r.z - Z_NEAR) / (Z_FAR - Z_NEAR);
+                let opacity = 1;
+                if (nd < 0.12) opacity = nd / 0.12;
+                if (nd > 0.8) opacity = (1 - nd) / 0.2;
+                return { w, h, opacity, isAccent: r.isAccent };
+            });
+
+            // 8 perspective rails connecting consecutive octagon vertices
+            for (let i = 0; i < computed.length - 1; i++) {
+                const a = computed[i];
+                const b = computed[i + 1];
+                if (a.w < 2 || b.w < 2) continue;
+                const ptsA = getOctPoints(cx, cy, a.w, a.h);
+                const ptsB = getOctPoints(cx, cy, b.w, b.h);
+                const lo = Math.min(a.opacity, b.opacity) * 0.13;
+                ctx.strokeStyle = `rgba(220,38,38,${lo})`;
+                ctx.lineWidth = 0.5;
+                ctx.beginPath();
+                for (let j = 0; j < 8; j++) {
+                    ctx.moveTo(ptsA[j][0], ptsA[j][1]);
+                    ctx.lineTo(ptsB[j][0], ptsB[j][1]);
+                }
+                ctx.stroke();
+            }
+
+            // Octagonal rings
+            computed.forEach(({ w, h, opacity, isAccent }) => {
+                if (w < 2 || h < 2) return;
+                ctx.strokeStyle = isAccent
+                    ? `rgba(220,38,38,${opacity * 0.6})`
+                    : `rgba(255,255,255,${opacity * 0.07})`;
+                ctx.lineWidth = isAccent ? 1 : 0.5;
+                drawOctagon(cx, cy, w, h);
+            });
+
+            animId = requestAnimationFrame(draw);
+        };
+
+        draw();
+        window.addEventListener('resize', resize);
+        return () => {
+            cancelAnimationFrame(animId);
+            window.removeEventListener('resize', resize);
+        };
+    }, []);
+
+    return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0" />;
+};
+
+const StarGateBackground = () => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        let width  = canvas.offsetWidth  || window.innerWidth;
+        let height = canvas.offsetHeight || window.innerHeight;
+        canvas.width  = width;
+        canvas.height = height;
+
+        // 3 cores quentes (sem azul) → 3 batches por frame
+        const colors = ['#DC2626', '#FF6B35', '#FFFFFF'];
+        const N = colors.length;
+
+        type StarObj = { x: number; y: number; z: number; pz: number; ci: number };
+
+        const makeStar = (): StarObj => {
+            const s: StarObj = {
+                x:  (Math.random() - 0.5) * width * 2,
+                y:  (Math.random() - 0.5) * height * 2,
+                z:  Math.random() * width,
+                pz: 0,
+                ci: Math.floor(Math.random() * N),
+            };
+            s.pz = s.z;
+            return s;
+        };
+
+        const COUNT = 180; // menos estrelas → menos geometria por frame
+        const stars: StarObj[] = Array.from({ length: COUNT }, makeStar);
+
+        // Buffers reutilizáveis: zero alocação por frame
+        const segsX0  = new Float32Array(COUNT);
+        const segsY0  = new Float32Array(COUNT);
+        const segsX1  = new Float32Array(COUNT);
+        const segsY1  = new Float32Array(COUNT);
+        const segCI   = new Uint8Array(COUNT);
+        const buckets = new Int32Array(N);
+
+        let currentSpeed = 2;
+        let animId: number;
+
+        const handleScroll = () => {
+            const maxScroll = document.body.scrollHeight - window.innerHeight;
+            const pct = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+            currentSpeed = 2 + pct * 50;
+        };
+
+        const render = () => {
+            ctx.fillStyle = 'rgba(0,0,0,0.28)'; // trail mais curto = menos pixels composited
+            ctx.fillRect(0, 0, width, height);
+
+            buckets.fill(0);
+
+            // Passo 1: atualizar posições e coletar segmentos
+            for (let i = 0; i < COUNT; i++) {
+                const s = stars[i];
+                s.pz = s.z;
+                s.z -= currentSpeed;
+                if (s.z < 1) {
+                    s.z  = width;
+                    s.x  = (Math.random() - 0.5) * width * 2;
+                    s.y  = (Math.random() - 0.5) * height * 2;
+                    s.pz = s.z;
+                }
+                segsX0[i] = (s.x / s.pz) * width  + width  * 0.5;
+                segsY0[i] = (s.y / s.pz) * height + height * 0.5;
+                segsX1[i] = (s.x / s.z)  * width  + width  * 0.5;
+                segsY1[i] = (s.y / s.z)  * height + height * 0.5;
+                segCI[i]  = s.ci;
+                buckets[s.ci]++;
+            }
+
+            // Passo 2: desenhar 1 path por cor → apenas 4 stroke() por frame
+            ctx.lineWidth = 1.5;
+            for (let ci = 0; ci < N; ci++) {
+                if (!buckets[ci]) continue;
+                ctx.strokeStyle = colors[ci];
+                ctx.beginPath();
+                for (let i = 0; i < COUNT; i++) {
+                    if (segCI[i] !== ci) continue;
+                    ctx.moveTo(segsX0[i], segsY0[i]);
+                    ctx.lineTo(segsX1[i], segsY1[i]);
+                }
+                ctx.stroke();
+            }
+
+            animId = requestAnimationFrame(render);
+        };
+
+        render();
+
+        const handleResize = () => {
+            width  = canvas.offsetWidth  || window.innerWidth;
+            height = canvas.offsetHeight || window.innerHeight;
+            canvas.width  = width;
+            canvas.height = height;
+        };
+
+        window.addEventListener('resize', handleResize);
+        window.addEventListener('scroll', handleScroll);
+
+        return () => {
+            cancelAnimationFrame(animId);
+            window.removeEventListener('resize', handleResize);
+            window.removeEventListener('scroll', handleScroll);
+        };
+    }, []);
+
+    return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0" />;
+};
+
+const FinalOrbit = () => {
+    const ref = useRef<HTMLElement>(null);
+    const { t } = useTranslation();
+    const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
+
+    const planetX  = useTransform(scrollYProgress, [0, 1], ["-80%", "-76%"]);
+    const opacity  = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 1]);
+    const textY    = useTransform(scrollYProgress, [0, 1], ["30px", "0px"]);
+
+    return (
+        <section ref={ref} className="relative h-[80vh] w-full overflow-hidden bg-black flex items-start justify-center pt-20">
+
+            {/* Cinema grain — animated, oversized to avoid edge gaps */}
+            <div className="absolute inset-0 z-[5] pointer-events-none overflow-hidden">
+                <svg className="absolute -top-1/2 -left-1/2 w-[200%] h-[200%] animate-grain opacity-[0.15] mix-blend-screen" xmlns="http://www.w3.org/2000/svg">
+                    <filter id="cinema-grain-fo">
+                        <feTurbulence type="fractalNoise" baseFrequency="0.62" numOctaves="4" stitchTiles="stitch"/>
+                        <feColorMatrix type="saturate" values="0"/>
+                    </filter>
+                    <rect width="100%" height="100%" filter="url(#cinema-grain-fo)"/>
+                </svg>
+            </div>
+
+            {/* Full-width base glow — spreads across entire section bottom */}
+            <div className="absolute bottom-[-20%] left-[-10%] w-[110vw] h-[70vh] bg-red-900/25 blur-[200px] pointer-events-none z-[6]" />
+            {/* Wide mid glow — left half */}
+            <div className="absolute bottom-[-10%] left-[-5%] w-[75vw] h-[60vh] bg-red-700/20 blur-[150px] pointer-events-none z-[6]" />
+            {/* Concentrated glow near planet edge */}
+            <div className="absolute bottom-[-5%] left-[-2%] w-[40vw] h-[50vh] bg-red-600/30 blur-[100px] pointer-events-none z-[6]" />
+            {/* Core glow on planet rim */}
+            <div className="absolute bottom-[5%] left-[-2%] w-[18vw] h-[30vh] bg-red-500/45 blur-[55px] pointer-events-none z-[6]" />
+
+            {/* Planet */}
+            <motion.div style={{ x: planetX, opacity }} className="absolute top-[35%] -translate-y-1/2 left-0 z-20 w-[200vh] h-[200vh] rounded-full">
+                <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_92%_50%,#cc2222_0%,#8b1a1a_15%,#3a0a0a_40%,#000000_65%)]" />
+                <div className="absolute inset-0 rounded-full shadow-[inset_-10px_0_80px_rgba(255,80,80,0.35)]" />
+                <div className="absolute inset-0 rounded-full shadow-[inset_-60px_0_120px_rgba(0,0,0,0.85)]" />
+                <div className="absolute top-0 left-0 w-full h-full rounded-full opacity-90" style={{ animation: 'pulse-halo 8s ease-in-out infinite' }} />
+            </motion.div>
+
+            {/* Content */}
+            <motion.div style={{ opacity, y: textY }} className="relative z-30 flex flex-col items-center text-center px-4">
+                <h2 className="font-sans font-black text-5xl md:text-8xl text-white tracking-tighter mb-4 drop-shadow-2xl leading-tight uppercase">
+                    Backed<br />By Brick.
+                </h2>
+                <p className="font-sans font-light text-white/50 tracking-[0.05em] text-sm md:text-base max-w-sm leading-relaxed mt-2">
+                    {t('legacy.text')}
+                </p>
+            </motion.div>
+        </section>
+    );
+};
+
 const Legacy = () => {
+    const { t } = useTranslation();
     const clients = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO"];
 
     return (
-        <section className="w-full py-40 px-6 md:px-12 lg:px-24 bg-brick-white text-brick-black relative overflow-hidden border-t border-black/5">
-            <div className="max-w-6xl mx-auto reveal">
-                <h2 className="text-6xl md:text-8xl lg:text-9xl font-black tracking-tighter mb-16 leading-[0.85] uppercase">
-                    Backed <br className="md:hidden" /> By Brick.
-                </h2>
-
-                <div className="flex flex-col md:flex-row gap-16 border-t-4 border-brick-black pt-12">
-                    <p className="text-xl md:text-2xl font-medium leading-tight max-w-md">
-                        This isn't a beta test. This is a new lens from a production house with 10 years of experience. Same directors. Same producers. New tools.
-                    </p>
-
-                    <div className="flex-1">
-                        <h4 className="text-xs font-bold tracking-[0.2em] uppercase mb-10 text-neutral-500 border-b border-neutral-300 pb-4 inline-block">Trusted By</h4>
-
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-8">
-                            {clients.map((client, i) => (
-                                <div key={i} className="group flex items-center">
-                                    <span className="text-xl md:text-2xl font-black text-neutral-400 group-hover:text-brick-black transition-colors duration-300 cursor-default tracking-tighter uppercase whitespace-nowrap">
-                                        {client}
-                                    </span>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+        <section className="relative w-full bg-[#050505] border-t border-white/10 px-6 md:px-12 lg:px-24 py-10">
+            <div className="flex flex-col items-center gap-5">
+                <div className="flex items-center gap-2">
+                    <svg width="7" height="7" viewBox="0 0 10 10" className="flex-shrink-0">
+                        <polygon points="3,0 7,0 10,3 10,7 7,10 3,10 0,7 0,3" fill="none" stroke="#DC2626" strokeWidth="1.5"/>
+                    </svg>
+                    <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-widest">{t('legacy.trusted_by')}</span>
+                </div>
+                <div className="flex flex-wrap justify-center gap-x-8 gap-y-3">
+                    {clients.map((client, i) => (
+                        <span key={i} className="text-sm font-black text-white/25 hover:text-white/70 transition-colors duration-500 uppercase tracking-tighter cursor-default">
+                            {client}
+                        </span>
+                    ))}
                 </div>
             </div>
         </section>
@@ -1983,6 +2308,7 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, o
             <Hero setMonolithHover={setMonolithHover} monolithHover={monolithHover} />
             <SelectedWorks onSelectProject={onSelectProject} />
             <Philosophy />
+            <FinalOrbit />
             <Legacy />
         </main>
         <Footer onChat={onChat} onAdmin={onAdmin} />
