@@ -342,6 +342,8 @@
       position: absolute;
       top: 50%;
       left: 50%;
+      margin-top: 0;
+      margin-left: 0;
       transform: translate(-50%, -50%);
       border-radius: 50%;
       pointer-events: none;
@@ -591,15 +593,6 @@
             style="transform: translateY(-120px);">
             <!-- VISUAL MONOLITH REPLICA - STANDARDIZED SIZE (HERO +33% +20% +10%) -->
             <div class="relative w-[264px] h-[528px] flex items-center justify-center pointer-events-auto">
-              <!-- Aura/Glow layers - Proportional -->
-              <div class="centered-layer aura-atmos pointer-events-none opacity-60 w-[704px] h-[704px] blur-[100px]">
-              </div>
-              <div
-                class="centered-layer light-atmos animate-breathe pointer-events-none opacity-60 w-[528px] h-[528px] blur-[65px]">
-              </div>
-              <div class="centered-layer core-atmos pointer-events-none"
-                style="width: 26px; height: 26px; filter: blur(6px);"></div>
-
               <!-- EXACT HERO MONOLITH REPLICA (SCALED) -->
               <div
                 class="monolith-structure w-full h-full rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative transition-transform duration-1000 ease-out pointer-events-none scale-100"
@@ -608,17 +601,14 @@
                   class="absolute inset-0 mix-blend-overlay monolith-texture bg-[#050505] pointer-events-none rounded-[2px] overflow-hidden">
                 </div>
 
-                <!-- INTERACTIVE RED DOT & RADIATION -->
-                <div class="absolute inset-0 overflow-hidden rounded-[2px] pointer-events-none z-30">
-                  <div
-                    class="absolute pointer-events-none mix-blend-screen transition-opacity duration-300 ease-out rounded-full opacity-100"
-                    style="width: 11px; height: 11px; top: 50%; left: 50%; margin-top: -5.5px; margin-left: -5.5px; background-color: #DC2626; box-shadow: 0 0 10px 2px rgba(220, 38, 38, 0.6), 0 0 20px 4px rgba(220, 38, 38, 0.2);">
-                  </div>
-                  <div
-                    class="absolute w-[1056px] h-[1056px] -ml-[528px] -mt-[528px] top-1/2 left-1/2 pointer-events-none transition-opacity duration-700 ease-out opacity-100 animate-breathe"
-                    style="background: radial-gradient(circle, rgba(220,38,38,0.25) 0%, rgba(220,38,38,0.05) 50%, transparent 80%); filter: blur(100px); z-index: 5;">
-                  </div>
+                <!-- Aura/Glow layers - Breathing Light Only (No hard dot, scaled down) -->
+                <div
+                  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 aura-atmos pointer-events-none opacity-60 w-[350px] h-[350px] blur-[60px] z-20">
                 </div>
+                <div
+                  class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 light-atmos animate-breathe pointer-events-none opacity-80 w-[240px] h-[240px] blur-[40px] z-20">
+                </div>
+                <!-- NO CORE-ATMOS (removes the hard red dot) -->
                 <div class="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10 rounded-[2px]">
                 </div>
               </div>
