@@ -1,5 +1,8 @@
 [phases.build]
 cmds = ["npm install", "npm run build"]
 
+[phases.build.env]
+NODE_OPTIONS = "--max-old-space-size=512"
+
 [start]
 cmd = "node server.js"
