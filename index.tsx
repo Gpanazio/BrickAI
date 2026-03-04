@@ -1588,7 +1588,7 @@ const MassiveTunnelBackground = () => {
         const segments = 60; // Mais segmentos para preencher a profundidade extra
         const sides = 8;
         let offset = 0;
-        const speed = 0.0018;
+        const speed = 0.0012;
 
         const draw = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1597,11 +1597,22 @@ const MassiveTunnelBackground = () => {
             const centerY = canvas.height / 2;
             const maxDim = Math.max(canvas.width, canvas.height);
 
-            offset += speed;
-            if (offset > 1) offset -= 1;
+            offset -= speed;
+            if (offset < 0) offset += 1;
 
-            for (let i = segments; i > 0; i--) {
-                const z = (i - offset) / segments;
+            // DRAW RAILS (Trilhos de perspectiva para profundidade infinita)
+            ctx.beginPath();
+            for (let s = 0; s < sides; s++) {
+                const angle = (s * Math.PI * 2) / sides + Math.PI / 8;
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(centerX + Math.cos(angle) * maxDim * 2, centerY + Math.sin(angle) * maxDim * 2);
+            }
+            ctx.strokeStyle = 'rgba(220, 38, 38, 0.15)';
+            ctx.lineWidth = 1.0;
+            ctx.stroke();
+
+            for (let i = segments - 1; i >= 0; i--) {
+                const z = (i + offset) / segments;
 
                 // Aumentei o multiplicador de 2.5 para 4.5 e o expoente para 3.0
                 const radius = Math.pow(z, 3.0) * maxDim * 4.5;
@@ -1611,7 +1622,6 @@ const MassiveTunnelBackground = () => {
                 const opacity = Math.pow(1 - z, 2.5);
 
                 const strokeColor = `hsla(0, 100%, 50%, ${opacity * 0.6})`;
-                const fillColor = `hsla(0, 100%, 10%, ${opacity * 0.15})`;
 
                 ctx.beginPath();
                 for (let s = 0; s <= sides; s++) {
@@ -1627,19 +1637,21 @@ const MassiveTunnelBackground = () => {
                 ctx.strokeStyle = strokeColor;
                 ctx.lineWidth = (1 - z) * 2; // Linhas ligeiramente mais grossas para escala maior
                 ctx.stroke();
-
-                ctx.fillStyle = fillColor;
-                ctx.fill();
             }
 
-            const coreGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxDim * 0.25);
-            coreGlow.addColorStop(0, 'rgba(220, 38, 38, 0.25)');
+            const time = Date.now() * 0.001;
+            const osc = (Math.sin(time) + 1) / 2;
+            const glowDist = maxDim * (0.1 + osc * 0.4);
+            const intensity = 0.1 + osc * 0.2;
+
+            const coreGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, glowDist);
+            coreGlow.addColorStop(0, `rgba(220, 38, 38, ${intensity})`);
             coreGlow.addColorStop(1, 'transparent');
             ctx.fillStyle = coreGlow;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            const vignette = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxDim * 1.3);
-            vignette.addColorStop(0.3, 'transparent');
+            const vignette = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxDim * 0.8);
+            vignette.addColorStop(0.4, 'transparent');
             vignette.addColorStop(1, 'rgba(5, 5, 5, 1)');
             ctx.fillStyle = vignette;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -1656,12 +1668,16 @@ const MassiveTunnelBackground = () => {
     }, []);
 
     return (
-        <div className="absolute inset-0 pointer-events-none z-[1] overflow-hidden">
+        <div
+            className="absolute inset-0 pointer-events-none z-[1] flex items-center justify-center overflow-hidden"
+            style={{
+                maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 50%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 50%, transparent 100%)'
+            }}
+        >
             <canvas ref={canvasRef} className="absolute inset-0 block w-full h-full" />
             {/* Camada de Textura de Película (Grão) overlay on the tunnel */}
             <div className="absolute inset-0 pointer-events-none opacity-[0.05] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
-            {/* Soft fade-in mask at the top so it blends smoothly with the black starry section above it */}
-            <div className="absolute top-0 left-0 w-full h-[60vh] bg-gradient-to-b from-[#050505] to-transparent"></div>
         </div>
     );
 };
@@ -1677,19 +1693,16 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
     const textY = useTransform(smoothProgress, [0, 1], ["30px", "0px"]);
 
     return (
-        <section ref={ref} className="relative w-full bg-[#050505] flex flex-col items-center pt-24 pb-0 overflow-hidden">
-
-            {/* New Tunnel Background Starting from the top of the section */}
-            <MassiveTunnelBackground />
+        <section ref={ref} className="relative w-full bg-[#050505] flex flex-col items-center pt-0 pb-0 overflow-hidden">
 
             <ParticleBackground reactToMouse={true} />
 
             {/* Glowing emanation behind everything - Moves slightly on scroll, styled like the hero's gentle circular light */}
-            <motion.div style={{ x: planetX }} className="absolute top-1/2 left-0 -translate-y-1/2 w-[2400px] h-[2400px] bg-[#DC2626]/5 rounded-full blur-[300px] pointer-events-none z-[6] origin-left" />
-            <motion.div style={{ x: planetX }} className="absolute top-1/2 left-[-10%] -translate-y-1/2 w-[1800px] h-[1800px] bg-[#DC2626]/5 rounded-full blur-[200px] pointer-events-none z-[6] origin-left" />
+            <motion.div style={{ x: planetX }} className="absolute top-1/2 left-[5%] -translate-y-[35%] w-[2400px] h-[2400px] bg-[#DC2626]/5 rounded-full blur-[300px] pointer-events-none z-[6] origin-left" />
+            <motion.div style={{ x: planetX }} className="absolute top-1/2 left-[-5%] -translate-y-[35%] w-[1800px] h-[1800px] bg-[#DC2626]/5 rounded-full blur-[200px] pointer-events-none z-[6] origin-left" />
 
             {/* THE PLANET (Edge) - Completely Static. No moving on scroll to avoid jumping completely */}
-            <div className="absolute top-1/2 left-0 z-20 w-[200vh] h-[200vh] rounded-full" style={{ transform: 'translate(-98%, -50%)' }}>
+            <div className="absolute top-1/2 left-0 z-20 w-[200vh] h-[200vh] rounded-full" style={{ transform: 'translate(-93%, -35%)' }}>
                 <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_92%_50%,#cc2222_0%,#8b1a1a_15%,#3a0a0a_40%,#000000_65%)]" />
                 <div className="absolute inset-0 rounded-full shadow-[inset_-10px_0_80px_rgba(255,80,80,0.35)]" />
                 <div className="absolute inset-0 rounded-full shadow-[inset_-60px_0_120px_rgba(0,0,0,0.85)]" />
@@ -1702,32 +1715,36 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                 />
             </div>
 
-            {/* 1. BACKED BY BRICK */}
-            <motion.div style={{ y: textY }} className="relative z-30 flex flex-col items-center text-center px-4 mb-40 w-full mt-10">
-                <h2 className="font-sans font-black text-5xl md:text-7xl text-white tracking-normal md:tracking-tight mb-5 leading-[0.95] uppercase drop-shadow-[0_0_18px_rgba(0,0,0,0.65)]">
-                    <span className="text-[#E5E7EB]">Nascidos</span><br />
-                    <span className="text-[#DC2626]">no set</span>
-                </h2>
-                <p className="font-mono text-white/50 tracking-[0.05em] text-sm md:text-base max-w-lg leading-relaxed mt-2 uppercase">
-                    Não é um experimento. É uma produtora com 10 anos de set reinventando o que é possível produzir.
-                </p>
-                <div className="mt-8 md:mt-10 w-full max-w-4xl">
-                    <div className="flex items-center justify-center gap-3 mb-5">
-                        <span className="h-px w-12 bg-gradient-to-r from-transparent to-[#DC2626]/70"></span>
-                        <span className="font-sans font-bold text-[10px] text-[#9CA3AF] uppercase tracking-[0.2em]">Clientes Brick</span>
-                        <span className="h-px w-12 bg-gradient-to-l from-transparent to-[#DC2626]/70"></span>
+            {/* PART 1: Nascidos no Set & Clients - Has MassiveTunnelBackground */}
+            <div className="relative w-full flex flex-col items-center pt-20 pb-20 overflow-hidden min-h-[75vh]">
+                {/* New Tunnel Background Constrained to this section */}
+                <MassiveTunnelBackground />
+
+                {/* 1. BACKED BY BRICK */}
+                <motion.div style={{ y: textY }} className="relative z-30 flex flex-col items-center text-center px-4 w-full mt-10">
+                    <h2 className="font-sans font-black text-5xl md:text-7xl text-white tracking-normal md:tracking-tight mb-5 leading-[0.95] uppercase drop-shadow-[0_0_18px_rgba(0,0,0,0.65)]">
+                        <span className="text-[#E5E7EB]">Nascidos</span><br />
+                        <span className="text-[#DC2626]">no set</span>
+                    </h2>
+                    <p className="font-mono text-white/50 tracking-[0.05em] text-sm md:text-base max-w-lg leading-relaxed mt-2 uppercase">
+                        Não é um experimento. É uma produtora com 10 anos de set reinventando o que é possível produzir.
+                    </p>
+                    <div className="mt-8 md:mt-10 w-full max-w-4xl">
+                        <div className="flex items-center justify-center gap-3 mb-5">
+                            <span className="font-sans font-bold text-[10px] text-[#9CA3AF] uppercase tracking-[0.2em]">Clientes Brick</span>
+                        </div>
+                        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-8 md:gap-x-16 md:gap-y-12 max-w-4xl mx-auto px-4">
+                            {clients.map((client, i) => (
+                                <div key={i} className="group cursor-default flex items-center justify-center">
+                                    <span className="font-mono text-xs md:text-sm text-[#9CA3AF] opacity-60 uppercase tracking-[0.2em] transition-all duration-500 group-hover:opacity-100 group-hover:text-white group-hover:tracking-[0.28em] group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.6)]">
+                                        {client}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                    <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-8 md:gap-x-16 md:gap-y-12 max-w-4xl mx-auto px-4">
-                        {clients.map((client, i) => (
-                            <div key={i} className="group cursor-default flex items-center justify-center">
-                                <span className="font-mono text-xs md:text-sm text-[#9CA3AF] opacity-60 uppercase tracking-[0.2em] transition-all duration-500 group-hover:opacity-100 group-hover:text-white group-hover:tracking-[0.28em] group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.6)]">
-                                    {client}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </motion.div>
+                </motion.div>
+            </div>
 
             {/* 2. PHILOSOPHY / A CRENÇA */}
             <div className="max-w-4xl mx-auto px-6 relative z-30 flex flex-col items-center text-center w-full mb-40">
