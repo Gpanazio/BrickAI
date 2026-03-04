@@ -1671,8 +1671,8 @@ const MassiveTunnelBackground = () => {
         <div
             className="absolute inset-0 pointer-events-none z-[1] flex items-center justify-center overflow-hidden"
             style={{
-                maskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 50%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 10%, black 50%, transparent 100%)'
+                maskImage: 'linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)',
+                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)'
             }}
         >
             <canvas ref={canvasRef} className="absolute inset-0 block w-full h-full" />
@@ -1695,6 +1695,9 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
     return (
         <section ref={ref} className="relative w-full bg-[#050505] flex flex-col items-center pt-0 pb-0 overflow-hidden">
 
+            {/* Tunnel Background covering the full section */}
+            <MassiveTunnelBackground />
+
             <ParticleBackground reactToMouse={true} />
 
             {/* Glowing emanation behind everything - Moves slightly on scroll, styled like the hero's gentle circular light */}
@@ -1715,10 +1718,8 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                 />
             </div>
 
-            {/* PART 1: Nascidos no Set & Clients - Has MassiveTunnelBackground */}
+            {/* PART 1: Nascidos no Set & Clients */}
             <div className="relative w-full flex flex-col items-center pt-20 pb-20 overflow-hidden min-h-[75vh]">
-                {/* New Tunnel Background Constrained to this section */}
-                <MassiveTunnelBackground />
 
                 {/* 1. BACKED BY BRICK */}
                 <motion.div style={{ y: textY }} className="relative z-30 flex flex-col items-center text-center px-4 w-full mt-10">
