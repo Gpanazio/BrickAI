@@ -1163,22 +1163,22 @@ const Philosophy = () => {
                             <div className="absolute left-1/2 top-1/2 w-[2px] h-[2px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DC2626]/60"></div>
                         </div>
                     </div>
-                    <span className="text-xs font-ai text-[#9CA3AF] bg-[#050505] px-4 text-center">{t('philosophy.belief_label')}</span>
+                    <span className="text-4xl md:text-6xl font-brick text-white bg-[#050505] px-4 text-center">{t('philosophy.belief_label')}</span>
                 </div>
                 <div className="flex flex-col gap-24 w-full">
-                    <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} />
-                    <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} />
-                    <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} />
+                    <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} titleSize="text-2xl md:text-3xl" />
+                    <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} titleSize="text-3xl md:text-4xl" />
+                    <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} titleSize="text-4xl md:text-6xl" />
                 </div>
             </div>
         </section>
     );
 };
 
-const PhilosophyItem = ({ title, text }: { title: string, text: string }) => (
+const PhilosophyItem = ({ title, text, titleSize = 'text-4xl md:text-6xl' }: { title: string, text: string, titleSize?: string }) => (
     <div className="reveal flex flex-col items-center group cursor-default">
-        <h2 className="text-4xl md:text-6xl font-brick text-white mb-4 transition-colors duration-500 group-hover:text-[#DC2626]">{title}</h2>
-        <p className="text-base md:text-lg text-[#9CA3AF] font-light max-w-lg leading-relaxed group-hover:text-white transition-colors duration-300">{text}</p>
+        <h2 className={`${titleSize} font-brick text-white mb-4 transition-colors duration-500 group-hover:text-[#DC2626]`}>{title}</h2>
+        <p className="text-base md:text-lg text-white font-light max-w-lg leading-relaxed transition-colors duration-300">{text}</p>
     </div>
 );
 
@@ -1570,42 +1570,40 @@ const MassiveTunnelBackground = () => {
         let animationFrameId: number;
 
         const resize = () => {
-            // Keep it bounded precisely to the section parent element
             const parent = canvas.parentElement;
-            if (parent) {
-                canvas.width = parent.clientWidth;
-                canvas.height = parent.clientHeight;
-            } else {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
+            if (!parent) return;
+            canvas.width = parent.clientWidth;
+            canvas.height = parent.clientHeight;
         };
 
         window.addEventListener('resize', resize);
         resize();
 
-        // Configurações para Túnel Massivo e Profundo
-        const segments = 60; // Mais segmentos para preencher a profundidade extra
+        const segments = 60;
         const sides = 8;
         let offset = 0;
-        const speed = 0.0012;
+        const speed = 0.003;
 
         const draw = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             const centerX = canvas.width / 2;
             const centerY = canvas.height / 2;
-            const maxDim = Math.max(canvas.width, canvas.height);
+
+            // Fit octagon within the container — constrained by the smaller dimension
+            const distToSide = canvas.width / 2;
+            const distToVert = canvas.height / 2;
+            const maxRadius = Math.min(distToSide, distToVert) / 0.924 * 1.2;
 
             offset -= speed;
             if (offset < 0) offset += 1;
 
-            // DRAW RAILS (Trilhos de perspectiva para profundidade infinita)
+            // DRAW RAILS
             ctx.beginPath();
             for (let s = 0; s < sides; s++) {
                 const angle = (s * Math.PI * 2) / sides + Math.PI / 8;
                 ctx.moveTo(centerX, centerY);
-                ctx.lineTo(centerX + Math.cos(angle) * maxDim * 2, centerY + Math.sin(angle) * maxDim * 2);
+                ctx.lineTo(centerX + Math.cos(angle) * maxRadius, centerY + Math.sin(angle) * maxRadius);
             }
             ctx.strokeStyle = 'rgba(220, 38, 38, 0.15)';
             ctx.lineWidth = 1.0;
@@ -1614,13 +1612,12 @@ const MassiveTunnelBackground = () => {
             for (let i = segments - 1; i >= 0; i--) {
                 const z = (i + offset) / segments;
 
-                // Aumentei o multiplicador de 2.5 para 4.5 e o expoente para 3.0
-                const radius = Math.pow(z, 3.0) * maxDim * 4.5;
+                const radius = Math.pow(z, 3.0) * maxRadius * 12;
 
                 if (radius < 0.5) continue;
+                if (radius > maxRadius) continue;
 
                 const opacity = Math.pow(1 - z, 2.5);
-
                 const strokeColor = `hsla(0, 100%, 50%, ${opacity * 0.6})`;
 
                 ctx.beginPath();
@@ -1635,13 +1632,13 @@ const MassiveTunnelBackground = () => {
                 ctx.closePath();
 
                 ctx.strokeStyle = strokeColor;
-                ctx.lineWidth = (1 - z) * 2; // Linhas ligeiramente mais grossas para escala maior
+                ctx.lineWidth = (1 - z) * 2;
                 ctx.stroke();
             }
 
             const time = Date.now() * 0.001;
             const osc = (Math.sin(time) + 1) / 2;
-            const glowDist = maxDim * (0.1 + osc * 0.4);
+            const glowDist = maxRadius * (0.3 + osc * 0.5);
             const intensity = 0.1 + osc * 0.2;
 
             const coreGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, glowDist);
@@ -1650,11 +1647,7 @@ const MassiveTunnelBackground = () => {
             ctx.fillStyle = coreGlow;
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            const vignette = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxDim * 0.8);
-            vignette.addColorStop(0.4, 'transparent');
-            vignette.addColorStop(1, 'rgba(5, 5, 5, 1)');
-            ctx.fillStyle = vignette;
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
 
             animationFrameId = requestAnimationFrame(draw);
         };
@@ -1668,16 +1661,8 @@ const MassiveTunnelBackground = () => {
     }, []);
 
     return (
-        <div
-            className="absolute inset-0 pointer-events-none z-[1] flex items-center justify-center overflow-hidden"
-            style={{
-                maskImage: 'linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)',
-                WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 8%, black 85%, transparent 100%)'
-            }}
-        >
+        <div className="absolute inset-0 pointer-events-none z-[1]">
             <canvas ref={canvasRef} className="absolute inset-0 block w-full h-full" />
-            {/* Camada de Textura de Película (Grão) overlay on the tunnel */}
-            <div className="absolute inset-0 pointer-events-none opacity-[0.05] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
         </div>
     );
 };
@@ -1693,10 +1678,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
     const textY = useTransform(smoothProgress, [0, 1], ["30px", "0px"]);
 
     return (
-        <section ref={ref} className="relative w-full bg-[#050505] flex flex-col items-center pt-0 pb-0 overflow-hidden">
-
-            {/* Tunnel Background covering the full section */}
-            <MassiveTunnelBackground />
+        <section ref={ref} className="relative w-full bg-transparent flex flex-col items-center pt-0 pb-0">
 
             <ParticleBackground reactToMouse={true} />
 
@@ -1719,16 +1701,16 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
             </div>
 
             {/* PART 1: Nascidos no Set & Clients */}
-            <div className="relative w-full flex flex-col items-center pt-20 pb-20 overflow-hidden min-h-[75vh]">
-
+            <div className="relative w-full flex flex-col items-center justify-center min-h-[75vh] overflow-hidden">
+                <MassiveTunnelBackground />
                 {/* 1. BACKED BY BRICK */}
-                <motion.div style={{ y: textY }} className="relative z-30 flex flex-col items-center text-center px-4 w-full mt-10">
+                <motion.div style={{ y: textY }} className="relative z-30 flex flex-col items-center text-center px-4 w-full py-16">
                     <h2 className="font-sans font-black text-5xl md:text-7xl text-white tracking-normal md:tracking-tight mb-5 leading-[0.95] uppercase drop-shadow-[0_0_18px_rgba(0,0,0,0.65)]">
                         <span className="text-[#E5E7EB]">Nascidos</span><br />
                         <span className="text-[#DC2626]">no set</span>
                     </h2>
-                    <p className="font-mono text-white/50 tracking-[0.05em] text-sm md:text-base max-w-lg leading-relaxed mt-2 uppercase">
-                        Não é um experimento. É uma produtora com 10 anos de set reinventando o que é possível produzir.
+                    <p className="font-mono text-white tracking-[0.05em] text-sm md:text-base max-w-lg leading-relaxed mt-2 uppercase">
+                        Não é um experimento. É uma produtora com 10 anos de set que agora não tem mais limites para o que é possível.
                     </p>
                     <div className="mt-8 md:mt-10 w-full max-w-4xl">
                         <div className="flex items-center justify-center gap-3 mb-5">
@@ -1750,28 +1732,48 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
             {/* 2. PHILOSOPHY / A CRENÇA */}
             <div className="max-w-4xl mx-auto px-6 relative z-30 flex flex-col items-center text-center w-full mb-40">
                 <div className="mb-20 reveal w-full flex flex-col items-center">
-                    <div className="w-full flex justify-center mb-6">
+                    <div className="w-full flex justify-center mb-16">
                         <div className="relative w-5 h-5">
                             <div className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full animate-breathe blur-[2px]" style={{ background: 'radial-gradient(circle at center, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0.18) 45%, rgba(220,38,38,0) 75%)' }}></div>
                             <div className="absolute left-1/2 top-1/2 w-[2px] h-[2px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DC2626]/60"></div>
                         </div>
                     </div>
-                    <span className="text-xs font-ai text-[#9CA3AF] px-4 text-center">{t('philosophy.belief_label')}</span>
+                    <span className="text-4xl md:text-6xl font-brick text-[#DC2626] px-4 text-center">{t('philosophy.belief_label')}</span>
                 </div>
                 <div className="flex flex-col gap-24 w-full">
-                    <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} />
-                    <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} />
-                    <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} />
+                    <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} titleSize="text-2xl md:text-3xl" />
+                    <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} titleSize="text-3xl md:text-4xl" />
+                    <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} titleSize="text-4xl md:text-6xl" />
                 </div>
             </div>
 
             {/* 3. FOOTER CTA */}
-            <div className="flex flex-col items-center text-center gap-8 reveal relative z-30 w-full mb-32 px-6 md:px-12">
-                <h2 className="text-xs md:text-sm font-ai text-[#9CA3AF] uppercase tracking-[0.2em]">{t('footer.complex_problem')}</h2>
-                <p className="text-3xl md:text-5xl lg:text-5xl font-brick text-[#DC2626] leading-none max-w-5xl drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">{t('footer.we_have_intelligence')}</p>
-                <MagneticButton onClick={onChat} className="mt-6 text-base md:text-lg font-ai font-bold text-white hover:text-[#DC2626] group">
-                    {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
-                </MagneticButton>
+            <div className="reveal relative z-30 w-full mb-32 px-6 md:px-24">
+                <div className="relative border border-white/10 p-8 md:p-16">
+                    {/* corner brackets */}
+                    <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-[#DC2626]" />
+                    <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-[#DC2626]" />
+                    <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-[#DC2626]" />
+                    <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-[#DC2626]" />
+
+                    {/* system log — top-left corner */}
+                    <div className="absolute top-4 left-6 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626] animate-pulse" />
+                        <span className="font-ai text-[10px] tracking-[0.3em] text-[#DC2626]/60 uppercase">BRICK.OS — SISTEMA PRONTO</span>
+                    </div>
+
+                    <div className="flex flex-col items-center text-center gap-8 pt-8">
+                        <p className="font-ai text-base md:text-xl text-[#9CA3AF]/60 tracking-[0.25em] uppercase">&gt; {t('footer.complex_problem')}</p>
+                        <p className="text-4xl md:text-6xl lg:text-7xl font-brick text-white leading-none">{t('footer.we_have_intelligence')}</p>
+
+                        <div className="flex items-center gap-3">
+                            <span className="font-ai text-[#DC2626] text-sm select-none">&gt;</span>
+                            <MagneticButton onClick={onChat} className="text-base md:text-lg font-ai font-bold text-[#DC2626] hover:text-white group">
+                                {t('footer.talk_to_us')} <span className="animate-blink">_</span>
+                            </MagneticButton>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             {/* FOOTER BOTTOM */}
