@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { ArrowRight, Database, Globe, Menu, X } from 'lucide-react';
 import * as THREE from 'three';
 import { useTranslation } from 'react-i18next';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import './src/i18n';
 import './src/index.css';
 
@@ -114,40 +114,32 @@ const GlobalStyles = () => (
 
         @keyframes pulse-halo {
             0%, 100% {
-                box-shadow: inset -4px 0 8px rgba(220,38,38,0.2), 0 0 8px rgba(220,38,38,0.05), 0 0 20px rgba(220,38,38,0.02);
-                opacity: 0.3;
+                box-shadow: inset -6px 0 15px rgba(220,38,38,0.4), 0 0 20px rgba(220,38,38,0.1), 0 0 40px rgba(220,38,38,0.05);
+                opacity: 0.6;
             }
             50% {
-                box-shadow: inset -8px 0 35px rgba(255,80,80,0.95), 0 0 50px rgba(220,38,38,0.35), 0 0 100px rgba(220,38,38,0.18);
-                opacity: 1;
+                box-shadow: inset -8px 0 25px rgba(255,80,80,0.8), 0 0 35px rgba(220,38,38,0.25), 0 0 70px rgba(220,38,38,0.12);
+                opacity: 0.9;
             }
         }
         @keyframes red-emanation {
             0%, 100% {
-                opacity: 0.14;
-                transform: translate3d(0, 0, 0) scaleX(0.96);
+                opacity: 0.15;
+                transform: translate3d(0, 0, 0) scaleX(0.98);
             }
-            46% {
-                opacity: 0.42;
-                transform: translate3d(2.2%, 0, 0) scaleX(1.03);
-            }
-            62% {
-                opacity: 0.28;
-                transform: translate3d(1.1%, 0, 0) scaleX(1.0);
+            50% {
+                opacity: 0.35;
+                transform: translate3d(1%, 0, 0) scaleX(1.02);
             }
         }
         @keyframes breath-release-glow {
-            0%, 35%, 100% {
-                opacity: 0.12;
-                transform: scale(0.95);
+            0%, 100% {
+                opacity: 0.2;
+                transform: scale(0.98);
             }
             50% {
-                opacity: 0.72;
-                transform: scale(1.08);
-            }
-            62% {
-                opacity: 0.42;
-                transform: scale(1.03);
+                opacity: 0.5;
+                transform: scale(1.02);
             }
         }
         @keyframes twinkle {
@@ -1000,25 +992,7 @@ const ParticleBackground = ({ reactToMouse = true }: { reactToMouse?: boolean })
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         mountRef.current.appendChild(renderer.domElement);
 
-        // Particles
-        const particlesCount = 5200;
-        const posArray = new Float32Array(particlesCount * 3);
-
-        for (let i = 0; i < particlesCount; i++) {
-            const i3 = i * 3;
-            posArray[i3] = (Math.random() - 0.5) * 15;
-            posArray[i3 + 1] = (Math.random() - 0.5) * 15;
-
-            // Bring stars back, but keep a small safe gap around camera to avoid huge foreground blocks
-            let z = (Math.random() - 0.5) * 15;
-            if (Math.abs(z) < 1.5) z = z < 0 ? -1.5 : 1.5;
-            posArray[i3 + 2] = z;
-        }
-
-        const particlesGeometry = new THREE.BufferGeometry();
-        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
-
-        // Create a circular texture for soft particles
+        // Create a circular texture for soft particles & nebulas (optimized to 32x32)
         const canvas = document.createElement('canvas');
         canvas.width = 32;
         canvas.height = 32;
@@ -1026,27 +1000,52 @@ const ParticleBackground = ({ reactToMouse = true }: { reactToMouse?: boolean })
         if (context) {
             const gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16);
             gradient.addColorStop(0, 'rgba(255,255,255,1)');
-            gradient.addColorStop(0.2, 'rgba(255,255,255,0.8)');
-            gradient.addColorStop(0.5, 'rgba(255,255,255,0.2)');
+            gradient.addColorStop(0.2, 'rgba(255,255,255,0.7)');
+            gradient.addColorStop(0.5, 'rgba(255,255,255,0.15)');
             gradient.addColorStop(1, 'rgba(255,255,255,0)');
             context.fillStyle = gradient;
             context.fillRect(0, 0, 32, 32);
         }
         const particleTexture = new THREE.CanvasTexture(canvas);
 
-        // Material
-        const particlesMaterial = new THREE.PointsMaterial({
-            size: 0.028,
-            color: 0xf3f4f6,
-            map: particleTexture,
-            transparent: true,
-            opacity: 0.52,
-            blending: THREE.AdditiveBlending,
-            depthWrite: false
+        // 1. Small Stars (Backing)
+        const smallStarsCount = 3500;
+        const smallPos = new Float32Array(smallStarsCount * 3);
+        for (let i = 0; i < smallStarsCount; i++) {
+            smallPos[i * 3] = (Math.random() - 0.5) * 20;
+            smallPos[i * 3 + 1] = (Math.random() - 0.5) * 20;
+            let z = (Math.random() - 0.5) * 20;
+            if (Math.abs(z) < 1.5) z = z < 0 ? -1.5 : 1.5;
+            smallPos[i * 3 + 2] = z;
+        }
+        const smallGeo = new THREE.BufferGeometry();
+        smallGeo.setAttribute('position', new THREE.BufferAttribute(smallPos, 3));
+        const smallMat = new THREE.PointsMaterial({
+            size: 0.02, color: 0xffffff, map: particleTexture, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false
         });
+        const smallMesh = new THREE.Points(smallGeo, smallMat);
+        scene.add(smallMesh);
 
-        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
-        scene.add(particlesMesh);
+        // 2. Medium Bright Stars
+        const medStarsCount = 700;
+        const medPos = new Float32Array(medStarsCount * 3);
+        for (let i = 0; i < medStarsCount; i++) {
+            medPos[i * 3] = (Math.random() - 0.5) * 20;
+            medPos[i * 3 + 1] = (Math.random() - 0.5) * 20;
+            let z = (Math.random() - 0.5) * 20;
+            if (Math.abs(z) < 3.5) z = z < 0 ? -3.5 : 3.5;
+            medPos[i * 3 + 2] = z;
+        }
+        const medGeo = new THREE.BufferGeometry();
+        medGeo.setAttribute('position', new THREE.BufferAttribute(medPos, 3));
+        const medMat = new THREE.PointsMaterial({
+            size: 0.05, color: 0xddddff, map: particleTexture, transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending, depthWrite: false
+        });
+        const medMesh = new THREE.Points(medGeo, medMat);
+        scene.add(medMesh);
+
+        // To make animations easier, expose them in an array
+        const particlesMeshes = [smallMesh, medMesh];
         camera.position.z = 3;
 
         // Mouse interaction
@@ -1068,14 +1067,19 @@ const ParticleBackground = ({ reactToMouse = true }: { reactToMouse?: boolean })
         const animate = () => {
             animationFrameId = requestAnimationFrame(animate);
 
-            particlesMesh.rotation.y += 0.0008;
+            // Rotate all backgrounds smoothly
+            particlesMeshes.forEach((mesh) => {
+                mesh.rotation.y += 0.0008;
+            });
 
             // Mouse influence
             const targetX = reactToMouse ? mouseX * 0.5 : 0;
             const targetY = reactToMouse ? mouseY * 0.5 : 0;
 
-            particlesMesh.rotation.x += 0.05 * (targetY - particlesMesh.rotation.x);
-            particlesMesh.rotation.y += 0.05 * (targetX - particlesMesh.rotation.y);
+            particlesMeshes.forEach(mesh => {
+                mesh.rotation.x += 0.05 * (targetY - mesh.rotation.x);
+                mesh.rotation.y += 0.05 * (targetX - mesh.rotation.y);
+            });
 
             renderer.render(scene, camera);
         };
@@ -1104,8 +1108,11 @@ const ParticleBackground = ({ reactToMouse = true }: { reactToMouse?: boolean })
             if (mountRef.current && renderer.domElement) {
                 mountRef.current.removeChild(renderer.domElement);
             }
-            particlesGeometry.dispose();
-            particlesMaterial.dispose();
+            smallGeo.dispose();
+            smallMat.dispose();
+            medGeo.dispose();
+            medMat.dispose();
+            particleTexture.dispose();
             renderer.dispose();
         };
     }, []);
@@ -1349,12 +1356,12 @@ const TunnelBackground = () => {
             return [
                 [cx - w / 2 + c, cy - h / 2],
                 [cx + w / 2 - c, cy - h / 2],
-                [cx + w / 2,     cy - h / 2 + c],
-                [cx + w / 2,     cy + h / 2 - c],
+                [cx + w / 2, cy - h / 2 + c],
+                [cx + w / 2, cy + h / 2 - c],
                 [cx + w / 2 - c, cy + h / 2],
                 [cx - w / 2 + c, cy + h / 2],
-                [cx - w / 2,     cy + h / 2 - c],
-                [cx - w / 2,     cy - h / 2 + c],
+                [cx - w / 2, cy + h / 2 - c],
+                [cx - w / 2, cy - h / 2 + c],
             ];
         };
 
@@ -1445,9 +1452,9 @@ const StarGateBackground = () => {
         const ctx = canvas.getContext('2d');
         if (!ctx) return;
 
-        let width  = canvas.offsetWidth  || window.innerWidth;
+        let width = canvas.offsetWidth || window.innerWidth;
         let height = canvas.offsetHeight || window.innerHeight;
-        canvas.width  = width;
+        canvas.width = width;
         canvas.height = height;
 
         // 3 cores quentes (sem azul) → 3 batches por frame
@@ -1458,9 +1465,9 @@ const StarGateBackground = () => {
 
         const makeStar = (): StarObj => {
             const s: StarObj = {
-                x:  (Math.random() - 0.5) * width * 2,
-                y:  (Math.random() - 0.5) * height * 2,
-                z:  Math.random() * width,
+                x: (Math.random() - 0.5) * width * 2,
+                y: (Math.random() - 0.5) * height * 2,
+                z: Math.random() * width,
                 pz: 0,
                 ci: Math.floor(Math.random() * N),
             };
@@ -1472,11 +1479,11 @@ const StarGateBackground = () => {
         const stars: StarObj[] = Array.from({ length: COUNT }, makeStar);
 
         // Buffers reutilizáveis: zero alocação por frame
-        const segsX0  = new Float32Array(COUNT);
-        const segsY0  = new Float32Array(COUNT);
-        const segsX1  = new Float32Array(COUNT);
-        const segsY1  = new Float32Array(COUNT);
-        const segCI   = new Uint8Array(COUNT);
+        const segsX0 = new Float32Array(COUNT);
+        const segsY0 = new Float32Array(COUNT);
+        const segsX1 = new Float32Array(COUNT);
+        const segsY1 = new Float32Array(COUNT);
+        const segCI = new Uint8Array(COUNT);
         const buckets = new Int32Array(N);
 
         let currentSpeed = 2;
@@ -1500,16 +1507,16 @@ const StarGateBackground = () => {
                 s.pz = s.z;
                 s.z -= currentSpeed;
                 if (s.z < 1) {
-                    s.z  = width;
-                    s.x  = (Math.random() - 0.5) * width * 2;
-                    s.y  = (Math.random() - 0.5) * height * 2;
+                    s.z = width;
+                    s.x = (Math.random() - 0.5) * width * 2;
+                    s.y = (Math.random() - 0.5) * height * 2;
                     s.pz = s.z;
                 }
-                segsX0[i] = (s.x / s.pz) * width  + width  * 0.5;
+                segsX0[i] = (s.x / s.pz) * width + width * 0.5;
                 segsY0[i] = (s.y / s.pz) * height + height * 0.5;
-                segsX1[i] = (s.x / s.z)  * width  + width  * 0.5;
-                segsY1[i] = (s.y / s.z)  * height + height * 0.5;
-                segCI[i]  = s.ci;
+                segsX1[i] = (s.x / s.z) * width + width * 0.5;
+                segsY1[i] = (s.y / s.z) * height + height * 0.5;
+                segCI[i] = s.ci;
                 buckets[s.ci]++;
             }
 
@@ -1533,9 +1540,9 @@ const StarGateBackground = () => {
         render();
 
         const handleResize = () => {
-            width  = canvas.offsetWidth  || window.innerWidth;
+            width = canvas.offsetWidth || window.innerWidth;
             height = canvas.offsetHeight || window.innerHeight;
-            canvas.width  = width;
+            canvas.width = width;
             canvas.height = height;
         };
 
@@ -1552,31 +1559,137 @@ const StarGateBackground = () => {
     return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0" />;
 };
 
-const FinalOrbit = () => {
+const MassiveTunnelBackground = () => {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        let animationFrameId: number;
+
+        const resize = () => {
+            // Keep it bounded precisely to the section parent element
+            const parent = canvas.parentElement;
+            if (parent) {
+                canvas.width = parent.clientWidth;
+                canvas.height = parent.clientHeight;
+            } else {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        };
+
+        window.addEventListener('resize', resize);
+        resize();
+
+        // Configurações para Túnel Massivo e Profundo
+        const segments = 60; // Mais segmentos para preencher a profundidade extra
+        const sides = 8;
+        let offset = 0;
+        const speed = 0.0018;
+
+        const draw = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const maxDim = Math.max(canvas.width, canvas.height);
+
+            offset += speed;
+            if (offset > 1) offset -= 1;
+
+            for (let i = segments; i > 0; i--) {
+                const z = (i - offset) / segments;
+
+                // Aumentei o multiplicador de 2.5 para 4.5 e o expoente para 3.0
+                const radius = Math.pow(z, 3.0) * maxDim * 4.5;
+
+                if (radius < 0.5) continue;
+
+                const opacity = Math.pow(1 - z, 2.5);
+
+                const strokeColor = `hsla(0, 100%, 50%, ${opacity * 0.6})`;
+                const fillColor = `hsla(0, 100%, 10%, ${opacity * 0.15})`;
+
+                ctx.beginPath();
+                for (let s = 0; s <= sides; s++) {
+                    const angle = (s * Math.PI * 2) / sides + Math.PI / 8;
+                    const x = centerX + Math.cos(angle) * radius;
+                    const y = centerY + Math.sin(angle) * radius;
+
+                    if (s === 0) ctx.moveTo(x, y);
+                    else ctx.lineTo(x, y);
+                }
+                ctx.closePath();
+
+                ctx.strokeStyle = strokeColor;
+                ctx.lineWidth = (1 - z) * 2; // Linhas ligeiramente mais grossas para escala maior
+                ctx.stroke();
+
+                ctx.fillStyle = fillColor;
+                ctx.fill();
+            }
+
+            const coreGlow = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxDim * 0.25);
+            coreGlow.addColorStop(0, 'rgba(220, 38, 38, 0.25)');
+            coreGlow.addColorStop(1, 'transparent');
+            ctx.fillStyle = coreGlow;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const vignette = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, maxDim * 1.3);
+            vignette.addColorStop(0.3, 'transparent');
+            vignette.addColorStop(1, 'rgba(5, 5, 5, 1)');
+            ctx.fillStyle = vignette;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            animationFrameId = requestAnimationFrame(draw);
+        };
+
+        draw();
+
+        return () => {
+            window.removeEventListener('resize', resize);
+            cancelAnimationFrame(animationFrameId);
+        };
+    }, []);
+
+    return (
+        <div className="absolute inset-0 pointer-events-none z-[1] overflow-hidden">
+            <canvas ref={canvasRef} className="absolute inset-0 block w-full h-full" />
+            {/* Camada de Textura de Película (Grão) overlay on the tunnel */}
+            <div className="absolute inset-0 pointer-events-none opacity-[0.05] mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]" />
+            {/* Soft fade-in mask at the top so it blends smoothly with the black starry section above it */}
+            <div className="absolute top-0 left-0 w-full h-[60vh] bg-gradient-to-b from-[#050505] to-transparent"></div>
+        </div>
+    );
+};
+
+const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => {
     const ref = useRef<HTMLElement>(null);
     const { t } = useTranslation();
     const clients = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO"];
     const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
+    const smoothProgress = useSpring(scrollYProgress, { stiffness: 40, damping: 15, mass: 0.5 });
 
-    const planetX  = useTransform(scrollYProgress, [0, 1], ["-80%", "-76%"]);
-    const opacity  = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 1]);
-    const textY    = useTransform(scrollYProgress, [0, 1], ["30px", "0px"]);
+    const planetX = useTransform(smoothProgress, [0, 1], ["-96%", "-92%"]);
+    const textY = useTransform(smoothProgress, [0, 1], ["30px", "0px"]);
 
     return (
-        <section ref={ref} className="relative h-[80vh] w-full overflow-hidden bg-[#050505] flex items-start justify-center pt-0">
-            <ParticleBackground />
+        <section ref={ref} className="relative w-full bg-[#050505] flex flex-col items-center pt-24 pb-0 overflow-hidden">
 
-            {/* Full-width base glow — spreads across entire section bottom */}
-            <div className="absolute bottom-[-20%] left-[-10%] w-[110vw] h-[70vh] bg-red-900/25 blur-[200px] pointer-events-none z-[6] origin-left" style={{ animation: 'red-emanation 9.5s ease-in-out infinite' }} />
-            {/* Wide mid glow — left half */}
-            <div className="absolute bottom-[-10%] left-[-5%] w-[75vw] h-[60vh] bg-red-700/20 blur-[150px] pointer-events-none z-[6] origin-left" style={{ animation: 'red-emanation 9.5s ease-in-out 0.2s infinite' }} />
-            {/* Concentrated glow near planet edge */}
-            <div className="absolute bottom-[-5%] left-[-2%] w-[40vw] h-[50vh] bg-red-600/30 blur-[100px] pointer-events-none z-[6] origin-left" style={{ animation: 'red-emanation 9.5s ease-in-out 0.35s infinite' }} />
-            {/* Core glow on planet rim */}
-            <div className="absolute bottom-[5%] left-[-2%] w-[18vw] h-[30vh] bg-red-500/45 blur-[55px] pointer-events-none z-[6] origin-left" style={{ animation: 'red-emanation 9.5s ease-in-out 0.5s infinite' }} />
+            {/* New Tunnel Background Starting from the top of the section */}
+            <MassiveTunnelBackground />
 
-            {/* Planet */}
-            <motion.div style={{ x: planetX, opacity }} className="absolute top-[15%] -translate-y-1/2 left-0 z-20 w-[200vh] h-[200vh] rounded-full">
+            <ParticleBackground reactToMouse={true} />
+
+            {/* Glowing emanation behind everything - Moves slightly on scroll, styled like the hero's gentle circular light */}
+            <motion.div style={{ x: planetX }} className="absolute top-1/2 left-0 -translate-y-1/2 w-[2400px] h-[2400px] bg-[#DC2626]/5 rounded-full blur-[300px] pointer-events-none z-[6] origin-left" />
+            <motion.div style={{ x: planetX }} className="absolute top-1/2 left-[-10%] -translate-y-1/2 w-[1800px] h-[1800px] bg-[#DC2626]/5 rounded-full blur-[200px] pointer-events-none z-[6] origin-left" />
+
+            {/* THE PLANET (Edge) - Completely Static. No moving on scroll to avoid jumping completely */}
+            <div className="absolute top-1/2 left-0 z-20 w-[200vh] h-[200vh] rounded-full" style={{ transform: 'translate(-98%, -50%)' }}>
                 <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_92%_50%,#cc2222_0%,#8b1a1a_15%,#3a0a0a_40%,#000000_65%)]" />
                 <div className="absolute inset-0 rounded-full shadow-[inset_-10px_0_80px_rgba(255,80,80,0.35)]" />
                 <div className="absolute inset-0 rounded-full shadow-[inset_-60px_0_120px_rgba(0,0,0,0.85)]" />
@@ -1587,43 +1700,27 @@ const FinalOrbit = () => {
                     className="absolute inset-[-4%] rounded-full bg-[radial-gradient(circle_at_88%_50%,rgba(255,120,120,0.6)_0%,rgba(220,38,38,0.3)_24%,rgba(220,38,38,0.08)_42%,transparent_62%)] blur-[18px]"
                     style={{ animation: 'breath-release-glow 9.5s ease-in-out infinite' }}
                 />
-            </motion.div>
+            </div>
 
-            {/* Content */}
-            <motion.div style={{ opacity, y: textY }} className="relative z-30 flex flex-col items-center text-center px-4 mt-10 md:mt-14">
-                <span className="mb-4 font-mono text-[10px] md:text-xs text-white/45 tracking-[0.45em] uppercase border border-white/15 px-3 py-1 bg-black/25">
-                    Signal Authority
-                </span>
-                <h2 className="font-mono font-black text-5xl md:text-8xl text-white tracking-[0.04em] md:tracking-[0.06em] mb-5 leading-[0.95] uppercase drop-shadow-[0_0_18px_rgba(0,0,0,0.65)]">
-                    <span className="text-[#E5E7EB]">Backed</span><br />
-                    <span className="text-[#DC2626]">By Brick</span>
+            {/* 1. BACKED BY BRICK */}
+            <motion.div style={{ y: textY }} className="relative z-30 flex flex-col items-center text-center px-4 mb-40 w-full mt-10">
+                <h2 className="font-sans font-black text-5xl md:text-7xl text-white tracking-normal md:tracking-tight mb-5 leading-[0.95] uppercase drop-shadow-[0_0_18px_rgba(0,0,0,0.65)]">
+                    <span className="text-[#E5E7EB]">Nascidos</span><br />
+                    <span className="text-[#DC2626]">no set</span>
                 </h2>
-                <p className="font-sans font-light text-white/50 tracking-[0.05em] text-sm md:text-base max-w-sm leading-relaxed mt-2">
-                    {t('legacy.text')}
+                <p className="font-mono text-white/50 tracking-[0.05em] text-sm md:text-base max-w-lg leading-relaxed mt-2 uppercase">
+                    Não é um experimento. É uma produtora com 10 anos de set reinventando o que é possível produzir.
                 </p>
                 <div className="mt-8 md:mt-10 w-full max-w-4xl">
                     <div className="flex items-center justify-center gap-3 mb-5">
                         <span className="h-px w-12 bg-gradient-to-r from-transparent to-[#DC2626]/70"></span>
-                        <span className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-[0.35em]">Clientes Brick</span>
+                        <span className="font-sans font-bold text-[10px] text-[#9CA3AF] uppercase tracking-[0.2em]">Clientes Brick</span>
                         <span className="h-px w-12 bg-gradient-to-l from-transparent to-[#DC2626]/70"></span>
                     </div>
-                    <div className="relative grid w-full grid-cols-2 md:grid-cols-4 gap-2.5 md:gap-3 max-w-5xl mx-auto">
-                        <div className="absolute -inset-6 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.12)_0%,rgba(220,38,38,0.04)_42%,transparent_75%)] blur-2xl pointer-events-none" />
+                    <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-8 md:gap-x-16 md:gap-y-12 max-w-4xl mx-auto px-4">
                         {clients.map((client, i) => (
-                            <div
-                                key={i}
-                                className="group relative h-[68px] md:h-[78px] px-3 md:px-4 flex items-center justify-center text-center border border-[#DC2626]/45 hover:border-[#ff5a5a]/80 transition-all duration-500 overflow-hidden [clip-path:polygon(0_0,calc(100%-10px)_0,100%_10px,100%_100%,10px_100%,0_calc(100%-10px))] hover:shadow-[0_0_38px_rgba(220,38,38,0.34)]"
-                                style={{
-                                    backgroundImage: 'linear-gradient(180deg, rgba(30,0,0,0.88) 0%, rgba(8,0,0,0.92) 100%), repeating-linear-gradient(to bottom, rgba(255,45,45,0.22) 0px, rgba(255,45,45,0.22) 1px, transparent 1px, transparent 13px), repeating-linear-gradient(to right, rgba(255,45,45,0.16) 0px, rgba(255,45,45,0.16) 1px, transparent 1px, transparent 13px)',
-                                    animation: 'red-grid-drift 8s linear infinite',
-                                }}
-                            >
-                                <span className="absolute top-1.5 left-2 font-mono text-[8px] text-white/35 tracking-[0.2em]">NODE_{String(i + 1).padStart(2, '0')}</span>
-                                <span className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,0,0,0.2)_0%,rgba(255,0,0,0.08)_35%,transparent_72%)] opacity-80 pointer-events-none" />
-                                <span className="absolute inset-0 opacity-35 bg-[linear-gradient(to_bottom,transparent_0%,rgba(255,255,255,0.08)_48%,transparent_100%)] pointer-events-none" />
-                                <span className="absolute left-0 top-0 h-[1px] w-8 bg-[#ff6464]" />
-                                <span className="absolute right-0 bottom-0 h-[1px] w-8 bg-[#ff6464]/70" />
-                                <span className="font-mono text-[10px] md:text-xs text-white uppercase tracking-[0.14em] group-hover:text-[#ffe4e4] transition-colors leading-tight drop-shadow-[0_0_8px_rgba(255,40,40,0.55)]">
+                            <div key={i} className="group cursor-default flex items-center justify-center">
+                                <span className="font-mono text-xs md:text-sm text-[#9CA3AF] opacity-60 uppercase tracking-[0.2em] transition-all duration-500 group-hover:opacity-100 group-hover:text-white group-hover:tracking-[0.28em] group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.6)]">
                                     {client}
                                 </span>
                             </div>
@@ -1631,6 +1728,51 @@ const FinalOrbit = () => {
                     </div>
                 </div>
             </motion.div>
+
+            {/* 2. PHILOSOPHY / A CRENÇA */}
+            <div className="max-w-4xl mx-auto px-6 relative z-30 flex flex-col items-center text-center w-full mb-40">
+                <div className="mb-20 reveal w-full flex flex-col items-center">
+                    <div className="w-full flex justify-center mb-6">
+                        <div className="relative w-5 h-5">
+                            <div className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full animate-breathe blur-[2px]" style={{ background: 'radial-gradient(circle at center, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0.18) 45%, rgba(220,38,38,0) 75%)' }}></div>
+                            <div className="absolute left-1/2 top-1/2 w-[2px] h-[2px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DC2626]/60"></div>
+                        </div>
+                    </div>
+                    <span className="text-xs font-ai text-[#9CA3AF] px-4 text-center">{t('philosophy.belief_label')}</span>
+                </div>
+                <div className="flex flex-col gap-24 w-full">
+                    <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} />
+                    <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} />
+                    <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} />
+                </div>
+            </div>
+
+            {/* 3. FOOTER CTA */}
+            <div className="flex flex-col items-center text-center gap-8 reveal relative z-30 w-full mb-32 px-6 md:px-12">
+                <h2 className="text-xs md:text-sm font-ai text-[#9CA3AF] uppercase tracking-[0.2em]">{t('footer.complex_problem')}</h2>
+                <p className="text-3xl md:text-5xl lg:text-5xl font-brick text-[#DC2626] leading-none max-w-5xl drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">{t('footer.we_have_intelligence')}</p>
+                <MagneticButton onClick={onChat} className="mt-6 text-base md:text-lg font-ai font-bold text-white hover:text-[#DC2626] group">
+                    {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
+                </MagneticButton>
+            </div>
+
+            {/* FOOTER BOTTOM */}
+            <div className="mt-auto w-full px-6 md:px-12 lg:px-24 pb-8 flex flex-col md:flex-row justify-between items-center md:items-start gap-4 reveal relative z-30 border-t border-white/5 pt-8">
+                <div className="flex gap-6">
+                    {['LinkedIn', 'Instagram'].map((social) => (
+                        <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors">{social}</a>
+                    ))}
+                </div>
+                <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-center md:text-right">
+                    <span className="block mb-2">&copy; 2026 Brick AI.</span>
+                    <span className="hidden md:inline">{t('footer.generative_division')}</span>
+                    <span className="block mt-1">{t('footer.rights_reserved')}</span>
+                    {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">{t('footer.system_admin')}</button>}
+                </div>
+            </div>
+
+            {/* NOISE OVERLAY */}
+            <div className="absolute inset-0 z-[40] opacity-[0.11] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
         </section>
     );
 };
@@ -2102,9 +2244,12 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
 const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => {
     const { t } = useTranslation();
     return (
-        <footer className="w-full py-24 px-6 md:px-12 lg:px-24 bg-[#050505] border-t border-white/5 relative z-10">
-            <div className="flex flex-col items-center text-center gap-8 reveal">
-                <h2 className="text-xs md:text-sm font-ai text-[#9CA3AF] uppercase">{t('footer.complex_problem')}</h2>
+        <footer className="w-full py-24 px-6 md:px-12 lg:px-24 bg-[#050505] border-t border-white/5 relative z-10 overflow-hidden">
+            <ParticleBackground reactToMouse={false} />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent pointer-events-none z-[1]"></div>
+
+            <div className="flex flex-col items-center text-center gap-8 reveal relative z-10">
+                <h2 className="text-xs md:text-sm font-ai text-[#9CA3AF] uppercase tracking-[0.2em]">{t('footer.complex_problem')}</h2>
                 <p className="text-3xl md:text-5xl lg:text-6xl font-brick text-[#DC2626] leading-none max-w-5xl drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">{t('footer.we_have_intelligence')}</p>
                 <MagneticButton onClick={onChat} className="mt-6 text-base md:text-lg font-ai font-bold text-white hover:text-[#DC2626] group">
                     {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
@@ -2349,10 +2494,8 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, o
         <main>
             <Hero setMonolithHover={setMonolithHover} monolithHover={monolithHover} />
             <SelectedWorks onSelectProject={onSelectProject} />
-            <Philosophy />
-            <FinalOrbit />
+            <UnifiedEnding onChat={onChat} onAdmin={onAdmin} />
         </main>
-        <Footer onChat={onChat} onAdmin={onAdmin} />
     </React.Fragment>
 );
 
