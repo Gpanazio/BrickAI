@@ -13,18 +13,18 @@
         "description": "UMA NOVA DIVISÃO DA BRICK.\nDO ZERO AO TUDO DESDE 2016"
     },
     "philosophy": {
-        "belief_label": "A Crença",
+        "belief_label": "O MÉTODO",
         "raw": {
-            "title": "RAW",
-            "text": "A IA cria pixels e padrões infinitos. Mas não consegue criar intenção. É apenas um recurso"
+            "title": "PROMPT",
+            "text": "Não existe prompt mágico. A IA cria pixels e padrões infinitos, mas não consegue criar intenção. É apenas uma ferramenta."
         },
         "noise": {
             "title": "RUÍDO",
-            "text": "Sem a mão humana, modelos generativos são apenas coincidência matemática. Nós fornecemos a visão"
+            "text": "Modelos generativos são grandes calculadoras de probabilidade. Elas tentam adivinhar e raramente conseguem. Nós somos o elemento que transforma o caos em arte."
         },
         "direct": {
             "title": "NÓS DIRIGIMOS A INTELIGÊNCIA",
-            "text": "A máquina processa dados. Quem imprime alma no filme é o olhar humano"
+            "text": "O modelo é um burocrata de silício que não obedece e não tem alma. Nosso trabalho é domá-lo tecnicamente e colocar o sentimento que ele nunca vai ter."
         }
     },
     "works": {
