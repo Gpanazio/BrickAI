@@ -12,12 +12,18 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev:server"],
       "port": 3002
-    }
-    ,{
+    },
+    {
       "name": "carousels",
       "runtimeExecutable": "npx",
       "runtimeArgs": ["serve", "-p", "4444", "--no-clipboard"],
       "port": 4444
+    },
+    {
+      "name": "remotion-studio",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["remotion", "studio", "src/index.ts", "--port", "3333"],
+      "port": 3333
     }
   ]
 }
