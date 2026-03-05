@@ -517,28 +517,22 @@ const GlitchText = ({ text, className }: { text: string, className?: string }) =
     );
 };
 
-const TypewriterText = ({ text, className, delay = 0 }: { text: string, className?: string, delay?: number }) => {
+const TypewriterText = ({ text, className }: { text: string, className?: string }) => {
     const [displayed, setDisplayed] = useState('');
     const [done, setDone] = useState(false);
 
     useEffect(() => {
         let i = 0;
-        let interval: any;
-        const initialDelay = setTimeout(() => {
-            interval = setInterval(() => {
-                i++;
-                setDisplayed(text.slice(0, i));
-                if (i >= text.length) {
-                    clearInterval(interval);
-                    setDone(true);
-                }
-            }, 80);
-        }, delay);
-        return () => {
-            clearTimeout(initialDelay);
-            clearInterval(interval);
-        };
-    }, [text, delay]);
+        const interval = setInterval(() => {
+            i++;
+            setDisplayed(text.slice(0, i));
+            if (i >= text.length) {
+                clearInterval(interval);
+                setDone(true);
+            }
+        }, 80);
+        return () => clearInterval(interval);
+    }, [text]);
 
     return (
         <span className={className}>
@@ -971,10 +965,10 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
             </div>
             <div className="text-center z-20 max-w-6xl px-4 flex flex-col items-center pointer-events-none">
                 <p className="reveal delay-200 text-base md:text-xl lg:text-2xl font-mono text-white drop-shadow-2xl mb-2 md:mb-4">
-                    <TypewriterText text={t('hero.scramble') as string} delay={1500} />
+                    <TypewriterText text={t('hero.scramble') as string} />
                 </p>
                 <h2 className="reveal delay-[1000ms] text-2xl md:text-4xl lg:text-5xl font-brick text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
-                    <ScrambleText text={t('hero.subtitle') as string} delay={3000} />
+                    <ScrambleText text={t('hero.subtitle') as string} delay={800} />
                 </h2>
             </div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
@@ -1014,7 +1008,7 @@ const ParticleBackground = ({ reactToMouse = true }: { reactToMouse?: boolean })
         }
         const particleTexture = new THREE.CanvasTexture(canvas);
 
-        // 1. Small Stars (Backing) - Brighter
+        // 1. Small Stars (Backing)
         const smallStarsCount = 3500;
         const smallPos = new Float32Array(smallStarsCount * 3);
         for (let i = 0; i < smallStarsCount; i++) {
@@ -1027,12 +1021,12 @@ const ParticleBackground = ({ reactToMouse = true }: { reactToMouse?: boolean })
         const smallGeo = new THREE.BufferGeometry();
         smallGeo.setAttribute('position', new THREE.BufferAttribute(smallPos, 3));
         const smallMat = new THREE.PointsMaterial({
-            size: 0.025, color: 0xffffff, map: particleTexture, transparent: true, opacity: 1.0, blending: THREE.AdditiveBlending, depthWrite: false
+            size: 0.02, color: 0xffffff, map: particleTexture, transparent: true, opacity: 0.9, blending: THREE.AdditiveBlending, depthWrite: false
         });
         const smallMesh = new THREE.Points(smallGeo, smallMat);
         scene.add(smallMesh);
 
-        // 2. Medium Bright Stars - Brighter
+        // 2. Medium Bright Stars
         const medStarsCount = 700;
         const medPos = new Float32Array(medStarsCount * 3);
         for (let i = 0; i < medStarsCount; i++) {
@@ -1045,7 +1039,7 @@ const ParticleBackground = ({ reactToMouse = true }: { reactToMouse?: boolean })
         const medGeo = new THREE.BufferGeometry();
         medGeo.setAttribute('position', new THREE.BufferAttribute(medPos, 3));
         const medMat = new THREE.PointsMaterial({
-            size: 0.06, color: 0xffffff, map: particleTexture, transparent: true, opacity: 1.0, blending: THREE.AdditiveBlending, depthWrite: false
+            size: 0.05, color: 0xddddff, map: particleTexture, transparent: true, opacity: 0.95, blending: THREE.AdditiveBlending, depthWrite: false
         });
         const medMesh = new THREE.Points(medGeo, medMat);
         scene.add(medMesh);
@@ -1300,8 +1294,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => void }) => {
     const { t } = useTranslation();
     return (
-        <section id="works" className="w-full pt-20 pb-0 bg-[#000000] relative z-40 md:overflow-hidden transition-colors duration-1000">
-            <ParticleBackground reactToMouse={false} />
+        <section id="works" className="w-full pt-20 pb-0 bg-[#050505] border-t border-white/5 relative z-40 md:overflow-hidden">
             <div className="px-6 md:px-12 lg:px-24 mb-12 reveal flex justify-between items-end border-b border-white/10 pb-4">
                 <div className="flex items-center gap-3">
                     <Database className="w-4 h-4 text-[#DC2626]" />
@@ -1313,7 +1306,7 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
                 </div>
             </div>
 
-            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] px-6 md:px-12 lg:px-24">
+            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] border-b border-white/10 px-6 md:px-12 lg:px-24">
                 <ContextConsumer>
                     {({ works }) => works.slice(0, 5).map((work, idx) => (
                         <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />
@@ -1674,65 +1667,6 @@ const MassiveTunnelBackground = () => {
     );
 };
 
-const StarchildBackground = () => {
-    return (
-        <div className="absolute inset-0 pointer-events-none z-[1] flex items-center justify-center overflow-hidden">
-
-            {/* 1. Subtle Ambiance Glows */}
-            <motion.div
-                animate={{ opacity: [0.05, 0.15, 0.05] }}
-                transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-1/2 left-[12%] w-[100vw] h-[100vh] bg-[#DC2626]/12 rounded-full blur-[200px] z-0"
-            />
-
-            {/* 2. THE PLANET (Edge) - Colossal Presence */}
-            <div className="absolute top-1/2 left-0 z-20 w-[200vh] h-[200vh] rounded-full" style={{ transform: 'translate(-93%, -35%)' }}>
-                <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_92%_50%,#cc2222_0%,#8b1a1a_18%,#3a0a0a_42%,transparent_75%)]" />
-                <div className="absolute inset-0 rounded-full shadow-[inset_-25px_0_120px_rgba(255,80,80,0.3)] opacity-70" />
-                <div className="absolute inset-[-6%] rounded-full bg-[radial-gradient(circle,rgba(220,38,38,0.18)_42%,rgba(220,38,38,0.06)_62%,transparent_82%)] blur-[45px] opacity-75" />
-            </div>
-
-            {/* 3. Deep Evolution Central Glow */}
-            <motion.div
-                animate={{ scale: [1, 1.05, 1], opacity: [0.2, 0.4, 0.2] }}
-                transition={{ duration: 18, ease: "easeInOut", repeat: Infinity }}
-                className="absolute w-[180vw] h-[180vw] md:w-[90vw] md:h-[90vw] bg-[#DC2626] rounded-full blur-[220px] mix-blend-screen z-10"
-            />
-
-            {/* 4. Majestic Orbital Overlays */}
-            <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 160, ease: "linear", repeat: Infinity }}
-                className="absolute w-[280vw] h-[280vw] bg-[conic-gradient(from_0deg,transparent_0deg,rgba(220,38,38,0.1)_45deg,transparent_90deg,rgba(220,38,38,0.1)_225deg,transparent_270deg)] blur-[120px] z-0"
-            />
-
-            {/* 5. Star Spores */}
-            <div className="absolute inset-0 z-30 mix-blend-screen opacity-50">
-                {[...Array(12)].map((_, i) => (
-                    <motion.div
-                        key={i}
-                        className="absolute w-[3px] h-[3px] bg-white rounded-full blur-[1.5px]"
-                        style={{
-                            top: `${Math.random() * 100}%`,
-                            left: `${Math.random() * 100}%`,
-                        }}
-                        animate={{
-                            y: [0, -150],
-                            opacity: [0, 1, 0]
-                        }}
-                        transition={{
-                            duration: 20 + Math.random() * 30,
-                            repeat: Infinity,
-                            delay: Math.random() * 15,
-                            ease: "linear"
-                        }}
-                    />
-                ))}
-            </div>
-        </div>
-    );
-};
-
 const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => {
     const ref = useRef<HTMLElement>(null);
     const { t } = useTranslation();
@@ -1744,194 +1678,122 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
     const textY = useTransform(smoothProgress, [0, 1], ["30px", "0px"]);
 
     return (
-        <section ref={ref} className="relative w-full bg-[#000000] flex flex-col items-center pt-0 pb-0 overflow-hidden">
+        <section ref={ref} className="relative w-full bg-transparent flex flex-col items-center pt-0 pb-0">
+
             <ParticleBackground reactToMouse={true} />
-            <StarchildBackground />
 
-            {/* PART 1: Nascidos no Set & Evolution (Starchild) */}
-            <div className="relative w-full flex flex-col items-center justify-center min-h-[140vh] py-32 z-10">
+            {/* Glowing emanation behind everything - Moves slightly on scroll, styled like the hero's gentle circular light */}
+            <motion.div style={{ x: planetX }} className="absolute top-1/2 left-[5%] -translate-y-[35%] w-[2400px] h-[2400px] bg-[#DC2626]/5 rounded-full blur-[300px] pointer-events-none z-[6] origin-left" />
+            <motion.div style={{ x: planetX }} className="absolute top-1/2 left-[-5%] -translate-y-[35%] w-[1800px] h-[1800px] bg-[#DC2626]/5 rounded-full blur-[200px] pointer-events-none z-[6] origin-left" />
 
-                <motion.div style={{ y: textY }} className="relative z-30 w-full flex flex-col items-center justify-center min-h-screen">
+            {/* THE PLANET (Edge) - Completely Static. No moving on scroll to avoid jumping completely */}
+            <div className="absolute top-1/2 left-0 z-20 w-[200vh] h-[200vh] rounded-full" style={{ transform: 'translate(-93%, -35%)' }}>
+                <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_92%_50%,#cc2222_0%,#8b1a1a_15%,#3a0a0a_40%,#000000_65%)]" />
+                <div className="absolute inset-0 rounded-full shadow-[inset_-10px_0_80px_rgba(255,80,80,0.35)]" />
+                <div className="absolute inset-0 rounded-full shadow-[inset_-60px_0_120px_rgba(0,0,0,0.85)]" />
+                <div className="absolute inset-[-6%] rounded-full bg-[radial-gradient(circle,rgba(220,38,38,0.2)_42%,rgba(220,38,38,0.1)_56%,rgba(220,38,38,0.04)_66%,transparent_76%)] blur-[22px] opacity-75" />
+                <div className="absolute inset-[-10%] rounded-full bg-[radial-gradient(circle,rgba(220,38,38,0.09)_48%,rgba(220,38,38,0.03)_66%,transparent_82%)] blur-[36px] opacity-60" />
+                <div className="absolute inset-0 rounded-full" style={{ animation: 'pulse-halo 9.5s ease-in-out infinite' }} />
+                <div
+                    className="absolute inset-[-4%] rounded-full bg-[radial-gradient(circle_at_88%_50%,rgba(255,120,120,0.6)_0%,rgba(220,38,38,0.3)_24%,rgba(220,38,38,0.08)_42%,transparent_62%)] blur-[18px]"
+                    style={{ animation: 'breath-release-glow 9.5s ease-in-out infinite' }}
+                />
+            </div>
 
-                    {/* TITLE CARD: Top Margin */}
-                    <div className="relative z-30 flex flex-col items-center text-center px-4 w-full mb-10 md:mb-16 mt-10">
-                        <motion.div
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 2, ease: "easeOut" }}
-                            className="flex flex-col items-center"
-                        >
-                            <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase mb-8">
-                                Estágio I &bull; Evolução
-                            </span>
-
-                            <h2 className="font-brick text-[40px] md:text-[60px] lg:text-[80px] text-white tracking-[0.1em] leading-[1.1] uppercase drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] mb-6">
-                                NASCIDOS <br />
-                                <span className="text-[#DC2626]">NO SET</span>
-                            </h2>
-
-                            <p className="font-mono text-[#9CA3AF] tracking-[0.05em] text-[10px] md:text-sm max-w-lg leading-relaxed uppercase mt-2">
-                                Não é um experimento. É uma produtora com 10 anos de set que agora não tem mais limites para o que é possível.
-                            </p>
-                        </motion.div>
-                    </div>
-
-                    {/* THE HORIZON (Monolith emerging from the dawn) */}
-                    <div className="relative w-full flex items-center justify-center my-10 md:my-20 h-[300px] md:h-[400px]">
-
-                        {/* Top Half Wrapper (Masks everything below the horizon line without solid backgrounds) */}
-                        <div className="absolute inset-0 flex items-center justify-center" style={{ clipPath: 'inset(-100% 0 50% 0)' }}>
-
-                            {/* 1. The Monolith (Behind the horizon light, rising from the void) */}
-                            <motion.div
-                                initial={{ y: "115%", opacity: 0 }}
-                                whileInView={{ y: "20%", opacity: 1 }}
-                                viewport={{ once: true, amount: 0, margin: "100px 0px" }}
-                                transition={{ duration: 1.1, ease: [0.33, 1, 0.68, 1] }}
-                                className="absolute w-[100px] md:w-[155px] lg:w-[195px] h-[400px] md:h-[580px] bg-[#000000] z-0"
-                                style={{ willChange: "transform, opacity" }}
-                            >
-                                {/* Pure Black Silhouette - No hard edges, but a very subtle soft dark red bleed behind the face to give it mass */}
-                                <div className="absolute top-0 left-0 w-full h-[40px] bg-gradient-to-b from-[#DC2626]/10 to-transparent blur-[10px]"></div>
-                            </motion.div>
-
-                            {/* 3. The Thick Soft Horizon Dawn */}
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex items-center justify-center z-20 pointer-events-none">
-                                {/* Massive Crimson Glare */}
-                                <motion.div
-                                    animate={{ opacity: [0.6, 1, 0.6], scaleY: [1, 1.2, 1] }}
-                                    transition={{ duration: 12, ease: "easeInOut", repeat: Infinity }}
-                                    className="absolute w-[120vw] h-[180px] bg-[#DC2626] rounded-[100%] blur-[80px] mix-blend-screen"
-                                    style={{ willChange: "transform, opacity" }}
-                                />
-                                {/* Intense Thick Sun Burn */}
-                                <motion.div
-                                    animate={{ opacity: [0.7, 1, 0.7] }}
-                                    transition={{ duration: 6, ease: "easeInOut", repeat: Infinity }}
-                                    className="absolute w-[80vw] md:w-[700px] h-[40px] md:h-[60px] bg-white blur-[30px] mix-blend-overlay"
-                                    style={{ willChange: "opacity" }}
-                                />
-                                {/* Core Soft Light Volume */}
-                                <div className="absolute w-[90vw] md:w-[600px] h-[15px] bg-gradient-to-r from-transparent via-white/80 to-transparent mix-blend-screen blur-[10px] shadow-[0_0_60px_rgba(255,255,255,0.8)]"></div>
-                                <div className="absolute w-[60vw] md:w-[350px] h-[6px] bg-white blur-[8px] mix-blend-screen opacity-90"></div>
-                            </div>
+            {/* PART 1: Nascidos no Set & Clients */}
+            <div className="relative w-full flex flex-col items-center justify-center min-h-[75vh] overflow-hidden">
+                <MassiveTunnelBackground />
+                {/* 1. BACKED BY BRICK */}
+                <motion.div style={{ y: textY }} className="relative z-30 flex flex-col items-center text-center px-4 w-full py-16">
+                    <h2 className="font-sans font-black text-5xl md:text-7xl text-white tracking-normal md:tracking-tight mb-5 leading-[0.95] uppercase drop-shadow-[0_0_18px_rgba(0,0,0,0.65)]">
+                        <span className="text-[#E5E7EB]">Nascidos</span><br />
+                        <span className="text-[#DC2626]">no set</span>
+                    </h2>
+                    <p className="font-mono text-white tracking-[0.05em] text-sm md:text-base max-w-lg leading-relaxed mt-2 uppercase">
+                        Não é um experimento. É uma produtora com 10 anos de set que agora não tem mais limites para o que é possível.
+                    </p>
+                    <div className="mt-8 md:mt-10 w-full max-w-4xl">
+                        <div className="flex items-center justify-center gap-3 mb-5">
+                            <span className="font-sans font-bold text-[10px] text-[#9CA3AF] uppercase tracking-[0.2em]">Clientes Brick</span>
                         </div>
-
-                        {/* Thin Horizon Line */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[100vw] h-[1px] bg-gradient-to-r from-transparent via-[#DC2626]/30 to-transparent z-10 transform-gpu"></div>
-                    </div>
-
-                    {/* MANUSCRIPT / CLIENTS: Bottom Margin */}
-                    <motion.div
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true, margin: "-100px" }}
-                        transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
-                        className="flex flex-col items-center text-center px-6 w-full max-w-4xl mt-10 md:mt-20 z-30 relative"
-                    >
-                        <div className="flex items-center justify-center gap-3 mb-10 w-full">
-                            <span className="h-px w-12 md:w-24 bg-gradient-to-r from-transparent to-[#DC2626]/40"></span>
-                            <span className="font-sans font-bold text-[9px] md:text-[10px] text-[#9CA3AF] uppercase tracking-[0.2em] md:tracking-[0.3em]">Clientes Brick</span>
-                            <span className="h-px w-12 md:w-24 bg-gradient-to-l from-transparent to-[#DC2626]/40"></span>
-                        </div>
-
-                        {/* Clients as Silent Constellations */}
-                        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-8 md:gap-x-16 md:gap-y-12 opacity-60 hover:opacity-100 transition-opacity duration-1000">
+                        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-8 md:gap-x-16 md:gap-y-12 max-w-4xl mx-auto px-4">
                             {clients.map((client, i) => (
-                                <span key={i} className="font-mono text-[8px] md:text-[10px] text-[#9CA3AF] uppercase tracking-[0.3em] md:tracking-[0.4em] transition-all duration-700 hover:text-white hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] cursor-default">
-                                    {client}
-                                </span>
+                                <div key={i} className="group cursor-default flex items-center justify-center">
+                                    <span className="font-mono text-xs md:text-sm text-[#9CA3AF] opacity-60 uppercase tracking-[0.2em] transition-all duration-500 group-hover:opacity-100 group-hover:text-white group-hover:tracking-[0.28em] group-hover:drop-shadow-[0_0_15px_rgba(255,255,255,0.6)]">
+                                        {client}
+                                    </span>
+                                </div>
                             ))}
                         </div>
-                    </motion.div>
-
+                    </div>
                 </motion.div>
-                {/* Noise with fade */}
-                <div className="absolute inset-0 z-[40] opacity-[0.08] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150" style={{ maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' }}></div>
             </div>
 
-            {/* PART 2: O MÉTODO / A CRENÇA */}
-            <div className="relative w-full flex flex-col items-center pt-24 pb-24 text-white z-10">
-
-                {/* Subtle red ambiance */}
-                <div className="absolute top-1/2 left-0 w-[150vw] md:w-[100vw] h-[150vh] bg-[radial-gradient(ellipse_at_left_center,rgba(220,38,38,0.05)_0%,transparent_60%)] pointer-events-none z-10 -translate-y-1/2 -translate-x-1/2"></div>
-
-                <div className="max-w-4xl mx-auto px-6 relative z-30 flex flex-col items-center text-center w-full">
-                    <div className="mb-20 reveal w-full flex flex-col items-center">
-                        <div className="w-full flex justify-center mb-10">
-                            <div className="relative w-5 h-5">
-                                <div className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full animate-breathe blur-[2px]" style={{ background: 'radial-gradient(circle at center, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0.18) 45%, rgba(220,38,38,0) 75%)' }}></div>
-                                <div className="absolute left-1/2 top-1/2 w-[2px] h-[2px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DC2626]/60"></div>
-                            </div>
+            {/* 2. PHILOSOPHY / A CRENÇA */}
+            <div className="max-w-4xl mx-auto px-6 relative z-30 flex flex-col items-center text-center w-full mb-40">
+                <div className="mb-20 reveal w-full flex flex-col items-center">
+                    <div className="w-full flex justify-center mb-16">
+                        <div className="relative w-5 h-5">
+                            <div className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full animate-breathe blur-[2px]" style={{ background: 'radial-gradient(circle at center, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0.18) 45%, rgba(220,38,38,0) 75%)' }}></div>
+                            <div className="absolute left-1/2 top-1/2 w-[2px] h-[2px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DC2626]/60"></div>
                         </div>
-                        <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase mb-10">
-                            Estágio II &bull; {t('philosophy.belief_label')}
-                        </span>
                     </div>
-                    <div className="flex flex-col gap-24 w-full">
-                        <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} />
-                        <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} />
-                        <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} />
+                    <span className="text-4xl md:text-6xl font-brick text-[#DC2626] px-4 text-center">{t('philosophy.belief_label')}</span>
+                </div>
+                <div className="flex flex-col gap-24 w-full">
+                    <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} titleSize="text-2xl md:text-3xl" />
+                    <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} titleSize="text-3xl md:text-4xl" />
+                    <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} titleSize="text-4xl md:text-6xl" />
+                </div>
+            </div>
+
+            {/* 3. FOOTER CTA */}
+            <div className="reveal relative z-30 w-full mb-32 px-6 md:px-24">
+                <div className="relative border border-white/10 p-8 md:p-16">
+                    {/* corner brackets */}
+                    <div className="absolute top-0 left-0 w-5 h-5 border-t-2 border-l-2 border-[#DC2626]" />
+                    <div className="absolute top-0 right-0 w-5 h-5 border-t-2 border-r-2 border-[#DC2626]" />
+                    <div className="absolute bottom-0 left-0 w-5 h-5 border-b-2 border-l-2 border-[#DC2626]" />
+                    <div className="absolute bottom-0 right-0 w-5 h-5 border-b-2 border-r-2 border-[#DC2626]" />
+
+                    {/* system log — top-left corner */}
+                    <div className="absolute top-4 left-6 flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626] animate-pulse" />
+                        <span className="font-ai text-[10px] tracking-[0.3em] text-[#DC2626]/60 uppercase">BRICK.OS — SISTEMA PRONTO</span>
+                    </div>
+
+                    <div className="flex flex-col items-center text-center gap-8 pt-8">
+                        <p className="font-ai text-base md:text-xl text-[#9CA3AF]/60 tracking-[0.25em] uppercase">&gt; {t('footer.complex_problem')}</p>
+                        <p className="text-4xl md:text-6xl lg:text-7xl font-brick text-white leading-none">{t('footer.we_have_intelligence')}</p>
+
+                        <div className="flex items-center gap-3">
+                            <span className="font-ai text-[#DC2626] text-sm select-none">&gt;</span>
+                            <MagneticButton onClick={onChat} className="text-base md:text-lg font-ai font-bold text-[#DC2626] hover:text-white group">
+                                {t('footer.talk_to_us')} <span className="animate-blink">_</span>
+                            </MagneticButton>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            {/* PART 3: FOOTER CTA (The Climax) */}
-            <div className="relative w-full flex flex-col items-center pt-32 pb-0 text-white z-10">
-
-                {/* Colossal Red Aura */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] md:w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.12)_0%,transparent_50%)] pointer-events-none z-0 blur-[100px]"></div>
-
-                <div className="flex flex-col items-center text-center reveal relative z-30 w-full mb-40 px-6 md:px-12">
-
-                    <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase mb-20 mt-10">
-                        Estágio III &bull; O Gran Finale
-                    </span>
-
-                    {/* Subtitle with Scramble Effect & Lasers */}
-                    <div className="flex items-center gap-4 md:gap-6 mb-12">
-                        <div className="w-8 md:w-16 h-[1px] bg-gradient-to-r from-transparent to-[#DC2626]"></div>
-                        <h2 className="text-[10px] md:text-xs font-ai text-[#DC2626] uppercase tracking-[0.3em] md:tracking-[0.5em] drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]">
-                            <ScrambleText text={t('footer.complex_problem')} hoverTrigger={true} triggerOnReveal={true} delay={500} />
-                        </h2>
-                        <div className="w-8 md:w-16 h-[1px] bg-gradient-to-l from-transparent to-[#DC2626]"></div>
-                    </div>
-
-                    {/* Massive Climax Typography */}
-                    <h1 className="text-5xl md:text-7xl lg:text-[110px] font-brick text-transparent bg-clip-text bg-gradient-to-b from-white to-[#9CA3AF] leading-[1.2] pb-6 pt-4 max-w-6xl transition-all duration-1000 hover:text-[#DC2626] hover:bg-none hover:drop-shadow-[0_0_80px_rgba(220,38,38,0.9)] cursor-default mb-16 px-4">
-                        {t('footer.we_have_intelligence')}
-                    </h1>
-
-                    {/* Highly polished, weighty contact button */}
-                    <MagneticButton onClick={onChat} className="group relative overflow-hidden border border-white/10 hover:border-[#DC2626] hover:bg-[#DC2626]/5 hover:shadow-[0_0_40px_rgba(220,38,38,0.2)] transition-all duration-700 px-10 py-5 md:px-16 md:py-6 backdrop-blur-sm">
-                        {/* Hover glass scanner beam */}
-                        <div className="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-45deg] group-hover:left-[200%] transition-all duration-1000 ease-in-out"></div>
-                        <span className="relative z-10 text-xs md:text-sm font-ai font-bold text-white tracking-[0.2em] md:tracking-[0.3em] uppercase">
-                            {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
-                        </span>
-                    </MagneticButton>
+            {/* FOOTER BOTTOM */}
+            <div className="mt-auto w-full px-6 md:px-12 lg:px-24 pb-8 flex flex-col md:flex-row justify-between items-center md:items-start gap-4 reveal relative z-30 border-t border-white/5 pt-8">
+                <div className="flex gap-6">
+                    {['LinkedIn', 'Instagram'].map((social) => (
+                        <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors">{social}</a>
+                    ))}
                 </div>
-
-                {/* FOOTER BOTTOM */}
-                <div className="mt-auto w-full px-6 md:px-12 lg:px-24 pb-8 flex flex-col md:flex-row justify-between items-center md:items-start gap-4 reveal relative z-30 border-t border-white/5 pt-8">
-                    <div className="flex gap-6">
-                        {['LinkedIn', 'Instagram'].map((social) => (
-                            <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors">{social}</a>
-                        ))}
-                    </div>
-                    <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-center md:text-right">
-                        <span className="block mb-2">&copy; 2026 Brick AI.</span>
-                        <span className="hidden md:inline">{t('footer.generative_division')}</span>
-                        <span className="block mt-1">{t('footer.rights_reserved')}</span>
-                        {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">{t('footer.system_admin')}</button>}
-                    </div>
+                <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-center md:text-right">
+                    <span className="block mb-2">&copy; 2026 Brick AI.</span>
+                    <span className="hidden md:inline">{t('footer.generative_division')}</span>
+                    <span className="block mt-1">{t('footer.rights_reserved')}</span>
+                    {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">{t('footer.system_admin')}</button>}
                 </div>
             </div>
 
             {/* NOISE OVERLAY */}
-            <div className="absolute inset-0 z-[40] opacity-[0.08] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
-        </section >
+            <div className="absolute inset-0 z-[40] opacity-[0.11] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
+        </section>
     );
 };
 

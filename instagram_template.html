@@ -99,6 +99,11 @@
       height: calc(1440px * var(--slide-scale));
       position: relative;
       flex-shrink: 0;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      /* Subtle outline to separate from bg */
+      border-radius: 4px;
+      /* Optional slight rounding for premium feel */
+      overflow: hidden;
     }
 
     .slide {
@@ -111,8 +116,7 @@
       left: 0;
       transform-origin: top left;
       transform: scale(var(--slide-scale));
-      border: 1px solid rgba(255, 255, 255, 0.05);
-      /* very subtle border like the site */
+      /* overflow: hidden; Removed from here, added to wrapper */
       overflow: hidden;
       cursor: default;
 
@@ -163,77 +167,89 @@
       z-index: 1;
     }
 
-    .reflect-streak {
+    /* === SLIDE 2: BLADE RUNNER WATER CAUSTICS (AMPLIFIED) === */
+    .mirror-liquid {
       position: absolute;
-      top: 0;
-      left: -100%;
-      width: 50%;
-      height: 100%;
-      background: linear-gradient(105deg,
-          transparent 20%,
-          rgba(255, 255, 255, 0.03) 35%,
-          rgba(255, 255, 255, 0.15) 45%,
-          rgba(255, 255, 255, 0.25) 50%,
-          rgba(255, 255, 255, 0.15) 55%,
-          rgba(255, 255, 255, 0.03) 65%,
-          transparent 80%);
-      transform: skewX(-25deg);
-      z-index: 15;
-      pointer-events: none;
-      animation: glossy-sweep 8s ease-in-out infinite;
-    }
-
-    .red-reflect-streak {
-      position: absolute;
-      top: -50%;
-      left: -200%;
-      width: 150%;
-      height: 200%;
-      background: linear-gradient(135deg,
-          rgba(220, 38, 38, 0) 0%,
-          rgba(220, 38, 38, 0) 48%,
-          rgba(220, 38, 38, 0.4) 49%,
-          rgba(220, 38, 38, 1) 50%,
-          rgba(220, 38, 38, 0.4) 51%,
-          rgba(220, 38, 38, 0) 52%,
-          rgba(220, 38, 38, 0) 100%);
-      transform: skewX(-20deg);
-      z-index: 16;
-      pointer-events: none;
-      animation: red-glossy-sweep 7s linear infinite;
+      inset: -50%;
+      background:
+        radial-gradient(ellipse 55% 45% at 35% 30%, rgba(220, 38, 38, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 55% at 72% 68%, rgba(180, 20, 20, 0.12) 0%, transparent 55%),
+        radial-gradient(ellipse 50% 40% at 55% 50%, rgba(200, 30, 30, 0.10) 0%, transparent 50%);
+      background-size: 200% 200%;
       mix-blend-mode: screen;
-      filter: blur(4px);
+      filter: blur(35px);
+      pointer-events: none;
+      z-index: 20;
+      opacity: 0.95;
+      animation: liquid-drift 32s ease-in-out infinite;
     }
 
-    @keyframes red-glossy-sweep {
+    .mirror-caustics {
+      position: absolute;
+      inset: -100%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='c1'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.015' numOctaves='3' stitchTiles='stitch' seed='1'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.8 0 1 0 0 0.1 0 0 1 0 0.1 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c1)'/%3E%3C/svg%3E");
+      opacity: 0.15;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      z-index: 22;
+      animation: caustic-a 19s linear infinite;
+    }
+
+    .mirror-deep {
+      position: absolute;
+      inset: -90%;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='c2'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.02' numOctaves='2' stitchTiles='stitch' seed='5'/%3E%3CfeColorMatrix type='matrix' values='1 0 0 0 0.5 0 1 0 0 0 0 0 1 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c2)'/%3E%3C/svg%3E");
+      opacity: 0.1;
+      mix-blend-mode: screen;
+      filter: blur(2px);
+      pointer-events: none;
+      z-index: 21;
+      animation: caustic-b 38s linear infinite;
+    }
+
+    @keyframes liquid-drift {
       0% {
-        left: -200%;
+        transform: translate(-30%, -30%) scale(1.6) rotate(0deg);
+      }
+
+      33% {
+        transform: translate(35%, 15%) scale(2.4) rotate(45deg);
+      }
+
+      66% {
+        transform: translate(-15%, 35%) scale(2.0) rotate(-30deg);
       }
 
       100% {
-        left: 200%;
+        transform: translate(-30%, -30%) scale(1.6) rotate(0deg);
       }
     }
 
-    @keyframes glossy-sweep {
-
-      0%,
-      100% {
-        left: -100%;
-        opacity: 0;
-      }
-
-      10% {
-        opacity: 1;
+    @keyframes caustic-a {
+      0% {
+        transform: translate(-120px, -120px) rotate(0deg) scale(1.3);
       }
 
       50% {
-        left: 120%;
-        opacity: 1;
+        transform: translate(150px, 150px) rotate(360deg) scale(2.0);
       }
 
-      60% {
-        opacity: 0;
+      100% {
+        transform: translate(-120px, -120px) rotate(720deg) scale(1.3);
+      }
+    }
+
+    @keyframes caustic-b {
+      0% {
+        transform: translate(130px, -130px) rotate(0deg) scale(2.2);
+      }
+
+      50% {
+        transform: translate(-150px, 150px) rotate(-360deg) scale(1.5);
+      }
+
+      100% {
+        transform: translate(130px, -130px) rotate(-720deg) scale(2.2);
       }
     }
 
@@ -325,7 +341,7 @@
       0%,
       100% {
         transform: translate(-50%, -50%) scale(0.8);
-        opacity: 0.2;
+        opacity: 0;
       }
 
       50% {
@@ -336,6 +352,32 @@
 
     .animate-breathe {
       animation: atmos-breathe 6s ease-in-out infinite;
+    }
+
+    @keyframes hero-mouse-sim {
+      0% {
+        transform: translate3d(0px, 0px, 0);
+      }
+
+      20% {
+        transform: translate3d(50px, 70px, 0);
+      }
+
+      40% {
+        transform: translate3d(-35px, 85px, 0);
+      }
+
+      60% {
+        transform: translate3d(-70px, -35px, 0);
+      }
+
+      80% {
+        transform: translate3d(35px, -70px, 0);
+      }
+
+      100% {
+        transform: translate3d(0px, 0px, 0);
+      }
     }
 
     .centered-layer {
@@ -413,13 +455,10 @@
 
     <!-- SLIDE 1 : THE MONOLITH -->
     <div class="slide-wrapper">
-      <div class="slide modal-video-noise">
+      <div class="slide modal-video-noise" style="background-color: #000000;">
 
-        <!-- Fundo Escuro com Luz Muito Sutil no Centro -->
-        <div
-          class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[1000px] rounded-full pointer-events-none z-0"
-          style="background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 60%);">
-        </div>
+        <!-- Dark base so purely black -->
+        <div class="absolute inset-0 bg-black z-0 pointer-events-none"></div>
 
         <div class="content-wrapper">
 
@@ -460,10 +499,10 @@
           <div class="absolute bottom-[240px] left-0 right-0 z-40 flex flex-col items-center pointer-events-none">
             <h2
               class="font-brick text-[80px] text-white leading-[0.85] tracking-tight mb-8 text-center whitespace-nowrap">
-              O MONOLITO
+              A EVOLUÇÃO
             </h2>
             <p class="font-mono text-[#9CA3AF] text-[36px] font-light leading-relaxed text-center">
-              NÃO PRECISA SE JUSTIFICAR
+              NÃO É A FERRAMENTA
             </p>
           </div>
 
@@ -483,15 +522,10 @@
 
     <!-- SLIDE 2 : THE CORE -->
     <div class="slide-wrapper">
-      <div class="slide modal-video-noise">
+      <div class="slide modal-video-noise" style="background-color: #000000;">
 
-        <!-- Huge red glow from the Hero section in site (same as slide 1) -->
-        <div
-          class="absolute top-0 left-1/2 -translate-x-1/2 w-[2200px] h-[2200px] bg-[#DC2626]/5 rounded-full blur-[300px] pointer-events-none z-0 mix-blend-screen opacity-100">
-        </div>
-
-        <!-- Tech grid matching works section -->
-        <div class="bg-tech-grid"></div>
+        <!-- Dark base so purely black -->
+        <div class="absolute inset-0 bg-black z-0 pointer-events-none"></div>
 
         <div class="content-wrapper">
 
@@ -521,7 +555,10 @@
               <div
                 class="monolith-structure w-full h-full rounded-[2px] shadow-2xl relative z-10 border border-white/10 overflow-hidden bg-black">
                 <div class="absolute inset-0 mix-blend-overlay monolith-texture bg-[#050505] opacity-95"></div>
-                <div class="red-reflect-streak"></div>
+                <!-- Reflection Layers -->
+                <div class="mirror-liquid"></div>
+                <div class="mirror-caustics"></div>
+                <div class="mirror-deep"></div>
                 <div class="absolute inset-0 border border-white/5 rounded-[2px]"></div>
                 <div class="absolute inset-0 bg-gradient-to-t from-black/100 via-transparent to-transparent opacity-80">
                 </div>
@@ -533,10 +570,10 @@
           <div class="absolute bottom-[240px] left-0 right-0 z-40 flex flex-col items-center pointer-events-none">
             <h2
               class="font-brick text-[80px] text-white leading-[0.85] tracking-tight mb-8 text-center whitespace-nowrap">
-              A IA É O ESPELHO
+              O LIMITE
             </h2>
             <p class="font-mono text-[#9CA3AF] text-[36px] font-light leading-relaxed text-center">
-              NÓS SOMOS O QUE REFLETE
+              É O TAMANHO DA SUA VISÃO
             </p>
           </div>
 
@@ -556,17 +593,12 @@
 
     <!-- SLIDE 3 : THE PHILOSOPHY -->
     <div class="slide-wrapper">
-      <div class="slide modal-video-noise">
+      <div class="slide modal-video-noise" style="background-color: #000000;">
 
-        <!-- Huge red glow from the Hero section in site (same as slide 1) -->
-        <div
-          class="absolute top-0 left-1/2 -translate-x-1/2 w-[2200px] h-[2200px] bg-[#DC2626]/5 rounded-full blur-[300px] pointer-events-none z-0 mix-blend-screen opacity-100">
-        </div>
+        <!-- Dark base so purely black -->
+        <div class="absolute inset-0 bg-black z-0 pointer-events-none"></div>
 
-        <!-- Tech grid matching works section -->
-        <div class="bg-tech-grid"></div>
-
-        <div class="content-wrapper relative z-20">
+        <div class="content-wrapper">
 
           <!-- LOGO CENTERED -->
           <div class="slide-logo pointer-events-none">
@@ -581,63 +613,75 @@
                 <rect x="35" y="35" width="30" height="30" fill="#DC2626" />
               </svg>
             </div>
+            <span class="text-[#DC2626] font-light text-[46px] animate-blink relative top-[4px] ml-[-4px]">_</span>
             <span
-              class="text-[#DC2626] font-light text-[46px] leading-[0] animate-blink relative top-[4px] ml-1">_</span>
-            <span class="text-gray-300 font-ai text-[32px] uppercase relative top-[6px] ml-1 tracking-widest">AI</span>
+              class="text-gray-300 font-ai text-[32px] uppercase relative top-[6px] ml-[-4px] tracking-widest">AI</span>
           </div>
+
 
           <!-- GEOGRAPHIC CENTER SLAB -->
           <div class="absolute inset-0 flex items-center justify-center pointer-events-none z-30"
             style="transform: translateY(-120px);">
-            <!-- VISUAL MONOLITH REPLICA - STANDARDIZED SIZE (HERO +33% +20% +10%) -->
-            <div class="relative w-[264px] h-[528px] flex items-center justify-center pointer-events-auto">
-              <!-- Aura/Glow layers - Proportional -->
-              <div class="centered-layer aura-atmos pointer-events-none opacity-60 w-[704px] h-[704px] blur-[100px]">
-              </div>
-              <div
-                class="centered-layer light-atmos animate-breathe pointer-events-none opacity-60 w-[528px] h-[528px] blur-[65px]">
-              </div>
-              <div class="centered-layer core-atmos pointer-events-none"
-                style="width: 26px; height: 26px; filter: blur(6px);"></div>
 
-              <!-- EXACT HERO MONOLITH REPLICA (SCALED) -->
+            <!-- STANDARDIZED MONOLITH -->
+            <div class="relative w-[264px] h-[528px] flex items-center justify-center pointer-events-auto">
+
+              <!-- MONOLITH STRUCTURE WITH OVERFLOW VISIBLE LIKE HOME -->
               <div
-                class="monolith-structure w-full h-full rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative transition-transform duration-1000 ease-out pointer-events-none scale-100"
+                class="monolith-structure w-[264px] h-[528px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative pointer-events-none scale-100"
                 style="transform: translateZ(0)">
+
+                <!-- Internal Texture / Background -->
                 <div
-                  class="absolute inset-0 mix-blend-overlay monolith-texture bg-[#050505] pointer-events-none rounded-[2px] overflow-hidden">
+                  class="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden">
                 </div>
 
-                <!-- INTERACTIVE RED DOT & RADIATION -->
+                <!-- EXTERNAL ATMOSPHERIC LAYERS - MATCHING HOME'S STRUCTURE -->
+                <div class="centered-layer aura-atmos pointer-events-none opacity-50 w-[563px] h-[563px] blur-[72px]"
+                  style="background: radial-gradient(circle at center, rgba(220,38,38,0.15) 0%, transparent 70%);">
+                </div>
+                <div
+                  class="centered-layer animate-breathe pointer-events-none opacity-90 w-[422px] h-[422px] blur-[48px]"
+                  style="background: radial-gradient(circle at center, rgba(220,38,38,0.7) 0%, rgba(220,38,38,0.3) 50%, transparent 70%);">
+                </div>
+                <div class="centered-layer pointer-events-none w-[28px] h-[28px] bg-[#dc2626] blur-[10px] opacity-80"
+                  style="border-radius: 50%;"></div>
+
+                <!-- INTERACTIVE RED DOT & RADIATION (Strictly Inside Monolith wrapper, but with overflow hidden) -->
                 <div class="absolute inset-0 overflow-hidden rounded-[2px] pointer-events-none z-30">
                   <div
                     class="absolute pointer-events-none mix-blend-screen transition-opacity duration-300 ease-out rounded-full opacity-100"
-                    style="width: 11px; height: 11px; top: 50%; left: 50%; margin-top: -5.5px; margin-left: -5.5px; background-color: #DC2626; box-shadow: 0 0 10px 2px rgba(220, 38, 38, 0.6), 0 0 20px 4px rgba(220, 38, 38, 0.2);">
+                    style="width: 11px; height: 11px; top: 50%; left: 50%; margin-top: -5.5px; margin-left: -5.5px; background-color: #DC2626; box-shadow: 0 0 17px 3.5px rgba(220, 38, 38, 0.6), 0 0 35px 7px rgba(220, 38, 38, 0.2);">
                   </div>
                   <div
-                    class="absolute w-[1056px] h-[1056px] -ml-[528px] -mt-[528px] top-1/2 left-1/2 pointer-events-none transition-opacity duration-700 ease-out opacity-100 animate-breathe"
-                    style="background: radial-gradient(circle, rgba(220,38,38,0.25) 0%, rgba(220,38,38,0.05) 50%, transparent 80%); filter: blur(100px); z-index: 5;">
+                    class="absolute w-[1056px] h-[1056px] top-1/2 left-1/2 -ml-[528px] -mt-[528px] pointer-events-none transition-opacity duration-700 ease-out opacity-100"
+                    style="background: radial-gradient(circle, rgba(220,38,38,0.25) 0%, rgba(220,38,38,0.05) 50%, transparent 80%); filter: blur(106px); z-index: 5; backface-visibility: hidden; -webkit-backface-visibility: hidden;">
                   </div>
+                </div>
+
+                <!-- Grid Overlay for texture inside -->
+                <div
+                  class="absolute inset-0 z-20 mix-blend-overlay opacity-10 bg-tech-grid rounded-[2px] overflow-hidden">
                 </div>
                 <div class="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10 rounded-[2px]">
                 </div>
+
               </div>
             </div>
           </div>
 
-          <!-- TEXT CONTENT - BELOW MONOLITH -->
           <!-- TEXT CONTENT - BELOW MONOLITH -->
           <div class="absolute bottom-[240px] left-0 right-0 z-40 flex flex-col items-center pointer-events-none">
             <h2
               class="font-brick text-[80px] text-white leading-[0.85] tracking-tight mb-8 text-center whitespace-nowrap">
               UM NOVO CORPO
             </h2>
-            <p class="font-mono text-[#DC2626] text-[36px] font-light leading-relaxed text-center">
+            <p class="font-mono text-[#DC2626] text-[36px] font-light tracking-wider text-center">
               A MESMA ALMA
             </p>
           </div>
 
-          <!-- FOOTER HUD - FINAL -->
+          <!-- FOOTER HUD -->
           <div class="flex items-center justify-center gap-8 pt-8 w-full">
             <span class="font-mono text-[16px] tracking-[0.4em] uppercase">
               <span class="text-red-500">&gt;&gt; </span>
@@ -646,6 +690,7 @@
             </span>
             <span class="font-ibm text-white/20 text-[18px] tracking-[0.2em]">03_03</span>
           </div>
+
         </div>
       </div>
     </div>
