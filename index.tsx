@@ -1300,7 +1300,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => void }) => {
     const { t } = useTranslation();
     return (
-        <section id="works" className="w-full pt-20 pb-0 bg-[#000000] relative z-40 md:overflow-hidden transition-colors duration-1000">
+        <section id="works" className="w-full pt-20 pb-0 bg-[#050505] border-t border-white/5 relative z-40 md:overflow-hidden">
             <ParticleBackground reactToMouse={false} />
             <div className="px-6 md:px-12 lg:px-24 mb-12 reveal flex justify-between items-end border-b border-white/10 pb-4">
                 <div className="flex items-center gap-3">
@@ -1313,7 +1313,7 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
                 </div>
             </div>
 
-            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] px-6 md:px-12 lg:px-24">
+            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] border-b border-white/10 px-6 md:px-12 lg:px-24">
                 <ContextConsumer>
                     {({ works }) => works.slice(0, 5).map((work, idx) => (
                         <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />
@@ -1676,55 +1676,51 @@ const MassiveTunnelBackground = () => {
 
 const StarchildBackground = () => {
     return (
-        <div className="absolute inset-0 pointer-events-none z-[1] flex items-center justify-center overflow-hidden">
+        <div
+            className="absolute inset-0 pointer-events-none z-[1] flex items-center justify-center"
+            style={{ maskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 30%, transparent 100%)' }}
+        >
+            {/* Infinite Cosmic Void - fades to transparent so background shows through */}
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_0%,rgba(0,0,0,0.9)_80%)] z-10"></div>
 
-            {/* 1. Subtle Ambiance Glows */}
+            {/* Deep Evolution Glow */}
             <motion.div
-                animate={{ opacity: [0.05, 0.15, 0.05] }}
-                transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-                className="absolute top-1/2 left-[12%] w-[100vw] h-[100vh] bg-[#DC2626]/12 rounded-full blur-[200px] z-0"
+                animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.25, 0.1] }}
+                transition={{ duration: 24, ease: "easeInOut", repeat: Infinity }}
+                className="absolute w-[150vw] h-[150vw] md:w-[90vw] md:h-[90vw] bg-[#DC2626] rounded-full blur-[150px] mix-blend-screen"
             />
 
-            {/* 2. THE PLANET (Edge) - Colossal Presence */}
-            <div className="absolute top-1/2 left-0 z-20 w-[200vh] h-[200vh] rounded-full" style={{ transform: 'translate(-93%, -35%)' }}>
-                <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_92%_50%,#cc2222_0%,#8b1a1a_18%,#3a0a0a_42%,transparent_75%)]" />
-                <div className="absolute inset-0 rounded-full shadow-[inset_-25px_0_120px_rgba(255,80,80,0.3)] opacity-70" />
-                <div className="absolute inset-[-6%] rounded-full bg-[radial-gradient(circle,rgba(220,38,38,0.18)_42%,rgba(220,38,38,0.06)_62%,transparent_82%)] blur-[45px] opacity-75" />
-            </div>
-
-            {/* 3. Deep Evolution Central Glow */}
+            {/* The Starchild Core Light */}
             <motion.div
-                animate={{ scale: [1, 1.05, 1], opacity: [0.2, 0.4, 0.2] }}
-                transition={{ duration: 18, ease: "easeInOut", repeat: Infinity }}
-                className="absolute w-[180vw] h-[180vw] md:w-[90vw] md:h-[90vw] bg-[#DC2626] rounded-full blur-[220px] mix-blend-screen z-10"
+                animate={{ scale: [0.95, 1.05, 0.95], opacity: [0.3, 0.6, 0.3] }}
+                transition={{ duration: 12, ease: "easeInOut", repeat: Infinity, delay: 2 }}
+                className="absolute w-[60vw] h-[60vw] md:w-[35vw] md:h-[35vw] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7)_0%,rgba(220,38,38,0.5)_40%,transparent_70%)] rounded-full blur-[80px] mix-blend-screen"
             />
 
-            {/* 4. Majestic Orbital Overlays */}
+            {/* Majestic Orbital Sweep (Jupiter/Monolith Eclipse style) */}
             <motion.div
                 animate={{ rotate: 360 }}
-                transition={{ duration: 160, ease: "linear", repeat: Infinity }}
-                className="absolute w-[280vw] h-[280vw] bg-[conic-gradient(from_0deg,transparent_0deg,rgba(220,38,38,0.1)_45deg,transparent_90deg,rgba(220,38,38,0.1)_225deg,transparent_270deg)] blur-[120px] z-0"
+                transition={{ duration: 120, ease: "linear", repeat: Infinity }}
+                className="absolute w-[200vw] h-[200vw] md:w-[150vw] md:h-[150vw] bg-[conic-gradient(from_0deg,transparent_0deg,rgba(220,38,38,0.15)_45deg,transparent_90deg,rgba(220,38,38,0.15)_225deg,transparent_270deg)] blur-[60px] z-0"
             />
 
-            {/* 5. Star Spores */}
-            <div className="absolute inset-0 z-30 mix-blend-screen opacity-50">
-                {[...Array(12)].map((_, i) => (
+            {/* Floating Star Spores */}
+            <div className="absolute inset-0 z-10 overflow-hidden mix-blend-screen">
+                {[...Array(25)].map((_, i) => (
                     <motion.div
                         key={i}
-                        className="absolute w-[3px] h-[3px] bg-white rounded-full blur-[1.5px]"
+                        className="absolute w-[1px] h-[1px] md:w-[2px] md:h-[2px] bg-white rounded-full blur-[1px]"
                         style={{
                             top: `${Math.random() * 100}%`,
                             left: `${Math.random() * 100}%`,
                         }}
                         animate={{
-                            y: [0, -150],
-                            opacity: [0, 1, 0]
+                            y: [0, -50],
+                            opacity: [0, 0.7, 0], scale: [1, 1.5, 1]
                         }}
                         transition={{
-                            duration: 20 + Math.random() * 30,
-                            repeat: Infinity,
-                            delay: Math.random() * 15,
-                            ease: "linear"
+                            duration: 20 + Math.random() * 20,
+                            repeat: Infinity, delay: Math.random() * 10, ease: "easeInOut"
                         }}
                     />
                 ))}
