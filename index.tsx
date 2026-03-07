@@ -18,6 +18,11 @@ const GlobalStyles = () => (
             --brick-gray: #9CA3AF;
             --brick-white: #E5E5E5;
         }
+        html, body, #root {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: clip;
+        }
         body {
             background-color: var(--brick-black);
             color: var(--brick-white);
@@ -1746,37 +1751,37 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
     return (
         <React.Fragment>
             {/* PART 1: Nascidos no Set & Evolution (Starchild) */}
-            <section className="relative w-full bg-[#000000] flex flex-col items-center justify-center min-h-[140vh] overflow-hidden py-32">
+            <section className="relative w-full bg-[#000000] flex flex-col items-center justify-center min-h-[104vh] md:min-h-[108vh] overflow-hidden pt-8 pb-8 md:pt-10 md:pb-10">
                 <ParticleBackground reactToMouse={true} />
 
-                <motion.div style={{ y: textY }} className="relative z-30 w-full flex flex-col items-center justify-center min-h-screen">
+                <motion.div style={{ y: textY }} className="relative z-30 w-full flex flex-col items-center justify-start min-h-[92vh] md:min-h-[94vh] gap-8 md:gap-10">
 
                     {/* TITLE CARD: Top Margin */}
-                    <div className="relative z-30 flex flex-col items-center text-center px-4 w-full mb-10 md:mb-16 mt-10">
+                    <div className="relative z-30 flex flex-col items-center text-center px-4 w-full">
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 2, ease: "easeOut" }}
-                            className="flex flex-col items-center"
+                            className="flex flex-col items-center gap-8 md:gap-10"
                         >
-                            <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase mb-8">
+                            <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase">
                                 Estágio I &bull; Evolução
                             </span>
 
-                            <h2 className="font-brick text-[40px] md:text-[60px] lg:text-[80px] text-white tracking-[0.1em] leading-[1.1] uppercase drop-shadow-[0_0_30px_rgba(255,255,255,0.1)] mb-6">
+                            <h2 className="font-brick text-[40px] md:text-[60px] lg:text-[80px] text-white tracking-[0.1em] leading-[1.1] uppercase drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
                                 NASCIDOS <br />
                                 <span className="text-[#DC2626]">NO SET</span>
                             </h2>
 
-                            <p className="font-mono text-[#9CA3AF] tracking-[0.05em] text-[10px] md:text-sm max-w-lg leading-relaxed uppercase mt-2">
+                            <p className="font-mono text-[#9CA3AF] tracking-[0.05em] text-[10px] md:text-sm max-w-lg leading-relaxed uppercase">
                                 Não é um experimento. É uma produtora com 10 anos de set que agora não tem mais limites para o que é possível.
                             </p>
                         </motion.div>
                     </div>
 
                     {/* THE HORIZON (Monolith emerging from the dawn) */}
-                    <div className="relative w-full flex items-center justify-center my-10 md:my-20 h-[300px] md:h-[400px]">
+                    <div className="relative w-full flex items-center justify-center h-[280px] md:h-[360px]">
 
                         {/* 1. The Monolith Top (Only the visible cap crosses the horizon) */}
                         <div
@@ -1791,45 +1796,217 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 className="absolute inset-0"
                                 style={{ willChange: "transform" }}
                             >
-                                <div className="w-full h-full rounded-t-[2px] bg-[#000000] border border-[#1a1a1a] shadow-[inset_0_0_40px_rgba(0,0,0,0.9)]"></div>
+                                <div className="relative w-full h-full rounded-t-[2px] bg-[#000000] border border-[#1a1a1a] shadow-[inset_0_0_40px_rgba(0,0,0,0.9)] overflow-hidden">
+                                    <motion.div
+                                        animate={{ x: ["-12%", "14%", "-12%"], opacity: [0.04, 0.11, 0.04] }}
+                                        transition={{ duration: 9.5, ease: "easeInOut", repeat: Infinity }}
+                                        className="absolute inset-y-0 left-[-16%] w-[52%] bg-gradient-to-r from-transparent via-white/18 to-transparent blur-[10px] mix-blend-screen"
+                                    />
+                                    <motion.div
+                                        animate={{ x: ["12%", "-14%", "12%"], opacity: [0.03, 0.09, 0.03] }}
+                                        transition={{ duration: 10.5, ease: "easeInOut", repeat: Infinity, delay: 0.5 }}
+                                        className="absolute inset-y-0 right-[-20%] w-[46%] bg-gradient-to-l from-transparent via-[#DC2626]/18 to-transparent blur-[12px] mix-blend-screen"
+                                    />
+                                    <motion.div
+                                        animate={{ x: ["-7%", "9%", "-7%"], scaleX: [0.95, 1.06, 0.95], opacity: [0.08, 0.18, 0.08] }}
+                                        transition={{ duration: 8.2, ease: "easeInOut", repeat: Infinity }}
+                                        className="absolute bottom-[-8%] left-1/2 h-[40%] w-[132%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.34)_0%,rgba(255,255,255,0.12)_32%,rgba(255,255,255,0)_76%)] blur-[12px] mix-blend-screen"
+                                    />
+                                </div>
                             </motion.div>
                         </div>
 
-                        {/* 2a. Red Horizon Volume (behind monolith) */}
+                        {/* 2a. Birth cloud volume (behind monolith) */}
                         <div
                             className="absolute top-1/2 left-1/2 w-full flex items-center justify-center z-[17] pointer-events-none"
                             style={{ transform: "translate(-50%, -18%)" }}
                         >
                             <motion.div
-                                animate={{ opacity: [0.58, 0.78, 0.58], scaleY: [1, 1.14, 1] }}
-                                transition={{ duration: 14, ease: "easeInOut", repeat: Infinity }}
-                                className="absolute w-[110vw] md:w-[86vw] h-[190px] md:h-[210px] bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.88)_0%,rgba(220,38,38,0.58)_34%,rgba(220,38,38,0.26)_58%,transparent_80%)] blur-[66px] mix-blend-screen"
-                                style={{ willChange: "transform, opacity", filter: "saturate(1.05)" }}
+                                animate={{ opacity: [0.56, 0.8, 0.56], scaleX: [0.95, 1.04, 0.95], scaleY: [0.96, 1.03, 0.96] }}
+                                transition={{ duration: 10.5, ease: "easeInOut", repeat: Infinity }}
+                                className="absolute h-[220px] md:h-[250px] rounded-full mix-blend-screen"
+                                style={{
+                                    willChange: "transform, opacity",
+                                    width: "min(94vw, 1120px)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,120,120,0.16) 0%, rgba(220,38,38,0.56) 22%, rgba(220,38,38,0.38) 44%, rgba(120,10,10,0.18) 63%, rgba(0,0,0,0) 84%)",
+                                    filter: "blur(74px) saturate(1.08)"
+                                }}
+                            />
+                            <motion.div
+                                animate={{ opacity: [0.68, 0.94, 0.68], scaleX: [0.96, 1.03, 0.96], scaleY: [0.94, 1.04, 0.94] }}
+                                transition={{ duration: 7.8, ease: "easeInOut", repeat: Infinity, delay: 0.2 }}
+                                className="absolute h-[84px] md:h-[110px] rounded-full"
+                                style={{
+                                    width: "min(82vw, 760px)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,170,170,0.12) 0%, rgba(220,38,38,0.34) 22%, rgba(220,38,38,0.16) 52%, rgba(0,0,0,0) 78%)",
+                                    filter: "blur(26px)",
+                                    opacity: 0.95
+                                }}
+                            />
+                            <motion.div
+                                animate={{ scaleX: [0.94, 1.08, 0.94], scaleY: [0.96, 1.04, 0.96], opacity: [0.5, 0.84, 0.5] }}
+                                transition={{ duration: 8.6, ease: "easeInOut", repeat: Infinity }}
+                                className="absolute -translate-x-[30%] h-[96px] md:h-[118px] rounded-full"
+                                style={{
+                                    width: "min(30vw, 280px)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,140,140,0.18) 0%, rgba(220,38,38,0.26) 34%, rgba(0,0,0,0) 76%)",
+                                    filter: "blur(28px)",
+                                    opacity: 0.9
+                                }}
+                            />
+                            <motion.div
+                                animate={{ scaleX: [0.94, 1.07, 0.94], scaleY: [0.96, 1.05, 0.96], opacity: [0.44, 0.76, 0.44] }}
+                                transition={{ duration: 9.2, ease: "easeInOut", repeat: Infinity, delay: 0.9 }}
+                                className="absolute translate-x-[30%] h-[88px] md:h-[110px] rounded-full"
+                                style={{
+                                    width: "min(28vw, 260px)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,150,150,0.16) 0%, rgba(220,38,38,0.24) 34%, rgba(0,0,0,0) 76%)",
+                                    filter: "blur(26px)",
+                                    opacity: 0.82
+                                }}
+                            />
+                            <motion.div
+                                animate={{ scaleX: [0.92, 1.08, 0.92], scaleY: [0.94, 1.06, 0.94], opacity: [0.12, 0.28, 0.12] }}
+                                transition={{ duration: 7.2, ease: "easeInOut", repeat: Infinity, delay: 0.4 }}
+                                className="absolute h-[42px] md:h-[52px] rounded-full mix-blend-screen"
+                                style={{
+                                    width: "min(48vw, 360px)",
+                                    background: "linear-gradient(90deg, rgba(220,38,38,0) 0%, rgba(255,170,170,0.22) 20%, rgba(255,210,210,0.34) 50%, rgba(255,170,170,0.22) 78%, rgba(220,38,38,0) 100%)",
+                                    filter: "blur(18px)"
+                                }}
+                            />
+                            <motion.div
+                                animate={{ scaleX: [0.94, 1.08, 0.94], scaleY: [0.94, 1.05, 0.94], opacity: [0.08, 0.22, 0.08] }}
+                                transition={{ duration: 6.8, ease: "easeInOut", repeat: Infinity, delay: 1.1 }}
+                                className="absolute translate-y-[16px] h-[30px] md:h-[38px] rounded-full mix-blend-screen"
+                                style={{
+                                    width: "min(40vw, 300px)",
+                                    background: "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,220,220,0.16) 24%, rgba(255,255,255,0.26) 50%, rgba(255,220,220,0.16) 76%, rgba(255,255,255,0) 100%)",
+                                    filter: "blur(16px)"
+                                }}
+                            />
+                            <motion.div
+                                animate={{ x: ["-4%", "3%", "-4%"], y: ["-4%", "5%", "-4%"], scale: [0.92, 1.08, 0.92], opacity: [0.06, 0.18, 0.06] }}
+                                transition={{ duration: 7.6, ease: "easeInOut", repeat: Infinity, delay: 0.3 }}
+                                className="absolute -translate-x-[18%] -translate-y-[10%] h-[58px] md:h-[72px] rounded-full mix-blend-screen"
+                                style={{
+                                    width: "min(16vw, 140px)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,180,180,0.18) 0%, rgba(220,38,38,0.2) 40%, rgba(0,0,0,0) 78%)",
+                                    filter: "blur(18px)"
+                                }}
+                            />
+                            <motion.div
+                                animate={{ x: ["3%", "-4%", "3%"], y: ["5%", "-3%", "5%"], scale: [0.9, 1.06, 0.9], opacity: [0.05, 0.16, 0.05] }}
+                                transition={{ duration: 8.4, ease: "easeInOut", repeat: Infinity, delay: 1.1 }}
+                                className="absolute translate-x-[16%] translate-y-[6%] h-[54px] md:h-[68px] rounded-full mix-blend-screen"
+                                style={{
+                                    width: "min(15vw, 128px)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,170,170,0.14) 0%, rgba(220,38,38,0.18) 42%, rgba(0,0,0,0) 78%)",
+                                    filter: "blur(18px)"
+                                }}
                             />
                         </div>
 
-                        {/* 2b. White Light Beam (in front of monolith) */}
+                        {/* 2b. Inner vapor light (in front of monolith) */}
                         <div
                             className="absolute top-1/2 left-1/2 w-full flex items-center justify-center z-20 pointer-events-none"
                             style={{ transform: "translate(-50%, -72%)" }}
                         >
                             <motion.div
-                                animate={{ opacity: [0.24, 0.34, 0.24], scaleX: [1, 1.03, 1] }}
-                                transition={{ duration: 12, ease: "easeInOut", repeat: Infinity }}
-                                className="absolute w-[100vw] md:w-[760px] h-[96px] md:h-[120px] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.52)_0%,rgba(255,255,255,0.22)_38%,transparent_74%)] blur-[36px] mix-blend-normal"
-                                style={{ willChange: "opacity, transform" }}
+                                animate={{ opacity: [0.18, 0.34, 0.18], scaleX: [0.97, 1.05, 0.97], scaleY: [0.95, 1.04, 0.95] }}
+                                transition={{ duration: 8.8, ease: "easeInOut", repeat: Infinity }}
+                                className="absolute h-[104px] md:h-[130px] rounded-full mix-blend-normal"
+                                style={{
+                                    willChange: "opacity, transform",
+                                    width: "min(90vw, 820px)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0.24) 24%, rgba(255,244,244,0.12) 42%, rgba(255,255,255,0) 74%)",
+                                    filter: "blur(34px)"
+                                }}
                             />
                             <motion.div
-                                animate={{ opacity: [0.42, 0.58, 0.42] }}
-                                transition={{ duration: 9, ease: "easeInOut", repeat: Infinity }}
-                                className="absolute w-[68vw] md:w-[520px] h-[18px] md:h-[24px] bg-white blur-[10px] mix-blend-normal"
-                                style={{ willChange: "opacity" }}
+                                animate={{ opacity: [0.36, 0.72, 0.36], scaleX: [0.94, 1.06, 0.94], scaleY: [0.94, 1.04, 0.94] }}
+                                transition={{ duration: 7.4, ease: "easeInOut", repeat: Infinity }}
+                                className="absolute h-[96px] md:h-[128px] -translate-y-[18px] rounded-full"
+                                style={{
+                                    width: "min(24vw, 220px)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,255,255,0.44) 0%, rgba(255,255,255,0.16) 36%, rgba(255,255,255,0) 74%)",
+                                    filter: "blur(24px)",
+                                    opacity: 0.78
+                                }}
                             />
                             <motion.div
-                                animate={{ opacity: [0.16, 0.24, 0.16] }}
-                                transition={{ duration: 10, ease: "easeInOut", repeat: Infinity }}
-                                className="absolute w-[56vw] md:w-[440px] h-[8px] md:h-[12px] bg-white blur-[6px] mix-blend-normal"
-                                style={{ willChange: "opacity" }}
+                                animate={{ opacity: [0.58, 0.9, 0.58], scaleX: [0.95, 1.05, 0.95], scaleY: [0.96, 1.03, 0.96] }}
+                                transition={{ duration: 7.9, ease: "easeInOut", repeat: Infinity, delay: 0.3 }}
+                                className="absolute h-[42px] md:h-[56px] rounded-full"
+                                style={{
+                                    width: "min(74vw, 580px)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,255,255,0.74) 0%, rgba(255,255,255,0.22) 28%, rgba(255,255,255,0) 72%)",
+                                    filter: "blur(16px)",
+                                    opacity: 0.9
+                                }}
+                            />
+                            <motion.div
+                                animate={{ opacity: [0.28, 0.56, 0.28], scaleX: [0.94, 1.08, 0.94], scaleY: [0.95, 1.04, 0.95] }}
+                                transition={{ duration: 7.2, ease: "easeInOut", repeat: Infinity }}
+                                className="absolute h-[24px] md:h-[30px] rounded-full mix-blend-normal"
+                                style={{
+                                    willChange: "opacity",
+                                    width: "min(58vw, 430px)",
+                                    background: "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.55) 18%, rgba(255,255,255,0.92) 50%, rgba(255,255,255,0.55) 82%, rgba(255,255,255,0) 100%)",
+                                    filter: "blur(12px)"
+                                }}
+                            />
+                            <motion.div
+                                animate={{ opacity: [0.12, 0.26, 0.12], scaleX: [0.92, 1.08, 0.92], scaleY: [0.94, 1.04, 0.94] }}
+                                transition={{ duration: 7.6, ease: "easeInOut", repeat: Infinity }}
+                                className="absolute -translate-x-[16%] -translate-y-[10px] rotate-[-5deg] h-[18px] md:h-[22px] rounded-full mix-blend-normal"
+                                style={{
+                                    willChange: "opacity",
+                                    width: "min(22vw, 170px)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,255,255,0.68) 0%, rgba(255,255,255,0.18) 42%, rgba(255,255,255,0) 76%)",
+                                    filter: "blur(10px)"
+                                }}
+                            />
+                            <motion.div
+                                animate={{ opacity: [0.08, 0.2, 0.08], scaleX: [0.92, 1.07, 0.92], scaleY: [0.95, 1.03, 0.95] }}
+                                transition={{ duration: 7.1, ease: "easeInOut", repeat: Infinity, delay: 0.9 }}
+                                className="absolute translate-x-[18%] translate-y-[8px] rotate-[4deg] h-[16px] md:h-[20px] rounded-full mix-blend-normal"
+                                style={{
+                                    willChange: "opacity",
+                                    width: "min(20vw, 150px)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,255,255,0.54) 0%, rgba(255,255,255,0.16) 40%, rgba(255,255,255,0) 78%)",
+                                    filter: "blur(10px)"
+                                }}
+                            />
+                            <motion.div
+                                animate={{ opacity: [0.08, 0.18, 0.08], scaleX: [0.9, 1.08, 0.9], scaleY: [0.96, 1.02, 0.96] }}
+                                transition={{ duration: 6.6, ease: "easeInOut", repeat: Infinity, delay: 0.2 }}
+                                className="absolute translate-y-[2px] h-[12px] md:h-[16px] rounded-full mix-blend-normal"
+                                style={{
+                                    width: "min(34vw, 250px)",
+                                    background: "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 24%, rgba(255,255,255,0.34) 50%, rgba(255,255,255,0.2) 76%, rgba(255,255,255,0) 100%)",
+                                    filter: "blur(8px)"
+                                }}
+                            />
+                            <motion.div
+                                animate={{ x: ["-3%", "2%", "-3%"], y: ["4%", "-3%", "4%"], scale: [0.92, 1.06, 0.92], opacity: [0.06, 0.16, 0.06] }}
+                                transition={{ duration: 6.9, ease: "easeInOut", repeat: Infinity }}
+                                className="absolute -translate-x-[10%] -translate-y-[12%] h-[24px] md:h-[30px] rounded-full mix-blend-normal"
+                                style={{
+                                    width: "min(12vw, 100px)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.12) 42%, rgba(255,255,255,0) 78%)",
+                                    filter: "blur(10px)"
+                                }}
+                            />
+                            <motion.div
+                                animate={{ x: ["2%", "-3%", "2%"], y: ["-3%", "4%", "-3%"], scale: [0.9, 1.05, 0.9], opacity: [0.05, 0.14, 0.05] }}
+                                transition={{ duration: 7.8, ease: "easeInOut", repeat: Infinity, delay: 0.8 }}
+                                className="absolute translate-x-[12%] translate-y-[10%] h-[20px] md:h-[26px] rounded-full mix-blend-normal"
+                                style={{
+                                    width: "min(10vw, 84px)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,255,255,0.24) 0%, rgba(255,255,255,0.1) 42%, rgba(255,255,255,0) 78%)",
+                                    filter: "blur(9px)"
+                                }}
                             />
                         </div>
                     </div>
@@ -1840,16 +2017,16 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
-                        className="flex flex-col items-center text-center px-6 w-full max-w-4xl mt-10 md:mt-20 z-30 relative"
+                        className="flex flex-col items-center text-center px-6 w-full max-w-4xl z-30 relative gap-8 md:gap-10"
                     >
-                        <div className="flex items-center justify-center gap-3 mb-10 w-full">
+                        <div className="flex items-center justify-center gap-3 w-full">
                             <span className="h-px w-12 md:w-24 bg-gradient-to-r from-transparent to-[#DC2626]/40"></span>
                             <span className="font-sans font-bold text-[9px] md:text-[10px] text-[#9CA3AF] uppercase tracking-[0.2em] md:tracking-[0.3em]">Clientes Brick</span>
                             <span className="h-px w-12 md:w-24 bg-gradient-to-l from-transparent to-[#DC2626]/40"></span>
                         </div>
 
                         {/* Clients as Silent Constellations */}
-                        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-8 md:gap-x-16 md:gap-y-12 opacity-60 hover:opacity-100 transition-opacity duration-1000">
+                        <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 md:gap-x-16 md:gap-y-6 opacity-60 hover:opacity-100 transition-opacity duration-1000">
                             {clients.map((client, i) => (
                                 <span key={i} className="font-mono text-[8px] md:text-[10px] text-[#9CA3AF] uppercase tracking-[0.3em] md:tracking-[0.4em] transition-all duration-700 hover:text-white hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] cursor-default">
                                     {client}
@@ -1863,21 +2040,21 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
             </section>
 
             {/* PART 2: O MÉTODO / A CRENÇA - Estrelas de fundo */}
-            <section ref={ref} className="relative w-full bg-gradient-to-b from-[#000000] to-[#050505] flex flex-col items-center pt-32 pb-24 overflow-hidden border-none text-white">
+            <section ref={ref} className="relative w-full bg-gradient-to-b from-[#000000] to-[#050505] flex flex-col items-center pt-8 md:pt-10 pb-16 md:pb-20 overflow-hidden border-none text-white">
                 <ParticleBackground reactToMouse={true} />
 
                 {/* Subtle red ambiance replacing the heavy planet */}
                 <div className="absolute top-1/2 left-0 w-[150vw] md:w-[100vw] h-[150vh] bg-[radial-gradient(ellipse_at_left_center,rgba(220,38,38,0.05)_0%,transparent_60%)] pointer-events-none z-10 -translate-y-1/2 -translate-x-1/2"></div>
 
                 <div className="max-w-4xl mx-auto px-6 relative z-30 flex flex-col items-center text-center w-full">
-                    <div className="mb-20 reveal w-full flex flex-col items-center">
-                        <div className="w-full flex justify-center mb-10">
+                    <div className="mb-16 md:mb-20 reveal w-full flex flex-col items-center gap-8 md:gap-10">
+                        <div className="w-full flex justify-center">
                             <div className="relative w-5 h-5">
                                 <div className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full animate-breathe blur-[2px]" style={{ background: 'radial-gradient(circle at center, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0.18) 45%, rgba(220,38,38,0) 75%)' }}></div>
                                 <div className="absolute left-1/2 top-1/2 w-[2px] h-[2px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DC2626]/60"></div>
                             </div>
                         </div>
-                        <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase mb-10">
+                        <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase">
                             Estágio II &bull; {t('philosophy.belief_label')}
                         </span>
                     </div>
@@ -1890,20 +2067,20 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
             </section>
 
             {/* PART 3: FOOTER CTA (The Climax) */}
-            <section className="relative w-full bg-[#050505] flex flex-col items-center pt-32 pb-0 overflow-hidden">
+            <section className="relative w-full bg-[#050505] flex flex-col items-center pt-12 md:pt-16 pb-0 overflow-hidden">
                 <ParticleBackground reactToMouse={true} />
 
                 {/* Colossal Red Aura emanating from the CTA to set the mood */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] md:w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.12)_0%,transparent_50%)] pointer-events-none z-0 blur-[100px]"></div>
 
-                <div className="flex flex-col items-center text-center reveal relative z-30 w-full mb-40 px-6 md:px-12">
+                <div className="flex flex-col items-center text-center reveal relative z-30 w-full mb-32 md:mb-36 px-6 md:px-12 gap-8 md:gap-10">
 
-                    <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase mb-20 mt-10">
+                    <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase">
                         Estágio III &bull; O Gran Finale
                     </span>
 
                     {/* Subtitle with Scramble Effect & Lasers */}
-                    <div className="flex items-center gap-4 md:gap-6 mb-12">
+                    <div className="flex items-center gap-4 md:gap-6">
                         <div className="w-8 md:w-16 h-[1px] bg-gradient-to-r from-transparent to-[#DC2626]"></div>
                         <h2 className="text-[10px] md:text-xs font-ai text-[#DC2626] uppercase tracking-[0.3em] md:tracking-[0.5em] drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]">
                             <ScrambleText text={t('footer.complex_problem')} hoverTrigger={true} triggerOnReveal={true} delay={500} />
@@ -1912,7 +2089,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                     </div>
 
                     {/* Massive Climax Typography */}
-                    <h1 className="text-5xl md:text-7xl lg:text-[110px] font-brick text-transparent bg-clip-text bg-gradient-to-b from-white to-[#9CA3AF] leading-[0.9] max-w-6xl transition-all duration-1000 hover:text-[#DC2626] hover:bg-none hover:drop-shadow-[0_0_80px_rgba(220,38,38,0.9)] cursor-default mb-16 px-4">
+                    <h1 className="text-5xl md:text-7xl lg:text-[110px] font-brick text-transparent bg-clip-text bg-gradient-to-b from-white to-[#9CA3AF] leading-[0.9] max-w-6xl transition-all duration-1000 hover:text-[#DC2626] hover:bg-none hover:drop-shadow-[0_0_80px_rgba(220,38,38,0.9)] cursor-default px-4">
                         {t('footer.we_have_intelligence')}
                     </h1>
 
