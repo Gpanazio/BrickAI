@@ -1778,41 +1778,59 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                     {/* THE HORIZON (Monolith emerging from the dawn) */}
                     <div className="relative w-full flex items-center justify-center my-10 md:my-20 h-[300px] md:h-[400px]">
 
-                        {/* 1. The Monolith (Behind the horizon light, rising from the void) */}
-                        <motion.div
-                            initial={{ y: "100%", opacity: 0 }}
-                            whileInView={{ y: "30%", opacity: 1 }}
-                            viewport={{ once: true, margin: "-100px" }}
-                            transition={{ duration: 5, ease: "easeOut" }}
-                            className="absolute w-[100px] md:w-[150px] lg:w-[180px] h-[400px] md:h-[500px] bg-[#000000] z-0"
-                            style={{ willChange: "transform, opacity" }}
+                        {/* 1. The Monolith Top (Only the visible cap crosses the horizon) */}
+                        <div
+                            className="absolute left-1/2 z-[18] w-[92px] h-[87px] md:w-[136px] md:h-[122px] lg:w-[164px] lg:h-[142px] -translate-x-1/2 overflow-hidden pointer-events-none"
+                            style={{ bottom: "50%" }}
                         >
-                            {/* Pure Black Silhouette - No hard edges, but a very subtle soft dark red bleed behind the face to give it mass */}
-                            <div className="absolute top-0 left-0 w-full h-[40px] bg-gradient-to-b from-[#DC2626]/10 to-transparent blur-[10px]"></div>
-                        </motion.div>
-
-                        {/* 2. The Lower Void (Masks the monolith below the horizon line) */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[#000000] z-10 border-t border-[#DC2626]/5 transform-gpu"></div>
-
-                        {/* 3. The Thick Soft Horizon Dawn (No hard lines, purely diffused massive volume) */}
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full flex items-center justify-center z-20 pointer-events-none">
-                            {/* Massive Crimson Glare */}
                             <motion.div
-                                animate={{ opacity: [0.6, 1, 0.6], scaleY: [1, 1.2, 1] }}
-                                transition={{ duration: 12, ease: "easeInOut", repeat: Infinity }}
-                                className="absolute w-[120vw] h-[180px] bg-[#DC2626] rounded-[100%] blur-[80px] mix-blend-screen"
-                                style={{ willChange: "transform, opacity" }}
+                                initial={{ y: "78%" }}
+                                whileInView={{ y: "0%" }}
+                                viewport={{ once: true, amount: 0.01 }}
+                                transition={{ duration: 4.2, ease: [0.16, 1, 0.3, 1] }}
+                                className="absolute inset-0"
+                                style={{ willChange: "transform" }}
+                            >
+                                <div className="w-full h-full rounded-t-[2px] bg-[#000000] border border-[#1a1a1a] shadow-[inset_0_0_40px_rgba(0,0,0,0.9)]"></div>
+                            </motion.div>
+                        </div>
+
+                        {/* 2a. Red Horizon Volume (behind monolith) */}
+                        <div
+                            className="absolute top-1/2 left-1/2 w-full flex items-center justify-center z-[17] pointer-events-none"
+                            style={{ transform: "translate(-50%, -18%)" }}
+                        >
+                            <motion.div
+                                animate={{ opacity: [0.58, 0.78, 0.58], scaleY: [1, 1.14, 1] }}
+                                transition={{ duration: 14, ease: "easeInOut", repeat: Infinity }}
+                                className="absolute w-[110vw] md:w-[86vw] h-[190px] md:h-[210px] bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.88)_0%,rgba(220,38,38,0.58)_34%,rgba(220,38,38,0.26)_58%,transparent_80%)] blur-[66px] mix-blend-screen"
+                                style={{ willChange: "transform, opacity", filter: "saturate(1.05)" }}
                             />
-                            {/* Intense Thick Sun Burn */}
+                        </div>
+
+                        {/* 2b. White Light Beam (in front of monolith) */}
+                        <div
+                            className="absolute top-1/2 left-1/2 w-full flex items-center justify-center z-20 pointer-events-none"
+                            style={{ transform: "translate(-50%, -72%)" }}
+                        >
                             <motion.div
-                                animate={{ opacity: [0.7, 1, 0.7] }}
-                                transition={{ duration: 6, ease: "easeInOut", repeat: Infinity }}
-                                className="absolute w-[80vw] md:w-[700px] h-[40px] md:h-[60px] bg-white blur-[30px] mix-blend-overlay"
+                                animate={{ opacity: [0.24, 0.34, 0.24], scaleX: [1, 1.03, 1] }}
+                                transition={{ duration: 12, ease: "easeInOut", repeat: Infinity }}
+                                className="absolute w-[100vw] md:w-[760px] h-[96px] md:h-[120px] bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.52)_0%,rgba(255,255,255,0.22)_38%,transparent_74%)] blur-[36px] mix-blend-normal"
+                                style={{ willChange: "opacity, transform" }}
+                            />
+                            <motion.div
+                                animate={{ opacity: [0.42, 0.58, 0.42] }}
+                                transition={{ duration: 9, ease: "easeInOut", repeat: Infinity }}
+                                className="absolute w-[68vw] md:w-[520px] h-[18px] md:h-[24px] bg-white blur-[10px] mix-blend-normal"
                                 style={{ willChange: "opacity" }}
                             />
-                            {/* Core Soft Light Volume (Expanded blur, no sharp 1px rays) */}
-                            <div className="absolute w-[90vw] md:w-[600px] h-[15px] bg-gradient-to-r from-transparent via-white/80 to-transparent mix-blend-screen blur-[10px] shadow-[0_0_60px_rgba(255,255,255,0.8)]"></div>
-                            <div className="absolute w-[60vw] md:w-[350px] h-[6px] bg-white blur-[8px] mix-blend-screen opacity-90"></div>
+                            <motion.div
+                                animate={{ opacity: [0.16, 0.24, 0.16] }}
+                                transition={{ duration: 10, ease: "easeInOut", repeat: Infinity }}
+                                className="absolute w-[56vw] md:w-[440px] h-[8px] md:h-[12px] bg-white blur-[6px] mix-blend-normal"
+                                style={{ willChange: "opacity" }}
+                            />
                         </div>
                     </div>
 
