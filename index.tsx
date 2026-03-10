@@ -121,6 +121,14 @@ const GlobalStyles = () => (
             50% { opacity: 1; box-shadow: 0 0 8px 3px rgba(220,38,38,0.6); }
         }
         .animate-dot-pulse { animation: dot-pulse 4s ease-in-out infinite; }
+        @keyframes fiber-travel {
+            0% { transform: translateX(-100%); opacity: 0; }
+            8% { opacity: 0.6; }
+            92% { opacity: 0.6; }
+            100% { transform: translateX(500%); opacity: 0; }
+        }
+        .animate-fiber { animation: fiber-travel 4s linear infinite; }
+        .animate-fiber-b { animation: fiber-travel 4s linear infinite; animation-delay: -2s; }
         @keyframes scan {
             0% { top: 0%; opacity: 0; }
             10% { opacity: 1; }
@@ -1344,20 +1352,26 @@ const Philosophy = () => {
                     <span className="text-4xl md:text-6xl font-brick text-white bg-[#050505] px-4 text-center">{t('philosophy.belief_label')}</span>
                 </div>
                 <div className="flex flex-col gap-24 w-full">
-                    <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} titleSize="text-2xl md:text-3xl" />
-                    <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} titleSize="text-3xl md:text-4xl" />
-                    <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} titleSize="text-4xl md:text-6xl" />
+                    <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} titleSize="text-2xl md:text-3xl" index={0} />
+                    <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} titleSize="text-3xl md:text-4xl" index={1} />
+                    <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} titleSize="text-4xl md:text-6xl" index={2} />
                 </div>
             </div>
         </section>
     );
 };
 
-const PhilosophyItem = ({ title, text, titleSize = 'text-4xl md:text-6xl' }: { title: string, text: string, titleSize?: string }) => (
-    <div className="reveal flex flex-col items-center group cursor-default">
+const PhilosophyItem = ({ title, text, titleSize = 'text-4xl md:text-6xl', index = 0 }: { title: string, text: string, titleSize?: string, index?: number }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 2.2, delay: index * 0.4, ease: "easeOut" }}
+        className="flex flex-col items-center group cursor-default"
+    >
         <h2 className={`${titleSize} font-brick text-white mb-4 transition-colors duration-500 group-hover:text-[#DC2626]`}>{title}</h2>
         <p className="text-base md:text-lg text-white font-light max-w-lg leading-relaxed transition-colors duration-300">{text}</p>
-    </div>
+    </motion.div>
 );
 
 // --- COMPONENTE DE DATA CHIP ---
@@ -1473,12 +1487,18 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
     const { t } = useTranslation();
     return (
         <section id="works" className="w-full pt-20 pb-0 bg-transparent relative z-40 md:overflow-hidden">
-            <div className="px-6 md:px-12 lg:px-24 mb-6 reveal flex items-center gap-3">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 2, ease: "easeOut" }}
+                className="px-6 md:px-12 lg:px-24 mb-6 flex items-center gap-3"
+            >
                 <span className="flex-shrink-0 flex items-center self-center">
                     <span className="block w-1 h-1 rounded-full bg-[#DC2626] animate-dot-pulse"></span>
                 </span>
                 <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] uppercase leading-none">{t('works_page.title')}</span>
-            </div>
+            </motion.div>
             <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] px-6 md:px-12 lg:px-24">
                 <ContextConsumer>
                     {({ works }) => works.slice(0, 5).map((work, idx) => (
@@ -2209,9 +2229,9 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                         </span>
                     </div>
                     <div className="flex flex-col gap-24 w-full">
-                        <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} />
-                        <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} />
-                        <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} />
+                        <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} index={0} />
+                        <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} index={1} />
+                        <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} index={2} />
                     </div>
                 </div>
             </section>
@@ -2253,8 +2273,12 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
 
                 {/* FOOTER BOTTOM */}
                 <div className="mt-auto w-full relative z-30">
-                    {/* Red-tinted separator — anchors the footer without a bg block */}
-                    <div className="w-full h-px bg-gradient-to-r from-transparent via-[#DC2626]/20 to-transparent mb-12" />
+                    {/* Digital fiber separator */}
+                    <div className="w-full h-px mb-12 relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#DC2626]/10 to-transparent" />
+                        <div className="absolute top-0 h-full w-[15%] animate-fiber" style={{ background: 'linear-gradient(90deg, transparent, rgba(220,38,38,0.25), transparent)' }} />
+                        <div className="absolute top-0 h-full w-[15%] animate-fiber-b" style={{ background: 'linear-gradient(90deg, transparent, rgba(220,38,38,0.25), transparent)' }} />
+                    </div>
                     <div className="w-full px-6 md:px-12 lg:px-24 pb-12 flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="flex gap-6">
                             {['LinkedIn', 'Instagram'].map((social) => (
