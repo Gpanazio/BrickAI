@@ -116,6 +116,11 @@ const GlobalStyles = () => (
             50% { opacity: 1; letter-spacing: 0.38em; }
         }
         .animate-soul { animation: soul-breathe 5s ease-in-out infinite; }
+        @keyframes dot-pulse {
+            0%, 100% { opacity: 0.7; box-shadow: 0 0 4px 1px rgba(220,38,38,0.3); }
+            50% { opacity: 1; box-shadow: 0 0 8px 3px rgba(220,38,38,0.6); }
+        }
+        .animate-dot-pulse { animation: dot-pulse 4s ease-in-out infinite; }
         @keyframes scan {
             0% { top: 0%; opacity: 0; }
             10% { opacity: 1; }
@@ -1454,8 +1459,8 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             </div>
 
             {/* EDGE DECOR */}
-            <div className="absolute top-6 right-6 z-40 opacity-60 group-hover:opacity-100 transition-all duration-700 text-[10px] font-mono text-[#DC2626] hidden md:block group-hover:translate-x-[-10px]">
-                <span className="mr-2">◈</span>LOG_DATA_{index.toString().padStart(2, '0')}
+            <div className="absolute top-6 right-6 z-40 opacity-0 group-hover:opacity-60 transition-all duration-700 text-[10px] font-mono text-white/40 hidden md:block">
+                {(index + 1).toString().padStart(2, '0')}
             </div>
 
             {/* SCANLINE OVERLAY ON HOVER */}
@@ -1468,18 +1473,13 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
     const { t } = useTranslation();
     return (
         <section id="works" className="w-full pt-20 pb-0 bg-transparent relative z-40 md:overflow-hidden">
-            <div className="px-6 md:px-12 lg:px-24 mb-12 reveal flex justify-between items-center border-b border-white/10 pb-6">
-                <div className="flex items-center gap-3">
-                    <Database className="w-4 h-4 text-[#DC2626]" />
-                    <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('works_page.title')}</h2>
-                </div>
-                <div className="hidden md:flex gap-4 text-[9px] font-mono text-[#9CA3AF]/50">
-                    <span>SYS.VER. 5.1_B</span>
-                    <span>{t('common.secure_connection')}</span>
-                </div>
+            <div className="px-6 md:px-12 lg:px-24 mb-6 reveal flex items-center gap-3">
+                <span className="flex-shrink-0 flex items-center self-center">
+                    <span className="block w-1 h-1 rounded-full bg-[#DC2626] animate-dot-pulse"></span>
+                </span>
+                <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] uppercase leading-none">{t('works_page.title')}</span>
             </div>
-
-            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] border-b border-white/10 px-6 md:px-12 lg:px-24">
+            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] px-6 md:px-12 lg:px-24">
                 <ContextConsumer>
                     {({ works }) => works.slice(0, 5).map((work, idx) => (
                         <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />
