@@ -972,7 +972,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
         <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-visible">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-40"></div>
 
-            <div className="reveal relative z-10 w-full flex justify-center mb-8 md:mb-12">
+            <div className="reveal relative z-10 w-full flex justify-center mb-10 md:mb-16">
                 <div className="relative">
                     <div
                         className={`monolith-structure w-[120px] h-[240px] md:w-[150px] md:h-[300px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative transition-transform duration-1000 ease-out pointer-events-none ${monolithHover ? 'scale-[1.02]' : 'scale-100'}`}
@@ -1028,8 +1028,8 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                     ></div>
                 </div>
             </div>
-            <div className="text-center z-20 max-w-6xl px-4 flex flex-col items-center pointer-events-none">
-                <p className="reveal delay-2000 text-base md:text-xl lg:text-2xl font-mono text-white drop-shadow-2xl mb-2 md:mb-4">
+            <div className="text-center z-20 max-w-6xl px-6 flex flex-col items-center pointer-events-none gap-4 md:gap-6">
+                <p className="reveal delay-2000 text-base md:text-xl lg:text-2xl font-mono text-white drop-shadow-2xl">
                     <TypewriterText text={t('hero.scramble') as string} delay={2000} onComplete={() => setTypewriterDone(true)} />
                 </p>
                 <h2 className="text-2xl md:text-4xl lg:text-5xl font-brick text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)] min-h-[50px] flex items-center justify-center">
@@ -1388,7 +1388,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             onClick={() => work.hasDetail && onOpen(work)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={`reveal relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-[#DC2626] transition-colors duration-300 bg-[#050505] group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
+            className={`reveal relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-[#DC2626] transition-colors duration-300 bg-[#050505]/90 group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
             style={{
                 flexGrow: isHovered ? 1.6 : 1,
                 flexShrink: 0,
@@ -1467,8 +1467,8 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => void }) => {
     const { t } = useTranslation();
     return (
-        <section id="works" className="w-full pt-20 pb-0 bg-[#050505] border-t border-white/5 relative z-40 md:overflow-hidden">
-            <div className="px-6 md:px-12 lg:px-24 mb-12 reveal flex justify-between items-end border-b border-white/10 pb-4">
+        <section id="works" className="w-full pt-20 pb-0 bg-transparent relative z-40 md:overflow-hidden">
+            <div className="px-6 md:px-12 lg:px-24 mb-12 reveal flex justify-between items-center border-b border-white/10 pb-6">
                 <div className="flex items-center gap-3">
                     <Database className="w-4 h-4 text-[#DC2626]" />
                     <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('works_page.title')}</h2>
@@ -1905,8 +1905,8 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
     return (
         <React.Fragment>
             {/* PART 1: Nascidos no Set & Evolution (Starchild) */}
-            <section className="relative w-full bg-transparent flex flex-col items-center justify-center min-h-[104vh] md:min-h-[108vh] overflow-hidden pt-8 pb-8 md:pt-10 md:pb-10">
-                <motion.div style={{ y: textY }} className="relative z-30 w-full flex flex-col items-center justify-start min-h-[92vh] md:min-h-[94vh] gap-8 md:gap-10">
+            <section className="relative w-full bg-transparent flex flex-col items-center justify-center min-h-[104vh] md:min-h-[108vh] overflow-hidden py-12 md:py-16">
+                <motion.div style={{ y: textY }} className="relative z-30 w-full flex flex-col items-center justify-start min-h-[92vh] md:min-h-[94vh] gap-10 md:gap-12">
 
                     {/* TITLE CARD: Top Margin */}
                     <div className="relative z-30 flex flex-col items-center text-center px-4 w-full">
@@ -1915,7 +1915,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 2, ease: "easeOut" }}
-                            className="flex flex-col items-center gap-8 md:gap-10"
+                            className="flex flex-col items-center gap-10 md:gap-12"
                         >
                             <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase">
                                 Estágio I &bull; A ORIGEM
@@ -1933,7 +1933,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                     </div>
 
                     {/* THE HORIZON (Monolith emerging from the dawn) */}
-                    <div className="relative w-full flex-1 flex items-center justify-center min-h-[280px] md:min-h-[360px] py-10 md:py-16">
+                    <div className="relative w-full flex-1 flex items-center justify-center min-h-[280px] md:min-h-[360px] py-12 md:py-16">
 
                         {/* 1. The Monolith Top (Only the visible cap crosses the horizon) */}
                         <div
@@ -2169,7 +2169,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
-                        className="flex flex-col items-center text-center px-6 w-full max-w-4xl z-30 relative gap-8 md:gap-10"
+                        className="flex flex-col items-center text-center px-6 w-full max-w-4xl z-30 relative gap-10 md:gap-12"
                     >
                         <div className="flex items-center justify-center gap-3 w-full">
                             <span className="h-px w-12 md:w-24 bg-gradient-to-r from-transparent to-[#DC2626]/40"></span>
@@ -2192,12 +2192,12 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
             </section>
 
             {/* PART 2: O MÉTODO / A CRENÇA - Estrelas de fundo */}
-            <section ref={ref} className="relative w-full bg-transparent flex flex-col items-center pt-8 md:pt-10 pb-16 md:pb-20 overflow-hidden border-none text-white">
+            <section ref={ref} className="relative w-full bg-transparent flex flex-col items-center py-16 md:py-20 overflow-hidden border-none text-white">
                 {/* Subtle red ambiance replacing the heavy planet */}
                 <div className="absolute top-1/2 left-0 w-[150vw] md:w-[100vw] h-[150vh] bg-[radial-gradient(ellipse_at_left_center,rgba(220,38,38,0.05)_0%,transparent_60%)] pointer-events-none z-10 -translate-y-1/2 -translate-x-1/2"></div>
 
                 <div className="max-w-4xl mx-auto px-6 relative z-30 flex flex-col items-center text-center w-full">
-                    <div className="mb-16 md:mb-20 reveal w-full flex flex-col items-center gap-8 md:gap-10">
+                    <div className="mb-16 md:mb-20 reveal w-full flex flex-col items-center gap-10 md:gap-12">
                         <div className="w-full flex justify-center">
                             <div className="relative w-5 h-5">
                                 <div className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full animate-breathe blur-[2px]" style={{ background: 'radial-gradient(circle at center, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0.18) 45%, rgba(220,38,38,0) 75%)' }}></div>
@@ -2217,11 +2217,11 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
             </section>
 
             {/* PART 3: FOOTER CTA (The Climax) */}
-            <section className="relative w-full bg-transparent flex flex-col items-center pt-12 md:pt-16 pb-0 overflow-x-hidden">
+            <section className="relative w-full bg-transparent flex flex-col items-center pt-16 md:pt-20 pb-0 overflow-x-hidden">
                 {/* Colossal Red Aura emanating from the CTA to set the mood */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] md:w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.12)_0%,transparent_50%)] pointer-events-none z-0 blur-[100px]"></div>
 
-                <div className="flex flex-col items-center text-center reveal relative z-30 w-full mb-32 md:mb-36 px-6 md:px-12 gap-8 md:gap-10">
+                <div className="flex flex-col items-center text-center reveal relative z-30 w-full mb-32 md:mb-36 px-6 md:px-12 gap-10 md:gap-12">
 
                     <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase">
                         Estágio III &bull; O Gran Finale
@@ -2254,17 +2254,17 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                 {/* FOOTER BOTTOM */}
                 <div className="mt-auto w-full relative z-30">
                     {/* Red-tinted separator — anchors the footer without a bg block */}
-                    <div className="w-full h-px bg-gradient-to-r from-transparent via-[#DC2626]/20 to-transparent mb-8" />
-                    <div className="w-full px-6 md:px-12 lg:px-24 pb-10 flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
+                    <div className="w-full h-px bg-gradient-to-r from-transparent via-[#DC2626]/20 to-transparent mb-12" />
+                    <div className="w-full px-6 md:px-12 lg:px-24 pb-12 flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="flex gap-6">
                             {['LinkedIn', 'Instagram'].map((social) => (
                                 <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white/50 hover:text-[#DC2626] tracking-widest uppercase transition-colors duration-500">{social}</a>
                             ))}
                         </div>
-                        <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/30 font-bold text-center md:text-right">
-                            <span className="block mb-2">&copy; 2026 Brick AI.</span>
+                        <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/30 font-bold text-center md:text-right flex flex-col items-center md:items-end gap-1">
+                            <span>&copy; 2026 Brick AI.</span>
                             <span className="hidden md:inline">{t('footer.generative_division')}</span>
-                            <span className="block mt-1">{t('footer.rights_reserved')}</span>
+                            <span>{t('footer.rights_reserved')}</span>
                             {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">{t('footer.system_admin')}</button>}
                         </div>
                     </div>
