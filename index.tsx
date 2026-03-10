@@ -1361,7 +1361,14 @@ const Philosophy = () => {
     );
 };
 
-const PhilosophyItem = ({ title, text, titleSize = 'text-4xl md:text-6xl', index = 0 }: { title: string, text: string, titleSize?: string, index?: number }) => (
+type PhilosophyItemProps = {
+    title: string;
+    text: string;
+    titleSize?: string;
+    index?: number;
+};
+
+const PhilosophyItem = ({ title, text, titleSize = 'text-4xl md:text-6xl', index = 0 }: PhilosophyItemProps) => (
     <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -2276,8 +2283,8 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                     {/* Digital fiber separator */}
                     <div className="w-full h-px mb-12 relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#DC2626]/10 to-transparent" />
-                        <div className="absolute top-0 h-full w-[15%] animate-fiber" style={{ background: 'linear-gradient(90deg, transparent, rgba(220,38,38,0.25), transparent)' }} />
-                        <div className="absolute top-0 h-full w-[15%] animate-fiber-b" style={{ background: 'linear-gradient(90deg, transparent, rgba(220,38,38,0.25), transparent)' }} />
+                        <div className="absolute top-0 h-full w-[15%] animate-fiber bg-[linear-gradient(90deg,transparent,rgba(220,38,38,0.25),transparent)]" />
+                        <div className="absolute top-0 h-full w-[15%] animate-fiber-b bg-[linear-gradient(90deg,transparent,rgba(220,38,38,0.25),transparent)]" />
                     </div>
                     <div className="w-full px-6 md:px-12 lg:px-24 pb-12 flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="flex gap-6">
