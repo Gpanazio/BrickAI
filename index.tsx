@@ -933,9 +933,9 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                         style={{ transform: 'translateZ(0)' }}
                     >
                         <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
-                        <div className="centered-layer aura-atmos pointer-events-none opacity-60 w-[400px] h-[400px] blur-[60px]"></div>
-                        <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-60 w-[300px] h-[300px] blur-[40px]"></div>
-                        <div className="centered-layer core-atmos pointer-events-none"></div>
+                        <div className="centered-layer aura-atmos pointer-events-none opacity-60" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
+                        <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '500px', height: '500px', background: 'radial-gradient(circle at center, rgba(220,38,38,0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
+                        <div className="centered-layer core-atmos animate-breathe pointer-events-none" style={{ width: '40px', height: '40px', filter: 'blur(10px)', background: 'radial-gradient(circle, rgba(220,38,38,1) 0%, rgba(220,38,38,0.4) 40%, transparent 80%)' }}></div>
 
                         {/* INTERACTIVE RED DOT & RADIATION (Strictly Inside Monolith) */}
                         <div className="absolute inset-0 overflow-hidden rounded-[2px] pointer-events-none z-30">
@@ -2735,8 +2735,8 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                                 <div className="absolute inset-0 monolith-texture opacity-80 mix-blend-overlay pointer-events-none rounded-[2px] overflow-hidden"></div>
 
                                 {/* Static Atmospherics */}
-                                <div className="centered-layer aura-atmos pointer-events-none opacity-40 w-[300px] h-[300px] blur-[80px]"></div>
-                                <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-60 w-[200px] h-[200px] blur-[50px]"></div>
+                                <div className="centered-layer aura-atmos pointer-events-none opacity-40" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
+                                <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(220,38,38,0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
 
                                 {/* Core Glow / Eye - Pulses on Thinking/Talking */}
                                 <div className={`centered-layer core-atmos pointer-events-none shadow-[0_0_40px_rgba(220,38,38,1)] transition-all duration-200 ${isProcessing ? 'animate-talking scale-150 opacity-100' : 'animate-thinking opacity-80'}`}></div>
@@ -2937,9 +2937,9 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                             <div className="relative">
                                 <div className="monolith-structure w-[100px] h-[200px] md:w-[130px] md:h-[260px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
                                     <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
-                                    <div className="centered-layer aura-atmos pointer-events-none opacity-60 w-[300px] h-[300px] blur-[60px]"></div>
-                                    <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-60 w-[200px] h-[200px] blur-[40px]"></div>
-                                    <div className="centered-layer core-atmos pointer-events-none"></div>
+                                    <div className="centered-layer aura-atmos pointer-events-none opacity-60" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
+                                    <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(220,38,38,0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
+                                    <div className="centered-layer core-atmos animate-breathe pointer-events-none" style={{ width: '40px', height: '40px', filter: 'blur(10px)', background: 'radial-gradient(circle, rgba(220,38,38,1) 0%, rgba(220,38,38,0.4) 40%, transparent 80%)' }}></div>
                                     <div className="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10 rounded-[2px]"></div>
                                 </div>
                             </div>
