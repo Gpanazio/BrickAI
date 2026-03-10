@@ -1,0 +1,138 @@
+- generic [ref=e3]:
+  - banner:
+    - generic [ref=e4] [cursor=pointer]:
+      - img "BRICK" [ref=e5]
+      - generic [ref=e6]: _
+      - generic [ref=e7]: AI
+    - generic [ref=e8]:
+      - button ">HOME" [ref=e9] [cursor=pointer]
+      - button ">SOBRE" [ref=e10] [cursor=pointer]
+      - button ">TRABALHOS" [ref=e11] [cursor=pointer]
+      - button ">TRANSMISSÕES" [ref=e12] [cursor=pointer]
+      - button ">FALE CONOSCO _" [ref=e13] [cursor=pointer]
+      - button "EN" [ref=e14] [cursor=pointer]:
+        - img [ref=e15]
+        - text: EN
+  - generic:
+    - generic:
+      - button "HOME"
+      - button "SOBRE"
+      - button "TRABALHOS"
+      - button "TRANSMISSÕES"
+      - button "FALE CONOSCO _"
+      - button "SWITCH TO ENGLISH":
+        - img
+        - text: SWITCH TO ENGLISH
+  - main [ref=e18]:
+    - generic [ref=e19]:
+      - generic:
+        - paragraph:
+          - generic: UM NOVO CORPO_
+        - heading "A LQ$OW AK@H" [level=2]
+    - generic [ref=e23]:
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - img [ref=e26]
+          - heading "PROJECT_DATABASE // Trabalhos Selecionados" [level=2] [ref=e30]
+        - generic [ref=e31]:
+          - generic [ref=e32]: SYS.VER. 5.1_B
+          - generic [ref=e33]: CONEXÃO SEGURA
+      - generic [ref=e34]:
+        - generic [ref=e100] [cursor=pointer]:
+          - generic:
+            - generic:
+              - generic: inheritance
+              - generic: "|"
+              - generic: GENERATIVE
+            - heading "INHERITANCE" [level=3]
+            - paragraph: CURTA-METRAGEM
+          - generic [ref=e104]: INHERITANCE
+          - generic [ref=e105]: ◈LOG_DATA_00
+        - generic [ref=e106] [cursor=pointer]:
+          - generic:
+            - generic:
+              - generic: shift
+              - generic: "|"
+              - generic: VFX
+            - heading "SYNAPSESHEET" [level=3]
+            - paragraph: MANIFESTO
+          - generic [ref=e110]: SHIFT
+          - generic [ref=e111]: ◈LOG_DATA_01
+        - generic [ref=e112] [cursor=pointer]:
+          - generic:
+            - generic:
+              - generic: anima
+              - generic: "|"
+              - generic: STYLE TRANSFER
+            - heading "AUTOBOL" [level=3]
+            - paragraph: HISTÓRIA REIMAGINADA
+          - generic [ref=e116]: ANIMA
+          - generic [ref=e117]: ◈LOG_DATA_02
+        - generic [ref=e118] [cursor=pointer]:
+          - generic:
+            - generic:
+              - generic: factory
+              - generic: "|"
+              - generic: GENERATIVE
+            - heading "FACTORY" [level=3]
+            - paragraph: RETRO-FUTURISMO
+          - generic [ref=e122]: FACTORY
+          - generic [ref=e123]: ◈LOG_DATA_03
+        - generic [ref=e124] [cursor=pointer]:
+          - generic:
+            - generic:
+              - generic: DOG DAY AFTERNOON
+              - generic: "|"
+              - generic: DATA ART
+            - heading "DOG DAY AFTERNOON" [level=3]
+            - paragraph: COMÉDIA ABSURDA
+          - generic [ref=e128]: DOG DAY AFTERNOON
+          - generic [ref=e129]: ◈LOG_DATA_04
+    - generic [ref=e36]:
+      - generic [ref=e38]:
+        - generic [ref=e39]: Estágio I • Evolução
+        - heading "NASCIDOS NO SET" [level=2] [ref=e40]:
+          - text: NASCIDOS
+          - text: NO SET
+        - paragraph [ref=e41]: Não é um experimento. É uma produtora com 10 anos de set que agora não tem mais limites para o que é possível.
+      - generic [ref=e49]:
+        - generic [ref=e52]: Clientes Brick
+        - generic [ref=e54]:
+          - generic [ref=e55]: BBC
+          - generic [ref=e56]: RECORD TV
+          - generic [ref=e57]: STONE
+          - generic [ref=e58]: ALIEXPRESS
+          - generic [ref=e59]: KEETA
+          - generic [ref=e60]: VISA
+          - generic [ref=e61]: FACEBOOK
+          - generic [ref=e62]: O BOTICÁRIO
+    - generic [ref=e64]:
+      - generic [ref=e70]: Estágio II • O MÉTODO
+      - generic [ref=e71]:
+        - generic [ref=e72]:
+          - heading "PROMPT" [level=2] [ref=e73]
+          - paragraph [ref=e74]: Não existe prompt mágico. A IA cria pixels e padrões infinitos, mas não consegue criar intenção. É apenas uma ferramenta.
+        - generic [ref=e75]:
+          - heading "RUÍDO" [level=2] [ref=e76]
+          - paragraph [ref=e77]: Modelos generativos são grandes calculadoras de probabilidade. Elas tentam adivinhar e raramente conseguem. Nós somos o elemento que transforma o caos em arte.
+        - generic [ref=e78]:
+          - heading "NÓS DIRIGIMOS A INTELIGÊNCIA" [level=2] [ref=e79]
+          - paragraph [ref=e80]: O modelo é um burocrata de silício que não obedece e não tem alma. Nosso trabalho é domá-lo tecnicamente e colocar o sentimento que ele nunca vai ter.
+    - generic [ref=e81]:
+      - generic [ref=e82]:
+        - generic [ref=e83]: Estágio III • O Gran Finale
+        - heading "YTQ XN4 1O!23 W^Q*%!H7EP8" [level=2] [ref=e130]
+        - heading "NÓS TEMOS A VISÃO" [level=1] [ref=e88]
+        - button "FALE CONOSCO _" [ref=e89] [cursor=pointer]:
+          - generic [ref=e91]: FALE CONOSCO _
+      - generic [ref=e92]:
+        - generic [ref=e93]:
+          - link "LinkedIn" [ref=e94] [cursor=pointer]:
+            - /url: https://linkedin.com/brickai
+          - link "Instagram" [ref=e95] [cursor=pointer]:
+            - /url: https://instagram.com/brickai
+        - generic [ref=e96]:
+          - generic [ref=e97]: © 2026 Brick AI.
+          - text: A Divisão Generativa
+          - generic [ref=e98]: Todos os Direitos Reservados
+          - button "SYSTEM_ADMIN" [ref=e99] [cursor=pointer]

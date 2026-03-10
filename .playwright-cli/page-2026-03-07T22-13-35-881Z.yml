@@ -1,0 +1,86 @@
+- generic [ref=e3]:
+  - banner:
+    - generic [ref=e4] [cursor=pointer]:
+      - img "BRICK" [ref=e5]
+      - generic [ref=e6]: _
+      - generic [ref=e7]: AI
+    - generic [ref=e8]:
+      - button ">HOME" [ref=e9] [cursor=pointer]
+      - button ">SOBRE" [ref=e10] [cursor=pointer]
+      - button ">TRABALHOS" [ref=e11] [cursor=pointer]
+      - button ">TRANSMISSÕES" [ref=e12] [cursor=pointer]
+      - button ">FALE CONOSCO _" [ref=e13] [cursor=pointer]
+      - button "EN" [ref=e14] [cursor=pointer]:
+        - img [ref=e15]
+        - text: EN
+  - generic:
+    - generic:
+      - button "HOME"
+      - button "SOBRE"
+      - button "TRABALHOS"
+      - button "TRANSMISSÕES"
+      - button "FALE CONOSCO _"
+      - button "SWITCH TO ENGLISH":
+        - img
+        - text: SWITCH TO ENGLISH
+  - main [ref=e18]:
+    - generic [ref=e19]:
+      - generic:
+        - paragraph:
+          - generic: _
+        - heading "J F5R5F KJ5R" [level=2]
+    - generic [ref=e24]:
+      - generic [ref=e25]:
+        - img [ref=e26]
+        - heading "PROJECT_DATABASE // Trabalhos Selecionados" [level=2] [ref=e30]
+      - generic [ref=e31]:
+        - generic [ref=e32]: SYS.VER. 5.1_B
+        - generic [ref=e33]: CONEXÃO SEGURA
+    - generic [ref=e36]:
+      - generic [ref=e38]:
+        - generic [ref=e39]: Estágio I • Evolução
+        - heading "NASCIDOS NO SET" [level=2] [ref=e40]:
+          - text: NASCIDOS
+          - text: NO SET
+        - paragraph [ref=e41]: Não é um experimento. É uma produtora com 10 anos de set que agora não tem mais limites para o que é possível.
+      - generic [ref=e43]:
+        - generic [ref=e46]: Clientes Brick
+        - generic [ref=e48]:
+          - generic [ref=e49]: BBC
+          - generic [ref=e50]: RECORD TV
+          - generic [ref=e51]: STONE
+          - generic [ref=e52]: ALIEXPRESS
+          - generic [ref=e53]: KEETA
+          - generic [ref=e54]: VISA
+          - generic [ref=e55]: FACEBOOK
+          - generic [ref=e56]: O BOTICÁRIO
+    - generic [ref=e58]:
+      - generic [ref=e64]: Estágio II • O MÉTODO
+      - generic [ref=e65]:
+        - generic [ref=e66]:
+          - heading "PROMPT" [level=2] [ref=e67]
+          - paragraph [ref=e68]: Não existe prompt mágico. A IA cria pixels e padrões infinitos, mas não consegue criar intenção. É apenas uma ferramenta.
+        - generic [ref=e69]:
+          - heading "RUÍDO" [level=2] [ref=e70]
+          - paragraph [ref=e71]: Modelos generativos são grandes calculadoras de probabilidade. Elas tentam adivinhar e raramente conseguem. Nós somos o elemento que transforma o caos em arte.
+        - generic [ref=e72]:
+          - heading "NÓS DIRIGIMOS A INTELIGÊNCIA" [level=2] [ref=e73]
+          - paragraph [ref=e74]: O modelo é um burocrata de silício que não obedece e não tem alma. Nosso trabalho é domá-lo tecnicamente e colocar o sentimento que ele nunca vai ter.
+    - generic [ref=e75]:
+      - generic [ref=e76]:
+        - generic [ref=e77]: Estágio III • O Gran Finale
+        - heading "K@Y _MG 2XI$T R_%NRTZVVZ^" [level=2] [ref=e80]
+        - heading "NÓS TEMOS A VISÃO" [level=1] [ref=e82]
+        - button "FALE CONOSCO _" [ref=e83] [cursor=pointer]:
+          - generic [ref=e85]: FALE CONOSCO _
+      - generic [ref=e86]:
+        - generic [ref=e87]:
+          - link "LinkedIn" [ref=e88] [cursor=pointer]:
+            - /url: https://linkedin.com/brickai
+          - link "Instagram" [ref=e89] [cursor=pointer]:
+            - /url: https://instagram.com/brickai
+        - generic [ref=e90]:
+          - generic [ref=e91]: © 2026 Brick AI.
+          - text: A Divisão Generativa
+          - generic [ref=e92]: Todos os Direitos Reservados
+          - button "SYSTEM_ADMIN" [ref=e93] [cursor=pointer]

@@ -10,6 +10,28 @@ import './src/index.css';
 // --- STYLES & CONFIG ---
 const GlobalStyles = () => (
     <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@100;200;300&display=swap');
+        .font-editorial {
+            font-family: 'Barlow', sans-serif;
+            font-style: normal;
+            font-weight: 200;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+        .climax-title {
+            background: linear-gradient(to bottom, #ffffff, #9CA3AF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            padding-top: 0.25em;
+            padding-bottom: 0.15em;
+            line-height: 1.2;
+        }
+        .climax-title:hover {
+            -webkit-text-fill-color: #DC2626;
+            background: none;
+            filter: drop-shadow(0 0 100px rgba(220,38,38,0.95));
+        }
         /* COLORS & UTILS */
         :root {
             --brick-black: #050505;
@@ -894,7 +916,7 @@ const FadeEntryText = ({ text, className, delay = 0 }: { text: string, className
         }, delay);
         return () => clearTimeout(t);
     }, [delay]);
-    
+
     return (
         <span className={`${className || ''} ${render ? 'hero-fade-entry' : 'opacity-0'}`}>
             {render ? text : ''}
@@ -1161,6 +1183,114 @@ const ParticleBackground = ({ reactToMouse = true }: { reactToMouse?: boolean })
     }, []);
 
     return <div ref={mountRef} className="absolute inset-0 pointer-events-none z-0" />;
+};
+
+const GlobalParticleBackground = () => {
+    const mountRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!mountRef.current) return;
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        mountRef.current.appendChild(renderer.domElement);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 32; canvas.height = 32;
+        const ctx = canvas.getContext('2d');
+        if (ctx) {
+            const g = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
+            g.addColorStop(0, 'rgba(255,255,255,1)');
+            g.addColorStop(0.2, 'rgba(255,255,255,0.7)');
+            g.addColorStop(0.5, 'rgba(255,255,255,0.15)');
+            g.addColorStop(1, 'rgba(255,255,255,0)');
+            ctx.fillStyle = g;
+            ctx.fillRect(0, 0, 32, 32);
+        }
+        const particleTexture = new THREE.CanvasTexture(canvas);
+
+        const smallStarsCount = 3500;
+        const smallPos = new Float32Array(smallStarsCount * 3);
+        for (let i = 0; i < smallStarsCount; i++) {
+            smallPos[i * 3] = (Math.random() - 0.5) * 20;
+            smallPos[i * 3 + 1] = (Math.random() - 0.5) * 20;
+            let z = (Math.random() - 0.5) * 20;
+            if (Math.abs(z) < 1.5) z = z < 0 ? -1.5 : 1.5;
+            smallPos[i * 3 + 2] = z;
+        }
+        const smallGeo = new THREE.BufferGeometry();
+        smallGeo.setAttribute('position', new THREE.BufferAttribute(smallPos, 3));
+        const smallMat = new THREE.PointsMaterial({ size: 0.025, color: 0xffffff, map: particleTexture, transparent: true, opacity: 1.0, blending: THREE.AdditiveBlending, depthWrite: false });
+        const smallMesh = new THREE.Points(smallGeo, smallMat);
+        scene.add(smallMesh);
+
+        const medStarsCount = 700;
+        const medPos = new Float32Array(medStarsCount * 3);
+        for (let i = 0; i < medStarsCount; i++) {
+            medPos[i * 3] = (Math.random() - 0.5) * 20;
+            medPos[i * 3 + 1] = (Math.random() - 0.5) * 20;
+            let z = (Math.random() - 0.5) * 20;
+            if (Math.abs(z) < 3.5) z = z < 0 ? -3.5 : 3.5;
+            medPos[i * 3 + 2] = z;
+        }
+        const medGeo = new THREE.BufferGeometry();
+        medGeo.setAttribute('position', new THREE.BufferAttribute(medPos, 3));
+        const medMat = new THREE.PointsMaterial({ size: 0.06, color: 0xffffff, map: particleTexture, transparent: true, opacity: 1.0, blending: THREE.AdditiveBlending, depthWrite: false });
+        const medMesh = new THREE.Points(medGeo, medMat);
+        scene.add(medMesh);
+
+        const particlesMeshes = [smallMesh, medMesh];
+        camera.position.z = 3;
+
+        let mouseX = 0;
+        let mouseY = 0;
+        const handleMouseMove = (e: MouseEvent) => {
+            mouseX = (e.clientX / window.innerWidth) - 0.5;
+            mouseY = (e.clientY / window.innerHeight) - 0.5;
+        };
+        window.addEventListener('mousemove', handleMouseMove);
+
+        let animId: number;
+        const animate = () => {
+            animId = requestAnimationFrame(animate);
+            particlesMeshes.forEach(mesh => {
+                mesh.rotation.y += 0.0008;
+            });
+            const targetX = mouseX * 0.5;
+            const targetY = mouseY * 0.5;
+            particlesMeshes.forEach(mesh => {
+                mesh.rotation.x += 0.05 * (targetY - mesh.rotation.x);
+                mesh.rotation.y += 0.05 * (targetX - mesh.rotation.y);
+            });
+            renderer.render(scene, camera);
+        };
+        animate();
+
+        const handleResize = () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        };
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('resize', handleResize);
+            cancelAnimationFrame(animId);
+            if (mountRef.current && renderer.domElement) {
+                mountRef.current.removeChild(renderer.domElement);
+            }
+            smallGeo.dispose(); smallMat.dispose();
+            medGeo.dispose(); medMat.dispose();
+            particleTexture.dispose();
+            renderer.dispose();
+        };
+    }, []);
+
+    return <div ref={mountRef} className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }} />;
 };
 
 const TwinkleStars = ({ count = 200 }: { count?: number }) => {
@@ -1775,9 +1905,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
     return (
         <React.Fragment>
             {/* PART 1: Nascidos no Set & Evolution (Starchild) */}
-            <section className="relative w-full bg-[#000000] flex flex-col items-center justify-center min-h-[104vh] md:min-h-[108vh] overflow-hidden pt-8 pb-8 md:pt-10 md:pb-10">
-                <ParticleBackground reactToMouse={true} />
-
+            <section className="relative w-full bg-transparent flex flex-col items-center justify-center min-h-[104vh] md:min-h-[108vh] overflow-hidden pt-8 pb-8 md:pt-10 md:pb-10">
                 <motion.div style={{ y: textY }} className="relative z-30 w-full flex flex-col items-center justify-start min-h-[92vh] md:min-h-[94vh] gap-8 md:gap-10">
 
                     {/* TITLE CARD: Top Margin */}
@@ -1790,7 +1918,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             className="flex flex-col items-center gap-8 md:gap-10"
                         >
                             <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase">
-                                Estágio I &bull; Evolução
+                                Estágio I &bull; A ORIGEM
                             </span>
 
                             <h2 className="font-brick text-[40px] md:text-[60px] lg:text-[80px] text-white tracking-[0.1em] leading-[1.1] uppercase drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
@@ -1798,14 +1926,14 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 <span className="text-[#DC2626]">NO SET</span>
                             </h2>
 
-                            <p className="font-mono text-[#9CA3AF] tracking-[0.05em] text-[10px] md:text-sm max-w-lg leading-relaxed uppercase">
+                            <p className="text-base md:text-lg text-white font-light max-w-lg leading-relaxed text-center">
                                 Não é um experimento. É uma produtora com 10 anos de set que agora não tem mais limites para o que é possível.
                             </p>
                         </motion.div>
                     </div>
 
                     {/* THE HORIZON (Monolith emerging from the dawn) */}
-                    <div className="relative w-full flex items-center justify-center h-[280px] md:h-[360px]">
+                    <div className="relative w-full flex-1 flex items-center justify-center min-h-[280px] md:min-h-[360px] py-10 md:py-16">
 
                         {/* 1. The Monolith Top (Only the visible cap crosses the horizon) */}
                         <div
@@ -1846,7 +1974,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             style={{ transform: "translate(-50%, -18%)" }}
                         >
                             <motion.div
-                                animate={{ opacity: [0.56, 0.8, 0.56], scaleX: [0.95, 1.04, 0.95], scaleY: [0.96, 1.03, 0.96] }}
+                                animate={{ opacity: [0.56, 0.8, 0.56], scale: [0.95, 1.05, 0.95] }}
                                 transition={{ duration: 10.5, ease: "easeInOut", repeat: Infinity }}
                                 className="absolute h-[220px] md:h-[250px] rounded-full mix-blend-screen"
                                 style={{
@@ -1857,7 +1985,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ opacity: [0.68, 0.94, 0.68], scaleX: [0.96, 1.03, 0.96], scaleY: [0.94, 1.04, 0.94] }}
+                                animate={{ opacity: [0.68, 0.94, 0.68], scale: [0.96, 1.04, 0.96] }}
                                 transition={{ duration: 7.8, ease: "easeInOut", repeat: Infinity, delay: 0.2 }}
                                 className="absolute h-[84px] md:h-[110px] rounded-full"
                                 style={{
@@ -1868,7 +1996,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ scaleX: [0.94, 1.08, 0.94], scaleY: [0.96, 1.04, 0.96], opacity: [0.5, 0.84, 0.5] }}
+                                animate={{ scale: [0.94, 1.08, 0.94], rotate: [0, 5, 0], opacity: [0.5, 0.84, 0.5] }}
                                 transition={{ duration: 8.6, ease: "easeInOut", repeat: Infinity }}
                                 className="absolute -translate-x-[30%] h-[96px] md:h-[118px] rounded-full"
                                 style={{
@@ -1879,7 +2007,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ scaleX: [0.94, 1.07, 0.94], scaleY: [0.96, 1.05, 0.96], opacity: [0.44, 0.76, 0.44] }}
+                                animate={{ scale: [0.94, 1.07, 0.94], rotate: [0, -5, 0], opacity: [0.44, 0.76, 0.44] }}
                                 transition={{ duration: 9.2, ease: "easeInOut", repeat: Infinity, delay: 0.9 }}
                                 className="absolute translate-x-[30%] h-[88px] md:h-[110px] rounded-full"
                                 style={{
@@ -1890,7 +2018,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ scaleX: [0.92, 1.08, 0.92], scaleY: [0.94, 1.06, 0.94], opacity: [0.12, 0.28, 0.12] }}
+                                animate={{ scale: [0.92, 1.08, 0.92], opacity: [0.12, 0.28, 0.12] }}
                                 transition={{ duration: 7.2, ease: "easeInOut", repeat: Infinity, delay: 0.4 }}
                                 className="absolute h-[42px] md:h-[52px] rounded-full mix-blend-screen"
                                 style={{
@@ -1900,7 +2028,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ scaleX: [0.94, 1.08, 0.94], scaleY: [0.94, 1.05, 0.94], opacity: [0.08, 0.22, 0.08] }}
+                                animate={{ scale: [0.94, 1.08, 0.94], opacity: [0.08, 0.22, 0.08] }}
                                 transition={{ duration: 6.8, ease: "easeInOut", repeat: Infinity, delay: 1.1 }}
                                 className="absolute translate-y-[16px] h-[30px] md:h-[38px] rounded-full mix-blend-screen"
                                 style={{
@@ -1910,7 +2038,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ x: ["-4%", "3%", "-4%"], y: ["-4%", "5%", "-4%"], scale: [0.92, 1.08, 0.92], opacity: [0.06, 0.18, 0.06] }}
+                                animate={{ rotate: [0, 10, 0], scale: [0.92, 1.08, 0.92], opacity: [0.06, 0.18, 0.06] }}
                                 transition={{ duration: 7.6, ease: "easeInOut", repeat: Infinity, delay: 0.3 }}
                                 className="absolute -translate-x-[18%] -translate-y-[10%] h-[58px] md:h-[72px] rounded-full mix-blend-screen"
                                 style={{
@@ -1920,7 +2048,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ x: ["3%", "-4%", "3%"], y: ["5%", "-3%", "5%"], scale: [0.9, 1.06, 0.9], opacity: [0.05, 0.16, 0.05] }}
+                                animate={{ rotate: [0, -10, 0], scale: [0.9, 1.06, 0.9], opacity: [0.05, 0.16, 0.05] }}
                                 transition={{ duration: 8.4, ease: "easeInOut", repeat: Infinity, delay: 1.1 }}
                                 className="absolute translate-x-[16%] translate-y-[6%] h-[54px] md:h-[68px] rounded-full mix-blend-screen"
                                 style={{
@@ -1937,7 +2065,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             style={{ transform: "translate(-50%, -72%)" }}
                         >
                             <motion.div
-                                animate={{ opacity: [0.18, 0.34, 0.18], scaleX: [0.97, 1.05, 0.97], scaleY: [0.95, 1.04, 0.95] }}
+                                animate={{ opacity: [0.34, 0.45, 0.34], scale: [0.97, 1.05, 0.97] }}
                                 transition={{ duration: 8.8, ease: "easeInOut", repeat: Infinity }}
                                 className="absolute h-[104px] md:h-[130px] rounded-full mix-blend-normal"
                                 style={{
@@ -1948,7 +2076,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ opacity: [0.36, 0.72, 0.36], scaleX: [0.94, 1.06, 0.94], scaleY: [0.94, 1.04, 0.94] }}
+                                animate={{ opacity: [0.60, 0.85, 0.60], scale: [0.94, 1.06, 0.94] }}
                                 transition={{ duration: 7.4, ease: "easeInOut", repeat: Infinity }}
                                 className="absolute h-[96px] md:h-[128px] -translate-y-[18px] rounded-full"
                                 style={{
@@ -1959,7 +2087,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ opacity: [0.58, 0.9, 0.58], scaleX: [0.95, 1.05, 0.95], scaleY: [0.96, 1.03, 0.96] }}
+                                animate={{ opacity: [0.75, 1.0, 0.75], scale: [0.95, 1.07, 0.95] }}
                                 transition={{ duration: 7.9, ease: "easeInOut", repeat: Infinity, delay: 0.3 }}
                                 className="absolute h-[42px] md:h-[56px] rounded-full"
                                 style={{
@@ -1970,7 +2098,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ opacity: [0.28, 0.56, 0.28], scaleX: [0.94, 1.08, 0.94], scaleY: [0.95, 1.04, 0.95] }}
+                                animate={{ opacity: [0.45, 0.65, 0.45], scale: [0.94, 1.08, 0.94] }}
                                 transition={{ duration: 7.2, ease: "easeInOut", repeat: Infinity }}
                                 className="absolute h-[24px] md:h-[30px] rounded-full mix-blend-normal"
                                 style={{
@@ -1981,9 +2109,9 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ opacity: [0.12, 0.26, 0.12], scaleX: [0.92, 1.08, 0.92], scaleY: [0.94, 1.04, 0.94] }}
+                                animate={{ opacity: [0.20, 0.35, 0.20], scale: [0.92, 1.08, 0.92], rotate: [-5, 0, -5] }}
                                 transition={{ duration: 7.6, ease: "easeInOut", repeat: Infinity }}
-                                className="absolute -translate-x-[16%] -translate-y-[10px] rotate-[-5deg] h-[18px] md:h-[22px] rounded-full mix-blend-normal"
+                                className="absolute -translate-x-[16%] -translate-y-[10px] h-[18px] md:h-[22px] rounded-full mix-blend-normal"
                                 style={{
                                     willChange: "opacity",
                                     width: "min(22vw, 170px)",
@@ -1992,9 +2120,9 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ opacity: [0.08, 0.2, 0.08], scaleX: [0.92, 1.07, 0.92], scaleY: [0.95, 1.03, 0.95] }}
+                                animate={{ opacity: [0.15, 0.28, 0.15], scale: [0.92, 1.07, 0.92], rotate: [4, -1, 4] }}
                                 transition={{ duration: 7.1, ease: "easeInOut", repeat: Infinity, delay: 0.9 }}
-                                className="absolute translate-x-[18%] translate-y-[8px] rotate-[4deg] h-[16px] md:h-[20px] rounded-full mix-blend-normal"
+                                className="absolute translate-x-[18%] translate-y-[8px] h-[16px] md:h-[20px] rounded-full mix-blend-normal"
                                 style={{
                                     willChange: "opacity",
                                     width: "min(20vw, 150px)",
@@ -2003,7 +2131,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ opacity: [0.08, 0.18, 0.08], scaleX: [0.9, 1.08, 0.9], scaleY: [0.96, 1.02, 0.96] }}
+                                animate={{ opacity: [0.15, 0.25, 0.15], scale: [0.9, 1.08, 0.9] }}
                                 transition={{ duration: 6.6, ease: "easeInOut", repeat: Infinity, delay: 0.2 }}
                                 className="absolute translate-y-[2px] h-[12px] md:h-[16px] rounded-full mix-blend-normal"
                                 style={{
@@ -2013,7 +2141,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ x: ["-3%", "2%", "-3%"], y: ["4%", "-3%", "4%"], scale: [0.92, 1.06, 0.92], opacity: [0.06, 0.16, 0.06] }}
+                                animate={{ rotate: [0, 8, 0], scale: [0.92, 1.08, 0.92], opacity: [0.12, 0.22, 0.12] }}
                                 transition={{ duration: 6.9, ease: "easeInOut", repeat: Infinity }}
                                 className="absolute -translate-x-[10%] -translate-y-[12%] h-[24px] md:h-[30px] rounded-full mix-blend-normal"
                                 style={{
@@ -2023,7 +2151,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 }}
                             />
                             <motion.div
-                                animate={{ x: ["2%", "-3%", "2%"], y: ["-3%", "4%", "-3%"], scale: [0.9, 1.05, 0.9], opacity: [0.05, 0.14, 0.05] }}
+                                animate={{ rotate: [0, -8, 0], scale: [0.9, 1.06, 0.9], opacity: [0.10, 0.20, 0.10] }}
                                 transition={{ duration: 7.8, ease: "easeInOut", repeat: Infinity, delay: 0.8 }}
                                 className="absolute translate-x-[12%] translate-y-[10%] h-[20px] md:h-[26px] rounded-full mix-blend-normal"
                                 style={{
@@ -2064,9 +2192,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
             </section>
 
             {/* PART 2: O MÉTODO / A CRENÇA - Estrelas de fundo */}
-            <section ref={ref} className="relative w-full bg-gradient-to-b from-[#000000] to-[#050505] flex flex-col items-center pt-8 md:pt-10 pb-16 md:pb-20 overflow-hidden border-none text-white">
-                <ParticleBackground reactToMouse={true} />
-
+            <section ref={ref} className="relative w-full bg-transparent flex flex-col items-center pt-8 md:pt-10 pb-16 md:pb-20 overflow-hidden border-none text-white">
                 {/* Subtle red ambiance replacing the heavy planet */}
                 <div className="absolute top-1/2 left-0 w-[150vw] md:w-[100vw] h-[150vh] bg-[radial-gradient(ellipse_at_left_center,rgba(220,38,38,0.05)_0%,transparent_60%)] pointer-events-none z-10 -translate-y-1/2 -translate-x-1/2"></div>
 
@@ -2091,9 +2217,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
             </section>
 
             {/* PART 3: FOOTER CTA (The Climax) */}
-            <section className="relative w-full bg-[#050505] flex flex-col items-center pt-12 md:pt-16 pb-0 overflow-hidden">
-                <ParticleBackground reactToMouse={true} />
-
+            <section className="relative w-full bg-transparent flex flex-col items-center pt-12 md:pt-16 pb-0 overflow-x-hidden">
                 {/* Colossal Red Aura emanating from the CTA to set the mood */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] md:w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.12)_0%,transparent_50%)] pointer-events-none z-0 blur-[100px]"></div>
 
@@ -2113,7 +2237,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                     </div>
 
                     {/* Massive Climax Typography */}
-                    <h1 className="text-5xl md:text-7xl lg:text-[110px] font-brick text-transparent bg-clip-text bg-gradient-to-b from-white to-[#9CA3AF] leading-[0.9] max-w-6xl transition-all duration-1000 hover:text-[#DC2626] hover:bg-none hover:drop-shadow-[0_0_80px_rgba(220,38,38,0.9)] cursor-default px-4">
+                    <h1 className="climax-title text-5xl md:text-7xl lg:text-[110px] font-brick max-w-6xl cursor-default px-4">
                         {t('footer.we_have_intelligence')}
                     </h1>
 
@@ -2128,17 +2252,21 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                 </div>
 
                 {/* FOOTER BOTTOM */}
-                <div className="mt-auto w-full px-6 md:px-12 lg:px-24 pb-8 flex flex-col md:flex-row justify-between items-center md:items-start gap-4 reveal relative z-30 border-t border-white/5 pt-8 bg-[#050505]">
-                    <div className="flex gap-6">
-                        {['LinkedIn', 'Instagram'].map((social) => (
-                            <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors">{social}</a>
-                        ))}
-                    </div>
-                    <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-center md:text-right">
-                        <span className="block mb-2">&copy; 2026 Brick AI.</span>
-                        <span className="hidden md:inline">{t('footer.generative_division')}</span>
-                        <span className="block mt-1">{t('footer.rights_reserved')}</span>
-                        {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">{t('footer.system_admin')}</button>}
+                <div className="mt-auto w-full relative z-30">
+                    {/* Red-tinted separator — anchors the footer without a bg block */}
+                    <div className="w-full h-px bg-gradient-to-r from-transparent via-[#DC2626]/20 to-transparent mb-8" />
+                    <div className="w-full px-6 md:px-12 lg:px-24 pb-10 flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
+                        <div className="flex gap-6">
+                            {['LinkedIn', 'Instagram'].map((social) => (
+                                <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white/50 hover:text-[#DC2626] tracking-widest uppercase transition-colors duration-500">{social}</a>
+                            ))}
+                        </div>
+                        <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/30 font-bold text-center md:text-right">
+                            <span className="block mb-2">&copy; 2026 Brick AI.</span>
+                            <span className="hidden md:inline">{t('footer.generative_division')}</span>
+                            <span className="block mt-1">{t('footer.rights_reserved')}</span>
+                            {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">{t('footer.system_admin')}</button>}
+                        </div>
                     </div>
                 </div>
 
@@ -3811,7 +3939,9 @@ const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedPr
                 <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} onPrev={() => navigateProject(-1)} onNext={() => navigateProject(1)} />
             )}
             {view === 'home' && (
-                <HomePage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} onAdmin={goAdmin} onAbout={goAbout} />
+                <>
+                    <GlobalParticleBackground />
+                    <HomePage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} onAdmin={goAdmin} onAbout={goAbout} /></>
             )}
             {view === 'about' && (
                 <AboutPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} />
