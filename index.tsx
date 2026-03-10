@@ -59,8 +59,8 @@ const GlobalStyles = () => (
             50% { opacity: 0; }
         }
         @keyframes atmos-breathe {
-            0%, 100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0.2; }
-            50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
+            0%, 100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.2; }
+            50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.8; }
         }
         @keyframes thinking-pulse {
             0%, 100% { opacity: 0.2; transform: translate(-50%, -50%) scale(1); }
@@ -156,8 +156,14 @@ const GlobalStyles = () => (
             100% { background-position: 0 26px, 26px 0, center; }
         }
 
-        /* NOISE REMOVED BY USER REQUEST */
-        .card-noise { display: none; }
+        @keyframes hero-fade-in {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+        .hero-fade-entry {
+            display: inline-block;
+            animation: hero-fade-in 1.2s ease-out forwards;
+        }
 
         @keyframes crt-glitch-text {
             0% { text-shadow: 2px 0 0 rgba(220,38,38,0.8), -2px 0 0 rgba(0,255,255,0.5), 0 0 10px rgba(220,38,38,0.6); }
@@ -532,7 +538,7 @@ const GlitchText = ({ text, className }: { text: string, className?: string }) =
     );
 };
 
-const TypewriterText = ({ text, className, delay = 0 }: { text: string, className?: string, delay?: number }) => {
+const TypewriterText = ({ text, className, delay = 0, onComplete }: { text: string, className?: string, delay?: number, onComplete?: () => void }) => {
     const [displayed, setDisplayed] = useState('');
     const [done, setDone] = useState(false);
 
@@ -545,13 +551,14 @@ const TypewriterText = ({ text, className, delay = 0 }: { text: string, classNam
                 if (i >= text.length) {
                     clearInterval(interval);
                     setDone(true);
+                    if (onComplete) onComplete();
                 }
-            }, 80);
+            }, 120);
             return () => clearInterval(interval);
         }, delay);
 
         return () => clearTimeout(timeout);
-    }, [text, delay]);
+    }, [text, delay, onComplete]);
 
     return (
         <span className={className}>
@@ -879,12 +886,29 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
     );
 };
 
+const FadeEntryText = ({ text, className, delay = 0 }: { text: string, className?: string, delay?: number }) => {
+    const [render, setRender] = useState(false);
+    useEffect(() => {
+        const t = setTimeout(() => {
+            setRender(true);
+        }, delay);
+        return () => clearTimeout(t);
+    }, [delay]);
+    
+    return (
+        <span className={`${className || ''} ${render ? 'hero-fade-entry' : 'opacity-0'}`}>
+            {render ? text : ''}
+        </span>
+    );
+};
+
 const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boolean) => void, monolithHover: boolean }) => {
     const radiationRef = useRef<HTMLDivElement>(null);
     const lightSourceRef = useRef<HTMLDivElement>(null); // Interactive Red Dot tracking
     const targetPos = useRef({ x: 0, y: 0 });
     const currentPos = useRef({ x: 0, y: 0 });
     const { t } = useTranslation();
+    const [typewriterDone, setTypewriterDone] = useState(false);
 
     const handleMouseMove = (e: React.MouseEvent) => {
         if (!radiationRef.current) return;
@@ -984,10 +1008,10 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
             </div>
             <div className="text-center z-20 max-w-6xl px-4 flex flex-col items-center pointer-events-none">
                 <p className="reveal delay-2000 text-base md:text-xl lg:text-2xl font-mono text-white drop-shadow-2xl mb-2 md:mb-4">
-                    <TypewriterText text={t('hero.scramble') as string} delay={2000} />
+                    <TypewriterText text={t('hero.scramble') as string} delay={2000} onComplete={() => setTypewriterDone(true)} />
                 </p>
-                <h2 className="reveal delay-4000 text-2xl md:text-4xl lg:text-5xl font-brick text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">
-                    <ScrambleText text={t('hero.subtitle') as string} delay={4000} />
+                <h2 className="text-2xl md:text-4xl lg:text-5xl font-brick text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)] min-h-[50px] flex items-center justify-center">
+                    {typewriterDone && <FadeEntryText text={t('hero.subtitle') as string} delay={900} />}
                 </h2>
             </div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
