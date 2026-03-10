@@ -116,6 +116,19 @@ const GlobalStyles = () => (
             50% { opacity: 1; letter-spacing: 0.38em; }
         }
         .animate-soul { animation: soul-breathe 5s ease-in-out infinite; }
+        @keyframes dot-pulse {
+            0%, 100% { opacity: 0.7; box-shadow: 0 0 4px 1px rgba(220,38,38,0.3); }
+            50% { opacity: 1; box-shadow: 0 0 8px 3px rgba(220,38,38,0.6); }
+        }
+        .animate-dot-pulse { animation: dot-pulse 4s ease-in-out infinite; }
+        @keyframes fiber-travel {
+            0% { transform: translateX(-100%); opacity: 0; }
+            8% { opacity: 0.6; }
+            92% { opacity: 0.6; }
+            100% { transform: translateX(500%); opacity: 0; }
+        }
+        .animate-fiber { animation: fiber-travel 4s linear infinite; }
+        .animate-fiber-b { animation: fiber-travel 4s linear infinite; animation-delay: -2s; }
         @keyframes scan {
             0% { top: 0%; opacity: 0; }
             10% { opacity: 1; }
@@ -972,7 +985,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
         <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-visible">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-40"></div>
 
-            <div className="reveal relative z-10 w-full flex justify-center mb-8 md:mb-12">
+            <div className="reveal relative z-10 w-full flex justify-center mb-10 md:mb-16">
                 <div className="relative">
                     <div
                         className={`monolith-structure w-[120px] h-[240px] md:w-[150px] md:h-[300px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative transition-transform duration-1000 ease-out pointer-events-none ${monolithHover ? 'scale-[1.02]' : 'scale-100'}`}
@@ -1028,8 +1041,8 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                     ></div>
                 </div>
             </div>
-            <div className="text-center z-20 max-w-6xl px-4 flex flex-col items-center pointer-events-none">
-                <p className="reveal delay-2000 text-base md:text-xl lg:text-2xl font-mono text-white drop-shadow-2xl mb-2 md:mb-4">
+            <div className="text-center z-20 max-w-6xl px-6 flex flex-col items-center pointer-events-none gap-4 md:gap-6">
+                <p className="reveal delay-2000 text-base md:text-xl lg:text-2xl font-mono text-white drop-shadow-2xl">
                     <TypewriterText text={t('hero.scramble') as string} delay={2000} onComplete={() => setTypewriterDone(true)} />
                 </p>
                 <h2 className="text-2xl md:text-4xl lg:text-5xl font-brick text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)] min-h-[50px] flex items-center justify-center">
@@ -1339,20 +1352,26 @@ const Philosophy = () => {
                     <span className="text-4xl md:text-6xl font-brick text-white bg-[#050505] px-4 text-center">{t('philosophy.belief_label')}</span>
                 </div>
                 <div className="flex flex-col gap-24 w-full">
-                    <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} titleSize="text-2xl md:text-3xl" />
-                    <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} titleSize="text-3xl md:text-4xl" />
-                    <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} titleSize="text-4xl md:text-6xl" />
+                    <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} titleSize="text-2xl md:text-3xl" index={0} />
+                    <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} titleSize="text-3xl md:text-4xl" index={1} />
+                    <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} titleSize="text-4xl md:text-6xl" index={2} />
                 </div>
             </div>
         </section>
     );
 };
 
-const PhilosophyItem = ({ title, text, titleSize = 'text-4xl md:text-6xl' }: { title: string, text: string, titleSize?: string }) => (
-    <div className="reveal flex flex-col items-center group cursor-default">
+const PhilosophyItem = ({ title, text, titleSize = 'text-4xl md:text-6xl', index = 0 }: { title: string, text: string, titleSize?: string, index?: number }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-80px" }}
+        transition={{ duration: 2.2, delay: index * 0.4, ease: "easeOut" }}
+        className="flex flex-col items-center group cursor-default"
+    >
         <h2 className={`${titleSize} font-brick text-white mb-4 transition-colors duration-500 group-hover:text-[#DC2626]`}>{title}</h2>
         <p className="text-base md:text-lg text-white font-light max-w-lg leading-relaxed transition-colors duration-300">{text}</p>
-    </div>
+    </motion.div>
 );
 
 // --- COMPONENTE DE DATA CHIP ---
@@ -1388,7 +1407,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             onClick={() => work.hasDetail && onOpen(work)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={`reveal relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-[#DC2626] transition-colors duration-300 bg-[#050505] group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
+            className={`reveal relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-[#DC2626] transition-colors duration-300 bg-[#050505]/90 group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
             style={{
                 flexGrow: isHovered ? 1.6 : 1,
                 flexShrink: 0,
@@ -1454,8 +1473,8 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             </div>
 
             {/* EDGE DECOR */}
-            <div className="absolute top-6 right-6 z-40 opacity-60 group-hover:opacity-100 transition-all duration-700 text-[10px] font-mono text-[#DC2626] hidden md:block group-hover:translate-x-[-10px]">
-                <span className="mr-2">◈</span>LOG_DATA_{index.toString().padStart(2, '0')}
+            <div className="absolute top-6 right-6 z-40 opacity-0 group-hover:opacity-60 transition-all duration-700 text-[10px] font-mono text-white/40 hidden md:block">
+                {(index + 1).toString().padStart(2, '0')}
             </div>
 
             {/* SCANLINE OVERLAY ON HOVER */}
@@ -1467,19 +1486,20 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
 const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => void }) => {
     const { t } = useTranslation();
     return (
-        <section id="works" className="w-full pt-20 pb-0 bg-[#050505] border-t border-white/5 relative z-40 md:overflow-hidden">
-            <div className="px-6 md:px-12 lg:px-24 mb-12 reveal flex justify-between items-end border-b border-white/10 pb-4">
-                <div className="flex items-center gap-3">
-                    <Database className="w-4 h-4 text-[#DC2626]" />
-                    <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('works_page.title')}</h2>
-                </div>
-                <div className="hidden md:flex gap-4 text-[9px] font-mono text-[#9CA3AF]/50">
-                    <span>SYS.VER. 5.1_B</span>
-                    <span>{t('common.secure_connection')}</span>
-                </div>
-            </div>
-
-            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] border-b border-white/10 px-6 md:px-12 lg:px-24">
+        <section id="works" className="w-full pt-20 pb-0 bg-transparent relative z-40 md:overflow-hidden">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-50px" }}
+                transition={{ duration: 2, ease: "easeOut" }}
+                className="px-6 md:px-12 lg:px-24 mb-6 flex items-center gap-3"
+            >
+                <span className="flex-shrink-0 flex items-center self-center">
+                    <span className="block w-1 h-1 rounded-full bg-[#DC2626] animate-dot-pulse"></span>
+                </span>
+                <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] uppercase leading-none">{t('works_page.title')}</span>
+            </motion.div>
+            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] px-6 md:px-12 lg:px-24">
                 <ContextConsumer>
                     {({ works }) => works.slice(0, 5).map((work, idx) => (
                         <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />
@@ -1905,8 +1925,8 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
     return (
         <React.Fragment>
             {/* PART 1: Nascidos no Set & Evolution (Starchild) */}
-            <section className="relative w-full bg-transparent flex flex-col items-center justify-center min-h-[104vh] md:min-h-[108vh] overflow-hidden pt-8 pb-8 md:pt-10 md:pb-10">
-                <motion.div style={{ y: textY }} className="relative z-30 w-full flex flex-col items-center justify-start min-h-[92vh] md:min-h-[94vh] gap-8 md:gap-10">
+            <section className="relative w-full bg-transparent flex flex-col items-center justify-center min-h-[104vh] md:min-h-[108vh] overflow-hidden py-12 md:py-16">
+                <motion.div style={{ y: textY }} className="relative z-30 w-full flex flex-col items-center justify-start min-h-[92vh] md:min-h-[94vh] gap-10 md:gap-12">
 
                     {/* TITLE CARD: Top Margin */}
                     <div className="relative z-30 flex flex-col items-center text-center px-4 w-full">
@@ -1915,25 +1935,25 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true, margin: "-100px" }}
                             transition={{ duration: 2, ease: "easeOut" }}
-                            className="flex flex-col items-center gap-8 md:gap-10"
+                            className="flex flex-col items-center gap-10 md:gap-12"
                         >
                             <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase">
-                                Estágio I &bull; A ORIGEM
+                                {t('stages.one')} &bull; {t('stages.origin')}
                             </span>
 
                             <h2 className="font-brick text-[40px] md:text-[60px] lg:text-[80px] text-white tracking-[0.1em] leading-[1.1] uppercase drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                                NASCIDOS <br />
-                                <span className="text-[#DC2626]">NO SET</span>
+                                {t('legacy.title_part1')} <br />
+                                <span className="text-[#DC2626]">{t('legacy.title_part2')}</span>
                             </h2>
 
                             <p className="text-base md:text-lg text-white font-light max-w-lg leading-relaxed text-center">
-                                Não é um experimento. É uma produtora com 10 anos de set que agora não tem mais limites para o que é possível.
+                                {t('legacy.text')}
                             </p>
                         </motion.div>
                     </div>
 
                     {/* THE HORIZON (Monolith emerging from the dawn) */}
-                    <div className="relative w-full flex-1 flex items-center justify-center min-h-[280px] md:min-h-[360px] py-10 md:py-16">
+                    <div className="relative w-full flex-1 flex items-center justify-center min-h-[280px] md:min-h-[360px] py-12 md:py-16">
 
                         {/* 1. The Monolith Top (Only the visible cap crosses the horizon) */}
                         <div
@@ -2169,7 +2189,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true, margin: "-100px" }}
                         transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
-                        className="flex flex-col items-center text-center px-6 w-full max-w-4xl z-30 relative gap-8 md:gap-10"
+                        className="flex flex-col items-center text-center px-6 w-full max-w-4xl z-30 relative gap-10 md:gap-12"
                     >
                         <div className="flex items-center justify-center gap-3 w-full">
                             <span className="h-px w-12 md:w-24 bg-gradient-to-r from-transparent to-[#DC2626]/40"></span>
@@ -2192,12 +2212,12 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
             </section>
 
             {/* PART 2: O MÉTODO / A CRENÇA - Estrelas de fundo */}
-            <section ref={ref} className="relative w-full bg-transparent flex flex-col items-center pt-8 md:pt-10 pb-16 md:pb-20 overflow-hidden border-none text-white">
+            <section ref={ref} className="relative w-full bg-transparent flex flex-col items-center py-16 md:py-20 overflow-hidden border-none text-white">
                 {/* Subtle red ambiance replacing the heavy planet */}
                 <div className="absolute top-1/2 left-0 w-[150vw] md:w-[100vw] h-[150vh] bg-[radial-gradient(ellipse_at_left_center,rgba(220,38,38,0.05)_0%,transparent_60%)] pointer-events-none z-10 -translate-y-1/2 -translate-x-1/2"></div>
 
                 <div className="max-w-4xl mx-auto px-6 relative z-30 flex flex-col items-center text-center w-full">
-                    <div className="mb-16 md:mb-20 reveal w-full flex flex-col items-center gap-8 md:gap-10">
+                    <div className="mb-16 md:mb-20 reveal w-full flex flex-col items-center gap-10 md:gap-12">
                         <div className="w-full flex justify-center">
                             <div className="relative w-5 h-5">
                                 <div className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full animate-breathe blur-[2px]" style={{ background: 'radial-gradient(circle at center, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0.18) 45%, rgba(220,38,38,0) 75%)' }}></div>
@@ -2205,26 +2225,26 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             </div>
                         </div>
                         <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase">
-                            Estágio II &bull; {t('philosophy.belief_label')}
+                            {t('stages.two')} &bull; {t('philosophy.belief_label')}
                         </span>
                     </div>
                     <div className="flex flex-col gap-24 w-full">
-                        <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} />
-                        <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} />
-                        <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} />
+                        <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} index={0} />
+                        <PhilosophyItem title={t('philosophy.noise.title')} text={t('philosophy.noise.text')} index={1} />
+                        <PhilosophyItem title={t('philosophy.direct.title')} text={t('philosophy.direct.text')} index={2} />
                     </div>
                 </div>
             </section>
 
             {/* PART 3: FOOTER CTA (The Climax) */}
-            <section className="relative w-full bg-transparent flex flex-col items-center pt-12 md:pt-16 pb-0 overflow-x-hidden">
+            <section className="relative w-full bg-transparent flex flex-col items-center pt-16 md:pt-20 pb-0 overflow-x-hidden">
                 {/* Colossal Red Aura emanating from the CTA to set the mood */}
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] md:w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.12)_0%,transparent_50%)] pointer-events-none z-0 blur-[100px]"></div>
 
-                <div className="flex flex-col items-center text-center reveal relative z-30 w-full mb-32 md:mb-36 px-6 md:px-12 gap-8 md:gap-10">
+                <div className="flex flex-col items-center text-center reveal relative z-30 w-full mb-32 md:mb-36 px-6 md:px-12 gap-10 md:gap-12">
 
                     <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase">
-                        Estágio III &bull; O Gran Finale
+                        {t('stages.three')} &bull; {t('stages.grand_finale')}
                     </span>
 
                     {/* Subtitle with Scramble Effect & Lasers */}
@@ -2253,18 +2273,22 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
 
                 {/* FOOTER BOTTOM */}
                 <div className="mt-auto w-full relative z-30">
-                    {/* Red-tinted separator — anchors the footer without a bg block */}
-                    <div className="w-full h-px bg-gradient-to-r from-transparent via-[#DC2626]/20 to-transparent mb-8" />
-                    <div className="w-full px-6 md:px-12 lg:px-24 pb-10 flex flex-col md:flex-row justify-between items-center md:items-start gap-4">
+                    {/* Digital fiber separator */}
+                    <div className="w-full h-px mb-12 relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#DC2626]/10 to-transparent" />
+                        <div className="absolute top-0 h-full w-[15%] animate-fiber" style={{ background: 'linear-gradient(90deg, transparent, rgba(220,38,38,0.25), transparent)' }} />
+                        <div className="absolute top-0 h-full w-[15%] animate-fiber-b" style={{ background: 'linear-gradient(90deg, transparent, rgba(220,38,38,0.25), transparent)' }} />
+                    </div>
+                    <div className="w-full px-6 md:px-12 lg:px-24 pb-12 flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="flex gap-6">
                             {['LinkedIn', 'Instagram'].map((social) => (
                                 <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white/50 hover:text-[#DC2626] tracking-widest uppercase transition-colors duration-500">{social}</a>
                             ))}
                         </div>
-                        <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/30 font-bold text-center md:text-right">
-                            <span className="block mb-2">&copy; 2026 Brick AI.</span>
+                        <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/30 font-bold text-center md:text-right flex flex-col items-center md:items-end gap-1">
+                            <span>&copy; 2026 Brick AI.</span>
                             <span className="hidden md:inline">{t('footer.generative_division')}</span>
-                            <span className="block mt-1">{t('footer.rights_reserved')}</span>
+                            <span>{t('footer.rights_reserved')}</span>
                             {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">{t('footer.system_admin')}</button>}
                         </div>
                     </div>
