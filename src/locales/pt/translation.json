@@ -103,9 +103,18 @@
     },
     "legacy": {
         "title": "NASCIDOS NO SET",
+        "title_part1": "NASCIDOS",
+        "title_part2": "NO SET",
         "title_mobile_br": "NASCIDOS <br /> NO SET",
-        "text": "Não é um experimento. É uma produtora com 10 anos de set reinventando o que é possível produzir.",
+        "text": "Não é um experimento. É uma produtora com 10 anos de set que agora não tem mais limites para o que é possível.",
         "trusted_by": "Parceiros"
+    },
+    "stages": {
+        "one": "Estágio I",
+        "origin": "A Origem",
+        "two": "Estágio II",
+        "three": "Estágio III",
+        "grand_finale": "O Gran Finale"
     },
     "footer": {
         "complex_problem": "TEM UMA IDEIA IMPOSSÍVEL?",

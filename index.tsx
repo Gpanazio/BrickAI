@@ -1938,16 +1938,16 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             className="flex flex-col items-center gap-10 md:gap-12"
                         >
                             <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase">
-                                Estágio I &bull; A ORIGEM
+                                {t('stages.one')} &bull; {t('stages.origin')}
                             </span>
 
                             <h2 className="font-brick text-[40px] md:text-[60px] lg:text-[80px] text-white tracking-[0.1em] leading-[1.1] uppercase drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
-                                NASCIDOS <br />
-                                <span className="text-[#DC2626]">NO SET</span>
+                                {t('legacy.title_part1')} <br />
+                                <span className="text-[#DC2626]">{t('legacy.title_part2')}</span>
                             </h2>
 
                             <p className="text-base md:text-lg text-white font-light max-w-lg leading-relaxed text-center">
-                                Não é um experimento. É uma produtora com 10 anos de set que agora não tem mais limites para o que é possível.
+                                {t('legacy.text')}
                             </p>
                         </motion.div>
                     </div>
@@ -2225,7 +2225,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             </div>
                         </div>
                         <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase">
-                            Estágio II &bull; {t('philosophy.belief_label')}
+                            {t('stages.two')} &bull; {t('philosophy.belief_label')}
                         </span>
                     </div>
                     <div className="flex flex-col gap-24 w-full">
@@ -2244,7 +2244,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                 <div className="flex flex-col items-center text-center reveal relative z-30 w-full mb-32 md:mb-36 px-6 md:px-12 gap-10 md:gap-12">
 
                     <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase">
-                        Estágio III &bull; O Gran Finale
+                        {t('stages.three')} &bull; {t('stages.grand_finale')}
                     </span>
 
                     {/* Subtitle with Scramble Effect & Lasers */}

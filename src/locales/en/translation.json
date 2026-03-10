@@ -16,15 +16,15 @@
         "belief_label": "THE METHOD",
         "raw": {
             "title": "PROMPT",
-            "text": "AI creates infinite pixels and patterns. But it cannot create intent. It is just a resource"
+            "text": "There is no magic prompt. AI creates infinite pixels and patterns, but it cannot create intent. It is just a tool."
         },
         "noise": {
             "title": "NOISE",
-            "text": "Without a human hand, generative models are just mathematical coincidence. We provide the vision"
+            "text": "Generative models are massive probability calculators. They guess, and they rarely get it right. We are the element that turns chaos into art."
         },
         "direct": {
             "title": "WE DIRECT THE INTELLIGENCE",
-            "text": "The machine processes data; it is the human gaze that imprints soul into the film"
+            "text": "The model is a silicon bureaucrat — it doesn't obey and it has no soul. Our job is to tame it technically and inject the feeling it will never have."
         }
     },
     "works": {
@@ -62,13 +62,13 @@
             "title": "FACTORY",
             "subtitle": "RETRO-FUTURISM",
             "desc": "Industrial decay with a retro-futuristic vision",
-            "longDesc": "A future imagined in the 70s, aged and abandoned. A space between the nostalgia of a past and the ruins of a future that never arrived (yet)."
+            "longDesc": "A future imagined in the 70s, aged and abandoned. This is the space between the sweet nostalgia of a forgotten past and the ruins of a tomorrow that hasn't arrived yet. In the contrast of warm lights and cold shadows, the project recovers the beauty of decay — where every corner tells the story of progress frozen in time. A visual journey through memories we never lived, yet they haunt us with the promise of something grand."
         },
         "dogday": {
             "title": "DOG DAY AFTERNOON",
             "subtitle": "ABSURDIST COMEDY",
             "desc": "Dogs in human situations",
-            "longDesc": "A canine support group with a 'SIT STAY HEAL' banner. A chihuahua in a sweater on a Zoom call. Dog Day Afternoon is absurdist comedy played completely straight — dogs in everyday human situations, filmed with the sobriety of an indie drama. The title is a nod to Sidney Lumet's classic with Al Pacino"
+            "longDesc": "What happens when man's best friend inherits his worst neuroses? Under the cold light of a community hall, a circle of chairs hosts the ritual of confession: a support group where barking gave way to articulate, heavy English. In this modern fable, the dogs no longer chase the ball — they chase the meaning behind the pain. A visceral portrait of how the gears of modern life leave scars and traumas that no one can escape."
         }
     },
     "transmissions": {
@@ -103,9 +103,18 @@
     },
     "legacy": {
         "title": "BORN ON SET",
+        "title_part1": "BORN",
+        "title_part2": "ON SET",
         "title_mobile_br": "BORN <br /> ON SET",
-        "text": "This isn't an experiment. It's a production company with 10 years on set reinventing what's possible to produce.",
+        "text": "This isn't an experiment. It's a production company with 10 years on set — now with no limits on what's possible.",
         "trusted_by": "Partners"
+    },
+    "stages": {
+        "one": "Stage I",
+        "origin": "The Origin",
+        "two": "Stage II",
+        "three": "Stage III",
+        "grand_finale": "The Grand Finale"
     },
     "footer": {
         "complex_problem": "GOT AN IMPOSSIBLE IDEA?",
