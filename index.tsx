@@ -3097,26 +3097,28 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
             <main className="min-h-screen pt-32 md:pt-40 flex flex-col bg-[#050505] relative overflow-hidden">
                 <div className="scanline-effect opacity-10 pointer-events-none"></div>
 
-                {/* ── HERO: DOSSIER STYLE ── */}
-                <section className="pb-24 md:pb-32 border-b border-white/10 reveal relative overflow-hidden">
-                    {/* Background breathing glow — bleeds like home */}
+                {/* ── HERO: O QUE FAZEMOS ── */}
+                <section className="min-h-[70vh] pb-24 md:pb-32 border-b border-white/5 reveal relative overflow-hidden">
+                    <ParticleBackground />
                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none animate-breathe"></div>
-                    <div className="w-full px-6 md:px-12 lg:px-24">
 
+                    <div className="w-full px-6 md:px-12 lg:px-24 relative z-10">
                         {/* PAGE HEADER */}
                         <div className="flex flex-col md:flex-row justify-between items-end mb-12">
                             <div>
                                 <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">
                                     {t('about.origin').split('_')[0]}_<span className="text-[#DC2626]">{t('about.origin').split('_').slice(1).join('_')}</span>
                                 </h1>
-                                <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input"><span className="text-[#DC2626]">&gt;&gt; </span> <span className="text-[#9CA3AF]">ACCESS_GRANTED // <span className="text-white">{t('about.est')}</span></span></p>
+                                <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input">
+                                    <span className="text-[#DC2626]">&gt;&gt; </span>
+                                    <span className="text-[#9CA3AF]">ACCESS_GRANTED // <span className="text-white">{t('about.est')}</span></span>
+                                </p>
                             </div>
                         </div>
 
-                        {/* CENTERED: MONOLITH + TITLE + DESC */}
+                        {/* CENTERED: MONOLITH + TITLE + 3 LINES */}
                         <div className="flex flex-col items-center text-center gap-10 py-8">
-
-                            {/* MONOLITH */}
+                            {/* MONOLITH — bigger */}
                             <div className="relative">
                                 <div className="monolith-structure w-[100px] h-[200px] md:w-[130px] md:h-[260px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
                                     <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
@@ -3127,7 +3129,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                                 </div>
                             </div>
 
-                            {/* VISÃO DE CINEMA */}
+                            {/* TITLE */}
                             <div className="flex flex-col items-center gap-3">
                                 <p className="font-brick text-5xl md:text-6xl lg:text-7xl text-white leading-tight tracking-tight uppercase">
                                     {t('about.title_primary')}<br />
@@ -3135,85 +3137,48 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                                 </p>
                             </div>
 
-                            {/* DESCRIPTION */}
-                            <div className="max-w-xl font-mono text-sm text-[#9CA3AF] leading-relaxed">
-                                <div className="flex gap-4 group text-left">
-                                    <span className="text-[#DC2626] font-bold shrink-0 opacity-50 group-hover:opacity-100">[01]</span>
-                                    <p className="border-l border-white/10 pl-4 group-hover:border-[#DC2626] transition-colors">
-                                        {t('about.description')}
-                                    </p>
-                                </div>
+                            {/* 3 DECLARATIVE LINES */}
+                            <div className="max-w-2xl font-mono text-sm text-[#9CA3AF] leading-relaxed flex flex-col gap-6">
+                                {['01', '02', '03'].map((num, i) => (
+                                    <motion.div
+                                        key={num}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true, margin: "-40px" }}
+                                        transition={{ duration: 1.5, delay: i * 0.2, ease: "easeOut" }}
+                                        className="flex gap-4 group text-left"
+                                    >
+                                        <span className="text-[#DC2626] font-bold shrink-0 opacity-50 group-hover:opacity-100 transition-opacity">[{num}]</span>
+                                        <p className="border-l border-white/10 pl-4 group-hover:border-[#DC2626] transition-colors">
+                                            {t(`about.lines.${num}`)}
+                                        </p>
+                                    </motion.div>
+                                ))}
                             </div>
-
                         </div>
                     </div>
                 </section>
 
-                {/* ── CAPACIDADES: INDUSTRIAL GRID ── */}
-                <section className="pt-24 md:pt-32 pb-24 md:pb-32 reveal bg-[#080808]">
-                    <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
-                        <div className="flex items-center justify-between mb-16">
-                            <div className="flex items-center gap-4">
-                                <div className="w-2 h-2 bg-[#DC2626]"></div>
-                                <span className="font-mono text-[10px] tracking-[0.4em] text-white uppercase">{t('about.core_modules')}</span>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
-                            {['cinematography', 'training', 'architecture'].map((mod, idx) => (
-                                <div key={idx} className="group p-10 hover:bg-[#DC2626]/[0.02] transition-all duration-500 min-h-[320px] flex flex-col justify-between relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-4 font-mono text-[10px] text-white/10 group-hover:text-[#DC2626]/40 transition-colors uppercase tracking-[0.5em]">
-                                        Unit_0{idx + 1}
-                                    </div>
+                {/* ── O MÉTODO: DECLARAÇÕES ESCALONADAS ── */}
+                <section className="relative w-full pt-20 pb-24 md:pb-32 bg-[#050505] z-20 overflow-hidden">
+                    <div className="absolute inset-0 z-[2] opacity-20 pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
+                    <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle,transparent_40%,rgba(5,5,5,0.9)_100%)] pointer-events-none"></div>
 
-                                    <div>
-                                        <div className="mb-8 flex items-center gap-2">
-                                            <div className="w-4 h-px bg-[#DC2626]"></div>
-                                            <span className="font-mono text-[10px] text-[#DC2626] tracking-[0.3em] uppercase">
-                                                {t(`about.modules.${mod}.status`)}
-                                            </span>
-                                        </div>
-                                        <h3 className="font-brick text-xl md:text-2xl text-white mb-4 uppercase group-hover:text-[#DC2626] transition-colors duration-500">
-                                            {t(`about.modules.${mod}.title`)}
-                                        </h3>
-                                    </div>
-
-                                    <p className="font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity border-t border-white/5 pt-6">
-                                        {t(`about.modules.${mod}.desc`)}
-                                    </p>
+                    <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
+                        <div className="mb-20 reveal w-full flex flex-col items-center">
+                            <div className="w-full flex justify-center mb-6">
+                                <div className="relative w-5 h-5">
+                                    <div className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full animate-breathe blur-[2px]" style={{ background: 'radial-gradient(circle at center, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0.18) 45%, rgba(220,38,38,0) 75%)' }}></div>
+                                    <div className="absolute left-1/2 top-1/2 w-[2px] h-[2px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DC2626]/60"></div>
                                 </div>
-                            ))}
-                        </div>
-
-                    </div>
-                </section>
-
-                {/* ── MANIFESTO: BRUTALIST BLOCKS ── */}
-                <section className="pt-24 md:pt-32 pb-24 md:pb-32 reveal bg-[#050505]">
-                    <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
-                        <div className="flex items-center justify-between mb-16 border-b border-white/10 pb-6">
-                            <div className="flex items-center gap-4">
-                                <div className="w-2 h-2 bg-[#DC2626]"></div>
-                                <span className="font-mono text-[10px] tracking-[0.4em] text-white uppercase">{t('about.manifesto.title')}</span>
                             </div>
-                            <span className="font-mono text-[10px] tracking-[0.2em] text-[#9CA3AF] uppercase">{t('about.manifesto.subtitle')}</span>
+                            <span className="text-4xl md:text-6xl font-brick text-white bg-[#050505] px-4 text-center">{t('about.method.label')}</span>
                         </div>
-
-                        <div className="divide-y divide-white/10">
-                            {['control', 'curation', 'black_box'].map((key, i) => (
-                                <div key={i} className="group grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 py-10 hover:bg-[#DC2626]/[0.02] transition-all duration-500 px-2">
-                                    <div className="md:col-span-1 font-mono text-[10px] text-[#DC2626]/50 group-hover:text-[#DC2626] tracking-[0.3em] uppercase pt-1 transition-colors">
-                                        0{i + 1}
-                                    </div>
-                                    <h3 className="md:col-span-4 font-brick text-xl md:text-2xl text-white uppercase group-hover:text-[#DC2626] transition-colors duration-500 leading-tight">
-                                        {t(`about.manifesto.cards.${key}.title`)}
-                                    </h3>
-                                    <p className="md:col-span-7 font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity">
-                                        {t(`about.manifesto.cards.${key}.desc`)}
-                                    </p>
-                                </div>
-                            ))}
+                        <div className="flex flex-col gap-24 w-full">
+                            <PhilosophyItem title={t('about.method.control.title')} text={t('about.method.control.text')} titleSize="text-2xl md:text-3xl" index={0} />
+                            <PhilosophyItem title={t('about.method.vision.title')} text={t('about.method.vision.text')} titleSize="text-3xl md:text-4xl" index={1} />
+                            <PhilosophyItem title={t('about.method.direct.title')} text={t('about.method.direct.text')} titleSize="text-4xl md:text-6xl" index={2} />
                         </div>
-
                     </div>
                 </section>
 
