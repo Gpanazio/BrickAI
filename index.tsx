@@ -3095,125 +3095,233 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
             </button>
 
             <main className="min-h-screen pt-32 md:pt-40 flex flex-col bg-[#050505] relative overflow-hidden">
-                <div className="scanline-effect opacity-10 pointer-events-none"></div>
+                <div className="scanline-effect absolute inset-0 opacity-10 pointer-events-none z-0"></div>
+                {/* Ambient viewport glow — matches Home */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-40"></div>
 
-                {/* ── HERO: DOSSIER STYLE ── */}
-                <section className="pb-24 md:pb-32 border-b border-white/10 reveal relative overflow-hidden">
-                    {/* Background breathing glow — bleeds like home */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none animate-breathe"></div>
-                    <div className="w-full px-6 md:px-12 lg:px-24">
+                {/* ── HERO: O QUE FAZEMOS ── */}
+                <section className="min-h-[70vh] pb-24 md:pb-32 border-b border-white/5 reveal relative overflow-hidden">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none animate-breathe"></div>
 
-                        {/* PAGE HEADER */}
-                        <div className="flex flex-col md:flex-row justify-between items-end mb-12">
+                    <div className="w-full px-6 md:px-12 lg:px-24 relative z-10">
+                        {/* PAGE HEADER — full width with date on right */}
+                        <motion.div
+                            initial={{ opacity: 0, y: -10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 1.2, ease: "easeOut" }}
+                            className="flex flex-row justify-between items-end mb-10 border-b border-white/[0.06] pb-8"
+                        >
                             <div>
-                                <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">
+                                <h1 className="text-3xl md:text-5xl font-brick text-white mb-3">
                                     {t('about.origin').split('_')[0]}_<span className="text-[#DC2626]">{t('about.origin').split('_').slice(1).join('_')}</span>
                                 </h1>
-                                <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input"><span className="text-[#DC2626]">&gt;&gt; </span> <span className="text-[#9CA3AF]">ACCESS_GRANTED // <span className="text-white">{t('about.est')}</span></span></p>
+                                <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input">
+                                    <span className="text-[#DC2626]">&gt;&gt; </span>
+                                    <span className="text-[#9CA3AF]">ACCESS_GRANTED</span>
+                                </p>
                             </div>
-                        </div>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest text-[#9CA3AF]/50 uppercase hidden md:block">
+                                {t('about.est')}
+                            </p>
+                        </motion.div>
 
-                        {/* CENTERED: MONOLITH + TITLE + DESC */}
-                        <div className="flex flex-col items-center text-center gap-10 py-8">
-
-                            {/* MONOLITH */}
-                            <div className="relative">
-                                <div className="monolith-structure w-[100px] h-[200px] md:w-[130px] md:h-[260px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
+                        {/* CENTERED: MONOLITH + TITLE + 3 LINES */}
+                        <div className="flex flex-col items-center text-center gap-12 py-8">
+                            {/* MONOLITH — cinematic presence */}
+                            <motion.div
+                                className="relative group/monolith cursor-default"
+                                initial={{ opacity: 0, scale: 0.95 }}
+                                animate={{ opacity: 1, scale: 1 }}
+                                whileHover={{ scale: 1.018 }}
+                                transition={{ duration: 2, ease: "easeOut" }}
+                            >
+                                <div className="monolith-structure w-[120px] h-[240px] md:w-[160px] md:h-[320px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
                                     <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
-                                    <div className="centered-layer aura-atmos pointer-events-none opacity-60" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
-                                    <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(220,38,38,0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
-                                    <div className="centered-layer core-atmos animate-breathe pointer-events-none" style={{ width: '40px', height: '40px', filter: 'blur(10px)', background: 'radial-gradient(circle, rgba(220,38,38,1) 0%, rgba(220,38,38,0.4) 40%, transparent 80%)' }}></div>
+                                    <div className="centered-layer aura-atmos pointer-events-none opacity-60 group-hover/monolith:opacity-80 transition-opacity duration-1000" style={{ width: '500px', height: '500px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.12) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
+                                    <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen group-hover/monolith:opacity-100 transition-opacity duration-700" style={{ width: '500px', height: '500px', background: 'radial-gradient(circle at center, rgba(220,38,38,0.7) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
+                                    <div className="centered-layer core-atmos animate-breathe pointer-events-none" style={{ width: '44px', height: '44px', filter: 'blur(10px)', background: 'radial-gradient(circle, rgba(220,38,38,1) 0%, rgba(220,38,38,0.4) 40%, transparent 80%)' }}></div>
                                     <div className="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10 rounded-[2px]"></div>
                                 </div>
-                            </div>
+                            </motion.div>
 
-                            {/* VISÃO DE CINEMA */}
-                            <div className="flex flex-col items-center gap-3">
+                            {/* DIVIDER */}
+                            <motion.div
+                                initial={{ scaleX: 0, opacity: 0 }}
+                                animate={{ scaleX: 1, opacity: 1 }}
+                                transition={{ duration: 1.2, delay: 0.6, ease: "easeOut" }}
+                                className="w-10 h-px bg-[#DC2626]/50 origin-center"
+                            />
+
+                            {/* TITLE */}
+                            <motion.div
+                                className="flex flex-col items-center gap-2"
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 1.5, delay: 0.4, ease: "easeOut" }}
+                            >
                                 <p className="font-brick text-5xl md:text-6xl lg:text-7xl text-white leading-tight tracking-tight uppercase">
                                     {t('about.title_primary')}<br />
                                     <span className="text-[#DC2626]">{t('about.title_highlight')}</span>
                                 </p>
-                            </div>
+                            </motion.div>
 
-                            {/* DESCRIPTION */}
-                            <div className="max-w-xl font-mono text-sm text-[#9CA3AF] leading-relaxed">
-                                <div className="flex gap-4 group text-left">
-                                    <span className="text-[#DC2626] font-bold shrink-0 opacity-50 group-hover:opacity-100">[01]</span>
-                                    <p className="border-l border-white/10 pl-4 group-hover:border-[#DC2626] transition-colors">
-                                        {t('about.description')}
-                                    </p>
-                                </div>
+                            {/* 3 DECLARATIVE LINES */}
+                            <div className="max-w-lg font-mono flex flex-col gap-16 md:gap-20 mt-10">
+                                {['01', '02', '03'].map((num, i) => (
+                                    <motion.div
+                                        key={num}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        whileInView={{ opacity: 1, y: 0 }}
+                                        viewport={{ once: true, margin: "-40px" }}
+                                        transition={{ duration: 1.6, delay: i * 0.3, ease: "easeOut" }}
+                                        className="flex flex-col items-center gap-3 text-center"
+                                    >
+                                        <span className="text-[#DC2626]/50 text-[9px] tracking-[0.5em] uppercase">[{num}]</span>
+                                        <p className="text-sm md:text-base text-[#9CA3AF] leading-loose tracking-wide">
+                                            {t(`about.lines.${num}`)}
+                                        </p>
+                                    </motion.div>
+                                ))}
                             </div>
-
                         </div>
                     </div>
                 </section>
 
-                {/* ── CAPACIDADES: INDUSTRIAL GRID ── */}
-                <section className="pt-24 md:pt-32 pb-24 md:pb-32 reveal bg-[#080808]">
-                    <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
-                        <div className="flex items-center justify-between mb-16">
-                            <div className="flex items-center gap-4">
-                                <div className="w-2 h-2 bg-[#DC2626]"></div>
-                                <span className="font-mono text-[10px] tracking-[0.4em] text-white uppercase">{t('about.core_modules')}</span>
-                            </div>
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/10">
-                            {['cinematography', 'training', 'architecture'].map((mod, idx) => (
-                                <div key={idx} className="group p-10 hover:bg-[#DC2626]/[0.02] transition-all duration-500 min-h-[320px] flex flex-col justify-between relative overflow-hidden">
-                                    <div className="absolute top-0 right-0 p-4 font-mono text-[10px] text-white/10 group-hover:text-[#DC2626]/40 transition-colors uppercase tracking-[0.5em]">
-                                        Unit_0{idx + 1}
-                                    </div>
+                {/* ── MANIFESTO ── */}
+                <section className="relative w-full py-44 md:py-56 bg-[#050505] z-20 overflow-hidden">
+                    <div className="absolute inset-0 animate-grain opacity-[0.015] pointer-events-none z-0"></div>
+                    {/* Top separator */}
+                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#DC2626]/20 to-transparent"></div>
+                    {/* Ambient glow */}
+                    <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[500px] h-[500px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-                                    <div>
-                                        <div className="mb-8 flex items-center gap-2">
-                                            <div className="w-4 h-px bg-[#DC2626]"></div>
-                                            <span className="font-mono text-[10px] text-[#DC2626] tracking-[0.3em] uppercase">
-                                                {t(`about.modules.${mod}.status`)}
-                                            </span>
-                                        </div>
-                                        <h3 className="font-brick text-xl md:text-2xl text-white mb-4 uppercase group-hover:text-[#DC2626] transition-colors duration-500">
-                                            {t(`about.modules.${mod}.title`)}
-                                        </h3>
-                                    </div>
+                    <div className="max-w-3xl mx-auto px-6 relative z-10">
+                        {/* Section label */}
+                        <motion.span
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true, margin: "-60px" }}
+                            transition={{ duration: 1.5 }}
+                            className="font-mono text-[10px] tracking-[0.5em] text-[#DC2626]/80 uppercase block mb-14 text-center"
+                        >
+                            {t('about.manifesto_label')}
+                        </motion.span>
 
-                                    <p className="font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity border-t border-white/5 pt-6">
-                                        {t(`about.modules.${mod}.desc`)}
-                                    </p>
-                                </div>
-                            ))}
-                        </div>
+                        {/* Pull quote — cartão de título */}
+                        <motion.h2
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            whileHover={{ scale: 1.01 }}
+                            viewport={{ once: true, margin: "-60px" }}
+                            transition={{ duration: 2, ease: "easeOut" }}
+                            className="font-brick text-3xl md:text-5xl lg:text-6xl text-white leading-[1.1] mb-20 md:mb-28 text-center cursor-default"
+                        >
+                            {t('about.manifesto_pull')}
+                        </motion.h2>
 
+                        {/* Body text — limpo, sem border */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 16 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-60px" }}
+                            transition={{ duration: 2, delay: 0.3, ease: "easeOut" }}
+                            className="flex flex-col gap-10"
+                        >
+                            <p className="font-mono text-sm md:text-base text-[#9CA3AF] leading-[1.85]">
+                                {t('about.manifesto_body')}
+                            </p>
+                            <p className="font-mono text-sm md:text-base text-white/80 leading-[1.85]">
+                                {t('about.manifesto_close')}
+                            </p>
+                        </motion.div>
+
+                        {/* Closing divider — Kubrick symmetry */}
+                        <motion.div
+                            initial={{ scaleX: 0 }}
+                            whileInView={{ scaleX: 1 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1, delay: 0.5, ease: "easeOut" }}
+                            className="w-12 h-px bg-[#DC2626]/40 origin-center mx-auto mt-20"
+                        />
                     </div>
                 </section>
 
-                {/* ── MANIFESTO: BRUTALIST BLOCKS ── */}
-                <section className="pt-24 md:pt-32 pb-24 md:pb-32 reveal bg-[#050505]">
-                    <div className="w-full max-w-7xl mx-auto px-6 md:px-12">
-                        <div className="flex items-center justify-between mb-16 border-b border-white/10 pb-6">
-                            <div className="flex items-center gap-4">
-                                <div className="w-2 h-2 bg-[#DC2626]"></div>
-                                <span className="font-mono text-[10px] tracking-[0.4em] text-white uppercase">{t('about.manifesto.title')}</span>
-                            </div>
-                            <span className="font-mono text-[10px] tracking-[0.2em] text-[#9CA3AF] uppercase">{t('about.manifesto.subtitle')}</span>
-                        </div>
+                {/* ── TRAJETÓRIA: REGISTROS DE MISSÃO ── */}
+                <section className="relative w-full py-32 md:py-44 bg-[#050505] z-20 overflow-hidden">
+                    <div className="absolute inset-0 animate-grain opacity-[0.015] pointer-events-none z-0"></div>
+                    {/* Top separator */}
+                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#DC2626]/10 to-transparent"></div>
+                    {/* Ambient glow — left side */}
+                    <div className="absolute top-1/3 left-0 -translate-x-1/2 w-[400px] h-[400px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none"></div>
 
-                        <div className="divide-y divide-white/10">
-                            {['control', 'curation', 'black_box'].map((key, i) => (
-                                <div key={i} className="group grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-12 py-10 hover:bg-[#DC2626]/[0.02] transition-all duration-500 px-2">
-                                    <div className="md:col-span-1 font-mono text-[10px] text-[#DC2626]/50 group-hover:text-[#DC2626] tracking-[0.3em] uppercase pt-1 transition-colors">
-                                        0{i + 1}
-                                    </div>
-                                    <h3 className="md:col-span-4 font-brick text-xl md:text-2xl text-white uppercase group-hover:text-[#DC2626] transition-colors duration-500 leading-tight">
-                                        {t(`about.manifesto.cards.${key}.title`)}
+                    <div className="max-w-3xl mx-auto px-6 relative z-10">
+                        {/* Section label */}
+                        <motion.span
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true, margin: "-60px" }}
+                            transition={{ duration: 1.5 }}
+                            className="font-mono text-[10px] tracking-[0.5em] text-[#DC2626]/80 uppercase block mb-14"
+                        >
+                            {t('about.trajectory_label')}
+                        </motion.span>
+
+                        {/* REGISTRO cards — capítulos de filme */}
+                        <div className="flex flex-col">
+                            {(['r001', 'r002', 'r003'] as const).map((key, i) => (
+                                <motion.div
+                                    key={key}
+                                    initial={{ opacity: 0, y: 24 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, margin: "-40px" }}
+                                    transition={{ duration: 1.6, delay: i * 0.2, ease: "easeOut" }}
+                                    className="relative group pt-10 pb-16 border-t border-white/[0.06] hover:border-[#DC2626]/30 transition-colors duration-700 cursor-default overflow-hidden"
+                                >
+                                    {/* Hover accent line */}
+                                    <div className="absolute top-0 left-0 h-px bg-[#DC2626]/60 w-0 group-hover:w-1/3 transition-all duration-700 ease-out"></div>
+                                    {/* Ghost number */}
+                                    <span className="absolute right-0 top-4 font-brick text-[100px] md:text-[140px] text-white/[0.03] leading-none select-none pointer-events-none group-hover:text-[#DC2626]/[0.04] transition-colors duration-1000">
+                                        {String(i + 1).padStart(2, '0')}
+                                    </span>
+                                    <span className="font-mono text-[10px] text-[#DC2626]/80 tracking-[0.35em] uppercase block mb-5 group-hover:text-[#DC2626] transition-colors duration-500">
+                                        &gt;&gt; {t(`about.trajectory.${key}.label`)}
+                                    </span>
+                                    <h3 className="font-brick text-3xl md:text-4xl text-white mb-5 group-hover:text-[#DC2626] transition-colors duration-500">
+                                        {t(`about.trajectory.${key}.title`)}
                                     </h3>
-                                    <p className="md:col-span-7 font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed opacity-60 group-hover:opacity-100 transition-opacity">
-                                        {t(`about.manifesto.cards.${key}.desc`)}
+                                    <p className="font-mono text-sm text-[#9CA3AF] leading-relaxed max-w-md">
+                                        {t(`about.trajectory.${key}.text`)}
                                     </p>
-                                </div>
+                                </motion.div>
                             ))}
                         </div>
 
+                        {/* Closing statement — brand inscription */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 16 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-40px" }}
+                            transition={{ duration: 2, delay: 0.4, ease: "easeOut" }}
+                            className="mt-32 md:mt-40 flex flex-col items-center gap-6"
+                        >
+                            <motion.div
+                                initial={{ scaleX: 0 }}
+                                whileInView={{ scaleX: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
+                                className="w-6 h-px bg-[#DC2626]/50 origin-center"
+                            />
+                            <p className="text-center font-brick text-2xl md:text-3xl text-white/90 max-w-lg mx-auto leading-snug tracking-wide uppercase">
+                                {t('about.trajectory.closing')}
+                            </p>
+                            <motion.div
+                                initial={{ scaleX: 0 }}
+                                whileInView={{ scaleX: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.8, delay: 0.9, ease: "easeOut" }}
+                                className="w-6 h-px bg-[#DC2626]/50 origin-center"
+                            />
+                        </motion.div>
                     </div>
                 </section>
 

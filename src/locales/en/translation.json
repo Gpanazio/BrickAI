@@ -130,43 +130,33 @@
         "est": "EST_2016",
         "title_primary": "CINEMATIC",
         "title_highlight": "VISION",
-        "title_secondary": "NEURAL EXECUTION",
-        "description": "Our vision didn't come from ChatGPT. It's the result of years on set, directing and executing in the real world. Long before anyone wrote a prompt, our path was already defined by high-complexity visual production. We understand narrative and aesthetics because our eye was refined in the daily grind of set life and the technical rigor of classical post-production. For us, technology is not a shortcut to mediocrity — it's a power multiplier: the artistic judgment stays purely human, but the final execution now reaches what our imagination always pursued.",
-        "core_modules": "AUTHORIAL VISION",
-        "modules": {
-            "cinematography": {
-                "title": "ARTISTIC CONCEPTION",
-                "status": "CALIBRATED",
-                "desc": "AI hallucinates images; we design intent. Every film is built from references and experience, where each frame serves the narrative. Technology without soul is worthless."
-            },
-            "training": {
-                "title": "VISUAL DIRECTION",
-                "status": "ONLINE",
-                "desc": "Chaos has no owner. We give unity to chaos. We turn a thousand random generations into something that looks like a film, not an accident. That's the work of people who know what they're doing and have been on set for a long time."
-            },
-            "architecture": {
-                "title": "DELIVERY",
-                "status": "STABLE",
-                "desc": "We're not image generators, we're creators. We oversee every step of the process so that technology serves the story, not the other way around. We don't sell generated files. We deliver a finished, complete vision."
-            }
+        "lines": {
+            "01": "A production company with 10 years on set. AI is our tool, not our identity.",
+            "02": "We create from script to final film — concept, direction, aesthetics and delivery.",
+            "03": "Flawless visuals for any type of production. No format limits, no scale limits."
         },
-        "manifesto": {
-            "title": "ANTI-SLOP PROTOCOL",
-            "subtitle": "SYSTEM_DIRECTIVES",
-            "cards": {
-                "control": {
-                    "title": "CONTROL > CHANCE",
-                    "desc": "The 'perfect prompt' is a myth. Consistency comes from those who direct the process — not from the luck of a line of text. For us, technology only makes sense when it's subjected to the rigor of the artistic eye. Where the market sees automation, we exercise total dominance over the image."
-                },
-                "curation": {
-                    "title": "QUALITY > VOLUME",
-                    "desc": "We are not here to produce disposable volume. We use the power of the machine as a search engine for the right image. Technology expands capacity — but it's the repertoire that decides what deserves to reach the screen."
-                },
-                "black_box": {
-                    "title": "ART = VIRTUOSITY",
-                    "desc": "What sets us apart is mastering both ends: the set eye and technical control of the new generation. We don't test tools out of curiosity — we fuse aesthetics and power to deliver what the market cannot replicate. Technology obeys art."
-                }
-            }
+        "manifesto_label": "MANIFESTO",
+        "manifesto_pull": "Our vision didn't come from ChatGPT.",
+        "manifesto_body": "It is the result of years on set, directing and executing in the real world. Long before the first prompt, our trajectory was already grounded in high-complexity visual production. We understand narrative and aesthetics because our eye was refined in the daily grind of the set and the technical rigor of classical post-production.",
+        "manifesto_close": "For us, technology is not a shortcut to mediocrity, but a multiplier of power: artistic judgment remains purely human, but now the final execution reaches what our imagination always sought.",
+        "trajectory_label": "TRAJETÓRIA",
+        "trajectory": {
+            "r001": {
+                "label": "REGISTRO_001",
+                "title": "10 YEARS ON SET",
+                "text": "From 2016 to here. From handheld cameras to limitless tools. Same soul."
+            },
+            "r002": {
+                "label": "REGISTRO_002",
+                "title": "GRAMADO 2025",
+                "text": "Inheritance: one of the first generative films selected at one of Latin America's largest festivals."
+            },
+            "r003": {
+                "label": "REGISTRO_003",
+                "title": "BBC • VISA • STONE • L'ORÉAL",
+                "text": "The same delivery standard as a traditional production company. Contracts, compliance, scale."
+            },
+            "closing": "Brick didn't arrive at AI through technology. We arrived through the pursuit of scale without giving up authorship."
         }
     },
     "chat": {
