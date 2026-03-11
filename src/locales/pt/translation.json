@@ -135,20 +135,28 @@
             "02": "Criamos do roteiro ao filme finalizado — conceito, direção, estética e entrega.",
             "03": "Visuais impecáveis para qualquer tipo de produção. Sem limite de formato, sem limite de escala."
         },
-        "method": {
-            "label": "O MÉTODO",
-            "control": {
-                "title": "CONTROLE",
-                "text": "Não existe prompt mágico. Consistência vem de quem dirige o processo, não da sorte de uma linha de texto."
+        "manifesto_label": "MANIFESTO",
+        "manifesto_pull": "Nossa visão não veio do ChatGPT.",
+        "manifesto_body": "Ela é o resultado de anos de set, direção e execução no mundo real. Muito antes do primeiro prompt, nossa trajetória já era pautada pela produção visual de alta complexidade. Entendemos narrativa e estética porque o nosso olhar foi refinado no dia a dia do set e no rigor técnico da pós-produção clássica.",
+        "manifesto_close": "Para nós, a tecnologia não é um atalho para o medíocre, mas um multiplicador de potência: o critério artístico continua sendo puramente humano, mas agora a execução final alcança o que a nossa imaginação sempre buscou.",
+        "trajectory_label": "TRAJETÓRIA",
+        "trajectory": {
+            "r001": {
+                "label": "REGISTRO_001",
+                "title": "10 ANOS DE SET",
+                "text": "De 2016 até aqui. De câmera na mão a ferramentas sem limite. Mesma alma."
             },
-            "vision": {
-                "title": "VISÃO",
-                "text": "A IA gera mil opções. Nós sabemos qual é a certa. Bom gosto é o ativo que nenhum modelo tem."
+            "r002": {
+                "label": "REGISTRO_002",
+                "title": "GRAMADO 2025",
+                "text": "Inheritance: um dos primeiros filmes gerativos selecionados em um dos maiores festivais da América Latina."
             },
-            "direct": {
-                "title": "NÓS DIRIGIMOS A INTELIGÊNCIA",
-                "text": "A tecnologia obedece à arte. O que entregamos não é conteúdo gerado — é uma visão autoral, finalizada."
-            }
+            "r003": {
+                "label": "REGISTRO_003",
+                "title": "BBC • VISA • STONE • L'ORÉAL",
+                "text": "O mesmo padrão de entrega de uma produtora tradicional. Contratos, compliance, escala."
+            },
+            "closing": "A Brick não chegou à IA pela tecnologia. Chegou pela busca de escala sem abrir mão de autoria."
         }
     },
     "chat": {

@@ -3138,18 +3138,18 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                             </div>
 
                             {/* 3 DECLARATIVE LINES */}
-                            <div className="max-w-2xl font-mono text-sm text-[#9CA3AF] leading-relaxed flex flex-col gap-6">
+                            <div className="max-w-2xl font-mono text-[#9CA3AF] leading-relaxed flex flex-col gap-10 md:gap-12 mt-4">
                                 {['01', '02', '03'].map((num, i) => (
                                     <motion.div
                                         key={num}
-                                        initial={{ opacity: 0, y: 20 }}
+                                        initial={{ opacity: 0, y: 30 }}
                                         whileInView={{ opacity: 1, y: 0 }}
                                         viewport={{ once: true, margin: "-40px" }}
-                                        transition={{ duration: 1.5, delay: i * 0.2, ease: "easeOut" }}
-                                        className="flex gap-4 group text-left"
+                                        transition={{ duration: 1.5, delay: i * 0.3, ease: "easeOut" }}
+                                        className="flex gap-5 group text-left"
                                     >
-                                        <span className="text-[#DC2626] font-bold shrink-0 opacity-50 group-hover:opacity-100 transition-opacity">[{num}]</span>
-                                        <p className="border-l border-white/10 pl-4 group-hover:border-[#DC2626] transition-colors">
+                                        <span className="text-[#DC2626] text-xs font-bold shrink-0 opacity-40 group-hover:opacity-100 transition-opacity duration-500 pt-1">[{num}]</span>
+                                        <p className="text-sm md:text-base border-l border-white/10 pl-5 group-hover:border-[#DC2626]/60 transition-colors duration-700">
                                             {t(`about.lines.${num}`)}
                                         </p>
                                     </motion.div>
@@ -3159,26 +3159,99 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                     </div>
                 </section>
 
-                {/* ── O MÉTODO: DECLARAÇÕES ESCALONADAS ── */}
-                <section className="relative w-full pt-20 pb-24 md:pb-32 bg-[#050505] z-20 overflow-hidden">
-                    <div className="absolute inset-0 z-[2] opacity-20 pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
-                    <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle,transparent_40%,rgba(5,5,5,0.9)_100%)] pointer-events-none"></div>
+                {/* ── MANIFESTO ── */}
+                <section className="relative w-full py-32 md:py-44 bg-[#050505] z-20 overflow-hidden">
+                    <div className="max-w-3xl mx-auto px-6 relative z-10">
+                        {/* Section label */}
+                        <motion.span
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true, margin: "-60px" }}
+                            transition={{ duration: 1.5 }}
+                            className="font-mono text-[10px] tracking-[0.5em] text-[#DC2626]/40 uppercase block mb-16"
+                        >
+                            {t('about.manifesto_label')}
+                        </motion.span>
 
-                    <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
-                        <div className="mb-20 reveal w-full flex flex-col items-center">
-                            <div className="w-full flex justify-center mb-6">
-                                <div className="relative w-5 h-5">
-                                    <div className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full animate-breathe blur-[2px]" style={{ background: 'radial-gradient(circle at center, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0.18) 45%, rgba(220,38,38,0) 75%)' }}></div>
-                                    <div className="absolute left-1/2 top-1/2 w-[2px] h-[2px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DC2626]/60"></div>
-                                </div>
-                            </div>
-                            <span className="text-4xl md:text-6xl font-brick text-white bg-[#050505] px-4 text-center">{t('about.method.label')}</span>
+                        {/* Pull quote — the opening punch */}
+                        <motion.h2
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true, margin: "-60px" }}
+                            transition={{ duration: 2, ease: "easeOut" }}
+                            className="font-brick text-3xl md:text-5xl lg:text-6xl text-white leading-[1.1] mb-16 md:mb-20"
+                        >
+                            {t('about.manifesto_pull')}
+                        </motion.h2>
+
+                        {/* Body text */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true, margin: "-60px" }}
+                            transition={{ duration: 2, delay: 0.3, ease: "easeOut" }}
+                            className="border-l border-white/10 pl-6 md:pl-10 flex flex-col gap-8"
+                        >
+                            <p className="font-mono text-sm md:text-base text-[#9CA3AF] leading-[2]">
+                                {t('about.manifesto_body')}
+                            </p>
+                            <p className="font-mono text-sm md:text-base text-white/70 leading-[2]">
+                                {t('about.manifesto_close')}
+                            </p>
+                        </motion.div>
+                    </div>
+                </section>
+
+                {/* ── TRAJETÓRIA: REGISTROS DE MISSÃO ── */}
+                <section className="relative w-full py-32 md:py-44 bg-black z-20 overflow-hidden">
+                    <div className="max-w-3xl mx-auto px-6 relative z-10">
+                        {/* Section label */}
+                        <motion.span
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true, margin: "-60px" }}
+                            transition={{ duration: 1.5 }}
+                            className="font-mono text-[10px] tracking-[0.5em] text-[#DC2626]/40 uppercase block mb-16"
+                        >
+                            {t('about.trajectory_label')}
+                        </motion.span>
+
+                        {/* REGISTRO cards — standalone, no wrapper */}
+                        <div className="flex flex-col gap-12 md:gap-16">
+                            {(['r001', 'r002', 'r003'] as const).map((key, i) => (
+                                <motion.div
+                                    key={key}
+                                    initial={{ opacity: 0, y: 40 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true, margin: "-40px" }}
+                                    transition={{ duration: 1.5, delay: i * 0.15, ease: "easeOut" }}
+                                    className="group border-l border-white/[0.08] pl-6 md:pl-10 hover:border-[#DC2626]/30 transition-colors duration-700"
+                                >
+                                    <span className="font-mono text-[10px] text-[#DC2626]/50 tracking-[0.3em] uppercase block mb-5">
+                                        &gt;&gt; {t(`about.trajectory.${key}.label`)}
+                                    </span>
+                                    <h3 className="font-brick text-2xl md:text-3xl text-white mb-4 group-hover:text-[#DC2626] transition-colors duration-500">
+                                        {t(`about.trajectory.${key}.title`)}
+                                    </h3>
+                                    <p className="font-mono text-sm text-[#9CA3AF] leading-relaxed max-w-lg">
+                                        {t(`about.trajectory.${key}.text`)}
+                                    </p>
+                                </motion.div>
+                            ))}
                         </div>
-                        <div className="flex flex-col gap-24 w-full">
-                            <PhilosophyItem title={t('about.method.control.title')} text={t('about.method.control.text')} titleSize="text-2xl md:text-3xl" index={0} />
-                            <PhilosophyItem title={t('about.method.vision.title')} text={t('about.method.vision.text')} titleSize="text-3xl md:text-4xl" index={1} />
-                            <PhilosophyItem title={t('about.method.direct.title')} text={t('about.method.direct.text')} titleSize="text-4xl md:text-6xl" index={2} />
-                        </div>
+
+                        {/* Closing statement — bigger, more weight */}
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true, margin: "-40px" }}
+                            transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
+                            className="mt-24 md:mt-32 pt-16 border-t border-white/[0.06]"
+                        >
+                            <p className="text-center font-mono text-base md:text-lg text-white/50 italic max-w-xl mx-auto leading-relaxed">
+                                "{t('about.trajectory.closing')}"
+                            </p>
+                        </motion.div>
                     </div>
                 </section>
 
