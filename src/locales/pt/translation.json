@@ -130,42 +130,24 @@
         "est": "EST_2016",
         "title_primary": "VISÃO DE",
         "title_highlight": "CINEMA",
-        "title_secondary": "EXECUÇÃO NEURAL",
-        "description": "Nossa visão não veio do ChatGPT. Ela é o resultado de anos de set, direção e execução no mundo real. Muito antes do primeiro prompt, nossa trajetória já era pautada pela produção visual de alta complexidade. Entendemos narrativa e estética porque o nosso olhar foi refinado no dia a dia do set e no rigor técnico da pós-produção clássica. Para nós, a tecnologia não é um atalho para o medíocre, mas um multiplicador de potência: o critério artístico continua sendo puramente humano, mas agora a execução final alcança o que a nossa imaginação sempre buscou.",
-        "core_modules": "OLHAR AUTORAL",
-        "modules": {
-            "cinematography": {
-                "title": "CONCEPÇÃO ARTÍSTICA",
-                "status": "CALIBRADO",
-                "desc": "A IA alucina imagens; nós projetamos intenção. O filme é construído de referências e experiência, onde cada frame serve à narrativa. Tecnologia sem alma não vale nada."
-            },
-            "training": {
-                "title": "DIREÇÃO VISUAL",
-                "status": "ONLINE",
-                "desc": "O caos não tem dono. A gente dá unidade ao caos. Transformamos mil gerações aleatórias em algo que tem cara de filme, não de acidente. Isso é trabalho de quem sabe o que faz e que tá no set há muito tempo."
-            },
-            "architecture": {
-                "title": "ENTREGA",
-                "status": "ESTÁVEL",
-                "desc": "Não somos geradores de imagem, somos criadores. Cuidamos de cada etapa do processo para que a tecnologia sirva à história, e não o contrário. Não vendemos arquivos gerados. Entregamos uma visão pronta, finalizada."
-            }
+        "lines": {
+            "01": "Somos uma produtora com 10 anos de set. A IA é a nossa ferramenta, não a nossa identidade.",
+            "02": "Criamos do roteiro ao filme finalizado — conceito, direção, estética e entrega.",
+            "03": "Visuais impecáveis para qualquer tipo de produção. Sem limite de formato, sem limite de escala."
         },
-        "manifesto": {
-            "title": "ANTI-SLOP PROTOCOL",
-            "subtitle": "SYSTEM_DIRECTIVES",
-            "cards": {
-                "control": {
-                    "title": "CONTROLE > ACASO",
-                    "desc": "O \u201cprompt perfeito\u201d é um mito. Consistência vem de quem dirige o processo, não da sorte de uma linha de texto. Para nós, tecnologia só faz sentido quando é submetida ao rigor do olhar artístico. Onde o mercado vê automação, nós exercemos domínio total sobre a imagem."
-                },
-                "curation": {
-                    "title": "QUALIDADE > VOLUME",
-                    "desc": "Não estamos aqui para produzir volume descartável. Usamos a potência da máquina como motor de busca pela imagem certa. A tecnologia amplia a capacidade, mas é o repertório que define o que merece chegar à tela."
-                },
-                "black_box": {
-                    "title": "ARTE = VIRTUOSISMO",
-                    "desc": "O que nos separa é dominar as duas pontas: olhar de set e controle técnico da nova geração. Não testamos ferramenta por curiosidade; fundimos estética e potência para entregar o que o mercado não consegue replicar. A tecnologia obedece à arte."
-                }
+        "method": {
+            "label": "O MÉTODO",
+            "control": {
+                "title": "CONTROLE",
+                "text": "Não existe prompt mágico. Consistência vem de quem dirige o processo, não da sorte de uma linha de texto."
+            },
+            "vision": {
+                "title": "VISÃO",
+                "text": "A IA gera mil opções. Nós sabemos qual é a certa. Bom gosto é o ativo que nenhum modelo tem."
+            },
+            "direct": {
+                "title": "NÓS DIRIGIMOS A INTELIGÊNCIA",
+                "text": "A tecnologia obedece à arte. O que entregamos não é conteúdo gerado — é uma visão autoral, finalizada."
             }
         }
     },

@@ -130,42 +130,24 @@
         "est": "EST_2016",
         "title_primary": "CINEMATIC",
         "title_highlight": "VISION",
-        "title_secondary": "NEURAL EXECUTION",
-        "description": "Our vision didn't come from ChatGPT. It's the result of years on set, directing and executing in the real world. Long before anyone wrote a prompt, our path was already defined by high-complexity visual production. We understand narrative and aesthetics because our eye was refined in the daily grind of set life and the technical rigor of classical post-production. For us, technology is not a shortcut to mediocrity — it's a power multiplier: the artistic judgment stays purely human, but the final execution now reaches what our imagination always pursued.",
-        "core_modules": "AUTHORIAL VISION",
-        "modules": {
-            "cinematography": {
-                "title": "ARTISTIC CONCEPTION",
-                "status": "CALIBRATED",
-                "desc": "AI hallucinates images; we design intent. Every film is built from references and experience, where each frame serves the narrative. Technology without soul is worthless."
-            },
-            "training": {
-                "title": "VISUAL DIRECTION",
-                "status": "ONLINE",
-                "desc": "Chaos has no owner. We give unity to chaos. We turn a thousand random generations into something that looks like a film, not an accident. That's the work of people who know what they're doing and have been on set for a long time."
-            },
-            "architecture": {
-                "title": "DELIVERY",
-                "status": "STABLE",
-                "desc": "We're not image generators, we're creators. We oversee every step of the process so that technology serves the story, not the other way around. We don't sell generated files. We deliver a finished, complete vision."
-            }
+        "lines": {
+            "01": "A production company with 10 years on set. AI is our tool, not our identity.",
+            "02": "We create from script to final film — concept, direction, aesthetics and delivery.",
+            "03": "Flawless visuals for any type of production. No format limits, no scale limits."
         },
-        "manifesto": {
-            "title": "ANTI-SLOP PROTOCOL",
-            "subtitle": "SYSTEM_DIRECTIVES",
-            "cards": {
-                "control": {
-                    "title": "CONTROL > CHANCE",
-                    "desc": "The 'perfect prompt' is a myth. Consistency comes from those who direct the process — not from the luck of a line of text. For us, technology only makes sense when it's subjected to the rigor of the artistic eye. Where the market sees automation, we exercise total dominance over the image."
-                },
-                "curation": {
-                    "title": "QUALITY > VOLUME",
-                    "desc": "We are not here to produce disposable volume. We use the power of the machine as a search engine for the right image. Technology expands capacity — but it's the repertoire that decides what deserves to reach the screen."
-                },
-                "black_box": {
-                    "title": "ART = VIRTUOSITY",
-                    "desc": "What sets us apart is mastering both ends: the set eye and technical control of the new generation. We don't test tools out of curiosity — we fuse aesthetics and power to deliver what the market cannot replicate. Technology obeys art."
-                }
+        "method": {
+            "label": "THE METHOD",
+            "control": {
+                "title": "CONTROL",
+                "text": "There is no magic prompt. Consistency comes from those who direct the process, not from the luck of a line of text."
+            },
+            "vision": {
+                "title": "VISION",
+                "text": "AI generates a thousand options. We know which one is right. Taste is the asset no model has."
+            },
+            "direct": {
+                "title": "WE DIRECT THE INTELLIGENCE",
+                "text": "Technology obeys art. What we deliver is not generated content — it is an authorial vision, finalized."
             }
         }
     },
