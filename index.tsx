@@ -3093,139 +3093,151 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-[100] flex items-center gap-2 group mix-blend-difference">
-                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
+            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-[9px] md:text-[10px] tracking-[0.4em] uppercase transition-colors z-[100] flex items-center gap-4 group mix-blend-difference">
+                <div className="w-8 h-[1px] bg-[#DC2626] group-hover:w-12 transition-all"></div>
+                {t('common.return_surface')}
             </button>
 
-            <main className="min-h-screen bg-[#050505] flex flex-col items-center pt-24 md:pt-32 relative overflow-hidden">
-                {/* ── BACKGROUND: INFINITE VOID ── */}
-                <div className="absolute inset-0 z-0 bg-[#050505]">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(15,0,0,0.05)_0%,rgba(0,0,0,1)_100%)]"></div>
+            <main className="min-h-screen bg-[#050505] flex flex-col pt-32 md:pt-40 relative overflow-hidden">
+                {/* ── TECHNICAL OVERLAYS ── */}
+                <div className="fixed inset-0 z-0 pointer-events-none opacity-20">
+                    <div className="absolute top-0 left-1/4 w-px h-full bg-white/[0.05]"></div>
+                    <div className="absolute top-0 left-2/4 w-px h-full bg-white/[0.05]"></div>
+                    <div className="absolute top-0 left-3/4 w-px h-full bg-white/[0.05]"></div>
+                    <div className="absolute top-1/4 left-0 w-full h-px bg-white/[0.05]"></div>
+                    <div className="absolute top-2/4 left-0 w-full h-px bg-white/[0.05]"></div>
                 </div>
 
-                {/* ── SECTION 01: THE ORIGIN (MONOLITH HERO) ── */}
-                <section className="relative z-10 w-full min-h-screen flex flex-col items-center justify-center px-6 border-b border-white/5 pb-20">
-                    <ParticleBackground reactToMouse={true} />
+                {/* ── SECTION 01: THE CORE ARCHITECTURE (HERO) ── */}
+                <section className="relative z-10 w-full flex flex-col md:flex-row gap-0 items-stretch px-6 md:px-12 lg:px-24 mb-32 border-b border-white/5">
                     
-                    {/* MONOLITH ELEMENT (Identical to Home) */}
-                    <div className="relative mb-24 reveal group">
-                        <div
-                            className="monolith-structure w-[120px] h-[240px] md:w-[150px] md:h-[300px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative transition-transform duration-1000 ease-out pointer-events-none group-hover:scale-[1.02]"
-                            style={{ transform: 'translateZ(0)' }}
-                        >
-                            <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
-                            <div className="centered-layer aura-atmos pointer-events-none opacity-60" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
-                            <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '500px', height: '500px', background: 'radial-gradient(circle at center, rgba(220,38,38,0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
-                            <div className="centered-layer core-atmos animate-breathe pointer-events-none" style={{ width: '40px', height: '40px', filter: 'blur(10px)', background: 'radial-gradient(circle, rgba(220,38,38,1) 0%, rgba(220,38,38,0.4) 40%, transparent 80%)' }}></div>
-                            <div className="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10 rounded-[2px]"></div>
-                        </div>
-                        
-                        <div className="absolute -top-10 left-1/2 -translate-x-1/2 whitespace-nowrap">
-                            <span className="font-mono text-[9px] text-[#DC2626] tracking-[0.4em] uppercase font-bold opacity-40 group-hover:opacity-100 transition-opacity">SOURCE_SIGNAL // ALIGNED</span>
-                        </div>
+                    {/* LEFT: THE CPU (MONOLITH) */}
+                    <div className="w-full md:w-5/12 py-20 flex flex-col items-center justify-center border-r border-white/5 relative">
+                         <div className="relative group">
+                            {/* Target Crosshair Decoration */}
+                            <div className="absolute -inset-10 border border-white/[0.03] rounded-full group-hover:scale-110 transition-transform duration-1000"></div>
+                            <div className="absolute -top-14 left-1/2 -translate-x-1/2 font-mono text-[8px] text-[#DC2626] tracking-[0.5em] opacity-50 uppercase whitespace-nowrap">INIT_CORE_SYNC</div>
+                            
+                            <div className="monolith-structure w-[100px] h-[200px] md:w-[120px] md:h-[240px] rounded-[1px] relative shadow-2xl transition-transform duration-700 group-hover:scale-105">
+                                <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 rounded-[1px] overflow-hidden"></div>
+                                <div className="centered-layer core-atmos animate-thinking scale-90"></div>
+                                <div className="absolute inset-0 border border-white/5 rounded-[1px]"></div>
+                            </div>
+                            
+                            <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-3">
+                                <span className="w-1.5 h-1.5 bg-[#DC2626] animate-pulse"></span>
+                                <span className="font-mono text-[9px] text-white/40 uppercase tracking-[0.2em]">{t('about.est')}</span>
+                            </div>
+                         </div>
                     </div>
 
-                    <div className="text-center max-w-5xl space-y-12 relative z-20">
-                        <div className="space-y-4">
-                            <h1 className="font-brick text-[3.5rem] md:text-[6rem] lg:text-[8.5rem] leading-[0.8] text-white uppercase tracking-tighter">
+                    {/* RIGHT: THE SPECS */}
+                    <div className="w-full md:w-7/12 py-20 md:pl-20 flex flex-col justify-center gap-12">
+                        <div className="space-y-4 reveal">
+                             <span className="font-mono text-[10px] text-[#DC2626] tracking-[0.3em] uppercase border-l-2 border-[#DC2626] pl-4">{t('about.origin')}</span>
+                             <h1 className="font-brick text-[3rem] md:text-[5rem] lg:text-[6.5rem] leading-[0.85] text-white uppercase tracking-tighter">
                                 {t('about.title_primary')}<br />
-                                <span className="text-[#DC2626] drop-shadow-[0_0_50px_rgba(220,38,38,0.4)]">{t('about.title_highlight')}</span>
-                            </h1>
-                            <p className="font-mono text-[10px] md:text-xs tracking-[0.6em] text-white/30 uppercase pt-6 animate-pulse">DNA_CORE // EST_2016</p>
+                                <span className="text-[#DC2626] drop-shadow-[0_0_30px_rgba(220,38,38,0.2)]">{t('about.title_highlight')}</span>
+                             </h1>
                         </div>
 
-                        {/* Staggered Directives as System Status */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-1 pt-12">
+                        <div className="grid gap-2 border-t border-white/5 pt-12">
                              {aboutLineKeys.map((key, i) => (
                                 <motion.div
                                     key={key}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
+                                    initial={{ opacity: 0, x: 20 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 0.6, delay: 0.4 + (i * 0.15) }}
-                                    className="p-10 border border-white/5 bg-white/[0.01] hover:bg-white/[0.03] transition-colors relative group"
+                                    transition={{ duration: 0.6, delay: i * 0.15 }}
+                                    className="flex items-center gap-8 py-6 group hover:bg-white/[0.02] transition-colors px-4 border-b border-white/5"
                                 >
-                                    <div className="absolute top-0 left-0 w-1 h-full bg-[#DC2626]/20 group-hover:bg-[#DC2626] transition-all"></div>
-                                    <p className="font-mono text-xs md:text-sm text-[#9CA3AF] leading-loose uppercase tracking-wide group-hover:text-white transition-colors text-left">
-                                        {t(`about.lines.${key}`)}
-                                    </p>
+                                    <span className="font-mono text-[9px] text-white/20 tracking-widest shrink-0 uppercase">PARAM_0{i+1}</span>
+                                    <p className="font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed uppercase group-hover:text-white transition-colors">{t(`about.lines.${key}`)}</p>
                                 </motion.div>
                              ))}
                         </div>
                     </div>
                 </section>
 
-                {/* ── SECTION 02: THE DARK CORE (MANIFESTO) ── */}
-                <section className="relative z-10 w-full min-h-[90vh] flex flex-col items-center justify-center bg-black py-40 overflow-hidden border-y border-white/5">
-                    {/* Atmospheric Red Fog */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vh] bg-[radial-gradient(circle,rgba(220,38,38,0.03)_0%,transparent_60%)] pointer-events-none blur-[100px]"></div>
+                {/* ── SECTION 02: CLINICAL OVERRIDE (MANIFESTO) ── */}
+                <section className="relative w-full bg-[#020202] py-40 md:py-60 z-10 border-b border-white/5">
+                    <ParticleBackground reactToMouse={false} />
+                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#DC2626]/5 to-transparent opacity-30"></div>
                     
-                    <div className="max-w-4xl mx-auto px-6 relative z-10">
-                        <div className="flex flex-col items-center gap-20">
-                            <div className="flex items-center gap-8 opacity-40">
-                                <div className="w-12 h-px bg-white"></div>
-                                <span className="font-mono text-[10px] font-bold tracking-[0.8em] text-white uppercase">{t('about.manifesto_label')}</span>
-                                <div className="w-12 h-px bg-white"></div>
-                            </div>
-                            
-                            <div className="space-y-12 text-center">
-                                <h2 className="font-brick text-[2.8rem] md:text-[5rem] lg:text-[6.5rem] leading-[0.85] text-white uppercase tracking-tighter drop-shadow-2xl">
-                                    {t('about.manifesto_pull')}
-                                </h2>
-                                
-                                <p className="font-mono text-base md:text-2xl text-[#9CA3AF] leading-[1.6] max-w-2xl mx-auto uppercase tracking-tight italic border-l-4 border-[#DC2626] pl-10 text-left md:text-center md:border-l-0 md:pl-0">
-                                    {t('about.manifesto_body')}
-                                </p>
+                    <div className="max-w-7xl mx-auto px-6 lg:px-24 flex flex-col md:flex-row gap-20 md:items-start">
+                        {/* THE SCANNER LABEL */}
+                        <div className="shrink-0 md:rotate-90 md:translate-y-20 origin-left">
+                            <span className="font-mono text-[9px] text-[#DC2626] font-bold tracking-[0.8em] uppercase border-y border-[#DC2626]/30 py-4 block whitespace-nowrap">MANUAL_OVERRIDE_ACTIVE</span>
+                        </div>
 
-                                <div className="inline-block border border-[#DC2626]/40 px-8 py-3 group hover:bg-[#DC2626]/10 transition-colors duration-700">
-                                     <span className="font-mono text-xs md:text-sm text-[#DC2626] tracking-[0.4em] uppercase font-bold group-hover:text-white transition-colors">{t('about.manifesto_close')}</span>
+                        <div className="flex-1 flex flex-col gap-16 md:pl-20 border-l border-white/10">
+                            <h2 className="font-brick text-[2.5rem] md:text-[4rem] lg:text-[5rem] text-white leading-[1.0] uppercase tracking-tighter drop-shadow-2xl reveal">
+                                {t('about.manifesto_pull')}
+                            </h2>
+                            
+                            <div className="grid md:grid-cols-2 gap-16">
+                                <div className="space-y-8">
+                                    <p className="font-editorial text-lg md:text-2xl text-[#E5E5E5] leading-relaxed tracking-wide italic">
+                                        {t('about.manifesto_body')}
+                                    </p>
+                                </div>
+                                <div className="space-y-12 flex flex-col justify-end pb-2">
+                                     <div className="space-y-4">
+                                        <div className="w-12 h-[2px] bg-[#DC2626]"></div>
+                                        <p className="font-mono text-xs text-[#9CA3AF] leading-loose uppercase tracking-[0.1em] border-l-2 border-white/5 pl-8">
+                                            {t('about.manifesto_close')}
+                                        </p>
+                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
 
-                {/* ── SECTION 03: MISSION RECORDS (TRAJECTORY) ── */}
-                <section className="relative z-10 w-full bg-[#050505] py-40">
-                    <div className="max-w-7xl mx-auto px-6 lg:px-24 flex flex-col gap-32">
-                        <div className="flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 pb-12">
-                            <div>
-                                <span className="font-mono text-[10px] text-[#DC2626] font-bold tracking-[0.5em] uppercase mb-4 block animate-pulse">PROTOCOL: MISSION_TRAJECTORY</span>
-                                <h3 className="font-brick text-4xl md:text-7xl text-white uppercase tracking-tighter">DIAGNOSTIC_RECORDS</h3>
-                            </div>
+                {/* ── SECTION 03: REGISTRY LOGS (TRAJECTORY) ── */}
+                <section className="relative z-10 w-full py-40 bg-[#050505]">
+                    <div className="max-w-7xl mx-auto px-6 lg:px-24">
+                        <div className="flex items-center gap-8 mb-24 reveal">
+                             <h3 className="font-brick text-3xl md:text-5xl text-white uppercase tracking-tighter shrink-0">{t('about.trajectory_label')}</h3>
+                             <div className="h-[2px] flex-1 bg-gradient-to-r from-[#DC2626] to-transparent"></div>
+                             <span className="font-mono text-[9px] text-white/20 uppercase tracking-[0.5em] hidden md:block">SEC_RECORDS_772</span>
                         </div>
 
-                        <div className="grid gap-1 border border-white/5 bg-white/5">
+                        <div className="grid md:grid-cols-3 gap-0 border border-white/5 bg-white/5">
                              {trajectoryKeys.map((key, i) => (
                                 <motion.div
                                     key={key}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    whileInView={{ opacity: 1, x: 0 }}
+                                    initial={{ opacity: 0 }}
+                                    whileInView={{ opacity: 1 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 0.6, delay: i * 0.15 }}
-                                    className="bg-black p-10 md:p-20 group hover:bg-[#080808] transition-all flex flex-col md:flex-row items-start gap-12"
+                                    transition={{ duration: 1, delay: i * 0.2 }}
+                                    className="bg-black p-10 border-r border-white/5 group hover:bg-[#DC2626]/[0.01] transition-all min-h-[400px] flex flex-col justify-between"
                                 >
-                                    <div className="w-20 pt-2 shrink-0">
-                                        <span className="font-brick text-4xl text-[#DC2626]/20 group-hover:text-[#DC2626] transition-all duration-1000 uppercase">
-                                            0{(i+1)}
-                                        </span>
-                                    </div>
-                                    <div className="flex-1 space-y-6">
-                                        <div className="space-y-1">
-                                            <span className="font-mono text-[9px] text-white/20 uppercase tracking-widest block">{t(`about.trajectory.${key}.label`)}</span>
-                                            <h4 className="font-brick text-2xl md:text-4xl text-white uppercase tracking-tight group-hover:text-[#DC2626] transition-colors">{t(`about.trajectory.${key}.title`)}</h4>
+                                    <div className="space-y-10">
+                                        <div className="flex justify-between items-start">
+                                            <span className="font-mono text-[8px] text-[#DC2626] border border-[#DC2626]/30 px-1 uppercase tracking-widest">LOG_DATA</span>
+                                            <span className="font-mono text-[8px] text-white/20 tracking-tighter">REF:0x{(i+1)*128}</span>
                                         </div>
-                                        <p className="font-mono text-sm md:text-lg text-[#9CA3AF] leading-relaxed uppercase max-w-2xl">{t(`about.trajectory.${key}.text`)}</p>
+                                        <h4 className="font-brick text-2xl text-white uppercase leading-none group-hover:text-[#DC2626] transition-colors">{t(`about.trajectory.${key}.title`)}</h4>
+                                    </div>
+                                    <div className="space-y-6">
+                                        <p className="font-mono text-[10px] md:text-xs text-[#9CA3AF] leading-relaxed uppercase group-hover:text-white transition-colors">{t(`about.trajectory.${key}.text`)}</p>
+                                        <div className="w-8 h-[1px] bg-white/10 group-hover:bg-[#DC2626] group-hover:w-full transition-all duration-700"></div>
+                                        <span className="block font-mono text-[8px] text-white/10 tracking-[0.3em] uppercase">{t(`about.trajectory.${key}.label`)}</span>
                                     </div>
                                 </motion.div>
                              ))}
                         </div>
 
-                        <div className="max-w-4xl border-l-[12px] border-[#DC2626] pl-12 py-10 reveal">
-                            <h2 className="font-brick text-3xl md:text-5xl lg:text-[4.8rem] text-white uppercase leading-[0.95] tracking-tighter italic">
+                        {/* CLOSING TAG */}
+                        <div className="mt-40 max-w-4xl mx-auto flex flex-col items-center text-center reveal">
+                            <div className="w-12 h-12 rounded-full border border-[#DC2626]/40 flex items-center justify-center mb-12 group hover:border-[#DC2626] transition-all">
+                                 <div className="w-1.5 h-1.5 bg-[#DC2626] animate-ping"></div>
+                            </div>
+                            <h2 className="font-brick text-2xl md:text-4xl lg:text-5xl text-white uppercase leading-[1.1] tracking-tighter">
                                 {t('about.trajectory.closing')}
                             </h2>
-                            <p className="font-mono text-[9px] text-[#DC2626]/50 tracking-[1.5em] uppercase mt-20 font-black">END_OF_TRANSMISSION</p>
+                            <div className="w-[1px] h-20 bg-gradient-to-b from-[#DC2626] to-transparent mt-12 opacity-50"></div>
                         </div>
                     </div>
                 </section>
