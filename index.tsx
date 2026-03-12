@@ -3099,16 +3099,15 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
-            <main className="min-h-screen pt-40 md:pt-44 flex flex-col bg-[#050505] relative overflow-hidden">
+            <main className="min-h-screen pt-32 md:pt-40 flex flex-col bg-[#050505] relative overflow-hidden">
                 <div className="scanline-effect absolute inset-0 opacity-10 pointer-events-none z-0"></div>
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-40"></div>
-                <div className="absolute top-[22rem] right-[-12rem] w-[30rem] h-[30rem] bg-[#DC2626]/8 rounded-full blur-[140px] pointer-events-none z-0"></div>
 
+                {/* ── SECTION 01: THE ORIGIN (HERO) ── */}
                 <section className="relative px-6 md:px-12 lg:px-24 pb-24 md:pb-32 z-10 overflow-hidden">
                     <ParticleBackground reactToMouse={false} />
                     <div className="absolute inset-0 z-[1] opacity-[0.12] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
-                    <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle_at_top,rgba(220,38,38,0.14),transparent_38%)] pointer-events-none"></div>
-
+                    
                     <motion.div
                         initial={{ opacity: 0, y: -10 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -3124,229 +3123,100 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                                 <span className="text-[#9CA3AF]">ACCESS_GRANTED // <span className="text-white">{t('about.est')}</span></span>
                             </p>
                         </div>
-                        <p className="font-mono text-[10px] md:text-xs tracking-[0.35em] text-[#9CA3AF]/60 uppercase">
-                            {t('about.manifesto_label')}
-                        </p>
                     </motion.div>
 
-                    <div className="relative z-10 max-w-7xl mx-auto grid xl:grid-cols-[minmax(0,1.05fr)_minmax(320px,420px)] gap-12 xl:gap-16 pt-12 md:pt-16 items-center">
-                        <div className="space-y-10">
-                            <motion.div
-                                initial={{ opacity: 0, y: 18 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ duration: 1.1, delay: 0.08, ease: "easeOut" }}
-                                className="space-y-5"
-                            >
-                                <span className="inline-flex items-center gap-3 border border-white/10 bg-white/[0.03] px-4 py-2 font-mono text-[10px] tracking-[0.35em] uppercase text-white/60">
-                                    <span className="relative flex h-2 w-2">
-                                        <span className="absolute inline-flex h-full w-full rounded-full bg-[#DC2626]/45 animate-ping"></span>
-                                        <span className="relative inline-flex h-2 w-2 rounded-full bg-[#DC2626]"></span>
-                                    </span>
-                                    {t('about.manifesto_label')}
-                                </span>
-                            </motion.div>
-
-                            <motion.div
-                                initial={{ opacity: 0, x: -20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 1.15, delay: 0.12, ease: "easeOut" }}
-                                className="space-y-6"
-                            >
-                                <h2 className="font-brick text-[3.2rem] leading-[0.9] text-white uppercase sm:text-[4.6rem] lg:text-[6.2rem] xl:text-[7rem]">
-                                    {t('about.title_primary')}
-                                    <span className="block text-[#DC2626] drop-shadow-[0_0_28px_rgba(220,38,38,0.28)]">{t('about.title_highlight')}</span>
+                    <div className="relative z-10 max-w-7xl mx-auto grid lg:grid-cols-[1fr_auto] gap-12 pt-16 items-center">
+                        <div className="space-y-12">
+                            <div className="space-y-6">
+                                <h2 className="font-brick text-[3.5rem] md:text-[5.5rem] leading-[0.9] text-white uppercase tracking-tight">
+                                    {t('about.title_primary')}<br />
+                                    <span className="text-[#DC2626] drop-shadow-[0_0_30px_rgba(220,38,38,0.3)]">{t('about.title_highlight')}</span>
                                 </h2>
-                                <p className="max-w-2xl font-mono text-sm md:text-base text-[#9CA3AF] leading-relaxed">
-                                    {t('about.manifesto_body')}
-                                </p>
-                            </motion.div>
+                            </div>
 
-                            <div className="grid gap-4 max-w-3xl">
+                            <div className="grid gap-6 max-w-2xl">
                                 {aboutLineKeys.map((key, index) => (
                                     <motion.div
                                         key={key}
-                                        initial={{ opacity: 0, y: 24 }}
-                                        whileInView={{ opacity: 1, y: 0 }}
-                                        viewport={{ once: true, margin: "-40px" }}
-                                        transition={{ duration: 1.2, delay: index * 0.16, ease: "easeOut" }}
-                                        whileHover={{ y: -2 }}
-                                        className="group relative overflow-hidden border border-white/10 bg-white/[0.025] px-5 py-5 md:px-6 md:py-6 transition-colors duration-500 hover:border-[#DC2626]/45 hover:bg-white/[0.04]"
+                                        initial={{ opacity: 0, x: -20 }}
+                                        whileInView={{ opacity: 1, x: 0 }}
+                                        viewport={{ once: true }}
+                                        transition={{ duration: 0.8, delay: index * 0.2 }}
+                                        className="flex items-start gap-6 group"
                                     >
-                                        <div className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-[#DC2626]/80 to-transparent opacity-30 transition-opacity duration-500 group-hover:opacity-100"></div>
-                                        <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/8 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100"></div>
-                                        <div className="flex items-start gap-4 md:gap-6">
-                                            <span className="mt-0.5 shrink-0 font-mono text-[10px] md:text-xs tracking-[0.45em] text-[#DC2626]">
-                                                [{key}]
-                                            </span>
-                                            <p className="font-mono text-sm md:text-base leading-relaxed text-white/78 transition-colors duration-300 group-hover:text-white">
-                                                {t(`about.lines.${key}`)}
-                                            </p>
-                                        </div>
+                                        <span className="font-mono text-[10px] text-[#DC2626] border border-[#DC2626]/30 px-2 py-1">REG_{key}</span>
+                                        <p className="font-mono text-sm md:text-base text-[#9CA3AF] leading-relaxed group-hover:text-white transition-colors">
+                                            {t(`about.lines.${key}`)}
+                                        </p>
                                     </motion.div>
                                 ))}
                             </div>
-
-                            <motion.p
-                                initial={{ opacity: 0, y: 16 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-40px" }}
-                                transition={{ duration: 1.1, delay: 0.2, ease: "easeOut" }}
-                                className="max-w-2xl font-editorial text-[11px] md:text-xs uppercase tracking-[0.26em] text-white/40"
-                            >
-                                {t('about.manifesto_close')}
-                            </motion.p>
                         </div>
 
-                        <motion.aside
-                            initial={{ opacity: 0, x: 24 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ duration: 1.15, delay: 0.16, ease: "easeOut" }}
-                            className="relative mx-auto w-full max-w-[420px] overflow-hidden border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))] p-6 md:p-8"
-                        >
-                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(220,38,38,0.2),transparent_36%)] pointer-events-none"></div>
-                            <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#DC2626]/70 to-transparent"></div>
-
-                            <div className="relative z-10 flex items-start justify-between gap-4 border-b border-white/10 pb-6">
-                                <div className="space-y-2">
-                                    <span className="font-mono text-[10px] tracking-[0.42em] uppercase text-[#DC2626]/85">
-                                        {t('about.manifesto_label')}
-                                    </span>
-                                    <p className="max-w-[15rem] font-mono text-xs leading-relaxed text-white/45">
-                                        {t('about.manifesto_pull')}
-                                    </p>
-                                </div>
-                                <span className="font-mono text-[10px] tracking-[0.35em] uppercase text-white/35">
-                                    {t('about.est')}
-                                </span>
-                            </div>
-
-                            <div className="relative z-10 flex flex-col items-center py-10">
-                                <motion.div
-                                    className="relative group/monolith cursor-default"
-                                    initial={{ opacity: 0, scale: 0.95 }}
-                                    animate={{ opacity: 1, scale: 1 }}
-                                    whileHover={{ scale: 1.015 }}
-                                    transition={{ duration: 1.8, ease: "easeOut" }}
-                                >
-                                    <div className="monolith-structure w-[138px] h-[276px] md:w-[156px] md:h-[312px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
-                                        <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
-                                        <div className="centered-layer aura-atmos pointer-events-none opacity-75 group-hover/monolith:opacity-100 transition-opacity duration-1000" style={{ width: '440px', height: '440px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.18) 0%, transparent 62%)', filter: 'blur(34px)' }}></div>
-                                        <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-90 mix-blend-screen group-hover/monolith:opacity-100 transition-opacity duration-700" style={{ width: '440px', height: '440px', background: 'radial-gradient(circle at center, rgba(220,38,38,0.76) 0%, rgba(153,0,0,0.14) 33%, transparent 54%)', filter: 'blur(20px)' }}></div>
-                                        <div className="centered-layer core-atmos animate-breathe pointer-events-none" style={{ width: '54px', height: '54px', filter: 'blur(10px)', background: 'radial-gradient(circle, rgba(220,38,38,1) 0%, rgba(220,38,38,0.45) 42%, transparent 82%)' }}></div>
-                                        <div className="absolute inset-0 border border-white/5 opacity-60 pointer-events-none z-10 rounded-[2px]"></div>
-                                    </div>
-                                </motion.div>
-                            </div>
-
-                            <motion.blockquote
-                                initial={{ opacity: 0, y: 18 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true, margin: "-40px" }}
-                                transition={{ duration: 1.1, delay: 0.2, ease: "easeOut" }}
-                                className="relative z-10 border-t border-white/10 pt-6"
-                            >
-                                <p className="font-brick text-2xl leading-[1.08] text-white">
-                                    {t('about.manifesto_pull')}
-                                </p>
-                            </motion.blockquote>
-                        </motion.aside>
+                        {/* MINI MONOLITH DECOR */}
+                        <div className="hidden lg:flex items-center justify-center pr-12">
+                             <div className="monolith-structure w-[100px] h-[200px] rounded-[1px] relative">
+                                <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 opacity-50 rounded-[1px]"></div>
+                                <div className="centered-layer core-atmos animate-thinking scale-75"></div>
+                             </div>
+                        </div>
                     </div>
                 </section>
 
-                <section className="relative w-full border-t border-white/5 py-24 md:py-32 bg-[#050505] z-20 overflow-hidden">
-                    <div className="absolute inset-0 z-[2] opacity-20 pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
-                    <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle,transparent_40%,rgba(5,5,5,0.92)_100%)] pointer-events-none"></div>
-                    <div className="absolute -bottom-44 left-[-12%] w-[95vw] h-[70vh] bg-red-700/10 blur-[180px] pointer-events-none z-[3] origin-left" style={{ animation: 'red-emanation 9.5s ease-in-out infinite' }}></div>
-
-                    <div className="max-w-6xl mx-auto px-6 md:px-12 relative z-10 flex flex-col gap-20">
-                        <motion.div
-                            initial={{ opacity: 0, y: 18 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-60px" }}
-                            transition={{ duration: 1.1, ease: "easeOut" }}
-                            className="flex max-w-4xl flex-col items-center gap-5 self-center text-center"
-                        >
-                            <div className="flex items-center gap-3">
-                                <span className="relative flex h-3 w-3">
-                                    <span className="absolute inline-flex h-full w-full rounded-full bg-[#DC2626]/45 animate-ping"></span>
-                                    <span className="relative inline-flex h-3 w-3 rounded-full bg-[#DC2626]"></span>
-                                </span>
-                                <span className="font-mono text-[10px] tracking-[0.45em] uppercase text-[#DC2626]/85">
-                                    {t('about.trajectory_label')}
-                                </span>
-                            </div>
-                            <h2 className="font-brick text-4xl md:text-6xl text-white uppercase leading-none">
+                {/* ── SECTION 02: THE MANIFESTO ── */}
+                <section className="relative w-full border-y border-white/5 py-32 bg-black overflow-hidden">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.03)_0%,transparent_70%)]"></div>
+                    <div className="max-w-5xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
+                        <span className="font-mono text-[10px] tracking-[0.6em] text-[#DC2626] uppercase mb-12 animate-pulse">{t('about.manifesto_label')}</span>
+                        
+                        <div className="space-y-12">
+                            <h2 className="font-brick text-4xl md:text-6xl text-white uppercase leading-[1.0] max-w-4xl mx-auto drop-shadow-[0_0_20px_rgba(255,255,255,0.05)]">
                                 {t('about.manifesto_pull')}
                             </h2>
-                            <p className="max-w-2xl font-editorial text-[11px] md:text-xs uppercase tracking-[0.28em] text-white/45">
-                                {t('about.trajectory.closing')}
+                            <p className="font-mono text-base md:text-xl text-[#9CA3AF] leading-relaxed max-w-3xl mx-auto">
+                                {t('about.manifesto_body')}
                             </p>
-                        </motion.div>
+                            <div className="w-16 h-[1px] bg-[#DC2626] mx-auto shadow-[0_0_8px_#DC2626]"></div>
+                            <p className="font-mono text-sm md:text-base text-white/50 leading-relaxed max-w-2xl mx-auto">
+                                {t('about.manifesto_close')}
+                            </p>
+                        </div>
+                    </div>
+                </section>
 
-                        <motion.div
-                            initial={{ opacity: 0, y: 24 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-40px" }}
-                            transition={{ duration: 1.2, ease: "easeOut" }}
-                            className="grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]"
-                        >
-                            <div className="border border-white/10 bg-white/[0.03] p-6 md:p-8">
-                                <span className="font-mono text-[10px] tracking-[0.45em] uppercase text-[#DC2626]/85">
-                                    {t('about.manifesto_label')}
-                                </span>
-                                <p className="mt-6 font-mono text-sm md:text-base leading-[1.9] text-[#9CA3AF]">
-                                    {t('about.manifesto_body')}
-                                </p>
-                            </div>
-                            <div className="border border-white/10 bg-black/20 p-6 md:p-8">
-                                <p className="font-mono text-sm md:text-base leading-[1.9] text-white/78">
-                                    {t('about.manifesto_close')}
-                                </p>
-                            </div>
-                        </motion.div>
+                {/* ── SECTION 03: NEURAL LOGS (TRAJECTORY) ── */}
+                <section className="relative w-full py-32 bg-[#050505] overflow-hidden">
+                    <div className="max-w-6xl mx-auto px-6 relative z-10">
+                        <div className="flex items-center gap-4 mb-20">
+                            <div className="h-[1px] flex-1 bg-white/10"></div>
+                            <span className="font-mono text-[10px] tracking-[0.4em] text-white/40 uppercase">{t('about.trajectory_label')}</span>
+                            <div className="h-[1px] w-12 bg-[#DC2626]"></div>
+                        </div>
 
-                        <div className="grid gap-4 lg:grid-cols-3">
+                        <div className="grid gap-1 md:grid-cols-3">
                             {trajectoryKeys.map((key, index) => (
-                                <motion.article
+                                <motion.div
                                     key={key}
-                                    initial={{ opacity: 0, y: 22 }}
+                                    initial={{ opacity: 0, y: 20 }}
                                     whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true, margin: "-40px" }}
-                                    transition={{ duration: 1.05, delay: index * 0.12, ease: "easeOut" }}
-                                    className="group relative min-h-[280px] overflow-hidden border border-white/10 bg-white/[0.02] p-6 md:p-7"
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 0.6, delay: index * 0.1 }}
+                                    className="bg-white/[0.01] border border-white/5 p-8 group hover:bg-[#DC2626]/5 hover:border-[#DC2626]/40 transition-all duration-500 flex flex-col justify-between min-h-[300px]"
                                 >
-                                    <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#DC2626]/55 to-transparent opacity-70"></div>
-                                    <span className="absolute right-5 top-5 font-brick text-6xl text-white/[0.04] transition-colors duration-500 group-hover:text-[#DC2626]/[0.09]">
-                                        {String(index + 1).padStart(2, '0')}
-                                    </span>
-                                    <div className="relative z-10 flex h-full flex-col justify-between gap-8">
-                                        <div>
-                                            <p className="font-mono text-[10px] tracking-[0.35em] uppercase text-[#DC2626]/80">
-                                                {t(`about.trajectory.${key}.label`)}
-                                            </p>
-                                            <h3 className="mt-6 font-brick text-3xl text-white leading-tight uppercase group-hover:text-[#DC2626] transition-colors">
-                                                {t(`about.trajectory.${key}.title`)}
-                                            </h3>
-                                        </div>
-                                        <p className="font-mono text-sm text-[#9CA3AF] leading-relaxed">
-                                            {t(`about.trajectory.${key}.text`)}
-                                        </p>
+                                    <div>
+                                        <span className="font-mono text-[9px] text-[#DC2626] block mb-8 opacity-60 group-hover:opacity-100 transition-opacity tracking-widest">{t(`about.trajectory.${key}.label`)}</span>
+                                        <h3 className="font-brick text-2xl md:text-3xl text-white mb-6 group-hover:text-[#DC2626] transition-colors leading-none uppercase">{t(`about.trajectory.${key}.title`)}</h3>
                                     </div>
-                                </motion.article>
+                                    <p className="font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed group-hover:text-white/90 transition-colors">{t(`about.trajectory.${key}.text`)}</p>
+                                </motion.div>
                             ))}
                         </div>
 
-                        <motion.div
-                            initial={{ opacity: 0, y: 18 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true, margin: "-40px" }}
-                            transition={{ duration: 1.15, delay: 0.15, ease: "easeOut" }}
-                            className="max-w-3xl self-center border-t border-white/10 pt-10 text-center"
-                        >
-                            <p className="font-editorial text-[11px] md:text-xs uppercase tracking-[0.24em] text-white/42">
+                        <div className="mt-32 border-l border-[#DC2626] pl-10 py-6 reveal">
+                            <p className="font-brick text-2xl md:text-4xl text-white uppercase max-w-3xl leading-[1.1] tracking-tight">
                                 {t('about.trajectory.closing')}
                             </p>
-                        </motion.div>
+                        </div>
                     </div>
                 </section>
             </main>
