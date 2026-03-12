@@ -3095,127 +3095,119 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-[60] flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
             <main className="min-h-screen pt-32 md:pt-40 flex flex-col bg-[#050505] relative overflow-hidden">
-                <div className="scanline-effect absolute inset-0 opacity-10 pointer-events-none z-0"></div>
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-40"></div>
+                <div className="scanline-effect absolute inset-0 opacity-[0.03] pointer-events-none z-0"></div>
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 opacity-40"></div>
 
-                {/* ── SECTION 01: THE ORIGIN (HERO) ── */}
-                <section className="relative px-6 md:px-12 lg:px-24 pb-24 md:pb-32 z-10 overflow-hidden">
-                    <ParticleBackground reactToMouse={false} />
-                    <div className="absolute inset-0 z-[1] opacity-[0.12] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')]"></div>
+                {/* ── SECTION 01: CINEMATIC OPENING ── */}
+                <section className="relative w-full px-6 md:px-12 lg:px-24 pt-12 pb-32 z-10">
+                    <ParticleBackground reactToMouse={true} />
                     
-                    <motion.div
-                        initial={{ opacity: 0, y: -10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 1.2, ease: "easeOut" }}
-                        className="relative z-10 w-full flex flex-col md:flex-row md:items-end justify-between gap-6 border-b border-white/10 pb-8"
-                    >
-                        <div className="space-y-3">
-                            <h1 className="pt-1 text-3xl md:text-5xl leading-[1.05] font-brick text-white mb-4">
-                                {originLead}_<span className="text-[#DC2626]">{originAccent}</span>
-                            </h1>
-                            <p className="font-mono text-[10px] md:text-xs tracking-widest max-w-xl animate-system-input">
-                                <span className="text-[#DC2626]">&gt;&gt; </span>
-                                <span className="text-[#9CA3AF]">ACCESS_GRANTED // <span className="text-white">{t('about.est')}</span></span>
-                            </p>
-                        </div>
-                    </motion.div>
-
-                    <div className="relative z-10 max-w-7xl mx-auto grid lg:grid-cols-[1fr_auto] gap-12 pt-16 items-center">
-                        <div className="space-y-12">
-                            <div className="space-y-6">
-                                <h2 className="font-brick text-[3.5rem] md:text-[5.5rem] leading-[0.9] text-white uppercase tracking-tight">
-                                    {t('about.title_primary')}<br />
-                                    <span className="text-[#DC2626] drop-shadow-[0_0_30px_rgba(220,38,38,0.3)]">{t('about.title_highlight')}</span>
-                                </h2>
-                            </div>
-
-                            <div className="grid gap-6 max-w-2xl">
-                                {aboutLineKeys.map((key, index) => (
-                                    <motion.div
-                                        key={key}
-                                        initial={{ opacity: 0, x: -20 }}
-                                        whileInView={{ opacity: 1, x: 0 }}
-                                        viewport={{ once: true }}
-                                        transition={{ duration: 0.8, delay: index * 0.2 }}
-                                        className="flex items-start gap-6 group"
-                                    >
-                                        <span className="font-mono text-[10px] text-[#DC2626] border border-[#DC2626]/30 px-2 py-1">REG_{key}</span>
-                                        <p className="font-mono text-sm md:text-base text-[#9CA3AF] leading-relaxed group-hover:text-white transition-colors">
-                                            {t(`about.lines.${key}`)}
-                                        </p>
-                                    </motion.div>
-                                ))}
-                            </div>
-                        </div>
-
-                        {/* MINI MONOLITH DECOR */}
-                        <div className="hidden lg:flex items-center justify-center pr-12">
-                             <div className="monolith-structure w-[100px] h-[200px] rounded-[1px] relative">
-                                <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 opacity-50 rounded-[1px]"></div>
-                                <div className="centered-layer core-atmos animate-thinking scale-75"></div>
+                    <div className="max-w-7xl mx-auto flex flex-col gap-16 md:gap-24 relative z-20">
+                        {/* Title Unit: Top Heavy, Precise */}
+                        <div className="border-l border-[#DC2626]/40 pl-6 md:pl-10 space-y-6 reveal">
+                             <div className="flex items-center gap-3">
+                                <span className="font-mono text-[9px] text-[#DC2626] tracking-[0.4em] uppercase border border-[#DC2626]/30 px-2 py-0.5">AUTH_REQ</span>
+                                <div className="h-px w-12 bg-white/10"></div>
+                                <span className="font-mono text-[9px] text-white/30 tracking-[0.4em] uppercase">{t('about.est')}</span>
                              </div>
+                             <h1 className="font-brick text-[3rem] md:text-[6rem] lg:text-[8rem] leading-[0.82] text-white uppercase tracking-tighter">
+                                {t('about.title_primary')}<br />
+                                <span className="text-[#DC2626] drop-shadow-[0_0_40px_rgba(220,38,38,0.4)]">{t('about.title_highlight')}</span>
+                             </h1>
+                        </div>
+
+                        {/* Staggered Facts */}
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-1 relative z-20">
+                             {aboutLineKeys.map((key, i) => (
+                                <motion.div
+                                    key={key}
+                                    initial={{ opacity: 0, y: 15 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ duration: 1, delay: 0.3 + (i * 0.15) }}
+                                    className="p-8 border border-white/5 bg-[#080808]/40 backdrop-blur-sm group hover:border-[#DC2626]/40 transition-all duration-700 min-h-[220px] flex flex-col justify-between"
+                                >
+                                    <span className="font-mono text-[9px] text-white/20 tracking-widest block uppercase border-b border-white/5 pb-4 mb-4 group-hover:text-[#DC2626]/60 transition-colors">DIRECTIVE_{key}</span>
+                                    <p className="font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed group-hover:text-white transition-colors">{t(`about.lines.${key}`)}</p>
+                                </motion.div>
+                             ))}
                         </div>
                     </div>
                 </section>
 
-                {/* ── SECTION 02: THE MANIFESTO ── */}
-                <section className="relative w-full border-y border-white/5 py-32 bg-black overflow-hidden">
-                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.03)_0%,transparent_70%)]"></div>
-                    <div className="max-w-5xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
-                        <span className="font-mono text-[10px] tracking-[0.6em] text-[#DC2626] uppercase mb-12 animate-pulse">{t('about.manifesto_label')}</span>
+                {/* ── SECTION 02: THE TEXTUAL CENTERPIECE ── */}
+                <section className="relative w-full border-y border-white/5 py-40 md:py-60 bg-[#020202] z-10 overflow-hidden">
+                    {/* Atmospheric Center Glow */}
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vh] bg-[radial-gradient(circle,rgba(220,38,38,0.04)_0%,transparent_60%)] pointer-events-none"></div>
+                    
+                    <div className="max-w-4xl mx-auto px-6 relative z-20 text-center flex flex-col items-center">
+                        <div className="w-16 h-[2px] bg-[#DC2626] mb-12 shadow-[0_0_15px_#DC2626]"></div>
                         
-                        <div className="space-y-12">
-                            <h2 className="font-brick text-4xl md:text-6xl text-white uppercase leading-[1.0] max-w-4xl mx-auto drop-shadow-[0_0_20px_rgba(255,255,255,0.05)]">
-                                {t('about.manifesto_pull')}
-                            </h2>
-                            <p className="font-mono text-base md:text-xl text-[#9CA3AF] leading-relaxed max-w-3xl mx-auto">
+                        <h2 className="font-brick text-[2.2rem] md:text-[3.8rem] lg:text-[4.5rem] leading-[1.0] text-white uppercase mb-16 tracking-tight">
+                            {t('about.manifesto_pull')}
+                        </h2>
+                        
+                        <div className="space-y-12 max-w-2xl mx-auto">
+                            <p className="font-editorial text-lg md:text-2xl text-white/80 leading-relaxed tracking-wide">
                                 {t('about.manifesto_body')}
                             </p>
-                            <div className="w-16 h-[1px] bg-[#DC2626] mx-auto shadow-[0_0_8px_#DC2626]"></div>
-                            <p className="font-mono text-sm md:text-base text-white/50 leading-relaxed max-w-2xl mx-auto">
+                            
+                            <p className="font-mono text-xs md:text-sm text-white/40 tracking-[0.2em] uppercase max-w-xl mx-auto leading-loose border-t border-white/10 pt-12">
                                 {t('about.manifesto_close')}
                             </p>
                         </div>
                     </div>
                 </section>
 
-                {/* ── SECTION 03: NEURAL LOGS (TRAJECTORY) ── */}
-                <section className="relative w-full py-32 bg-[#050505] overflow-hidden">
-                    <div className="max-w-6xl mx-auto px-6 relative z-10">
-                        <div className="flex items-center gap-4 mb-20">
-                            <div className="h-[1px] flex-1 bg-white/10"></div>
-                            <span className="font-mono text-[10px] tracking-[0.4em] text-white/40 uppercase">{t('about.trajectory_label')}</span>
-                            <div className="h-[1px] w-12 bg-[#DC2626]"></div>
+                {/* ── SECTION 03: REGISTRY LOGS (TRAJECTORY) ── */}
+                <section className="relative w-full py-40 bg-[#050505] z-10">
+                    <div className="max-w-7xl mx-auto px-6 lg:px-24">
+                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-32 border-b border-white/10 pb-16">
+                            <div className="space-y-4">
+                                <span className="font-mono text-[10px] tracking-[0.6em] text-[#DC2626] uppercase block animate-pulse">{t('about.trajectory_label')}</span>
+                                <h3 className="font-brick text-4xl md:text-6xl text-white uppercase tracking-tighter">DATA_HISTORY</h3>
+                            </div>
+                            <div className="md:text-right">
+                                <p className="font-mono text-[9px] text-white/20 uppercase tracking-[0.3em]">SECURE_STORAGE // NODE_772</p>
+                            </div>
                         </div>
 
-                        <div className="grid gap-1 md:grid-cols-3">
-                            {trajectoryKeys.map((key, index) => (
+                        <div className="space-y-px bg-white/5 border border-white/5 overflow-hidden rounded-sm">
+                             {trajectoryKeys.map((key, i) => (
                                 <motion.div
                                     key={key}
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
+                                    initial={{ opacity: 0, x: -10 }}
+                                    whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                                    className="bg-white/[0.01] border border-white/5 p-8 group hover:bg-[#DC2626]/5 hover:border-[#DC2626]/40 transition-all duration-500 flex flex-col justify-between min-h-[300px]"
+                                    transition={{ duration: 0.8, delay: i * 0.15 }}
+                                    className="bg-black p-10 md:p-16 flex flex-col md:flex-row gap-10 md:items-start group hover:bg-[#DC2626]/[0.02] transition-colors"
                                 >
-                                    <div>
-                                        <span className="font-mono text-[9px] text-[#DC2626] block mb-8 opacity-60 group-hover:opacity-100 transition-opacity tracking-widest">{t(`about.trajectory.${key}.label`)}</span>
-                                        <h3 className="font-brick text-2xl md:text-3xl text-white mb-6 group-hover:text-[#DC2626] transition-colors leading-none uppercase">{t(`about.trajectory.${key}.title`)}</h3>
+                                    <div className="md:w-1/4">
+                                        <span className="font-brick text-6xl text-white/5 group-hover:text-[#DC2626]/20 transition-colors duration-1000 uppercase">
+                                            0{(i+1)}
+                                        </span>
                                     </div>
-                                    <p className="font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed group-hover:text-white/90 transition-colors">{t(`about.trajectory.${key}.text`)}</p>
+                                    <div className="md:w-3/4 space-y-6">
+                                        <div className="flex items-center gap-4">
+                                            <div className="w-2 h-2 rounded-full bg-[#DC2626] shadow-[0_0_10px_#DC2626] animate-pulse"></div>
+                                            <h4 className="font-brick text-2xl md:text-4xl text-white uppercase tracking-tight group-hover:text-[#DC2626] transition-colors">{t(`about.trajectory.${key}.title`)}</h4>
+                                        </div>
+                                        <p className="font-mono text-sm md:text-lg text-[#9CA3AF] leading-relaxed max-w-2xl">{t(`about.trajectory.${key}.text`)}</p>
+                                        <span className="inline-block font-mono text-[9px] tracking-widest text-[#DC2626]/40 uppercase pt-2">{t(`about.trajectory.${key}.label`)}</span>
+                                    </div>
                                 </motion.div>
-                            ))}
+                             ))}
                         </div>
 
-                        <div className="mt-32 border-l border-[#DC2626] pl-10 py-6 reveal">
-                            <p className="font-brick text-2xl md:text-4xl text-white uppercase max-w-3xl leading-[1.1] tracking-tight">
+                        <div className="mt-40 max-w-3xl border-l-2 border-[#DC2626] pl-12 py-8 reveal">
+                            <h2 className="font-brick text-3xl md:text-5xl lg:text-6xl text-white uppercase leading-none tracking-tighter drop-shadow-xl">
                                 {t('about.trajectory.closing')}
-                            </p>
+                            </h2>
                         </div>
                     </div>
                 </section>
