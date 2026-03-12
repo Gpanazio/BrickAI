@@ -3089,125 +3089,165 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
     const { t } = useTranslation();
     const aboutLineKeys = ['01', '02', '03'] as const;
     const trajectoryKeys = ['r001', 'r002', 'r003'] as const;
-    const [originLead, ...originRest] = t('about.origin').split('_');
-    const originAccent = originRest.join('_');
 
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-[60] flex items-center gap-2 group mix-blend-difference">
+            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-[100] flex items-center gap-2 group mix-blend-difference">
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
-            <main className="min-h-screen pt-32 md:pt-40 flex flex-col bg-[#050505] relative overflow-hidden">
-                <div className="scanline-effect absolute inset-0 opacity-[0.03] pointer-events-none z-0"></div>
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 opacity-40"></div>
+            <main className="min-h-screen bg-[#050505] flex flex-col items-center pt-24 md:pt-32 relative overflow-hidden">
+                {/* ── BACKGROUND: DARK SYMMETRY ── */}
+                <div className="absolute inset-0 z-0 bg-[#050505]">
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(10,10,10,1)_0%,rgba(0,0,0,1)_100%)]"></div>
+                    <div className="absolute inset-0 opacity-[0.03] pointer-events-none z-0" style={{ backgroundImage: 'linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '100px 100px' }}></div>
+                </div>
 
-                {/* ── SECTION 01: CINEMATIC OPENING ── */}
-                <section className="relative w-full px-6 md:px-12 lg:px-24 pt-12 pb-32 z-10">
-                    <ParticleBackground reactToMouse={true} />
+                {/* ── SECTION 01: THE ARCHIVE (HERO) ── */}
+                <section className="relative z-10 w-full min-h-screen flex flex-col items-center justify-center px-6 border-b border-white/5 pb-20">
                     
-                    <div className="max-w-7xl mx-auto flex flex-col gap-16 md:gap-24 relative z-20">
-                        {/* Title Unit: Top Heavy, Precise */}
-                        <div className="border-l border-[#DC2626]/40 pl-6 md:pl-10 space-y-6 reveal">
-                             <div className="flex items-center gap-3">
-                                <span className="font-mono text-[9px] text-[#DC2626] tracking-[0.4em] uppercase border border-[#DC2626]/30 px-2 py-0.5">AUTH_REQ</span>
-                                <div className="h-px w-12 bg-white/10"></div>
-                                <span className="font-mono text-[9px] text-white/30 tracking-[0.4em] uppercase">{t('about.est')}</span>
+                    {/* HAL EYE ELEMENT */}
+                    <div className="relative mb-20 group reveal">
+                        <div className="w-[180px] h-[180px] md:w-[240px] md:h-[240px] rounded-full bg-black border-[12px] border-[#1a1a1a] flex items-center justify-center relative shadow-[0_0_100px_rgba(0,0,0,1)] overflow-hidden">
+                             {/* LENS SHINE */}
+                             <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.1)_0%,transparent_50%)] z-20 pointer-events-none"></div>
+                             
+                             {/* THE CORE GLOW */}
+                             <div className="w-[120px] h-[120px] md:w-[160px] md:h-[160px] rounded-full bg-[#3d0000] relative flex items-center justify-center">
+                                <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(220,38,38,0.8)_0%,transparent_70%)] animate-pulse"></div>
+                                <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-[#ff0000] shadow-[0_0_40px_#ff0000] blur-[1px] relative z-10">
+                                     <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white blur-[2px] opacity-40"></div>
+                                </div>
                              </div>
-                             <h1 className="font-brick text-[3rem] md:text-[6rem] lg:text-[8rem] leading-[0.82] text-white uppercase tracking-tighter">
-                                {t('about.title_primary')}<br />
-                                <span className="text-[#DC2626] drop-shadow-[0_0_40px_rgba(220,38,38,0.4)]">{t('about.title_highlight')}</span>
-                             </h1>
+
+                             {/* SCANLINE / DATA GRID Overlay */}
+                             <div className="absolute inset-0 opacity-20 z-20 pointer-events-none bg-[url('https://grainy-gradients.vercel.app/noise.svg')] mix-blend-overlay"></div>
+                             <div className="absolute top-0 left-0 w-full h-[1px] bg-[#DC2626] opacity-30 animate-scan z-30"></div>
                         </div>
 
-                        {/* Staggered Facts */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-1 relative z-20">
+                        {/* Clinical Labels */}
+                        <div className="absolute -top-12 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-50">
+                            <span className="font-mono text-[9px] text-[#DC2626] tracking-[0.4em] uppercase font-bold">BRICK_NEURAL_UNIT_9000</span>
+                            <div className="w-px h-8 bg-gradient-to-t from-[#DC2626] to-transparent"></div>
+                        </div>
+                    </div>
+
+                    <div className="text-center max-w-5xl space-y-12">
+                        <div className="space-y-4">
+                            <h1 className="font-brick text-[3.5rem] md:text-[6rem] lg:text-[8.5rem] leading-[0.8] text-white uppercase tracking-tighter drop-shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                                {t('about.title_primary')}<br />
+                                <span className="text-[#DC2626]">{t('about.title_highlight')}</span>
+                            </h1>
+                            <div className="flex items-center justify-center gap-6 pt-4 opacity-40">
+                                <span className="font-mono text-[10px] tracking-[0.6em] text-white">00_DNA</span>
+                                <div className="w-8 h-[2px] bg-[#DC2626]"></div>
+                                <span className="font-mono text-[10px] tracking-[0.6em] text-white">99_LOGS</span>
+                            </div>
+                        </div>
+
+                        {/* Staggered Directives as Data Streams */}
+                        <div className="flex flex-col md:flex-row justify-center items-stretch gap-1 pt-12">
                              {aboutLineKeys.map((key, i) => (
                                 <motion.div
                                     key={key}
-                                    initial={{ opacity: 0, y: 15 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
+                                    initial={{ opacity: 0, scale: 0.98 }}
+                                    whileInView={{ opacity: 1, scale: 1 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 1, delay: 0.3 + (i * 0.15) }}
-                                    className="p-8 border border-white/5 bg-[#080808]/40 backdrop-blur-sm group hover:border-[#DC2626]/40 transition-all duration-700 min-h-[220px] flex flex-col justify-between"
+                                    transition={{ duration: 0.6, delay: 0.4 + (i * 0.1) }}
+                                    className="flex-1 bg-white/[0.03] border border-white/5 p-10 group hover:bg-white/[0.06] transition-colors relative"
                                 >
-                                    <span className="font-mono text-[9px] text-white/20 tracking-widest block uppercase border-b border-white/5 pb-4 mb-4 group-hover:text-[#DC2626]/60 transition-colors">DIRECTIVE_{key}</span>
-                                    <p className="font-mono text-xs md:text-sm text-[#9CA3AF] leading-relaxed group-hover:text-white transition-colors">{t(`about.lines.${key}`)}</p>
+                                    <div className="absolute top-0 left-0 w-1 h-full bg-[#DC2626]/20 group-hover:bg-[#DC2626] transition-all"></div>
+                                    <p className="font-mono text-xs md:text-sm text-[#9CA3AF] leading-loose uppercase tracking-wide group-hover:text-white transition-colors">
+                                        {t(`about.lines.${key}`)}
+                                    </p>
+                                    <span className="absolute bottom-4 right-6 font-mono text-[8px] text-white/10 uppercase font-bold tracking-widest">SEQ_ENTRY_{key}</span>
                                 </motion.div>
                              ))}
                         </div>
                     </div>
                 </section>
 
-                {/* ── SECTION 02: THE TEXTUAL CENTERPIECE ── */}
-                <section className="relative w-full border-y border-white/5 py-40 md:py-60 bg-[#020202] z-10 overflow-hidden">
-                    {/* Atmospheric Center Glow */}
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vh] bg-[radial-gradient(circle,rgba(220,38,38,0.04)_0%,transparent_60%)] pointer-events-none"></div>
+                {/* ── SECTION 02: THE CENTER CORE (MANIFESTO) ── */}
+                <section className="relative z-10 w-full min-h-[80vh] flex flex-col items-center justify-center bg-white text-black py-40 overflow-hidden">
+                    {/* HAL-style Diagnostic Grid background */}
+                    <div className="absolute inset-0 opacity-[0.04] pointer-events-none" style={{ backgroundImage: 'linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px)', backgroundSize: '40px 40px' }}></div>
                     
-                    <div className="max-w-4xl mx-auto px-6 relative z-20 text-center flex flex-col items-center">
-                        <div className="w-16 h-[2px] bg-[#DC2626] mb-12 shadow-[0_0_15px_#DC2626]"></div>
-                        
-                        <h2 className="font-brick text-[2.2rem] md:text-[3.8rem] lg:text-[4.5rem] leading-[1.0] text-white uppercase mb-16 tracking-tight">
-                            {t('about.manifesto_pull')}
-                        </h2>
-                        
-                        <div className="space-y-12 max-w-2xl mx-auto">
-                            <p className="font-editorial text-lg md:text-2xl text-white/80 leading-relaxed tracking-wide">
+                    <div className="max-w-4xl mx-auto px-6 relative z-10">
+                        <div className="flex flex-col items-center gap-16">
+                            <div className="flex items-center gap-6">
+                                <div className="w-12 h-[3px] bg-black"></div>
+                                <span className="font-mono text-xs font-black tracking-[0.8em] uppercase">SYSTEM_MANIFESTO</span>
+                                <div className="w-12 h-[3px] bg-black"></div>
+                            </div>
+                            
+                            <h2 className="font-brick text-[2.8rem] md:text-[5rem] lg:text-[6rem] leading-[0.85] text-center uppercase tracking-tighter italic">
+                                {t('about.manifesto_pull')}
+                            </h2>
+                            
+                            <p className="font-mono text-base md:text-2xl text-center leading-[1.6] max-w-2xl font-bold uppercase tracking-tight">
                                 {t('about.manifesto_body')}
                             </p>
                             
-                            <p className="font-mono text-xs md:text-sm text-white/40 tracking-[0.2em] uppercase max-w-xl mx-auto leading-loose border-t border-white/10 pt-12">
+                            <div className="bg-[#ff0000] text-white px-8 py-3 font-mono text-sm font-black tracking-[0.2em] uppercase">
+                                STATUS: HUMAN_INTUITION_REQUIRED
+                            </div>
+
+                            <p className="font-mono text-[10px] md:text-xs text-black/50 text-center uppercase tracking-widest max-w-lg leading-relaxed mt-12 border-t border-black/10 pt-8">
                                 {t('about.manifesto_close')}
                             </p>
                         </div>
                     </div>
                 </section>
 
-                {/* ── SECTION 03: REGISTRY LOGS (TRAJECTORY) ── */}
-                <section className="relative w-full py-40 bg-[#050505] z-10">
-                    <div className="max-w-7xl mx-auto px-6 lg:px-24">
-                        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12 mb-32 border-b border-white/10 pb-16">
-                            <div className="space-y-4">
-                                <span className="font-mono text-[10px] tracking-[0.6em] text-[#DC2626] uppercase block animate-pulse">{t('about.trajectory_label')}</span>
-                                <h3 className="font-brick text-4xl md:text-6xl text-white uppercase tracking-tighter">DATA_HISTORY</h3>
-                            </div>
-                            <div className="md:text-right">
-                                <p className="font-mono text-[9px] text-white/20 uppercase tracking-[0.3em]">SECURE_STORAGE // NODE_772</p>
+                {/* ── SECTION 03: DIAGNOSTIC LOGS (TRAJECTORY) ── */}
+                <section className="relative z-10 w-full bg-[#0a0a0a] py-40">
+                    <div className="max-w-7xl mx-auto px-6 lg:px-24 flex flex-col gap-24">
+                        <div className="flex flex-col md:flex-row md:items-end justify-between border-b-[8px] border-[#1a1a1a] pb-10">
+                            <div>
+                                <span className="font-mono text-[10px] text-[#DC2626] font-bold tracking-[0.5em] uppercase mb-4 block">MODULE: MISSION_HISTORY</span>
+                                <h3 className="font-brick text-4xl md:text-7xl text-white uppercase tracking-tighter">DATA_RECORDS</h3>
                             </div>
                         </div>
 
-                        <div className="space-y-px bg-white/5 border border-white/5 overflow-hidden rounded-sm">
+                        <div className="grid gap-1">
                              {trajectoryKeys.map((key, i) => (
                                 <motion.div
                                     key={key}
-                                    initial={{ opacity: 0, x: -10 }}
+                                    initial={{ opacity: 0, x: -20 }}
                                     whileInView={{ opacity: 1, x: 0 }}
                                     viewport={{ once: true }}
-                                    transition={{ duration: 0.8, delay: i * 0.15 }}
-                                    className="bg-black p-10 md:p-16 flex flex-col md:flex-row gap-10 md:items-start group hover:bg-[#DC2626]/[0.02] transition-colors"
+                                    transition={{ duration: 0.6, delay: i * 0.1 }}
+                                    className="bg-white/[0.015] p-10 md:p-16 border-l-[10px] border-transparent hover:border-[#ff0000] hover:bg-white/[0.03] transition-all flex flex-col md:flex-row items-center gap-12 group"
                                 >
-                                    <div className="md:w-1/4">
-                                        <span className="font-brick text-6xl text-white/5 group-hover:text-[#DC2626]/20 transition-colors duration-1000 uppercase">
-                                            0{(i+1)}
-                                        </span>
+                                    <div className="w-full md:w-32 font-brick text-6xl text-white/5 group-hover:text-[#DC2626] transition-colors leading-none">
+                                        R0{(i+1)}
                                     </div>
-                                    <div className="md:w-3/4 space-y-6">
-                                        <div className="flex items-center gap-4">
-                                            <div className="w-2 h-2 rounded-full bg-[#DC2626] shadow-[0_0_10px_#DC2626] animate-pulse"></div>
-                                            <h4 className="font-brick text-2xl md:text-4xl text-white uppercase tracking-tight group-hover:text-[#DC2626] transition-colors">{t(`about.trajectory.${key}.title`)}</h4>
+                                    <div className="flex-1 space-y-6">
+                                        <h4 className="font-brick text-2xl md:text-4xl text-white uppercase tracking-tight group-hover:translate-x-2 transition-transform duration-500">
+                                            {t(`about.trajectory.${key}.title`)}
+                                        </h4>
+                                        <p className="font-mono text-sm md:text-lg text-[#9CA3AF] leading-relaxed uppercase group-hover:text-white transition-colors">{t(`about.trajectory.${key}.text`)}</p>
+                                    </div>
+                                    <div className="hidden lg:block">
+                                        <div className="w-12 h-12 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#ff0000] transition-colors">
+                                            <div className="w-3 h-3 bg-white/20 group-hover:bg-[#ff0000] group-hover:shadow-[0_0_15px_#ff0000] transition-all"></div>
                                         </div>
-                                        <p className="font-mono text-sm md:text-lg text-[#9CA3AF] leading-relaxed max-w-2xl">{t(`about.trajectory.${key}.text`)}</p>
-                                        <span className="inline-block font-mono text-[9px] tracking-widest text-[#DC2626]/40 uppercase pt-2">{t(`about.trajectory.${key}.label`)}</span>
                                     </div>
                                 </motion.div>
                              ))}
                         </div>
 
-                        <div className="mt-40 max-w-3xl border-l-2 border-[#DC2626] pl-12 py-8 reveal">
-                            <h2 className="font-brick text-3xl md:text-5xl lg:text-6xl text-white uppercase leading-none tracking-tighter drop-shadow-xl">
+                        <div className="mt-32 flex flex-col items-center text-center">
+                            <div className="w-full h-px bg-white/10 mb-20 relative">
+                                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-[#0a0a0a] px-8">
+                                    <div className="w-4 h-4 bg-[#ff0000] rounded-full animate-pulse"></div>
+                                </div>
+                            </div>
+                            <h2 className="font-brick text-3xl md:text-5xl lg:text-7xl text-white uppercase leading-[0.9] tracking-tighter max-w-4xl drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
                                 {t('about.trajectory.closing')}
                             </h2>
+                            <p className="font-mono text-[9px] text-[#DC2626] tracking-[1em] uppercase mt-16 font-bold">END_OF_TRANSMISSION</p>
                         </div>
                     </div>
                 </section>
