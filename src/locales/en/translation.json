@@ -132,7 +132,7 @@
         "title_highlight": "ON",
         "title_secondary": "SET.",
         "description": "From 2016 to here. From physical sets to limitless tools. Brick was born producing traditional video. It wasn't a conversion, it was an evolution. When technology matured enough, Brick absorbed it without losing what matters: soul.",
-        "core_modules": "CORE_MODULES",
+        "core_modules": "MAP_COORDINATES //",
         "modules": {
             "cinematography": {
                 "title": "SYNTHETIC_CINEMATOGRAPHY",
@@ -163,7 +163,7 @@
                     "desc": "Chaos has no owner. We give unity to chaos. We turn a thousand random generations into something that looks like a film, not an accident. That's the work of people who know what they're doing and have been on set for a long time."
                 },
                 "black_box": {
-                    "title": "DELIVERY",
+                    "title": "SIGNATURE",
                     "desc": "We're not image generators, we're creators. We oversee every step of the process so that technology serves the story, not the other way around. We don't sell generated files. We deliver a finished, complete vision."
                 }
             }
