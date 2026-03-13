@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRight, Database, Globe, Menu, X } from 'lucide-react';
+import { ArrowRight, Database, Globe, Globe2, Menu, Radio, Wifi, X } from 'lucide-react';
 import * as THREE from 'three';
 import { useTranslation } from 'react-i18next';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
@@ -150,6 +150,11 @@ const GlobalStyles = () => (
         .animate-thinking { animation: thinking-pulse 1.5s ease-in-out infinite; }
         .animate-talking { animation: talking-glitch 0.15s infinite; }
         .animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+        @keyframes border-trace {
+            0% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: -116; }
+        }
+        .animate-border-trace { animation: border-trace 3s linear infinite; }
         .animate-scan { animation: scan 3s ease-in-out forwards; }
 
         @keyframes pulse-halo {
@@ -3154,7 +3159,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                             <div className="bg-[#0A0A0A] border border-white/10 p-8 md:p-10 relative animate-fade-in-up delay-300 lg:mt-24">
                                 <div className="absolute top-0 left-0 w-full h-1 bg-[#DC2626]"></div>
                                 <h3 className="font-mono text-xs text-[#9CA3AF] uppercase tracking-[0.2em] mb-8 flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                                    <span className="w-2 h-2 bg-[#DC2626] rounded-full animate-pulse"></span>
                                     {t('about.core_modules')}
                                 </h3>
                                 <div className="space-y-6">
@@ -3189,6 +3194,59 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                                             {t('about.modules.architecture.desc')}
                                         </p>
                                     </div>
+
+                                    {/* NETWORK_LOAD — satellite relay visual */}
+                                    <div className="w-full h-px bg-white/5"></div>
+                                    <div className="flex items-center gap-6 py-4">
+                                        <div className="relative w-5 h-8 flex items-center justify-center">
+                                            <Globe2 size={24} className="text-[#DC2626] opacity-30" />
+                                            <motion.div
+                                                animate={{ rotate: 360 }}
+                                                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                                                className="absolute inset-[-2px]"
+                                            >
+                                                <svg className="w-full h-full" viewBox="0 0 24 36" fill="none">
+                                                    {/* base outline */}
+                                                    <rect x="0.5" y="0.5" width="23" height="35" stroke="#DC2626" strokeWidth="0.5" strokeOpacity="0.25" />
+                                                    {/* traveling light — perimeter=116 */}
+                                                    <rect x="0.5" y="0.5" width="23" height="35" stroke="#DC2626" strokeWidth="1.5" strokeDasharray="8 108" className="animate-border-trace" />
+                                                </svg>
+                                            </motion.div>
+                                        </div>
+                                        <div className="flex-1 space-y-2">
+                                            <div className="flex justify-between items-end">
+                                                <span className="text-[8px] font-mono text-white/40 tracking-[0.2em]">SATELLITE_RELAY_ACTIVE</span>
+                                            </div>
+                                            <div className="flex items-end gap-[2px] h-[18px]">
+                                                {Array.from({ length: 14 }).map((_, i) => {
+                                                    const a = i * 7.3 + 1.1;
+                                                    const b = i * 3.17 + 2.9;
+                                                    const dur = 0.9 + ((a * 17.3) % 1) * 5.5;
+                                                    const delay = ((b * 11.7) % 1) * 6.0;
+                                                    const lo = 0.05 + ((a * 5.1) % 1) * 0.2;
+                                                    const hi = 0.65 + ((b * 4.3) % 1) * 0.35;
+                                                    return (
+                                                        <motion.div
+                                                            key={i}
+                                                            className="flex-1 bg-[#DC2626]"
+                                                            style={{ height: '18px' }}
+                                                            animate={{ opacity: [lo, hi, lo] }}
+                                                            transition={{
+                                                                duration: dur,
+                                                                delay: delay,
+                                                                repeat: Infinity,
+                                                                ease: 'easeInOut',
+                                                            }}
+                                                        />
+                                                    );
+                                                })}
+                                            </div>
+                                            <div className="flex justify-between text-[7px] font-mono text-white/20 uppercase">
+                                                <span>Pkt_Loss: 0.00%</span>
+                                                <span>Latency: 14ms</span>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -3197,9 +3255,9 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                     {/* THE INFRASTRUCTURE (DIFFERENTIATORS) */}
                     <section className="w-full px-6 md:px-12 lg:px-24 mb-32 reveal">
                         <div className="border-t border-white/10 pt-12">
-                        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-8 border-b border-white/10 pb-4 gap-2">
-                            <h2 className="text-2xl font-brick text-white">{t('about.manifesto.title')}</h2>
-                            <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-widest">{t('about.manifesto.subtitle')}</span>
+                        <div className="flex items-center gap-3 mb-8 border-b border-white/10 pb-4">
+                            <Database className="w-4 h-4 text-[#DC2626]" />
+                            <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.manifesto.title')} // {t('about.manifesto.subtitle')}</h2>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
                             <InfoCard
