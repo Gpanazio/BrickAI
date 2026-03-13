@@ -7,6 +7,9 @@ export default {
     ],
     theme: {
         extend: {
+            fontFamily: {
+                'inter': ['Inter', 'sans-serif'],
+            },
             colors: {
                 'brick-white': '#E5E5E5',
                 'brick-black': '#050505',

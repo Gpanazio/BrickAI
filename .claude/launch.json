@@ -3,15 +3,15 @@
   "configurations": [
     {
       "name": "frontend",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "npm", "run", "dev"],
       "port": 3000,
       "autoPort": true
     },
     {
       "name": "backend",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev:server"],
+      "runtimeExecutable": "cmd",
+      "runtimeArgs": ["/c", "npm", "run", "dev:server"],
       "port": 3002
     },
     {
