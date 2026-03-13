@@ -151,8 +151,8 @@
             }
         },
         "manifesto": {
-            "title": "OLHAR AUTORAL",
-            "subtitle": "Porque Junto Não Escala",
+            "title": "OLHAR_AUTORAL",
+            "subtitle": "Porque Mágica Não Escala",
             "cards": {
                 "control": {
                     "title": "CONCEPÇÃO ARTÍSTICA",

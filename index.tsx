@@ -454,13 +454,39 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
             },
         ];
 
-        // Transmissions are loaded 100% from the DB (no hardcoded fallback).
-
+        const generatedTransmissions: Post[] = [
+            {
+                id: "log_001",
+                date: "2025.01.15",
+                title: { pt: t('transmissions.log_001.title'), en: t('transmissions.log_001.title') },
+                excerpt: { pt: t('transmissions.log_001.excerpt'), en: t('transmissions.log_001.excerpt') },
+                tags: ["MANIFESTO", "IA", "AUTORIA"],
+                url: "log_001",
+                content: t('transmissions.log_001.content_p1')
+            },
+            {
+                id: "log_002",
+                date: "2025.02.10",
+                title: { pt: t('transmissions.log_002.title'), en: t('transmissions.log_002.title') },
+                excerpt: { pt: t('transmissions.log_002.excerpt'), en: t('transmissions.log_002.excerpt') },
+                tags: ["PRODUÇÃO", "DIREÇÃO", "CINEMA"],
+                url: "log_002",
+                content: t('transmissions.log_002.content_p1')
+            },
+            {
+                id: "log_003",
+                date: "2025.03.05",
+                title: { pt: t('transmissions.log_003.title'), en: t('transmissions.log_003.title') },
+                excerpt: { pt: t('transmissions.log_003.excerpt'), en: t('transmissions.log_003.excerpt') },
+                tags: ["EVOLUÇÃO", "VANGUARDA", "TECNOLOGIA"],
+                url: "log_003",
+                content: t('transmissions.log_003.content_p1')
+            },
+        ];
 
         const syncData = async () => {
-            // Works start from hardcoded defaults (i18n texts preserved), transmissions come 100% from DB
             let finalWorks = [...generatedWorks];
-            let finalTrans: Post[] = [];
+            let finalTrans: Post[] = [...generatedTransmissions];
 
             try {
                 const [wRes, tRes] = await Promise.all([
@@ -496,8 +522,16 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
                 if (tRes.ok) {
                     const dbTrans = await tRes.json();
-                    if (Array.isArray(dbTrans)) {
-                        finalTrans = dbTrans;
+                    if (Array.isArray(dbTrans) && dbTrans.length > 0) {
+                        // Merge: DB transmissions override hardcoded ones by id, extras get appended
+                        dbTrans.forEach((dt: Post) => {
+                            const idx = finalTrans.findIndex(ft => ft.id === dt.id);
+                            if (idx >= 0) {
+                                finalTrans[idx] = dt;
+                            } else {
+                                finalTrans.push(dt);
+                            }
+                        });
                     }
                 }
 
@@ -2667,7 +2701,9 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
 }
 
 const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, onAbout }: any) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const postTitle = getLocalizedField(post.title, i18n.language, 'UNTITLED');
+    const postExcerpt = getLocalizedField(post.excerpt, i18n.language, '');
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
@@ -2690,16 +2726,16 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, 
                                 </div>
 
                                 <h1 className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-[0.95] tracking-tight mb-8 text-center">
-                                    {(post.title || '').toUpperCase() === 'A MÁQUINA NÃO TEM ALMA. NÓS TEMOS.' ? (
+                                    {postTitle.toUpperCase() === 'A MÁQUINA NÃO TEM ALMA. NÓS TEMOS.' ? (
                                         <>
                                             A MÁQUINA NÃO TEM ALMA.{' '}
                                             <span className="text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.45)]">NÓS TEMOS.</span>
                                         </>
-                                    ) : post.title}
+                                    ) : postTitle}
                                 </h1>
 
                                 <p className="text-base md:text-xl text-[#b8bcc4] font-light leading-relaxed text-center">
-                                    {post.excerpt}
+                                    {postExcerpt}
                                 </p>
                             </div>
                         </header>
@@ -3202,53 +3238,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                     </section>
             </main>
 
-            {/* ABOUT CTA — SAME AS HOME */}
-            <section className="relative w-full bg-transparent flex flex-col items-center pt-16 md:pt-20 pb-0 overflow-x-hidden">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] md:w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.12)_0%,transparent_50%)] pointer-events-none z-0 blur-[100px]"></div>
-
-                <div className="flex flex-col items-center text-center reveal relative z-30 w-full mb-32 md:mb-36 px-6 md:px-12 gap-10 md:gap-12">
-                    <div className="flex items-center gap-4 md:gap-6">
-                        <div className="w-8 md:w-16 h-[1px] bg-gradient-to-r from-transparent to-[#DC2626]"></div>
-                        <h2 className="text-[10px] md:text-xs font-ai text-[#DC2626] uppercase tracking-[0.3em] md:tracking-[0.5em] drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]">
-                            <ScrambleText text={t('footer.complex_problem')} hoverTrigger={true} triggerOnReveal={true} delay={500} />
-                        </h2>
-                        <div className="w-8 md:w-16 h-[1px] bg-gradient-to-l from-transparent to-[#DC2626]"></div>
-                    </div>
-
-                    <h1 className="climax-title text-5xl md:text-7xl lg:text-[110px] font-brick max-w-6xl cursor-default px-4">
-                        {t('footer.we_have_intelligence')}
-                    </h1>
-
-                    <MagneticButton onClick={onChat} className="group relative overflow-hidden border border-white/10 hover:border-[#DC2626] hover:bg-[#DC2626]/5 hover:shadow-[0_0_40px_rgba(220,38,38,0.2)] transition-all duration-700 px-10 py-5 md:px-16 md:py-6 backdrop-blur-sm">
-                        <div className="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-45deg] group-hover:left-[200%] transition-all duration-1000 ease-in-out"></div>
-                        <span className="relative z-10 text-xs md:text-sm font-ai font-bold text-white tracking-[0.2em] md:tracking-[0.3em] uppercase">
-                            {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
-                        </span>
-                    </MagneticButton>
-                </div>
-
-                <div className="mt-auto w-full relative z-30">
-                    <div className="w-full h-px mb-12 relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#DC2626]/10 to-transparent" />
-                        <div className="absolute top-0 h-full w-[15%] animate-fiber bg-[linear-gradient(90deg,transparent,rgba(220,38,38,0.25),transparent)]" />
-                        <div className="absolute top-0 h-full w-[15%] animate-fiber-b bg-[linear-gradient(90deg,transparent,rgba(220,38,38,0.25),transparent)]" />
-                    </div>
-                    <div className="w-full px-6 md:px-12 lg:px-24 pb-12 flex flex-col md:flex-row justify-between items-center gap-6">
-                        <div className="flex gap-6">
-                            {['LinkedIn', 'Instagram'].map((social) => (
-                                <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white/50 hover:text-[#DC2626] tracking-widest uppercase transition-colors duration-500">{social}</a>
-                            ))}
-                        </div>
-                        <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/30 font-bold text-center md:text-right flex flex-col items-center md:items-end gap-1">
-                            <span>&copy; 2026 Brick AI.</span>
-                            <span className="hidden md:inline">{t('footer.generative_division')}</span>
-                            <span>{t('footer.rights_reserved')}</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="absolute inset-0 z-[40] opacity-[0.11] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
-            </section>
+            <Footer onChat={onChat} />
         </React.Fragment>
     );
 };
