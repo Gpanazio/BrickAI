@@ -3030,7 +3030,7 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, o
 );
 
 const InfoCard = ({ number, title, desc }: { number: string, title: string, desc: string }) => (
-    <div className="group relative bg-[#050505] p-8 md:p-10 hover:bg-[#0A0A0A] transition-colors duration-500 overflow-hidden border border-white/5 hover:border-[#DC2626] border-l-4 border-l-transparent hover:border-l-[#DC2626]">
+    <div className="group relative bg-[#050505] p-8 md:p-10 hover:bg-[#0A0A0A] transition-colors duration-500 overflow-hidden border border-white/5 hover:border-[#DC2626] border-l-4 border-l-transparent hover:border-l-[#DC2626] h-full flex flex-col">
         <div className="absolute top-0 right-0 p-4 opacity-30 group-hover:opacity-100 transition-opacity">
             <span className="font-mono text-[9px] text-[#DC2626] border border-[#DC2626] px-1 tracking-widest">SEC_{number}</span>
         </div>
@@ -3110,7 +3110,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                                     {t('about.title_highlight')}<br />
                                     <span className="text-[#DC2626]">{t('about.title_secondary')}</span>
                                 </h2>
-                                <p className="text-[#E5E5E5] font-light text-base md:text-lg leading-relaxed max-w-xl border-l-2 border-[#DC2626] pl-6 animate-fade-in-up delay-200">
+                                <p className="text-[#E5E5E5] font-inter font-light text-base md:text-lg leading-relaxed max-w-xl border-l-2 border-[#DC2626] pl-6 animate-fade-in-up delay-200">
                                     {t('about.description')}
                                 </p>
                             </div>
@@ -3165,7 +3165,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                             <h2 className="text-2xl font-brick text-white">{t('about.manifesto.title')}</h2>
                             <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-widest">{t('about.manifesto.subtitle')}</span>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
                             <InfoCard
                                 number="01"
                                 title={t('about.manifesto.cards.control.title')}
@@ -3193,16 +3193,62 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                             <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.team.title')}</h2>
                         </div>
 
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                            <TeamMember name="ALEX M." role={t('about.team.roles.alex')} id="001" />
-                            <TeamMember name="SARAH V." role={t('about.team.roles.sarah')} id="002" />
-                            <TeamMember name="GABRIEL P." role={t('about.team.roles.gabriel')} id="003" />
-                            <TeamMember name="MARCUS L." role={t('about.team.roles.marcus')} id="004" />
+                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                            <TeamMember name="FRAN CAMPARONI" role={t('about.team.roles.fran')} id="001" />
+                            <TeamMember name="GABRIEL PANAZIO" role={t('about.team.roles.gabriel')} id="002" />
+                            <TeamMember name="LUFE BERTO" role={t('about.team.roles.lufe')} id="003" />
                         </div>
                         </div>
                     </section>
             </main>
-            <Footer onChat={onChat} />
+
+            {/* ABOUT CTA — SAME AS HOME */}
+            <section className="relative w-full bg-transparent flex flex-col items-center pt-16 md:pt-20 pb-0 overflow-x-hidden">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] md:w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.12)_0%,transparent_50%)] pointer-events-none z-0 blur-[100px]"></div>
+
+                <div className="flex flex-col items-center text-center reveal relative z-30 w-full mb-32 md:mb-36 px-6 md:px-12 gap-10 md:gap-12">
+                    <div className="flex items-center gap-4 md:gap-6">
+                        <div className="w-8 md:w-16 h-[1px] bg-gradient-to-r from-transparent to-[#DC2626]"></div>
+                        <h2 className="text-[10px] md:text-xs font-ai text-[#DC2626] uppercase tracking-[0.3em] md:tracking-[0.5em] drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]">
+                            <ScrambleText text={t('footer.complex_problem')} hoverTrigger={true} triggerOnReveal={true} delay={500} />
+                        </h2>
+                        <div className="w-8 md:w-16 h-[1px] bg-gradient-to-l from-transparent to-[#DC2626]"></div>
+                    </div>
+
+                    <h1 className="climax-title text-5xl md:text-7xl lg:text-[110px] font-brick max-w-6xl cursor-default px-4">
+                        {t('footer.we_have_intelligence')}
+                    </h1>
+
+                    <MagneticButton onClick={onChat} className="group relative overflow-hidden border border-white/10 hover:border-[#DC2626] hover:bg-[#DC2626]/5 hover:shadow-[0_0_40px_rgba(220,38,38,0.2)] transition-all duration-700 px-10 py-5 md:px-16 md:py-6 backdrop-blur-sm">
+                        <div className="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-45deg] group-hover:left-[200%] transition-all duration-1000 ease-in-out"></div>
+                        <span className="relative z-10 text-xs md:text-sm font-ai font-bold text-white tracking-[0.2em] md:tracking-[0.3em] uppercase">
+                            {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
+                        </span>
+                    </MagneticButton>
+                </div>
+
+                <div className="mt-auto w-full relative z-30">
+                    <div className="w-full h-px mb-12 relative overflow-hidden">
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#DC2626]/10 to-transparent" />
+                        <div className="absolute top-0 h-full w-[15%] animate-fiber bg-[linear-gradient(90deg,transparent,rgba(220,38,38,0.25),transparent)]" />
+                        <div className="absolute top-0 h-full w-[15%] animate-fiber-b bg-[linear-gradient(90deg,transparent,rgba(220,38,38,0.25),transparent)]" />
+                    </div>
+                    <div className="w-full px-6 md:px-12 lg:px-24 pb-12 flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div className="flex gap-6">
+                            {['LinkedIn', 'Instagram'].map((social) => (
+                                <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white/50 hover:text-[#DC2626] tracking-widest uppercase transition-colors duration-500">{social}</a>
+                            ))}
+                        </div>
+                        <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/30 font-bold text-center md:text-right flex flex-col items-center md:items-end gap-1">
+                            <span>&copy; 2026 Brick AI.</span>
+                            <span className="hidden md:inline">{t('footer.generative_division')}</span>
+                            <span>{t('footer.rights_reserved')}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="absolute inset-0 z-[40] opacity-[0.11] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
+            </section>
         </React.Fragment>
     );
 };

@@ -97,13 +97,15 @@
     },
     "legacy": {
         "title": "BACKED BY BRICK.",
+        "title_part1": "BACKED BY",
+        "title_part2": "BRICK.",
         "title_mobile_br": "BACKED <br /> BY BRICK.",
         "text": "This isn't a beta test. This is a new lens from a production house with 10 years of experience.",
         "trusted_by": "Trusted By"
     },
     "footer": {
-        "complex_problem": "Have a complex problem?",
-        "we_have_intelligence": "WE HAVE THE INTELLIGENCE.",
+        "complex_problem": "Have an impossible idea?",
+        "we_have_intelligence": "WE HAVE THE VISION.",
         "talk_to_us": "TALK TO US",
         "network": "Network",
         "rights_reserved": "All Rights Reserved.",
@@ -136,30 +138,29 @@
             }
         },
         "manifesto": {
-            "title": "THE ANTI-PROMPT MANIFESTO",
-            "subtitle": "Why Magic Doesn't Scale",
+            "title": "AUTHORIAL VISION",
+            "subtitle": "Because Together It Doesn't Scale",
             "cards": {
                 "control": {
-                    "title": "CONTROL > CHANCE",
-                    "desc": "The 'perfect prompt' is a myth. Consistency comes from ControlNet, IP-Adapters, and Python scripts, not lucky words. We engineer our images; we don't wish for them."
+                    "title": "ARTISTIC CONCEPTION",
+                    "desc": "AI hallucinates images; we design intention. Film is built from references and experience, where every frame serves the narrative. Technology without soul is worthless."
                 },
                 "curation": {
-                    "title": "CURATION IS CREATION",
-                    "desc": "A model can generate 1,000 images in a minute. The art is knowing which one is wrong. Our directors curate with the same critical eye they used on film sets for 10 years."
+                    "title": "VISUAL DIRECTION",
+                    "desc": "Chaos has no owner. We give unity to chaos. We transform a thousand random generations into something that looks like film, not accident. That's the work of people who know their craft and have been on set for a long time."
                 },
                 "black_box": {
-                    "title": "NO BLACK BOXES",
-                    "desc": "We don't rely on closed web-interfaces. We build our own ComfyUI pipelines locally. This gives us pixel-level control over the latent space that 'magic buttons' can't provide."
+                    "title": "DELIVERY",
+                    "desc": "We are not image generators, we are creators. We manage every step of the process so technology serves the story, not the other way around. We don't sell generated files. We deliver a finished, complete vision."
                 }
             }
         },
         "team": {
             "title": "UNIT_LEADERS // COMMAND",
             "roles": {
-                "alex": "EXECUTIVE PRODUCER",
-                "sarah": "CREATIVE DIRECTOR",
-                "gabriel": "HEAD OF TECHNOLOGY",
-                "marcus": "VFX SUPERVISOR"
+                "fran": "DIRECTOR",
+                "gabriel": "CREATIVE & INNOVATION DIRECTOR",
+                "lufe": "CREATIVE DIRECTOR"
             }
         }
     },

@@ -3,111 +3,113 @@
         "brand": "MARCA",
         "about": "SOBRE",
         "works": "TRABALHOS",
-        "transmissions": "TRANSMISS├òES",
+        "transmissions": "TRANSMISSÕES",
         "talk_to_us": "FALE CONOSCO"
     },
     "hero": {
         "title": "DO SET AO SERVIDOR.",
-        "subtitle": "10 ANOS DE OF├ìCIO.",
+        "subtitle": "10 ANOS DE OFÍCIO.",
         "scramble": "AGORA GENERATIVO.",
-        "description": "UMA NOVA DIVIS├âO DA BRICK.\nDO ZERO AO TUDO DESDE 2016."
+        "description": "UMA NOVA DIVISÃO DA BRICK.\nDO ZERO AO TUDO DESDE 2016."
     },
     "philosophy": {
-        "belief_label": "A Cren├ºa",
+        "belief_label": "A Crença",
         "raw": {
             "title": "CRU.",
-            "text": "A IA cria pixels e padr├Áes infinitos. Mas n├úo pode criar inten├º├úo. ├ë apenas um recurso."
+            "text": "A IA cria pixels e padrões infinitos. Mas não pode criar intenção. É apenas um recurso."
         },
         "noise": {
-            "title": "RU├ìDO.",
-            "text": "Sem a m├úo humana, modelos generativos s├úo apenas coincid├¬ncia matem├ítica. N├│s fornecemos a vis├úo."
+            "title": "RUÍDO.",
+            "text": "Sem a mão humana, modelos generativos são apenas coincidência matemática. Nós fornecemos a visão."
         },
         "direct": {
-            "title": "N├ôS DIRECIONAMOS A INTELIG├èNCIA.",
-            "text": "A m├íquina ├® o pincel. O banco de dados ├® a tinta. Ainda somos os artistas."
+            "title": "NÓS DIRECIONAMOS A INTELIGÊNCIA.",
+            "text": "A máquina é o pincel. O banco de dados é a tinta. Ainda somos os artistas."
         }
     },
     "works": {
         "inheritance": {
-            "title": "HERAN├çA",
+            "title": "HERANÇA",
             "subtitle": "TOTALMENTE GENERATIVO",
-            "desc": "Quando a loca├º├úo n├úo existe. 100% Renderiza├º├úo Neural.",
-            "longDesc": "Inheritance ├® um testamento ├á alucina├º├úo direcionada. Nossos artistas treinaram LoRAs personalizados em plantas arquitet├┤nicas brutalistas para guiar o modelo Stable Diffusion XL. Curamos 4.000 quadros onde a decad├¬ncia org├ónica encontra o concreto, garantindo consist├¬ncia temporal atrav├®s de mapas de profundidade ControlNet enquanto mantemos a vis├úo original do diretor de isolamento."
+            "desc": "Quando a locação não existe. 100% Renderização Neural.",
+            "longDesc": "Inheritance é um testamento à alucinação direcionada. Nossos artistas treinaram LoRAs personalizados em plantas arquitetônicas brutalistas para guiar o modelo Stable Diffusion XL. Curamos 4.000 quadros onde a decadência orgânica encontra o concreto, garantindo consistência temporal através de mapas de profundidade ControlNet enquanto mantemos a visão original do diretor de isolamento."
         },
         "shift": {
             "title": "VENDEMOS QUALQUER COISA",
-            "subtitle": "EXTENS├âO H├ìBRIDA",
-            "desc": "Expandindo o set al├®m dos limites f├¡sicos. VFX Incons├║til.",
-            "longDesc": "Para 'Vendemos Qualquer Coisa', o desafio foi casar sets f├¡sicos com horizontes digitais infinitos. Utilizamos um pipeline propriet├írio de in-painting que rastreia dados de c├ómera live-action (Alexa Mini) e os alimenta em um modelo de preenchimento generativo. O resultado ├® uma extens├úo matematicamente perfeita do set, ilumina├º├úo e granula├º├úo, dirigida precisamente pelas escolhas de lente do diretor de fotografia."
+            "subtitle": "EXTENSÃO HÍBRIDA",
+            "desc": "Expandindo o set além dos limites físicos. VFX Inconsútil.",
+            "longDesc": "Para 'Vendemos Qualquer Coisa', o desafio foi casar sets físicos com horizontes digitais infinitos. Utilizamos um pipeline proprietário de in-painting que rastreia dados de câmera live-action (Alexa Mini) e os alimenta em um modelo de preenchimento generativo. O resultado é uma extensão matematicamente perfeita do set, iluminação e granulação, dirigida precisamente pelas escolhas de lente do diretor de fotografia."
         },
         "anima": {
             "title": "AUTOBOL",
-            "subtitle": "TRANSFER├èNCIA DE ESTILO",
+            "subtitle": "TRANSFERÊNCIA DE ESTILO",
             "desc": "Transformando live action em arte de marca usando modelos customizados.",
-            "longDesc": "Reinterpretamos imagens de transmiss├úo padr├úo atrav├®s de um modelo de transfer├¬ncia de estilo treinado sob medida usando Ebsynth e ControlNet. O objetivo n├úo era abstra├º├úo aleat├│ria, mas uma est├®tica espec├¡fica de 'escultura cin├®tica' definida pelo diretor de arte. A IA agiu como o pincel, preservando a identidade dos jogadores e a fluidez de 60fps enquanto transformava completamente a textura da realidade."
+            "longDesc": "Reinterpretamos imagens de transmissão padrão através de um modelo de transferência de estilo treinado sob medida usando Ebsynth e ControlNet. O objetivo não era abstração aleatória, mas uma estética específica de 'escultura cinética' definida pelo diretor de arte. A IA agiu como o pincel, preservando a identidade dos jogadores e a fluidez de 60fps enquanto transformava completamente a textura da realidade."
         },
         "void": {
             "title": "OLHANDO O VAZIO",
-            "subtitle": "VISUALIZA├ç├âO DE DADOS",
-            "desc": "Traduzindo radia├º├úo c├│smica em espectros vis├¡veis.",
-            "longDesc": "Uma instala├º├úo baseada em dados que visualiza radia├º├úo c├│smica em tempo real via NASA Open API. Escrevemos scripts Python para converter ru├¡do num├®rico em par├ómetros de din├ómica de fluidos no TouchDesigner. A IA ent├úo texturiza essa simula├º├úo em tempo real, permitindo efetivamente que o p├║blico 'veja' o universo invis├¡vel atrav├®s de uma lente est├®tica curada por humanos."
+            "subtitle": "VISUALIZAÇÃO DE DADOS",
+            "desc": "Traduzindo radiação cósmica em espectros visíveis.",
+            "longDesc": "Uma instalação baseada em dados que visualiza radiação cósmica em tempo real via NASA Open API. Escrevemos scripts Python para converter ruído numérico em parâmetros de dinâmica de fluidos no TouchDesigner. A IA então texturiza essa simulação em tempo real, permitindo efetivamente que o público 'veja' o universo invisível através de uma lente estética curada por humanos."
         },
         "urban": {
             "title": "RECIFE URBANO",
             "subtitle": "AMB. PROCEDURAL",
-            "desc": "Cultivando cidades como corais. Algoritmos biol├│gicos aplicados.",
-            "longDesc": "Urban Reef explora a biomim├®tica na arquitetura. Usando algoritmos de crescimento diferencial no Houdini, 'cultivamos' estruturas de cidade que buscam luz como corais. Essas malhas procedurais foram ent├úo texturizadas usando upscaling de IA, criando uma vis├úo de uma cidade que parece cultivada em vez de constru├¡da, desafiando processos de design arquitet├┤nico tradicionais."
+            "desc": "Cultivando cidades como corais. Algoritmos biológicos aplicados.",
+            "longDesc": "Urban Reef explora a biomimética na arquitetura. Usando algoritmos de crescimento diferencial no Houdini, 'cultivamos' estruturas de cidade que buscam luz como corais. Essas malhas procedurais foram então texturizadas usando upscaling de IA, criando uma visão de uma cidade que parece cultivada em vez de construída, desafiando processos de design arquitetônico tradicionais."
         },
         "silent": {
             "title": "ECO SILENCIOSO",
             "subtitle": "AUDIO REATIVO",
-            "desc": "Uma narrativa visual conduzida inteiramente por frequ├¬ncias sub-graves.",
-            "longDesc": "Em Silent Echo, a m├║sica dirige a m├íquina. Constru├¡mos um sistema no Unreal Engine 5 onde elementos visuais s├úo acionados diretamente pela an├ílise de ├íudio. Frequ├¬ncias sub-graves ditam o deslocamento da geometria, enquanto high-hats acionam eventos de ilumina├º├úo generativa. ├ë uma experi├¬ncia sinest├®sica onde o som do artista esculpe diretamente o mundo digital."
+            "desc": "Uma narrativa visual conduzida inteiramente por frequências sub-graves.",
+            "longDesc": "Em Silent Echo, a música dirige a máquina. Construímos um sistema no Unreal Engine 5 onde elementos visuais são acionados diretamente pela análise de áudio. Frequências sub-graves ditam o deslocamento da geometria, enquanto high-hats acionam eventos de iluminação generativa. É uma experiência sinestésica onde o som do artista esculpe diretamente o mundo digital."
         }
     },
     "transmissions": {
         "log_001": {
-            "title": "O ESPA├çO LATENTE ├ë UMA LOCALIZA├ç├âO",
-            "excerpt": "Por que paramos de procurar ru├¡nas f├¡sicas e come├ºamos a treinar LoRAs em plantas brutalistas.",
-            "content_p1": "Tendemos a pensar em modelos generativos como motores de cria├º├úo. Prompt de entrada, imagem de sa├¡da. Um processo de fabrica├º├úo linear. Mas essa met├ífora ├® insuficiente para produ├º├úo de alto n├¡vel. Na Brick, tratamos o modelo n├úo como uma f├íbrica, mas como um territ├│rio.",
-            "section_title": "A Topografia do Ru├¡do",
-            "content_p2": "O Stable Diffusion XL n├úo \"desenha\". Ele remove o ru├¡do. Ele subtrai o caos para revelar a ordem. Isso implica que a imagem j├í existe dentro do ru├¡do de alta dimens├úo, matematicamente esperando para ser descoberta.",
-            "quote": "\"N├úo constru├¡mos o set. Navegamos para as coordenadas onde o set tem maior probabilidade estat├¡stica de existir.\""
+            "title": "O ESPAÇO LATENTE É UMA LOCALIZAÇÃO",
+            "excerpt": "Por que paramos de procurar ruínas físicas e começamos a treinar LoRAs em plantas brutalistas.",
+            "content_p1": "Tendemos a pensar em modelos generativos como motores de criação. Prompt de entrada, imagem de saída. Um processo de fabricação linear. Mas essa metáfora é insuficiente para produção de alto nível. Na Brick, tratamos o modelo não como uma fábrica, mas como um território.",
+            "section_title": "A Topografia do Ruído",
+            "content_p2": "O Stable Diffusion XL não \"desenha\". Ele remove o ruído. Ele subtrai o caos para revelar a ordem. Isso implica que a imagem já existe dentro do ruído de alta dimensão, matematicamente esperando para ser descoberta.",
+            "quote": "\"Não construímos o set. Navegamos para as coordenadas onde o set tem maior probabilidade estatística de existir.\""
         },
         "log_002": {
-            "title": "VETORES DE MOVIMENTO NA TRANSFER├èNCIA DE ESTILO",
-            "excerpt": "Resolvendo o problema de cintila├º├úo em modelos de difus├úo. Como usamos fluxo ├│ptico para impor consist├¬ncia temporal.",
-            "content_p1": "A trepida├º├úo. A cintila├º├úo. A textura \"fervente\". Esta ├® a marca registrada do v├¡deo de IA bruto. Revela a independ├¬ncia quadro a quadro do processo de difus├úo. Para o <0>Projeto: Anima</0>, esse artefato era inaceit├ível.",
-            "content_p2": "Nossa solu├º├úo envolveu extrair mapas de fluxo ├│ptico da filmagem original usando Nuke. Esses vetores de movimento agem como um esqueleto temporal."
+            "title": "VETORES DE MOVIMENTO NA TRANSFERÊNCIA DE ESTILO",
+            "excerpt": "Resolvendo o problema de cintilação em modelos de difusão. Como usamos fluxo óptico para impor consistência temporal.",
+            "content_p1": "A trepidação. A cintilação. A textura \"fervente\". Esta é a marca registrada do vídeo de IA bruto. Revela a independência quadro a quadro do processo de difusão. Para o <0>Projeto: Anima</0>, esse artefato era inaceitável.",
+            "content_p2": "Nossa solução envolveu extrair mapas de fluxo óptico da filmagem original usando Nuke. Esses vetores de movimento agem como um esqueleto temporal."
         },
         "log_003": {
             "title": "GLITCH INTENCIONAL: A ASSINATURA HUMANA",
-            "excerpt": "Quando a perfei├º├úo ├® o erro. Injetando ru├¡do de volta na sa├¡da limpa de modelos comerciais para recuperar a sensa├º├úo de 'cinema'.",
-            "content_p1": "Os modelos modernos est├úo convergindo para uma \"m├®dia de meio de jornada\". Uma est├®tica polida e pl├ística que grita \"sint├®tico\". Paradoxalmente, para fazer a imagem de IA parecer real, precisamos quebr├í-la.",
-            "quote": "O artefato ├® a arte."
+            "excerpt": "Quando a perfeição é o erro. Injetando ruído de volta na saída limpa de modelos comerciais para recuperar a sensação de 'cinema'.",
+            "content_p1": "Os modelos modernos estão convergindo para uma \"média de meio de jornada\". Uma estética polida e plástica que grita \"sintético\". Paradoxalmente, para fazer a imagem de IA parecer real, precisamos quebrá-la.",
+            "quote": "O artefato é a arte."
         }
     },
     "common": {
-        "return_surface": "RETORNAR ├Ç SUPERF├ìCIE",
-        "return_index": "RETORNAR AO ├ìNDICE",
+        "return_surface": "RETORNAR À SUPERFÍCIE",
+        "return_index": "RETORNAR AO ÍNDICE",
         "system_status": "STATUS_SISTEMA",
         "online": "ONLINE",
-        "secure_connection": "CONEX├âO SEGURA",
+        "secure_connection": "CONEXÃO SEGURA",
         "loading": "CARREGANDO SISTEMA..."
     },
     "legacy": {
         "title": "APOIADO PELA BRICK.",
+        "title_part1": "APOIADO PELA",
+        "title_part2": "BRICK.",
         "title_mobile_br": "APOIADO <br /> PELA BRICK.",
-        "text": "Isto n├úo ├® um teste beta. Esta ├® uma nova lente de uma produtora com 10 anos de experi├¬ncia.",
+        "text": "Isto não é um teste beta. Esta é uma nova lente de uma produtora com 10 anos de experiência.",
         "trusted_by": "Confiado Por"
     },
     "footer": {
-        "complex_problem": "Tem um problema complexo?",
-        "we_have_intelligence": "N├ôS TEMOS A INTELIG├èNCIA.",
+        "complex_problem": "Tem uma ideia impossível?",
+        "we_have_intelligence": "NÓS TEMOS A VISÃO.",
         "talk_to_us": "FALE CONOSCO",
         "network": "Rede",
         "rights_reserved": "Todos os Direitos Reservados.",
-        "generative_division": "A Divis├úo Generativa",
+        "generative_division": "A Divisão Generativa",
         "system_admin": "ADMIN_SISTEMA"
     },
     "about": {
@@ -116,81 +118,80 @@
         "title_primary": "NASCIDOS",
         "title_highlight": "NO",
         "title_secondary": "SET.",
-        "description": "Antes de escrevermos um prompt, passamos 7 anos empurrando pixels no Nuke e Maya. Entendemos luz, composi├º├úo e narrativa porque as constru├¡mos ├á m├úo por uma d├®cada. N├úo adotamos IA para substituir o of├¡cio. Adotamos para quebrar o limite de velocidade.",
-        "core_modules": "M├ôDULOS_CENTRAIS",
+        "description": "De 2016 até aqui. De sets físicos a ferramentas sem limite. A Brick nasceu produzindo vídeo tradicional. Não foi uma conversão, foi uma evolução. Quando a tecnologia amadureceu o suficiente, a Brick absorveu a tecnologia sem perder o que importa: alma.",
+        "core_modules": "MÓDULOS_CENTRAIS",
         "modules": {
             "cinematography": {
-                "title": "CINEMATOGRAFIA_SINT├ëTICA",
+                "title": "CINEMATOGRAFIA_SINTÉTICA",
                 "status": "INSTALADO",
-                "desc": "Gera├º├úo de V├¡deo // ComfyUI // Upscaling 4K"
+                "desc": "Geração de Vídeo // ComfyUI // Upscaling 4K"
             },
             "training": {
                 "title": "TREINAMENTO_MODELO",
                 "status": "INSTALADO",
-                "desc": "LoRAs Customizados // Consist├¬ncia de Estilo // Ajuste Fino"
+                "desc": "LoRAs Customizados // Consistência de Estilo // Ajuste Fino"
             },
             "architecture": {
                 "title": "ARQUITETURA_PIPELINE",
                 "status": "INSTALADO",
-                "desc": "Ferramentas Python // Automa├º├úo // Render Farm"
+                "desc": "Ferramentas Python // Automação // Render Farm"
             }
         },
         "manifesto": {
-            "title": "O MANIFESTO ANTI-PROMPT",
-            "subtitle": "Por que M├ígica n├úo Escala",
+            "title": "OLHAR AUTORAL",
+            "subtitle": "Porque Junto Não Escala",
             "cards": {
                 "control": {
-                    "title": "CONTROLE > ACASO",
-                    "desc": "O 'prompt perfeito' ├® um mito. A consist├¬ncia vem do ControlNet, IP-Adapters e scripts Python, n├úo de palavras de sorte. N├│s engenhamos nossas imagens; n├úo torcemos por elas."
+                    "title": "CONCEPÇÃO ARTÍSTICA",
+                    "desc": "A IA alucina imagens; nós projetamos intenção. O filme é construído de referências e experiência, onde cada frame serve à narrativa. Tecnologia sem alma não vale nada."
                 },
                 "curation": {
-                    "title": "CURADORIA ├ë CRIA├ç├âO",
-                    "desc": "Um modelo pode gerar 1.000 imagens em um minuto. A arte ├® saber qual est├í errada. Nossos diretores curam com o mesmo olhar cr├¡tico que usaram em sets de filmagem por 10 anos."
+                    "title": "DIREÇÃO VISUAL",
+                    "desc": "O caos não tem dono. A gente dá unidade ao caos. Transformamos mil gerações aleatórias em algo que tem cara de filme, não de acidente. Isso é trabalho de quem sabe o que faz e que tá no set há muito tempo."
                 },
                 "black_box": {
-                    "title": "SEM CAIXAS PRETAS",
-                    "desc": "N├úo dependemos de interfaces web fechadas. Constru├¡mos nossos pr├│prios pipelines ComfyUI localmente. Isso nos d├í controle em n├¡vel de pixel sobre o espa├ºo latente que 'bot├Áes m├ígicos' n├úo podem fornecer."
+                    "title": "ENTREGA",
+                    "desc": "Não somos geradores de imagem, somos criadores. Cuidamos de cada etapa do processo para que a tecnologia sirva à história, e não o contrário. Não vendemos arquivos gerados. Entregamos uma visão pronta, finalizada."
                 }
             }
         },
         "team": {
-            "title": "L├ìDERES_UNIDADE // COMANDO",
+            "title": "LÍDERES_UNIDADE // COMANDO",
             "roles": {
-                "alex": "PRODUTOR EXECUTIVO",
-                "sarah": "DIRETORA CRIATIVA",
-                "gabriel": "HEAD DE TECNOLOGIA",
-                "marcus": "SUPERVISOR DE VFX"
+                "fran": "DIRETORA",
+                "gabriel": "DIRETOR DE CRIAÇÃO E INOVAÇÃO",
+                "lufe": "DIRETOR DE CRIAÇÃO"
             }
         }
     },
     "chat": {
-        "reach_humans": "ALCAN├çAR_HUMANOS",
-        "manual_override": "PROTOCOLOS DE SUBSTITUI├ç├âO MANUAL",
+        "reach_humans": "ALCANÇAR_HUMANOS",
+        "manual_override": "PROTOCOLOS DE SUBSTITUIÇÃO MANUAL",
         "status_online": "STATUS: ONLINE",
         "email_streams": "FLUXOS_EMAIL",
         "voice_link": "LINK_VOZ",
-        "network_nodes": "N├ôS_REDE",
+        "network_nodes": "NÓS_REDE",
         "mason_intro": "EU SOU MASON",
-        "generative_core": "O N├║cleo Generativo.",
+        "generative_core": "O Núcleo Generativo.",
         "state": "Estado:",
         "active": "ATIVO",
         "idle": "OCIOSO",
         "placeholder": "INSIRA COMANDO...",
         "execute": "EXECUTAR",
         "initial_messages": {
-            "online": "SISTEMA_ONLINE. Eu sou MASON. Construo a funda├º├úo da sua realidade.",
+            "online": "SISTEMA_ONLINE. Eu sou MASON. Construo a fundação da sua realidade.",
             "protocol": "Protocolo iniciado. Transmita sua consulta para processamento imediato."
         },
         "suggestions": {
-            "philosophy": "Qual ├® a filosofia do Mon├│lito?",
+            "philosophy": "Qual é a filosofia do Monólito?",
             "audit": "Executar auditoria de projeto.",
-            "synthesis": "Iniciar s├¡ntese criativa.",
-            "humans": "Substitui├º├úo manual: Falar com humanos."
+            "synthesis": "Iniciar síntese criativa.",
+            "humans": "Substituição manual: Falar com humanos."
         }
     },
     "works_page": {
         "title": "BANCO_DADOS_PROJETOS // Trabalhos Selecionados",
-        "archive_index": "├ìNDICE_ARQUIVO",
+        "archive_index": "ÍNDICE_ARQUIVO",
         "accessing": "ACESSANDO BANCO DE DADOS NEURAL...",
         "entries_found": "ENTRADAS ENCONTRADAS.",
         "no_data": "NENHUM DADO ENCONTRADO NESTE SETOR.",
@@ -203,7 +204,7 @@
     },
     "project_modal": {
         "neural_active": "RENDER_NEURAL_ATIVO",
-        "static_preview": "PR├ëVIA_EST├üTICA",
+        "static_preview": "PRÉVIA_ESTÁTICA",
         "system_data": "Dados do Sistema"
     }
 }
