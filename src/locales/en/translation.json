@@ -10,21 +10,21 @@
         "title": "BORN ON SET",
         "subtitle": "THE SAME SOUL",
         "scramble": "A NEW BODY",
-        "description": "A NEW DIVISION BY BRICK.\nFROM ZERO TO EVERYTHING SINCE 2016"
+        "description": "A NEW DIVISION OF BRICK.\nFROM SCRATCH TO EVERYTHING, SINCE 2016"
     },
     "philosophy": {
         "belief_label": "THE METHOD",
         "raw": {
             "title": "PROMPT",
-            "text": "There is no magic prompt. AI creates infinite pixels and patterns, but it cannot create intent. It is just a tool."
+            "text": "There is no magic prompt. AI can generate endless pixels and patterns, but it cannot create intention. It's just a tool."
         },
         "noise": {
             "title": "NOISE",
-            "text": "Generative models are massive probability calculators. They guess, and they rarely get it right. We are the element that turns chaos into art."
+            "text": "Generative models are giant probability engines. They guess, and most guesses miss. We are the element that turns chaos into art."
         },
         "direct": {
             "title": "WE DIRECT THE INTELLIGENCE",
-            "text": "The model is a silicon bureaucrat — it doesn't obey and it has no soul. Our job is to tame it technically and inject the feeling it will never have."
+            "text": "The model is a silicon bureaucrat: it doesn't obey and it has no soul. Our job is to tame it technically and inject the feeling it will never have."
         }
     },
     "works": {
@@ -32,31 +32,31 @@
             "title": "INHERITANCE",
             "subtitle": "SHORT FILM",
             "desc": "Official Selection — Gramado Film Festival 2025",
-            "longDesc": "A leaked documentary arrived from the future. After the AI revolution optimized human life into nonexistence, a new civilization rose from what we left behind, small yet hauntingly familiar. This film follows the true cycle of power as a fragile species rebuilds the world, repeats our mistakes, and fights to break the rhythm written long before them. Through fire, division, transcendence and return, they outgrow their cage, inherit our pattern, and attempt to rewrite it. Because history doesn't just repeat."
+            "longDesc": "A leaked documentary from the future. After the AI revolution erases humanity, hamsters inherit the planet and rebuild civilization—repeating our mistakes while fighting a cycle written long before them. Officially selected at the 2025 Gramado Film Festival, the film tracks this fragile species through fire, division, and transcendence as they try to break history's rhythm."
         },
         "shift": {
             "title": "SYNAPSESHEET",
             "subtitle": "MANIFESTO",
             "desc": "Genero Challenge Finalist",
-            "longDesc": "One face, sixty seconds, and the abolition of geographic borders. This film is raw proof that the physical limitations of the set have become optional. In the span of a minute, the same protagonist shifts contexts: from the elegance of a European salon to the roar of a marching band in a packed stadium, from the silence of baroque palaces to the sumo ring. A Genero Challenge finalist, the work is not just a visual exercise — it is a decree: from now on, the scale of a story is limited only by the courage of the direction, never again by logistics."
+            "longDesc": "One face, one minute, and the collapse of geographic distance. A Genero Challenge finalist, this film proves that set walls are now optional. The protagonist shifts between radically different worlds—from European refinement to a roaring stadium, from baroque silence to a sumo ring. More than a visual exercise, it's a statement: scale is now limited by directorial ambition, not logistics."
         },
         "anima": {
             "title": "AUTOBOL",
             "subtitle": "REIMAGINED HISTORY",
             "desc": "Reviving a forgotten sport from the 70s",
-            "longDesc": "Autobol was real. In 1970s Rio de Janeiro, cars pushed a giant ball in matches between Flamengo, Fluminense, Vasco, and Botafogo. Created by physician Mário Marques Tourinho, the sport was a brief phenomenon — almost entirely forgotten today. This project reimagines Autobol as it could have been captured back then: with all the texture, grain, and atmosphere of lost 70s broadcast footage"
+            "longDesc": "Autobol was real. In 1970s Rio, cars battled over a giant ball in matches tied to the city's biggest clubs. This project revives what time failed to preserve: a cinematic reimagining of the sport with the grain, speed, and brutal energy of a lost broadcast—brought back at full scale."
         },
         "void": {
             "title": "VOID GAZING",
             "subtitle": "DATA VISUALIZATION",
             "desc": "Translating cosmic radiation into visible spectrums",
-            "longDesc": "A data-driven installation that visualizes real-time cosmic radiation via NASA Open API. We wrote Python scripts to convert numerical noise into fluid dynamics parameters inside TouchDesigner. AI then textures the simulation in real time — effectively letting audiences see the invisible universe through a human-curated aesthetic lens"
+            "longDesc": "A data-driven installation that visualizes cosmic radiation in real time through NASA's Open API. We built Python scripts to convert numerical noise into fluid-dynamics parameters in TouchDesigner. AI textures the simulation live, letting audiences see the invisible universe through a human-curated aesthetic lens."
         },
         "urban": {
             "title": "URBAN REEF",
             "subtitle": "PROCEDURAL ENV",
             "desc": "Growing cities like coral. Biological algorithms applied",
-            "longDesc": "Urban Reef explores biomimicry in architecture. Using differential growth algorithms in Houdini, we grew city structures that seek light the way coral does. These procedural meshes were then textured using AI upscaling — producing a vision of a city that feels cultivated rather than constructed, challenging how architectural design is conceived"
+            "longDesc": "Urban Reef explores biomimicry in architecture. Using differential growth algorithms in Houdini, we cultivated city structures that seek light like coral. These procedural meshes were then enhanced with AI upscaling, creating a cityscape that feels grown rather than built—and challenging conventional architectural design logic."
         },
         "factory": {
             "title": "FACTORY",
@@ -74,7 +74,7 @@
     "transmissions": {
         "log_001": {
             "title": "THE MACHINE HAS NO SOUL. WE DO.",
-            "excerpt": "Technology without artistic intent is just expensive noise. Art directs. The machine executes.",
+            "excerpt": "Technology without artistic intent is just expensive noise. Art leads. The machine executes.",
             "content_p1": "The stack of bytes that powers artificial intelligence has no idea what a narrative that hurts feels like, or why a slightly tilted frame is sometimes the thing that saves a scene. It doesn't sense aesthetics. It only processes statistics.\n\nBut Brick has been breathing this for decades. As creators, we know that technology without artistic intent is just expensive noise. We are artists who chose to master the technological chaos.\n\nWhat we deliver is not an automated process. It is authorial execution pushed to its absolute limit. While the market drowns in easy prompts, we use AI as a surgical brush to materialize concepts that, until yesterday, were trapped by budget or physical constraints.\n\nThe soul of the scene, the mood that grips the viewer, the edit that actually makes sense — those are human. Those are ours. The machine is simply the tool that lets us deliver the client's vision with a visual force nobody else can match.\n\nThat distinction wasn't born from a screen. It was born on set. From years of calibrating light, building performance, understanding what makes a scene breathe.\n\nBrick didn't arrive at AI through technology. We arrived through the pursuit of scale without giving up authorship. The models were trained on the cinema this industry produced. Our job is to define what comes next.",
             "section_title": "",
             "content_p2": "",
@@ -106,7 +106,7 @@
         "title_part1": "BORN",
         "title_part2": "ON SET",
         "title_mobile_br": "BORN <br /> ON SET",
-        "text": "This isn't an experiment. It's a production company with 10 years on set — now with no limits on what's possible.",
+        "text": "This isn't an experiment. It's a production company with 10 years on set—now without limits on what's possible.",
         "trusted_by": "Partners"
     },
     "stages": {
@@ -114,14 +114,14 @@
         "origin": "The Origin",
         "two": "Stage II",
         "three": "Stage III",
-        "grand_finale": "The Grand Finale"
+        "grand_finale": "Grand Finale"
     },
     "footer": {
-        "complex_problem": "GOT AN IMPOSSIBLE IDEA?",
+        "complex_problem": "HAVE AN IMPOSSIBLE IDEA?",
         "we_have_intelligence": "WE HAVE THE VISION",
         "talk_to_us": "TALK TO US",
         "network": "Network",
-        "rights_reserved": "All Rights Reserved",
+        "rights_reserved": "All rights reserved",
         "generative_division": "The Generative Division",
         "system_admin": "SYSTEM_ADMIN"
     },
@@ -131,7 +131,7 @@
         "title_primary": "BORN",
         "title_highlight": "ON",
         "title_secondary": "SET.",
-        "description": "From 2016 to here. From physical sets to limitless tools. Brick was born producing traditional video. It wasn't a conversion, it was an evolution. When technology matured enough, Brick absorbed it without losing what matters: soul.",
+        "description": "From 2016 to now. From physical sets to limitless tools. Brick started in traditional production. It wasn't a pivot—it was an evolution. When the tech matured, we embraced it without losing what matters most: soul.",
         "core_modules": "MAP_COORDINATES //",
         "modules": {
             "cinematography": {
@@ -142,12 +142,12 @@
             "training": {
                 "title": "MODEL_TRAINING",
                 "status": "INSTALLED",
-                "desc": "Custom LoRAs // Style Consistency // Fine Tuning"
+                "desc": "Custom LoRAs // Style Consistency // Fine-Tuning"
             },
             "architecture": {
                 "title": "PIPELINE_ARCHITECTURE",
                 "status": "INSTALLED",
-                "desc": "Python Tools // Automation // Render Farm"
+                "desc": "Python Tooling // Automation // Render Farm"
             }
         },
         "manifesto": {
@@ -156,20 +156,20 @@
             "cards": {
                 "control": {
                     "title": "ARTISTIC CONCEPTION",
-                    "desc": "AI hallucinates images; we design intent. Every film is built from references and experience, where each frame serves the narrative. Technology without soul is worthless."
+                    "desc": "AI hallucinates images; we design intention. Every film is built on references and lived set experience, where each frame serves the narrative. Technology without soul is worthless."
                 },
                 "curation": {
                     "title": "VISUAL DIRECTION",
-                    "desc": "Chaos has no owner. We give unity to chaos. We turn a thousand random generations into something that looks like a film, not an accident. That's the work of people who know what they're doing and have been on set for a long time."
+                    "desc": "Chaos has no author. We impose coherence. We turn thousands of random generations into something that feels like cinema, not an accident. That's the craft of people who know the set and the process."
                 },
                 "black_box": {
                     "title": "SIGNATURE",
-                    "desc": "We're not image generators, we're creators. We oversee every step of the process so that technology serves the story, not the other way around. We don't sell generated files. We deliver a finished, complete vision."
+                    "desc": "We're not image generators—we're creators. We direct every stage so technology serves the story, never the other way around. We don't sell generated files. We deliver finished vision."
                 }
             }
         },
         "team": {
-            "title": "UNIT_LEADERS // COMMAND",
+            "title": "UNIT_LEADS // COMMAND",
             "roles": {
                 "fran": "DIRECTOR",
                 "gabriel": "CREATIVE & INNOVATION DIRECTOR",
@@ -193,7 +193,7 @@
         "placeholder": "Transmit your message...",
         "execute": "EXECUTE",
         "initial_messages": {
-            "online": "Hello. I am MASON. I'm here to direct your transmission",
+            "online": "Hello. I'm MASON. I'm here to route your transmission.",
             "protocol": "How can I help?"
         },
         "suggestions": {
@@ -203,7 +203,7 @@
         }
     },
     "works_page": {
-        "title": "Prelude • The Proof",
+        "title": "Prelude • Proof",
         "archive_index": "ARCHIVE_INDEX",
         "accessing": "ACCESSING NEURAL DATABASE...",
         "entries_found": "ENTRIES FOUND",
