@@ -454,13 +454,39 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
             },
         ];
 
-        // Transmissions are loaded 100% from the DB (no hardcoded fallback).
-
+        const generatedTransmissions: Post[] = [
+            {
+                id: "log_001",
+                date: "2025.01.15",
+                title: { pt: t('transmissions.log_001.title'), en: t('transmissions.log_001.title') },
+                excerpt: { pt: t('transmissions.log_001.excerpt'), en: t('transmissions.log_001.excerpt') },
+                tags: ["MANIFESTO", "IA", "AUTORIA"],
+                url: "log_001",
+                content: t('transmissions.log_001.content_p1')
+            },
+            {
+                id: "log_002",
+                date: "2025.02.10",
+                title: { pt: t('transmissions.log_002.title'), en: t('transmissions.log_002.title') },
+                excerpt: { pt: t('transmissions.log_002.excerpt'), en: t('transmissions.log_002.excerpt') },
+                tags: ["PRODUÇÃO", "DIREÇÃO", "CINEMA"],
+                url: "log_002",
+                content: t('transmissions.log_002.content_p1')
+            },
+            {
+                id: "log_003",
+                date: "2025.03.05",
+                title: { pt: t('transmissions.log_003.title'), en: t('transmissions.log_003.title') },
+                excerpt: { pt: t('transmissions.log_003.excerpt'), en: t('transmissions.log_003.excerpt') },
+                tags: ["EVOLUÇÃO", "VANGUARDA", "TECNOLOGIA"],
+                url: "log_003",
+                content: t('transmissions.log_003.content_p1')
+            },
+        ];
 
         const syncData = async () => {
-            // Works start from hardcoded defaults (i18n texts preserved), transmissions come 100% from DB
             let finalWorks = [...generatedWorks];
-            let finalTrans: Post[] = [];
+            let finalTrans: Post[] = [...generatedTransmissions];
 
             try {
                 const [wRes, tRes] = await Promise.all([
@@ -496,8 +522,16 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
                 if (tRes.ok) {
                     const dbTrans = await tRes.json();
-                    if (Array.isArray(dbTrans)) {
-                        finalTrans = dbTrans;
+                    if (Array.isArray(dbTrans) && dbTrans.length > 0) {
+                        // Merge: DB transmissions override hardcoded ones by id, extras get appended
+                        dbTrans.forEach((dt: Post) => {
+                            const idx = finalTrans.findIndex(ft => ft.id === dt.id);
+                            if (idx >= 0) {
+                                finalTrans[idx] = dt;
+                            } else {
+                                finalTrans.push(dt);
+                            }
+                        });
                     }
                 }
 
@@ -2667,7 +2701,9 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
 }
 
 const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, onAbout }: any) => {
-    const { t } = useTranslation();
+    const { t, i18n } = useTranslation();
+    const postTitle = getLocalizedField(post.title, i18n.language, 'UNTITLED');
+    const postExcerpt = getLocalizedField(post.excerpt, i18n.language, '');
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
@@ -2690,16 +2726,16 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, 
                                 </div>
 
                                 <h1 className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-[0.95] tracking-tight mb-8 text-center">
-                                    {(post.title || '').toUpperCase() === 'A MÁQUINA NÃO TEM ALMA. NÓS TEMOS.' ? (
+                                    {postTitle.toUpperCase() === 'A MÁQUINA NÃO TEM ALMA. NÓS TEMOS.' ? (
                                         <>
                                             A MÁQUINA NÃO TEM ALMA.{' '}
                                             <span className="text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.45)]">NÓS TEMOS.</span>
                                         </>
-                                    ) : post.title}
+                                    ) : postTitle}
                                 </h1>
 
                                 <p className="text-base md:text-xl text-[#b8bcc4] font-light leading-relaxed text-center">
-                                    {post.excerpt}
+                                    {postExcerpt}
                                 </p>
                             </div>
                         </header>
@@ -3030,7 +3066,7 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, o
 );
 
 const InfoCard = ({ number, title, desc }: { number: string, title: string, desc: string }) => (
-    <div className="group relative bg-[#050505] p-8 md:p-10 hover:bg-[#0A0A0A] transition-colors duration-500 overflow-hidden border border-white/5 hover:border-[#DC2626] border-l-4 border-l-transparent hover:border-l-[#DC2626]">
+    <div className="group relative bg-[#050505] p-8 md:p-10 hover:bg-[#0A0A0A] transition-colors duration-500 overflow-hidden border border-white/5 hover:border-[#DC2626] border-l-4 border-l-transparent hover:border-l-[#DC2626] h-full flex flex-col">
         <div className="absolute top-0 right-0 p-4 opacity-30 group-hover:opacity-100 transition-opacity">
             <span className="font-mono text-[9px] text-[#DC2626] border border-[#DC2626] px-1 tracking-widest">SEC_{number}</span>
         </div>
@@ -3110,7 +3146,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                                     {t('about.title_highlight')}<br />
                                     <span className="text-[#DC2626]">{t('about.title_secondary')}</span>
                                 </h2>
-                                <p className="text-[#E5E5E5] font-light text-base md:text-lg leading-relaxed max-w-xl border-l-2 border-[#DC2626] pl-6 animate-fade-in-up delay-200">
+                                <p className="text-[#E5E5E5] font-inter font-light text-base md:text-lg leading-relaxed max-w-xl border-l-2 border-[#DC2626] pl-6 animate-fade-in-up delay-200">
                                     {t('about.description')}
                                 </p>
                             </div>
@@ -3165,7 +3201,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                             <h2 className="text-2xl font-brick text-white">{t('about.manifesto.title')}</h2>
                             <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-widest">{t('about.manifesto.subtitle')}</span>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
                             <InfoCard
                                 number="01"
                                 title={t('about.manifesto.cards.control.title')}
@@ -3193,15 +3229,15 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                             <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.team.title')}</h2>
                         </div>
 
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-                            <TeamMember name="ALEX M." role={t('about.team.roles.alex')} id="001" />
-                            <TeamMember name="SARAH V." role={t('about.team.roles.sarah')} id="002" />
-                            <TeamMember name="GABRIEL P." role={t('about.team.roles.gabriel')} id="003" />
-                            <TeamMember name="MARCUS L." role={t('about.team.roles.marcus')} id="004" />
+                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                            <TeamMember name="FRAN CAMPARONI" role={t('about.team.roles.fran')} id="001" />
+                            <TeamMember name="GABRIEL PANAZIO" role={t('about.team.roles.gabriel')} id="002" />
+                            <TeamMember name="LUFE BERTO" role={t('about.team.roles.lufe')} id="003" />
                         </div>
                         </div>
                     </section>
             </main>
+
             <Footer onChat={onChat} />
         </React.Fragment>
     );
