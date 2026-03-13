@@ -63,7 +63,26 @@
             "subtitle": "AUDIO REACTIVE",
             "desc": "A visual narrative driven entirely by sub-bass frequencies.",
             "longDesc": "In Silent Echo, the music drives the machine. We built a system in Unreal Engine 5 where visual elements are triggered directly by audio analysis. Sub-bass frequencies dictate geometry displacement, while high-hats trigger generative lighting events. It is a synesthetic experience where the artist's sound directly sculpts the digital world."
+        },
+        "factory": {
+            "title": "FACTORY",
+            "subtitle": "GENERATIVE CINEMATOGRAPHY",
+            "desc": "Full generative pipeline from concept to final delivery.",
+            "longDesc": "Factory represents Brick AI's complete pipeline — from concept to final delivery. Every frame is built with intention, combining traditional cinematography with cutting-edge generative tools to create results that couldn't exist otherwise."
+        },
+        "dogday": {
+            "title": "DOG DAY AFTERNOON",
+            "subtitle": "ABSURDIST REALISM",
+            "desc": "When the absurd meets generative hyperrealism.",
+            "longDesc": "Dog Day Afternoon explores the frontier between the real and the impossible. Using advanced image generation techniques, we created hyperrealistic scenarios that defy logic while maintaining a cinematic quality that convinces the eye."
         }
+    },
+    "stages": {
+        "one": "STAGE_01",
+        "two": "STAGE_02",
+        "three": "STAGE_03",
+        "origin": "ORIGIN",
+        "grand_finale": "GRAND FINALE"
     },
     "transmissions": {
         "log_001": {
