@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRight, Database, Globe, Globe2, Menu, Radio, Wifi, X } from 'lucide-react';
+import { ArrowRight, Database, Globe, Globe2, Menu, X } from 'lucide-react';
 import * as THREE from 'three';
 import { useTranslation } from 'react-i18next';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
