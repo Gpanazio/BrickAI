@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRight, Database, Globe, Globe2, Menu, X } from 'lucide-react';
+import { ArrowRight, Eye, Fingerprint, Globe, Globe2, Menu, X } from 'lucide-react';
 import * as THREE from 'three';
 import { useTranslation } from 'react-i18next';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
@@ -3070,6 +3070,45 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, o
     </React.Fragment>
 );
 
+const SignalLoadingBar = () => {
+    const TOTAL_BLOCKS = 14;
+    const [progress, setProgress] = useState(11);
+
+    useEffect(() => {
+        let current = 8;
+        const tick = () => {
+            const target = 9 + Math.floor(Math.random() * 6);
+            const step = target > current ? 1 : -1;
+            const interval = setInterval(() => {
+                current += step;
+                setProgress(current);
+                if (current === target) {
+                    clearInterval(interval);
+                    setTimeout(tick, 1500 + Math.random() * 2000);
+                }
+            }, 400 + Math.random() * 300);
+        };
+        tick();
+        return () => {};
+    }, []);
+
+    return (
+        <div className="flex items-end gap-[2px] h-[18px] w-full">
+            {Array.from({ length: TOTAL_BLOCKS }).map((_, i) => (
+                <div
+                    key={i}
+                    className="flex-1 bg-[#DC2626]"
+                    style={{
+                        height: '18px',
+                        opacity: i < progress ? 1 : 0.08,
+                        transition: 'opacity 0.1s ease',
+                    }}
+                />
+            ))}
+        </div>
+    );
+};
+
 const InfoCard = ({ number, title, desc }: { number: string, title: string, desc: string }) => (
     <div className="group relative bg-[#050505] p-8 md:p-10 hover:bg-[#0A0A0A] transition-colors duration-500 overflow-hidden border border-white/5 hover:border-[#DC2626] border-l-4 border-l-transparent hover:border-l-[#DC2626] h-full flex flex-col">
         <div className="absolute top-0 right-0 p-4 opacity-30 group-hover:opacity-100 transition-opacity">
@@ -3206,9 +3245,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                                                 className="absolute inset-[-2px]"
                                             >
                                                 <svg className="w-full h-full" viewBox="0 0 24 36" fill="none">
-                                                    {/* base outline */}
                                                     <rect x="0.5" y="0.5" width="23" height="35" stroke="#DC2626" strokeWidth="0.5" strokeOpacity="0.25" />
-                                                    {/* traveling light — perimeter=116 */}
                                                     <rect x="0.5" y="0.5" width="23" height="35" stroke="#DC2626" strokeWidth="1.5" strokeDasharray="8 108" className="animate-border-trace" />
                                                 </svg>
                                             </motion.div>
@@ -3217,30 +3254,8 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                                             <div className="flex justify-between items-end">
                                                 <span className="text-[8px] font-mono text-white/40 tracking-[0.2em]">SATELLITE_RELAY_ACTIVE</span>
                                             </div>
-                                            <div className="flex items-end gap-[2px] h-[18px]">
-                                                {Array.from({ length: 14 }).map((_, i) => {
-                                                    const a = i * 7.3 + 1.1;
-                                                    const b = i * 3.17 + 2.9;
-                                                    const dur = 0.9 + ((a * 17.3) % 1) * 5.5;
-                                                    const delay = ((b * 11.7) % 1) * 6.0;
-                                                    const lo = 0.05 + ((a * 5.1) % 1) * 0.2;
-                                                    const hi = 0.65 + ((b * 4.3) % 1) * 0.35;
-                                                    return (
-                                                        <motion.div
-                                                            key={i}
-                                                            className="flex-1 bg-[#DC2626]"
-                                                            style={{ height: '18px' }}
-                                                            animate={{ opacity: [lo, hi, lo] }}
-                                                            transition={{
-                                                                duration: dur,
-                                                                delay: delay,
-                                                                repeat: Infinity,
-                                                                ease: 'easeInOut',
-                                                            }}
-                                                        />
-                                                    );
-                                                })}
-                                            </div>
+                                            {/* pixel loading bar (retro) */}
+                                            <SignalLoadingBar />
                                             <div className="flex justify-between text-[7px] font-mono text-white/20 uppercase">
                                                 <span>Pkt_Loss: 0.00%</span>
                                                 <span>Latency: 14ms</span>
@@ -3256,7 +3271,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                     <section className="w-full px-6 md:px-12 lg:px-24 mb-32 reveal">
                         <div className="border-t border-white/10 pt-12">
                         <div className="flex items-center gap-3 mb-8 border-b border-white/10 pb-4">
-                            <Database className="w-4 h-4 text-[#DC2626]" />
+                            <Eye className="w-4 h-4 text-[#DC2626]" />
                             <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.manifesto.title')} // {t('about.manifesto.subtitle')}</h2>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
@@ -3283,7 +3298,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                     <section className="w-full px-6 md:px-12 lg:px-24 pb-32 md:pb-40 reveal">
                         <div className="border-t border-white/10 pt-12">
                         <div className="flex items-center gap-3 mb-12 border-b border-white/10 pb-4">
-                            <Database className="w-4 h-4 text-[#DC2626]" />
+                            <Fingerprint className="w-4 h-4 text-[#DC2626]" />
                             <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.team.title')}</h2>
                         </div>
 
