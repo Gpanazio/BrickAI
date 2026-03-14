@@ -132,7 +132,7 @@
         "title_highlight": "NO",
         "title_secondary": "SET.",
         "description": "De 2016 até aqui. De sets físicos a ferramentas sem limite. A Brick nasceu produzindo vídeo tradicional. Não foi uma conversão, foi uma evolução. Quando a tecnologia amadureceu o suficiente, a Brick absorveu a tecnologia sem perder o que importa: alma.",
-        "core_modules": "MÓDULOS_CENTRAIS",
+        "core_modules": "MAP_COORDINATES //",
         "modules": {
             "cinematography": {
                 "title": "CINEMATOGRAFIA_SINTÉTICA",
@@ -160,10 +160,10 @@
                 },
                 "curation": {
                     "title": "DIREÇÃO VISUAL",
-                    "desc": "O caos não tem dono. A gente dá unidade ao caos. Transformamos mil gerações aleatórias em algo que tem cara de filme, não de acidente. Isso é trabalho de quem sabe o que faz e que tá no set há muito tempo."
+                    "desc": "O caos não tem dono. A gente impõe ordem. Transformamos múltiplas gerações aleatórias em algo que tem cara de filme, não de acidente. Isso é trabalho de quem sabe o que faz e que tá no set há muito tempo."
                 },
                 "black_box": {
-                    "title": "ENTREGA",
+                    "title": "ASSINATURA",
                     "desc": "Não somos geradores de imagem, somos criadores. Cuidamos de cada etapa do processo para que a tecnologia sirva à história, e não o contrário. Não vendemos arquivos gerados. Entregamos uma visão pronta, finalizada."
                 }
             }
