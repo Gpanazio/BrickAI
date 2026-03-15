@@ -44,19 +44,19 @@
             "title": "AUTOBOL",
             "subtitle": "REIMAGINED HISTORY",
             "desc": "Reviving a forgotten sport from the 70s",
-            "longDesc": "Autobol was real. In 1970s Rio de Janeiro, cars pushed a giant ball in matches between Flamengo, Fluminense, Vasco, and Botafogo. Created by physician Mário Marques Tourinho, the sport was a brief phenomenon — almost entirely forgotten today. This project reimagines Autobol as it could have been captured back then: with all the texture, grain, and atmosphere of lost 70s broadcast footage"
+            "longDesc": "Autobol was real. In 1970s Rio de Janeiro, cars pushed a giant ball in matches between Flamengo, Fluminense, Vasco, and Botafogo. Created by physician Mário Marques Tourinho, the sport was a brief phenomenon — almost entirely forgotten today. This project reimagines Autobol as it could have been captured back then: with all the texture, grain, and atmosphere of lost 70s broadcast footage."
         },
         "void": {
             "title": "VOID GAZING",
             "subtitle": "DATA VISUALIZATION",
             "desc": "Translating cosmic radiation into visible spectrums",
-            "longDesc": "A data-driven installation that visualizes real-time cosmic radiation via NASA Open API. We wrote Python scripts to convert numerical noise into fluid dynamics parameters inside TouchDesigner. AI then textures the simulation in real time — effectively letting audiences see the invisible universe through a human-curated aesthetic lens"
+            "longDesc": "A data-driven installation that visualizes real-time cosmic radiation via NASA Open API. We wrote Python scripts to convert numerical noise into fluid dynamics parameters inside TouchDesigner. AI then textures the simulation in real time — effectively letting audiences see the invisible universe through a human-curated aesthetic lens."
         },
         "urban": {
             "title": "URBAN REEF",
             "subtitle": "PROCEDURAL ENV",
             "desc": "Growing cities like coral. Biological algorithms applied",
-            "longDesc": "Urban Reef explores biomimicry in architecture. Using differential growth algorithms in Houdini, we grew city structures that seek light the way coral does. These procedural meshes were then textured using AI upscaling — producing a vision of a city that feels cultivated rather than constructed, challenging how architectural design is conceived"
+            "longDesc": "Urban Reef explores biomimicry in architecture. Using differential growth algorithms in Houdini, we grew city structures that seek light the way coral does. These procedural meshes were then textured using AI upscaling — producing a vision of a city that feels cultivated rather than constructed, challenging how architectural design is conceived."
         },
         "factory": {
             "title": "FACTORY",
@@ -131,7 +131,7 @@
         "title_primary": "BORN",
         "title_highlight": "ON",
         "title_secondary": "SET",
-        "description": "From 2016 to here. From physical sets to limitless tools. Brick was born producing traditional video. It wasn't a conversion, it was an evolution. When technology matured enough, Brick absorbed it without losing what matters: soul.",
+        "description": "ORIGIN\n\nBrick AI is a new body for a brain forged in the analog world. Direction, aesthetics, rhythm and language remain the foundation of our craft and creative eye. Technology now arrives as an extension of that repertoire. It's not a change of identity. It's an evolution of power.",
         "core_modules": "MAP_COORDINATES //",
         "modules": {
             "cinematography": {
