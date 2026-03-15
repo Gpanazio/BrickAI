@@ -2061,6 +2061,10 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
     const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
     const smoothProgress = useSpring(scrollYProgress, { stiffness: 40, damping: 15, mass: 0.5 });
     const shouldReduceMotion = useReducedMotion();
+    const getAnimationProps = (anim: typeof monolithAnimations[keyof typeof monolithAnimations]) =>
+        shouldReduceMotion
+            ? { animate: staticFromAnim(anim.animate), transition: { duration: 0 } }
+            : anim;
 
     const planetX = useTransform(smoothProgress, [0, 1], ["-96%", "-92%"]);
     const textY = useTransform(smoothProgress, [0, 1], ["30px", "0px"]);
@@ -2113,18 +2117,15 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             >
                                 <div className="relative w-full h-full rounded-t-[2px] bg-[#000000] border border-[#1a1a1a] shadow-[inset_0_0_40px_rgba(0,0,0,0.9)] overflow-hidden">
                                     <motion.div
-                                        animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.leftGleam.animate) : monolithAnimations.leftGleam.animate}
-                                        transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.leftGleam.transition}
+                                        {...getAnimationProps(monolithAnimations.leftGleam)}
                                         className="absolute inset-y-0 left-[-16%] w-[52%] bg-gradient-to-r from-transparent via-white/18 to-transparent blur-[10px] mix-blend-screen"
                                     />
                                     <motion.div
-                                        animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.rightGleam.animate) : monolithAnimations.rightGleam.animate}
-                                        transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.rightGleam.transition}
+                                        {...getAnimationProps(monolithAnimations.rightGleam)}
                                         className="absolute inset-y-0 right-[-20%] w-[46%] bg-gradient-to-l from-transparent via-[#DC2626]/18 to-transparent blur-[12px] mix-blend-screen"
                                     />
                                     <motion.div
-                                        animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.bottomGlow.animate) : monolithAnimations.bottomGlow.animate}
-                                        transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.bottomGlow.transition}
+                                        {...getAnimationProps(monolithAnimations.bottomGlow)}
                                         className="absolute bottom-[-8%] left-1/2 h-[40%] w-[132%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.34)_0%,rgba(255,255,255,0.12)_32%,rgba(255,255,255,0)_76%)] blur-[12px] mix-blend-screen"
                                     />
                                 </div>
@@ -2138,8 +2139,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                         >
                             {/* Main nebula — breathes + morphs */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.mainNebula.animate) : monolithAnimations.mainNebula.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.mainNebula.transition}
+                                {...getAnimationProps(monolithAnimations.mainNebula)}
                                 className="absolute h-[220px] md:h-[250px] rounded-full mix-blend-screen"
                                 style={{
                                     willChange: "transform, opacity",
@@ -2150,8 +2150,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Inner glow band — vertical drift */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.innerGlow.animate) : monolithAnimations.innerGlow.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.innerGlow.transition}
+                                {...getAnimationProps(monolithAnimations.innerGlow)}
                                 className="absolute h-[84px] md:h-[110px] rounded-full"
                                 style={{
                                     width: "min(82vw, 760px)",
@@ -2162,8 +2161,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Left vapor — rises + rotates */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.leftVapor.animate) : monolithAnimations.leftVapor.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.leftVapor.transition}
+                                {...getAnimationProps(monolithAnimations.leftVapor)}
                                 className="absolute -translate-x-[30%] h-[96px] md:h-[118px] rounded-full"
                                 style={{
                                     width: "min(30vw, 280px)",
@@ -2174,8 +2172,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Right vapor — counter-drifts */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.rightVapor.animate) : monolithAnimations.rightVapor.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.rightVapor.transition}
+                                {...getAnimationProps(monolithAnimations.rightVapor)}
                                 className="absolute translate-x-[30%] h-[88px] md:h-[110px] rounded-full"
                                 style={{
                                     width: "min(28vw, 260px)",
@@ -2186,8 +2183,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Horizon streak — pulses + morphs */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.horizonStreak.animate) : monolithAnimations.horizonStreak.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.horizonStreak.transition}
+                                {...getAnimationProps(monolithAnimations.horizonStreak)}
                                 className="absolute h-[42px] md:h-[52px] rounded-full mix-blend-screen"
                                 style={{
                                     width: "min(48vw, 360px)",
@@ -2197,8 +2193,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Lower streak — drifts up */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.lowerStreak.animate) : monolithAnimations.lowerStreak.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.lowerStreak.transition}
+                                {...getAnimationProps(monolithAnimations.lowerStreak)}
                                 className="absolute h-[30px] md:h-[38px] rounded-full mix-blend-screen"
                                 style={{
                                     width: "min(40vw, 300px)",
@@ -2208,8 +2203,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Left wisp — swirls upward */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.leftWispRed.animate) : monolithAnimations.leftWispRed.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.leftWispRed.transition}
+                                {...getAnimationProps(monolithAnimations.leftWispRed)}
                                 className="absolute -translate-x-[18%] -translate-y-[10%] h-[58px] md:h-[72px] rounded-full mix-blend-screen"
                                 style={{
                                     width: "min(16vw, 140px)",
@@ -2219,8 +2213,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Right wisp — swirls opposite */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.rightWispRed.animate) : monolithAnimations.rightWispRed.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.rightWispRed.transition}
+                                {...getAnimationProps(monolithAnimations.rightWispRed)}
                                 className="absolute translate-x-[16%] translate-y-[6%] h-[54px] md:h-[68px] rounded-full mix-blend-screen"
                                 style={{
                                     width: "min(15vw, 128px)",
@@ -2237,8 +2230,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                         >
                             {/* Broad white vapor — breathes + morphs vertically */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.broadVapor.animate) : monolithAnimations.broadVapor.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.broadVapor.transition}
+                                {...getAnimationProps(monolithAnimations.broadVapor)}
                                 className="absolute h-[104px] md:h-[130px] rounded-full mix-blend-normal"
                                 style={{
                                     willChange: "opacity, transform",
@@ -2249,8 +2241,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Core glow — rises gently */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.coreGlow.animate) : monolithAnimations.coreGlow.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.coreGlow.transition}
+                                {...getAnimationProps(monolithAnimations.coreGlow)}
                                 className="absolute h-[96px] md:h-[128px] rounded-full"
                                 style={{
                                     width: "min(24vw, 220px)",
@@ -2261,8 +2252,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Horizon light — pulses with vertical morph */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.horizonLight.animate) : monolithAnimations.horizonLight.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.horizonLight.transition}
+                                {...getAnimationProps(monolithAnimations.horizonLight)}
                                 className="absolute h-[42px] md:h-[56px] rounded-full"
                                 style={{
                                     width: "min(74vw, 580px)",
@@ -2273,8 +2263,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Sharp horizon line — breathes */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.sharpHorizon.animate) : monolithAnimations.sharpHorizon.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.sharpHorizon.transition}
+                                {...getAnimationProps(monolithAnimations.sharpHorizon)}
                                 className="absolute h-[24px] md:h-[30px] rounded-full mix-blend-normal"
                                 style={{
                                     willChange: "opacity",
@@ -2285,8 +2274,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Left wisp — swirls upward */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.leftWispWhite.animate) : monolithAnimations.leftWispWhite.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.leftWispWhite.transition}
+                                {...getAnimationProps(monolithAnimations.leftWispWhite)}
                                 className="absolute -translate-x-[16%] h-[18px] md:h-[22px] rounded-full mix-blend-normal"
                                 style={{
                                     willChange: "opacity",
@@ -2297,8 +2285,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Right wisp — counter-swirls */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.rightWispWhite.animate) : monolithAnimations.rightWispWhite.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.rightWispWhite.transition}
+                                {...getAnimationProps(monolithAnimations.rightWispWhite)}
                                 className="absolute translate-x-[18%] h-[16px] md:h-[20px] rounded-full mix-blend-normal"
                                 style={{
                                     willChange: "opacity",
@@ -2309,8 +2296,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Thin inner streak — vertical pulse */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.thinStreak.animate) : monolithAnimations.thinStreak.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.thinStreak.transition}
+                                {...getAnimationProps(monolithAnimations.thinStreak)}
                                 className="absolute h-[12px] md:h-[16px] rounded-full mix-blend-normal"
                                 style={{
                                     width: "min(34vw, 250px)",
@@ -2320,8 +2306,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Upper-left tendril — spirals upward */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.upperLeftTendril.animate) : monolithAnimations.upperLeftTendril.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.upperLeftTendril.transition}
+                                {...getAnimationProps(monolithAnimations.upperLeftTendril)}
                                 className="absolute -translate-x-[10%] -translate-y-[12%] h-[24px] md:h-[30px] rounded-full mix-blend-normal"
                                 style={{
                                     width: "min(12vw, 100px)",
@@ -2331,8 +2316,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Lower-right tendril — spirals opposite */}
                             <motion.div
-                                animate={shouldReduceMotion ? staticFromAnim(monolithAnimations.lowerRightTendril.animate) : monolithAnimations.lowerRightTendril.animate}
-                                transition={shouldReduceMotion ? { duration: 0 } : monolithAnimations.lowerRightTendril.transition}
+                                {...getAnimationProps(monolithAnimations.lowerRightTendril)}
                                 className="absolute translate-x-[12%] translate-y-[10%] h-[20px] md:h-[26px] rounded-full mix-blend-normal"
                                 style={{
                                     width: "min(10vw, 84px)",
