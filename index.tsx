@@ -1965,7 +1965,8 @@ const StarchildBackground = () => {
 };
 
 // --- MONOLITH ANIMATION VARIANTS ---
-const staticFromAnim = (anim: { opacity: readonly number[] }) => ({ opacity: anim.opacity[0] });
+const staticFromAnim = (anim: Record<string, number[] | string[]>) =>
+    Object.fromEntries(Object.entries(anim).map(([key, values]) => [key, values[0]]));
 
 const monolithAnimations = {
     // Inner monolith lights
@@ -2051,7 +2052,7 @@ const monolithAnimations = {
         animate: { rotate: [0, -2, -0.5, -2.5, 0], scaleX: [1.01, 0.98, 1.01, 0.98, 1.01], scaleY: [0.99, 1.02, 0.99, 1.02, 0.99], y: ["8%", "6%", "7.5%", "5%", "8%"], opacity: [0.12, 0.16, 0.13, 0.17, 0.12] },
         transition: { duration: 20, ease: "easeInOut", repeat: Infinity, delay: 0.8, times: [0, 0.22, 0.46, 0.74, 1] }
     }
-} as const;
+};
 
 const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => {
     const ref = useRef<HTMLElement>(null);
