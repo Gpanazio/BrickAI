@@ -20,7 +20,7 @@
         },
         "noise": {
             "title": "RUÍDO",
-            "text": "Modelos generativos são grandes calculadoras de probabilidade. Elas tentam adivinhar e raramente conseguem. Nós somos o elemento que transforma o caos em arte."
+            "text": "Modelos generativos são grandes calculadoras de probabilidade. Eles tentam adivinhar e raramente conseguem. Nós somos o elemento que transforma o caos em arte."
         },
         "direct": {
             "title": "NÓS DIRIGIMOS A INTELIGÊNCIA",
@@ -32,7 +32,7 @@
             "title": "INHERITANCE",
             "subtitle": "CURTA-METRAGEM",
             "desc": "Seleção oficial Festival de Gramado 2025",
-            "longDesc": "um documentário vazado do futuro. Após a revolução da IA apagar os humanos, hamsters herdam o planeta e reconstroem o mundo, repetindo nossos erros e lutando contra um ciclo já escrito. Selecionado pelo Festival de Gramado, o filme mostra essa pequena espécie tentando quebrar o ritmo da história entre fogo, divisão e transcendência, provando que o passado insiste em retornar."
+            "longDesc": "Um documentário vazado do futuro. Após a revolução da IA apagar os humanos, hamsters herdam o planeta e reconstroem o mundo, repetindo nossos erros e lutando contra um ciclo já escrito. Selecionado pelo Festival de Gramado, o filme mostra essa pequena espécie tentando quebrar o ritmo da história entre fogo, divisão e transcendência, provando que o passado insiste em retornar."
         },
         "shift": {
             "title": "SYNAPSESHEET",
@@ -50,13 +50,13 @@
             "title": "VOID GAZING",
             "subtitle": "DATA VISUALIZATION",
             "desc": "Traduzindo radiação cósmica em espectros visíveis",
-            "longDesc": "Uma instalação baseada em dados que visualiza radiação cósmica em tempo real via NASA Open API. Escrevemos scripts Python para converter ruído numérico em parâmetros de dinâmica de fluidos no TouchDesigner. A IA então texturiza essa simulação em tempo real, permitindo efetivamente que o público 'veja' o universo invisível através de uma lente estética curada por humanos"
+            "longDesc": "Uma instalação baseada em dados que visualiza radiação cósmica em tempo real via NASA Open API. Escrevemos scripts Python para converter ruído numérico em parâmetros de dinâmica de fluidos no TouchDesigner. A IA então texturiza essa simulação em tempo real, permitindo efetivamente que o público 'veja' o universo invisível através de uma lente estética curada por humanos."
         },
         "urban": {
             "title": "URBAN REEF",
             "subtitle": "PROCEDURAL ENV",
             "desc": "Cultivando cidades como corais. Algoritmos biológicos aplicados",
-            "longDesc": "Urban Reef explora a biomimética na arquitetura. Usando algoritmos de crescimento diferencial no Houdini, 'cultivamos' estruturas de cidade que buscam luz como corais. Essas malhas procedurais foram então texturizadas usando upscaling de IA, criando uma visão de uma cidade que parece cultivada em vez de construída, desafiando processos de design arquitetônico tradicionais"
+            "longDesc": "Urban Reef explora a biomimética na arquitetura. Usando algoritmos de crescimento diferencial no Houdini, 'cultivamos' estruturas de cidade que buscam luz como corais. Essas malhas procedurais foram então texturizadas usando upscaling de IA, criando uma visão de uma cidade que parece cultivada em vez de construída, desafiando processos de design arquitetônico tradicionais."
         },
         "factory": {
             "title": "FACTORY",
@@ -68,7 +68,7 @@
             "title": "DOG DAY AFTERNOON",
             "subtitle": "COMÉDIA ABSURDA",
             "desc": "Cachorros em situações humanas",
-            "longDesc": "O que acontece quando o melhor amigo do homem herda suas piores neuroses? Sob a luz fria de uma sala comunitária, um círculo de cadeiras acomoda o rito do desabafo: um grupo de apoio onde o latido deu lugar a um inglês articulado e denso. Nesta fábula moderna, os cães não buscam mais a bola, mas o sentido por trás da dor. É um retrato visceral de como as engrenagens da vida atual deixam cicatrizes e traumas que ninguém consegue escapar."
+            "longDesc": "O que acontece quando o melhor amigo do homem herda suas piores neuroses? Sob a luz fria de uma sala comunitária, um círculo de cadeiras acomoda o rito do desabafo: um grupo de apoio onde o latido deu lugar a um inglês articulado e denso. Nesta fábula moderna, os cães não buscam mais a bola, mas o sentido por trás da dor. É um retrato visceral de como as engrenagens da vida atual deixam cicatrizes e traumas de que ninguém consegue escapar."
         }
     },
     "transmissions": {
@@ -114,7 +114,7 @@
         "origin": "A Origem",
         "two": "Estágio II",
         "three": "Estágio III",
-        "grand_finale": "O Gran Finale"
+        "grand_finale": "O Grande Final"
     },
     "footer": {
         "complex_problem": "TEM UMA IDEIA IMPOSSÍVEL?",
