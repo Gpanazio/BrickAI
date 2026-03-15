@@ -2022,18 +2022,30 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             >
                                 <div className="relative w-full h-full rounded-t-[2px] bg-[#000000] border border-[#1a1a1a] shadow-[inset_0_0_40px_rgba(0,0,0,0.9)] overflow-hidden">
                                     <motion.div
-                                        animate={{ x: ["-12%", "14%", "-12%"], opacity: [0.04, 0.11, 0.04] }}
-                                        transition={{ duration: 9.5, ease: "easeInOut", repeat: Infinity }}
+                                        animate={{
+                                            y: ["1%", "-1%", "0.5%", "-1.5%", "1%"],
+                                            scaleY: [0.97, 1.03, 0.98, 1.02, 0.97],
+                                            opacity: [0.08, 0.12, 0.09, 0.13, 0.08]
+                                        }}
+                                        transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, times: [0, 0.28, 0.48, 0.72, 1] }}
                                         className="absolute inset-y-0 left-[-16%] w-[52%] bg-gradient-to-r from-transparent via-white/18 to-transparent blur-[10px] mix-blend-screen"
                                     />
                                     <motion.div
-                                        animate={{ x: ["12%", "-14%", "12%"], opacity: [0.03, 0.09, 0.03] }}
-                                        transition={{ duration: 10.5, ease: "easeInOut", repeat: Infinity, delay: 0.5 }}
+                                        animate={{
+                                            y: ["-1%", "1.5%", "0%", "2%", "-1%"],
+                                            scaleY: [1.02, 0.97, 1.01, 0.98, 1.02],
+                                            opacity: [0.07, 0.11, 0.08, 0.12, 0.07]
+                                        }}
+                                        transition={{ duration: 20, ease: "easeInOut", repeat: Infinity, times: [0, 0.22, 0.5, 0.76, 1] }}
                                         className="absolute inset-y-0 right-[-20%] w-[46%] bg-gradient-to-l from-transparent via-[#DC2626]/18 to-transparent blur-[12px] mix-blend-screen"
                                     />
                                     <motion.div
-                                        animate={{ x: ["-7%", "9%", "-7%"], scaleX: [0.95, 1.06, 0.95], opacity: [0.08, 0.18, 0.08] }}
-                                        transition={{ duration: 8.2, ease: "easeInOut", repeat: Infinity }}
+                                        animate={{
+                                            scaleY: [0.97, 1.03, 0.98, 1.04, 0.97],
+                                            scaleX: [1.01, 0.98, 1.01, 0.97, 1.01],
+                                            opacity: [0.12, 0.17, 0.13, 0.18, 0.12]
+                                        }}
+                                        transition={{ duration: 16, ease: "easeInOut", repeat: Infinity, times: [0, 0.3, 0.52, 0.78, 1] }}
                                         className="absolute bottom-[-8%] left-1/2 h-[40%] w-[132%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.34)_0%,rgba(255,255,255,0.12)_32%,rgba(255,255,255,0)_76%)] blur-[12px] mix-blend-screen"
                                     />
                                 </div>
@@ -2045,9 +2057,15 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             className="absolute top-1/2 left-1/2 w-full flex items-center justify-center z-[17] pointer-events-none"
                             style={{ transform: "translate(-50%, -18%)" }}
                         >
+                            {/* Main nebula — breathes + morphs */}
                             <motion.div
-                                animate={{ opacity: [0.56, 0.8, 0.56], scale: [0.95, 1.05, 0.95] }}
-                                transition={{ duration: 10.5, ease: "easeInOut", repeat: Infinity }}
+                                animate={{
+                                    opacity: [0.62, 0.72, 0.65, 0.74, 0.6, 0.62],
+                                    scaleX: [0.98, 1.02, 0.99, 1.03, 0.97, 0.98],
+                                    scaleY: [1.02, 0.98, 1.01, 0.97, 1.02, 1.02],
+                                    y: ["0%", "-1%", "-0.5%", "-1.5%", "0.5%", "0%"]
+                                }}
+                                transition={{ duration: 22, ease: "easeInOut", repeat: Infinity, times: [0, 0.2, 0.4, 0.62, 0.84, 1] }}
                                 className="absolute h-[220px] md:h-[250px] rounded-full mix-blend-screen"
                                 style={{
                                     willChange: "transform, opacity",
@@ -2056,9 +2074,15 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                     filter: "blur(74px) saturate(1.08)"
                                 }}
                             />
+                            {/* Inner glow band — vertical drift */}
                             <motion.div
-                                animate={{ opacity: [0.68, 0.94, 0.68], scale: [0.96, 1.04, 0.96] }}
-                                transition={{ duration: 7.8, ease: "easeInOut", repeat: Infinity, delay: 0.2 }}
+                                animate={{
+                                    opacity: [0.75, 0.85, 0.72, 0.88, 0.76, 0.75],
+                                    scaleX: [0.99, 1.02, 0.98, 1.03, 0.99, 0.99],
+                                    scaleY: [1.01, 0.98, 1.01, 0.97, 1.02, 1.01],
+                                    y: ["0.5%", "-1%", "0%", "-1.5%", "0.5%", "0.5%"]
+                                }}
+                                transition={{ duration: 19, ease: "easeInOut", repeat: Infinity, delay: 0.2, times: [0, 0.18, 0.38, 0.6, 0.82, 1] }}
                                 className="absolute h-[84px] md:h-[110px] rounded-full"
                                 style={{
                                     width: "min(82vw, 760px)",
@@ -2067,9 +2091,16 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                     opacity: 0.95
                                 }}
                             />
+                            {/* Left vapor — rises + rotates */}
                             <motion.div
-                                animate={{ scale: [0.94, 1.08, 0.94], rotate: [0, 5, 0], opacity: [0.5, 0.84, 0.5] }}
-                                transition={{ duration: 8.6, ease: "easeInOut", repeat: Infinity }}
+                                animate={{
+                                    scaleX: [0.98, 1.02, 0.99, 1.03, 0.97, 0.98],
+                                    scaleY: [1.02, 0.98, 1.01, 0.97, 1.02, 1.02],
+                                    rotate: [0, 1.5, 0.5, 2, -0.5, 0],
+                                    y: ["0%", "-1.5%", "-0.5%", "-2.5%", "-0.3%", "0%"],
+                                    opacity: [0.6, 0.72, 0.64, 0.76, 0.58, 0.6]
+                                }}
+                                transition={{ duration: 20, ease: "easeInOut", repeat: Infinity, times: [0, 0.22, 0.42, 0.65, 0.85, 1] }}
                                 className="absolute -translate-x-[30%] h-[96px] md:h-[118px] rounded-full"
                                 style={{
                                     width: "min(30vw, 280px)",
@@ -2078,9 +2109,16 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                     opacity: 0.9
                                 }}
                             />
+                            {/* Right vapor — counter-drifts */}
                             <motion.div
-                                animate={{ scale: [0.94, 1.07, 0.94], rotate: [0, -5, 0], opacity: [0.44, 0.76, 0.44] }}
-                                transition={{ duration: 9.2, ease: "easeInOut", repeat: Infinity, delay: 0.9 }}
+                                animate={{
+                                    scaleX: [1.02, 0.98, 1.01, 0.97, 1.03, 1.02],
+                                    scaleY: [0.98, 1.02, 0.99, 1.03, 0.97, 0.98],
+                                    rotate: [0, -1.5, -0.3, -2, 0.5, 0],
+                                    y: ["0%", "-1.2%", "-0.3%", "-2%", "0.3%", "0%"],
+                                    opacity: [0.56, 0.68, 0.6, 0.72, 0.54, 0.56]
+                                }}
+                                transition={{ duration: 21, ease: "easeInOut", repeat: Infinity, delay: 0.9, times: [0, 0.2, 0.44, 0.68, 0.86, 1] }}
                                 className="absolute translate-x-[30%] h-[88px] md:h-[110px] rounded-full"
                                 style={{
                                     width: "min(28vw, 260px)",
@@ -2089,9 +2127,10 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                     opacity: 0.82
                                 }}
                             />
+                            {/* Horizon streak — pulses + morphs */}
                             <motion.div
-                                animate={{ scale: [0.92, 1.08, 0.92], opacity: [0.12, 0.28, 0.12] }}
-                                transition={{ duration: 7.2, ease: "easeInOut", repeat: Infinity, delay: 0.4 }}
+                                animate={{ scaleX: [0.98, 1.02, 0.99, 1.03, 0.98], scaleY: [1.02, 0.98, 1.01, 0.97, 1.02], opacity: [0.16, 0.22, 0.18, 0.24, 0.16], y: ["0px", "-1px", "0px", "-2px", "0px"] }}
+                                transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, delay: 0.4, times: [0, 0.24, 0.46, 0.72, 1] }}
                                 className="absolute h-[42px] md:h-[52px] rounded-full mix-blend-screen"
                                 style={{
                                     width: "min(48vw, 360px)",
@@ -2099,19 +2138,21 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                     filter: "blur(18px)"
                                 }}
                             />
+                            {/* Lower streak — drifts up */}
                             <motion.div
-                                animate={{ scale: [0.94, 1.08, 0.94], opacity: [0.08, 0.22, 0.08] }}
-                                transition={{ duration: 6.8, ease: "easeInOut", repeat: Infinity, delay: 1.1 }}
-                                className="absolute translate-y-[16px] h-[30px] md:h-[38px] rounded-full mix-blend-screen"
+                                animate={{ scaleY: [0.98, 1.03, 0.99, 1.02, 0.98], opacity: [0.12, 0.17, 0.14, 0.18, 0.12], y: ["14px", "12px", "13px", "11px", "14px"] }}
+                                transition={{ duration: 17, ease: "easeInOut", repeat: Infinity, delay: 1.1, times: [0, 0.26, 0.48, 0.74, 1] }}
+                                className="absolute h-[30px] md:h-[38px] rounded-full mix-blend-screen"
                                 style={{
                                     width: "min(40vw, 300px)",
                                     background: "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,220,220,0.16) 24%, rgba(255,255,255,0.26) 50%, rgba(255,220,220,0.16) 76%, rgba(255,255,255,0) 100%)",
                                     filter: "blur(16px)"
                                 }}
                             />
+                            {/* Left wisp — swirls upward */}
                             <motion.div
-                                animate={{ rotate: [0, 10, 0], scale: [0.92, 1.08, 0.92], opacity: [0.06, 0.18, 0.06] }}
-                                transition={{ duration: 7.6, ease: "easeInOut", repeat: Infinity, delay: 0.3 }}
+                                animate={{ rotate: [0, 2, 0.5, 3, 0], scaleX: [0.98, 1.02, 0.99, 1.03, 0.98], scaleY: [1.02, 0.98, 1.01, 0.97, 1.02], y: ["0%", "-2%", "-0.5%", "-3%", "0%"], opacity: [0.08, 0.13, 0.1, 0.14, 0.08] }}
+                                transition={{ duration: 19, ease: "easeInOut", repeat: Infinity, delay: 0.3, times: [0, 0.24, 0.46, 0.72, 1] }}
                                 className="absolute -translate-x-[18%] -translate-y-[10%] h-[58px] md:h-[72px] rounded-full mix-blend-screen"
                                 style={{
                                     width: "min(16vw, 140px)",
@@ -2119,9 +2160,10 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                     filter: "blur(18px)"
                                 }}
                             />
+                            {/* Right wisp — swirls opposite */}
                             <motion.div
-                                animate={{ rotate: [0, -10, 0], scale: [0.9, 1.06, 0.9], opacity: [0.05, 0.16, 0.05] }}
-                                transition={{ duration: 8.4, ease: "easeInOut", repeat: Infinity, delay: 1.1 }}
+                                animate={{ rotate: [0, -2, -0.5, -3, 0], scaleX: [1.02, 0.98, 1.01, 0.97, 1.02], scaleY: [0.98, 1.02, 0.99, 1.03, 0.98], y: ["0%", "-1.5%", "-0.5%", "-2.5%", "0%"], opacity: [0.08, 0.12, 0.09, 0.13, 0.08] }}
+                                transition={{ duration: 21, ease: "easeInOut", repeat: Infinity, delay: 1.1, times: [0, 0.22, 0.46, 0.74, 1] }}
                                 className="absolute translate-x-[16%] translate-y-[6%] h-[54px] md:h-[68px] rounded-full mix-blend-screen"
                                 style={{
                                     width: "min(15vw, 128px)",
@@ -2136,9 +2178,15 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             className="absolute top-1/2 left-1/2 w-full flex items-center justify-center z-20 pointer-events-none"
                             style={{ transform: "translate(-50%, -72%)" }}
                         >
+                            {/* Broad white vapor — breathes + morphs vertically */}
                             <motion.div
-                                animate={{ opacity: [0.34, 0.45, 0.34], scale: [0.97, 1.05, 0.97] }}
-                                transition={{ duration: 8.8, ease: "easeInOut", repeat: Infinity }}
+                                animate={{
+                                    opacity: [0.34, 0.4, 0.36, 0.42, 0.33, 0.34],
+                                    scaleX: [0.99, 1.01, 0.99, 1.02, 0.98, 0.99],
+                                    scaleY: [1.01, 0.98, 1.01, 0.98, 1.02, 1.01],
+                                    y: ["0px", "-2px", "-1px", "-3px", "1px", "0px"]
+                                }}
+                                transition={{ duration: 20, ease: "easeInOut", repeat: Infinity, times: [0, 0.22, 0.42, 0.64, 0.84, 1] }}
                                 className="absolute h-[104px] md:h-[130px] rounded-full mix-blend-normal"
                                 style={{
                                     willChange: "opacity, transform",
@@ -2147,10 +2195,16 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                     filter: "blur(34px)"
                                 }}
                             />
+                            {/* Core glow — rises gently */}
                             <motion.div
-                                animate={{ opacity: [0.60, 0.85, 0.60], scale: [0.94, 1.06, 0.94] }}
-                                transition={{ duration: 7.4, ease: "easeInOut", repeat: Infinity }}
-                                className="absolute h-[96px] md:h-[128px] -translate-y-[18px] rounded-full"
+                                animate={{
+                                    opacity: [0.65, 0.74, 0.68, 0.76, 0.64, 0.65],
+                                    scaleY: [0.98, 1.02, 0.99, 1.03, 0.97, 0.98],
+                                    scaleX: [1.01, 0.98, 1.01, 0.98, 1.02, 1.01],
+                                    y: ["-20px", "-22px", "-20.5px", "-23px", "-19px", "-20px"]
+                                }}
+                                transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, times: [0, 0.24, 0.44, 0.66, 0.86, 1] }}
+                                className="absolute h-[96px] md:h-[128px] rounded-full"
                                 style={{
                                     width: "min(24vw, 220px)",
                                     background: "radial-gradient(ellipse at center, rgba(255,255,255,0.44) 0%, rgba(255,255,255,0.16) 36%, rgba(255,255,255,0) 74%)",
@@ -2158,9 +2212,15 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                     opacity: 0.78
                                 }}
                             />
+                            {/* Horizon light — pulses with vertical morph */}
                             <motion.div
-                                animate={{ opacity: [0.75, 1.0, 0.75], scale: [0.95, 1.07, 0.95] }}
-                                transition={{ duration: 7.9, ease: "easeInOut", repeat: Infinity, delay: 0.3 }}
+                                animate={{
+                                    opacity: [0.72, 0.82, 0.75, 0.85, 0.7, 0.72],
+                                    scaleX: [0.99, 1.02, 0.99, 1.02, 0.98, 0.99],
+                                    scaleY: [1.01, 0.98, 1.01, 0.98, 1.02, 1.01],
+                                    y: ["0px", "-1px", "0px", "-1.5px", "0.5px", "0px"]
+                                }}
+                                transition={{ duration: 19, ease: "easeInOut", repeat: Infinity, delay: 0.3, times: [0, 0.2, 0.4, 0.62, 0.84, 1] }}
                                 className="absolute h-[42px] md:h-[56px] rounded-full"
                                 style={{
                                     width: "min(74vw, 580px)",
@@ -2169,9 +2229,14 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                     opacity: 0.9
                                 }}
                             />
+                            {/* Sharp horizon line — breathes */}
                             <motion.div
-                                animate={{ opacity: [0.45, 0.65, 0.45], scale: [0.94, 1.08, 0.94] }}
-                                transition={{ duration: 7.2, ease: "easeInOut", repeat: Infinity }}
+                                animate={{
+                                    opacity: [0.45, 0.54, 0.48, 0.56, 0.44, 0.45],
+                                    scaleX: [0.99, 1.02, 0.99, 1.02, 0.98, 0.99],
+                                    scaleY: [1.02, 0.98, 1.01, 0.97, 1.03, 1.02]
+                                }}
+                                transition={{ duration: 17, ease: "easeInOut", repeat: Infinity, times: [0, 0.22, 0.44, 0.66, 0.86, 1] }}
                                 className="absolute h-[24px] md:h-[30px] rounded-full mix-blend-normal"
                                 style={{
                                     willChange: "opacity",
@@ -2180,10 +2245,11 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                     filter: "blur(12px)"
                                 }}
                             />
+                            {/* Left wisp — swirls upward */}
                             <motion.div
-                                animate={{ opacity: [0.20, 0.35, 0.20], scale: [0.92, 1.08, 0.92], rotate: [-5, 0, -5] }}
-                                transition={{ duration: 7.6, ease: "easeInOut", repeat: Infinity }}
-                                className="absolute -translate-x-[16%] -translate-y-[10px] h-[18px] md:h-[22px] rounded-full mix-blend-normal"
+                                animate={{ opacity: [0.24, 0.3, 0.26, 0.31, 0.24], scaleY: [0.98, 1.02, 0.99, 1.03, 0.98], rotate: [-1, 0.5, -0.5, 1, -1], y: ["-12px", "-14px", "-12.5px", "-15px", "-12px"] }}
+                                transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, times: [0, 0.24, 0.46, 0.74, 1] }}
+                                className="absolute -translate-x-[16%] h-[18px] md:h-[22px] rounded-full mix-blend-normal"
                                 style={{
                                     willChange: "opacity",
                                     width: "min(22vw, 170px)",
@@ -2191,10 +2257,11 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                     filter: "blur(10px)"
                                 }}
                             />
+                            {/* Right wisp — counter-swirls */}
                             <motion.div
-                                animate={{ opacity: [0.15, 0.28, 0.15], scale: [0.92, 1.07, 0.92], rotate: [4, -1, 4] }}
-                                transition={{ duration: 7.1, ease: "easeInOut", repeat: Infinity, delay: 0.9 }}
-                                className="absolute translate-x-[18%] translate-y-[8px] h-[16px] md:h-[20px] rounded-full mix-blend-normal"
+                                animate={{ opacity: [0.18, 0.24, 0.2, 0.25, 0.18], scaleY: [1.02, 0.98, 1.01, 0.97, 1.02], rotate: [1, -0.5, 0.5, -1, 1], y: ["6px", "4px", "5.5px", "3px", "6px"] }}
+                                transition={{ duration: 19, ease: "easeInOut", repeat: Infinity, delay: 0.9, times: [0, 0.22, 0.46, 0.74, 1] }}
+                                className="absolute translate-x-[18%] h-[16px] md:h-[20px] rounded-full mix-blend-normal"
                                 style={{
                                     willChange: "opacity",
                                     width: "min(20vw, 150px)",
@@ -2202,19 +2269,21 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                     filter: "blur(10px)"
                                 }}
                             />
+                            {/* Thin inner streak — vertical pulse */}
                             <motion.div
-                                animate={{ opacity: [0.15, 0.25, 0.15], scale: [0.9, 1.08, 0.9] }}
-                                transition={{ duration: 6.6, ease: "easeInOut", repeat: Infinity, delay: 0.2 }}
-                                className="absolute translate-y-[2px] h-[12px] md:h-[16px] rounded-full mix-blend-normal"
+                                animate={{ opacity: [0.18, 0.23, 0.19, 0.24, 0.18], scaleY: [0.98, 1.02, 0.99, 1.03, 0.98], y: ["1px", "-1px", "0.5px", "-1.5px", "1px"] }}
+                                transition={{ duration: 17, ease: "easeInOut", repeat: Infinity, delay: 0.2, times: [0, 0.24, 0.48, 0.76, 1] }}
+                                className="absolute h-[12px] md:h-[16px] rounded-full mix-blend-normal"
                                 style={{
                                     width: "min(34vw, 250px)",
                                     background: "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.2) 24%, rgba(255,255,255,0.34) 50%, rgba(255,255,255,0.2) 76%, rgba(255,255,255,0) 100%)",
                                     filter: "blur(8px)"
                                 }}
                             />
+                            {/* Upper-left tendril — spirals upward */}
                             <motion.div
-                                animate={{ rotate: [0, 8, 0], scale: [0.92, 1.08, 0.92], opacity: [0.12, 0.22, 0.12] }}
-                                transition={{ duration: 6.9, ease: "easeInOut", repeat: Infinity }}
+                                animate={{ rotate: [0, 2, 0.5, 2.5, 0], scaleX: [0.99, 1.02, 0.99, 1.02, 0.99], scaleY: [1.01, 0.98, 1.01, 0.98, 1.01], y: ["0%", "-2%", "-0.5%", "-3%", "0%"], opacity: [0.14, 0.18, 0.15, 0.19, 0.14] }}
+                                transition={{ duration: 19, ease: "easeInOut", repeat: Infinity, times: [0, 0.24, 0.46, 0.72, 1] }}
                                 className="absolute -translate-x-[10%] -translate-y-[12%] h-[24px] md:h-[30px] rounded-full mix-blend-normal"
                                 style={{
                                     width: "min(12vw, 100px)",
@@ -2222,9 +2291,10 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                     filter: "blur(10px)"
                                 }}
                             />
+                            {/* Lower-right tendril — spirals opposite */}
                             <motion.div
-                                animate={{ rotate: [0, -8, 0], scale: [0.9, 1.06, 0.9], opacity: [0.10, 0.20, 0.10] }}
-                                transition={{ duration: 7.8, ease: "easeInOut", repeat: Infinity, delay: 0.8 }}
+                                animate={{ rotate: [0, -2, -0.5, -2.5, 0], scaleX: [1.01, 0.98, 1.01, 0.98, 1.01], scaleY: [0.99, 1.02, 0.99, 1.02, 0.99], y: ["8%", "6%", "7.5%", "5%", "8%"], opacity: [0.12, 0.16, 0.13, 0.17, 0.12] }}
+                                transition={{ duration: 20, ease: "easeInOut", repeat: Infinity, delay: 0.8, times: [0, 0.22, 0.46, 0.74, 1] }}
                                 className="absolute translate-x-[12%] translate-y-[10%] h-[20px] md:h-[26px] rounded-full mix-blend-normal"
                                 style={{
                                     width: "min(10vw, 84px)",
