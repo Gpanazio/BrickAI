@@ -457,6 +457,20 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 videoUrl: "https://review.brick.mov/portfolio/embed/6",
                 hasDetail: true
             },
+            {
+                id: "slop-ai",
+                orientation: "horizontal",
+                subtitle: "GERAÇÃO AUTÔNOMA DE CONTEÚDO",
+                category: "CONCEITO : CINEMATOGRAFIA SINTÉTICA",
+                title: "SLOP AI",
+                desc: "Experimento de geração massiva de conteúdo visual com IA.",
+                longDesc: "Experimento de geração massiva de conteúdo visual com IA.",
+                credits: [],
+                gradient: "from-neutral-950 to-[#DC2626]/20",
+                imageHome: "",
+                imageWorks: "",
+                hasDetail: false
+            },
         ];
 
         const generatedTransmissions: Post[] = [
@@ -528,15 +542,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 if (tRes.ok) {
                     const dbTrans = await tRes.json();
                     if (Array.isArray(dbTrans) && dbTrans.length > 0) {
-                        // Merge: DB transmissions override hardcoded ones by id, extras get appended
-                        dbTrans.forEach((dt: Post) => {
-                            const idx = finalTrans.findIndex(ft => ft.id === dt.id);
-                            if (idx >= 0) {
-                                finalTrans[idx] = dt;
-                            } else {
-                                finalTrans.push(dt);
-                            }
-                        });
+                        finalTrans = dbTrans;
                     }
                 }
 
@@ -2320,12 +2326,12 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                 {/* FOOTER BOTTOM */}
                 <div className="mt-auto w-full relative z-30">
                     {/* Digital fiber separator */}
-                    <div className="w-full h-px mb-12 relative overflow-hidden">
+                    <div className="w-full h-px mb-6 relative overflow-hidden">
                         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#DC2626]/10 to-transparent" />
                         <div className="absolute top-0 h-full w-[15%] animate-fiber bg-[linear-gradient(90deg,transparent,rgba(220,38,38,0.25),transparent)]" />
                         <div className="absolute top-0 h-full w-[15%] animate-fiber-b bg-[linear-gradient(90deg,transparent,rgba(220,38,38,0.25),transparent)]" />
                     </div>
-                    <div className="w-full px-6 md:px-12 lg:px-24 pb-12 flex flex-col md:flex-row justify-between items-center gap-6">
+                    <div className="w-full px-6 md:px-12 lg:px-24 pb-6 flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="flex gap-6">
                             {['LinkedIn', 'Instagram'].map((social) => (
                                 <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white/50 hover:text-[#DC2626] tracking-widest uppercase transition-colors duration-500">{social}</a>
@@ -2335,7 +2341,6 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             <span>&copy; 2026 Brick AI.</span>
                             <span className="hidden md:inline">{t('footer.generative_division')}</span>
                             <span>{t('footer.rights_reserved')}</span>
-                            {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">{t('footer.system_admin')}</button>}
                         </div>
                     </div>
                 </div>
@@ -2681,7 +2686,7 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
             <main className="pt-32 md:pt-40 min-h-screen flex flex-col">
-                <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
+                <section className="w-full px-6 md:px-12 lg:px-24 mb-16 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('works_page.archive_index').split('_').slice(0, -1).join('_')}_<span className="text-[#DC2626]">{t('works_page.archive_index').split('_').slice(-1)[0]}</span></h1>
@@ -2689,8 +2694,8 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
                         </div>
                     </div>
                 </section>
-                <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 md:pb-40">
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-px bg-white/5">
+                <section className="w-full px-6 md:px-12 lg:px-24 pb-16">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-px">
                         {filteredWorks.map((work, idx) => (
                             <WorksGridItem key={work.id} work={work} index={idx} onOpen={onSelectProject} />
                         ))}
@@ -2776,7 +2781,7 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
                 <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
             <main className="pt-32 md:pt-40 min-h-screen flex flex-col bg-[#050505]">
-                <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
+                <section className="w-full px-6 md:px-12 lg:px-24 mb-16 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('transmissions_page.title').split('_').slice(0, -1).join('_')}_<span className="text-[#DC2626]">{t('transmissions_page.title').split('_').slice(-1)[0]}</span></h1>
@@ -2815,7 +2820,7 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
 const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => {
     const { t } = useTranslation();
     return (
-        <footer className="w-full py-24 px-6 md:px-12 lg:px-24 bg-[#050505] border-t border-white/5 relative z-10 overflow-hidden">
+        <footer className="w-full py-12 px-6 md:px-12 lg:px-24 bg-[#050505] border-t border-white/5 relative z-10 overflow-hidden">
             <ParticleBackground reactToMouse={false} />
             <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent pointer-events-none z-[1]"></div>
 
@@ -2826,7 +2831,7 @@ const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void 
                     {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
                 </MagneticButton>
             </div>
-            <div className="mt-16 border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-start gap-4 reveal">
+            <div className="mt-8 border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-start gap-4 reveal">
                 <div className="flex gap-6">
                     {['LinkedIn', 'Instagram'].map((social) => (
                         <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors">{social}</a>
@@ -2836,7 +2841,6 @@ const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void 
                     <span className="block mb-2">&copy; 2026 Brick AI.</span>
                     <span className="hidden md:inline">{t('footer.generative_division')}</span>
                     <span className="block mt-1">{t('footer.rights_reserved')}</span>
-                    {onAdmin && <button onClick={onAdmin} className="mt-4 opacity-20 hover:opacity-100 transition-opacity">{t('footer.system_admin')}</button>}
                 </div>
             </div>
         </footer>
@@ -3072,11 +3076,11 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, o
 
 
 const InfoCard = ({ number, title, desc }: { number: string, title: string, desc: string }) => (
-    <div className="group relative bg-[#050505] p-8 md:p-10 hover:bg-[#0A0A0A] transition-colors duration-500 overflow-hidden border border-white/5 hover:border-[#DC2626] border-l-4 border-l-transparent hover:border-l-[#DC2626] h-full flex flex-col">
+    <div className="group relative bg-[#050505] p-8 md:p-10 hover:bg-[#0A0A0A] transition-colors duration-500 overflow-hidden border border-white/5 hover:border-[#DC2626] border-l-4 border-l-transparent hover:border-l-[#DC2626] flex flex-col">
         <div className="absolute top-0 right-0 p-4 opacity-30 group-hover:opacity-100 transition-opacity">
             <span className="font-mono text-[9px] text-[#DC2626] border border-[#DC2626] px-1 tracking-widest">SEC_{number}</span>
         </div>
-        <div className="mb-6 relative z-10">
+        <div className="relative z-10">
             <h3 className="text-xl md:text-2xl font-brick text-white mb-4 group-hover:text-[#DC2626] transition-colors duration-300 uppercase leading-none">{title}</h3>
             <p className="text-xs md:text-sm font-mono text-[#9CA3AF] leading-relaxed opacity-80">{desc}</p>
         </div>
@@ -3142,9 +3146,9 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                 <div className="scanline-effect fixed inset-0 z-0 pointer-events-none opacity-20"></div>
 
                 {/* HERO: ORIGIN STORY */}
-                <section className="w-full px-6 md:px-12 lg:px-24 mb-24 reveal">
+                <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
                     {/* Compact header — same pattern as Works/Transmissions */}
-                    <div className="mb-16">
+                    <div className="mb-10">
                         <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">
                             {t('about.origin').split('_').slice(0, -1).join('_')}
                             <span className="text-brick-red">_{t('about.origin').split('_').slice(-1)[0]}</span>
@@ -3155,24 +3159,49 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                         </p>
                     </div>
 
-                    {/* Pull quote — full-width editorial statement */}
-                    <div className="w-full text-center py-16 md:py-24 border-t border-b border-white/10 mb-16">
-                        <h2 className="text-5xl md:text-7xl lg:text-8xl font-brick text-white leading-[0.9] tracking-tight">
-                            {t('about.title_primary')}<br />
-                            {t('about.title_highlight')}<br />
-                            <span className="text-brick-red">{t('about.title_secondary')}</span>
-                        </h2>
-                    </div>
+                    {/* CENTERED: MONOLITH + TITLE + DESC */}
+                    <div className="flex flex-col items-center text-center gap-10 pb-8">
+                        {/* MONOLITH */}
+                        <div className="relative">
+                            <div className="monolith-structure w-[100px] h-[200px] md:w-[130px] md:h-[260px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
+                                <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
+                                <div className="centered-layer aura-atmos pointer-events-none opacity-60" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
+                                <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(220,38,38,0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
+                                <div className="centered-layer core-atmos animate-breathe pointer-events-none" style={{ width: '40px', height: '40px', filter: 'blur(10px)', background: 'radial-gradient(circle, rgba(220,38,38,1) 0%, rgba(220,38,38,0.4) 40%, transparent 80%)' }}></div>
+                                <div className="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10 rounded-[2px]"></div>
+                            </div>
+                        </div>
 
-                    {/* Description */}
-                    <p className="text-brick-white font-inter font-light text-base md:text-lg leading-relaxed max-w-2xl animate-fade-in-up">
-                        {t('about.description')}
-                    </p>
+                        {/* TITLE */}
+                        <div className="flex flex-col items-center gap-3">
+                            <p className="font-brick text-5xl md:text-6xl lg:text-7xl text-white leading-tight tracking-tight uppercase">
+                                {t('about.title_primary')} {t('about.title_highlight')}<br />
+                                <span className="text-[#DC2626]">{t('about.title_secondary')}</span>
+                            </p>
+                        </div>
+
+                        {/* DESCRIPTION — InfoCard XL */}
+                        <div className="group relative max-w-[692px] w-full bg-[#050505] p-8 md:p-10 hover:bg-[#0A0A0A] transition-colors duration-500 overflow-hidden border border-white/5 hover:border-[#DC2626] border-l-4 border-l-transparent hover:border-l-[#DC2626] flex flex-col text-left">
+                            {/* SEC badge */}
+                            <div className="absolute top-0 right-0 p-4 opacity-30 group-hover:opacity-100 transition-opacity">
+                                <span className="font-mono text-[9px] text-[#DC2626] border border-[#DC2626] px-1 tracking-widest">SEC_00</span>
+                            </div>
+                            <div className="mb-6 relative z-10">
+                                <h3 className="font-brick text-2xl md:text-3xl text-white mb-4 group-hover:text-[#DC2626] transition-colors duration-300 uppercase leading-none">
+                                    {t('about.description').split('\n\n')[0]}
+                                </h3>
+                                <p className="text-xs md:text-sm font-mono text-[#9CA3AF] leading-relaxed opacity-80">
+                                    {t('about.description').split('\n\n')[1]}
+                                </p>
+                            </div>
+                            <div className="scanline-effect opacity-10 group-hover:opacity-20 transition-opacity"></div>
+                        </div>
+                    </div>
                 </section>
 
                     {/* THE INFRASTRUCTURE (DIFFERENTIATORS) */}
                     <section className="w-full px-6 md:px-12 lg:px-24 mb-32 reveal">
-                        <div className="border-t border-white/10 pt-12">
+                        <div>
                         <div className="flex items-center gap-3 mb-8 border-b border-white/10 pb-4">
                             <Eye className="w-4 h-4 text-[#DC2626]" />
                             <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.manifesto.title')} // {t('about.manifesto.subtitle')}</h2>
@@ -3199,7 +3228,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
 
                     {/* LEADERSHIP (REAL ROLES) */}
                     <section className="w-full px-6 md:px-12 lg:px-24 pb-32 md:pb-40 reveal">
-                        <div className="border-t border-white/10 pt-12">
+                        <div>
                         <div className="flex items-center gap-3 mb-12 border-b border-white/10 pb-4">
                             <Fingerprint className="w-4 h-4 text-[#DC2626]" />
                             <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.team.title')}</h2>
