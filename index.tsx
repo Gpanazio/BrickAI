@@ -3070,44 +3070,6 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, o
     </React.Fragment>
 );
 
-const SignalLoadingBar = () => {
-    const TOTAL_BLOCKS = 14;
-    const [progress, setProgress] = useState(11);
-
-    useEffect(() => {
-        let current = 8;
-        const tick = () => {
-            const target = 9 + Math.floor(Math.random() * 6);
-            const step = target > current ? 1 : -1;
-            const interval = setInterval(() => {
-                current += step;
-                setProgress(current);
-                if (current === target) {
-                    clearInterval(interval);
-                    setTimeout(tick, 1500 + Math.random() * 2000);
-                }
-            }, 400 + Math.random() * 300);
-        };
-        tick();
-        return () => {};
-    }, []);
-
-    return (
-        <div className="flex items-end gap-[2px] h-[18px] w-full">
-            {Array.from({ length: TOTAL_BLOCKS }).map((_, i) => (
-                <div
-                    key={i}
-                    className="flex-1 bg-[#DC2626]"
-                    style={{
-                        height: '18px',
-                        opacity: i < progress ? 1 : 0.08,
-                        transition: 'opacity 0.1s ease',
-                    }}
-                />
-            ))}
-        </div>
-    );
-};
 
 const InfoCard = ({ number, title, desc }: { number: string, title: string, desc: string }) => (
     <div className="group relative bg-[#050505] p-8 md:p-10 hover:bg-[#0A0A0A] transition-colors duration-500 overflow-hidden border border-white/5 hover:border-[#DC2626] border-l-4 border-l-transparent hover:border-l-[#DC2626] h-full flex flex-col">
@@ -3181,91 +3143,32 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
 
                 {/* HERO: ORIGIN STORY */}
                 <section className="w-full px-6 md:px-12 lg:px-24 mb-24 reveal">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-                        <div>
-                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('about.origin').split('_').slice(0, -1).join('_')}<span className="text-[#DC2626]">_{t('about.origin').split('_').slice(-1)[0]}</span></h1>
-                            <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input mb-8"><span className="text-[#DC2626]">&gt;&gt; </span><span className="text-[#9CA3AF]">{t('about.est')}</span></p>
-                            <h2 className="text-4xl md:text-6xl lg:text-7xl font-brick text-white mb-8 leading-[0.9] tracking-tight">
-                                    {t('about.title_primary')}<br />
-                                    {t('about.title_highlight')}<br />
-                                    <span className="text-[#DC2626]">{t('about.title_secondary')}</span>
-                                </h2>
-                                <p className="text-[#E5E5E5] font-inter font-light text-base md:text-lg leading-relaxed max-w-xl border-l-2 border-[#DC2626] pl-6 animate-fade-in-up delay-200">
-                                    {t('about.description')}
-                                </p>
-                            </div>
-                            {/* CORE MODULES / CAPABILITIES */}
-                            <div className="bg-[#0A0A0A] border border-white/10 p-8 md:p-10 relative animate-fade-in-up delay-300 lg:mt-24">
-                                <div className="absolute top-0 left-0 w-full h-1 bg-[#DC2626]"></div>
-                                <h3 className="font-mono text-xs text-[#9CA3AF] uppercase tracking-[0.2em] mb-8 flex items-center gap-2">
-                                    <span className="w-2 h-2 bg-[#DC2626] rounded-full animate-pulse"></span>
-                                    {t('about.core_modules')}
-                                </h3>
-                                <div className="space-y-6">
-                                    <div className="group">
-                                        <div className="flex justify-between items-baseline mb-1">
-                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">{t('about.modules.cinematography.title')}</h4>
-                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">{t('about.modules.cinematography.status')}</span>
-                                        </div>
-                                        <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-relaxed">
-                                            {t('about.modules.cinematography.desc')}
-                                        </p>
-                                    </div>
-                                    <div className="w-full h-px bg-white/5"></div>
+                    {/* Compact header — same pattern as Works/Transmissions */}
+                    <div className="mb-16">
+                        <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">
+                            {t('about.origin').split('_').slice(0, -1).join('_')}
+                            <span className="text-brick-red">_{t('about.origin').split('_').slice(-1)[0]}</span>
+                        </h1>
+                        <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input">
+                            <span className="text-brick-red">&gt;&gt; </span>
+                            <span className="text-brick-gray">{t('about.est')}</span>
+                        </p>
+                    </div>
 
-                                    <div className="group">
-                                        <div className="flex justify-between items-baseline mb-1">
-                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">{t('about.modules.training.title')}</h4>
-                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">{t('about.modules.training.status')}</span>
-                                        </div>
-                                        <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-relaxed">
-                                            {t('about.modules.training.desc')}
-                                        </p>
-                                    </div>
-                                    <div className="w-full h-px bg-white/5"></div>
+                    {/* Pull quote — full-width editorial statement */}
+                    <div className="w-full text-center py-16 md:py-24 border-t border-b border-white/10 mb-16">
+                        <h2 className="text-5xl md:text-7xl lg:text-8xl font-brick text-white leading-[0.9] tracking-tight">
+                            {t('about.title_primary')}<br />
+                            {t('about.title_highlight')}<br />
+                            <span className="text-brick-red">{t('about.title_secondary')}</span>
+                        </h2>
+                    </div>
 
-                                    <div className="group">
-                                        <div className="flex justify-between items-baseline mb-1">
-                                            <h4 className="font-brick text-lg md:text-xl text-white group-hover:text-[#DC2626] transition-colors">{t('about.modules.architecture.title')}</h4>
-                                            <span className="font-mono text-[9px] text-[#DC2626] opacity-0 group-hover:opacity-100 transition-opacity">{t('about.modules.architecture.status')}</span>
-                                        </div>
-                                        <p className="font-mono text-[10px] text-[#9CA3AF] uppercase tracking-widest leading-relaxed">
-                                            {t('about.modules.architecture.desc')}
-                                        </p>
-                                    </div>
-
-                                    {/* NETWORK_LOAD — satellite relay visual */}
-                                    <div className="w-full h-px bg-white/5"></div>
-                                    <div className="flex items-center gap-6 py-4">
-                                        <div className="relative w-5 h-8 flex items-center justify-center">
-                                            <Globe2 size={24} className="text-[#DC2626] opacity-30" />
-                                            <motion.div
-                                                animate={{ rotate: 360 }}
-                                                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                                                className="absolute inset-[-2px]"
-                                            >
-                                                <svg className="w-full h-full" viewBox="0 0 24 36" fill="none">
-                                                    <rect x="0.5" y="0.5" width="23" height="35" stroke="#DC2626" strokeWidth="0.5" strokeOpacity="0.25" />
-                                                    <rect x="0.5" y="0.5" width="23" height="35" stroke="#DC2626" strokeWidth="1.5" strokeDasharray="8 108" className="animate-border-trace" />
-                                                </svg>
-                                            </motion.div>
-                                        </div>
-                                        <div className="flex-1 space-y-2">
-                                            <div className="flex justify-between items-end">
-                                                <span className="text-[8px] font-mono text-white/40 tracking-[0.2em]">SATELLITE_RELAY_ACTIVE</span>
-                                            </div>
-                                            {/* pixel loading bar (retro) */}
-                                            <SignalLoadingBar />
-                                            <div className="flex justify-between text-[7px] font-mono text-white/20 uppercase">
-                                                <span>Pkt_Loss: 0.00%</span>
-                                                <span>Latency: 14ms</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+                    {/* Description */}
+                    <p className="text-brick-white font-inter font-light text-base md:text-lg leading-relaxed max-w-2xl animate-fade-in-up">
+                        {t('about.description')}
+                    </p>
+                </section>
 
                     {/* THE INFRASTRUCTURE (DIFFERENTIATORS) */}
                     <section className="w-full px-6 md:px-12 lg:px-24 mb-32 reveal">
