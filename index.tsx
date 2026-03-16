@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ArrowRight, Eye, Fingerprint, Globe, Globe2, Menu, X } from 'lucide-react';
 import * as THREE from 'three';
