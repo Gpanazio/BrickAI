@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useContext } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useContext, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ArrowRight, Eye, Fingerprint, Globe, Globe2, Menu, X } from 'lucide-react';
 import * as THREE from 'three';
@@ -326,6 +326,7 @@ interface Work {
     subtitle: string;
     category: string;
     title: string;
+    titleFull?: string;
     desc: string;
     videoUrl?: string;
     longDesc?: string;
@@ -388,6 +389,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 subtitle: t('works.inheritance.subtitle'),
                 category: "SELEÇÃO OFICIAL : FESTIVAL DE GRAMADO",
                 title: t('works.inheritance.title'),
+                titleFull: t('works.inheritance.titleFull'),
                 desc: t('works.inheritance.desc'),
                 longDesc: t('works.inheritance.longDesc'),
                 credits: [],
@@ -467,8 +469,10 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 longDesc: "Experimento de geração massiva de conteúdo visual com IA.",
                 credits: [],
                 gradient: "from-neutral-950 to-[#DC2626]/20",
-                imageHome: "",
-                imageWorks: "",
+                imageHome: "/slopai.jpg",
+                imageWorks: "/slopai.jpg",
+                imageSettingsHome: { x: 50, y: 50, scale: 1.0 },
+                imageSettingsWorks: { x: 50, y: 50, scale: 1.0 },
                 hasDetail: false
             },
         ];
@@ -1027,7 +1031,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
     }, [monolithHover]);
 
     return (
-        <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-visible">
+        <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-visible pt-20">
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-40"></div>
 
             <div className="reveal relative z-10 w-full flex justify-center mb-10 md:mb-16">
@@ -2619,14 +2623,16 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                             {/* Title */}
                             <div className="relative">
                                 <h2
-                                    className="font-brick text-white uppercase"
+                                    className="font-brick text-white uppercase break-words overflow-wrap-anywhere"
                                     style={{
-                                        fontSize: 'clamp(2rem, 3.5vw, 3.2rem)',
-                                        lineHeight: '0.82',
+                                        fontSize: 'clamp(1.6rem, 3vw, 2.8rem)',
+                                        lineHeight: '0.85',
                                         letterSpacing: '-0.03em',
+                                        overflowWrap: 'anywhere',
+                                        wordBreak: 'break-word',
                                     }}
                                 >
-                                    {project.title}
+                                    {project.titleFull || project.title}
                                 </h2>
                                 <div className="flex items-center gap-4 mt-4">
                                     <div className="h-px w-6 bg-white/20"></div>
@@ -2689,7 +2695,7 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
         >
             {/* UPDATED FILTERS FOR VISIBILITY */}
             <div
-                className="absolute inset-0 opacity-100 sharp-image saturate-[0.9] group-hover:saturate-110 brightness-95 group-hover:brightness-105 group-hover:opacity-100 transition-all duration-700"
+                className="absolute inset-0 opacity-100 sharp-image saturate-[0.9] group-hover:saturate-110 brightness-95 group-hover:brightness-105 transition-[filter] duration-700"
                 style={{
                     backgroundImage: `url('${work.imageWorks || work.imageHome}')`,
                     backgroundSize: 'cover',
@@ -2699,17 +2705,17 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
             ></div>
 
             {/* Tech Grid Overlay for consistency */}
-            <div className="absolute inset-0 bg-tech-grid opacity-20 z-10 pointer-events-none group-hover:opacity-10 transition-opacity duration-300"></div>
+            <div className="absolute inset-0 bg-tech-grid opacity-20 z-10 pointer-events-none group-hover:opacity-10 transition-opacity duration-700"></div>
 
             <div className="scanline-effect z-20"></div>
             {/* UPDATED GRADIENT OPACITY */}
-            <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-transparent to-transparent group-hover:opacity-70 transition-opacity duration-300 z-20"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-transparent to-transparent opacity-100 group-hover:opacity-85 transition-opacity duration-1000 ease-out z-20"></div>
 
             <div className="absolute inset-0 p-4 flex flex-col justify-between z-30">
                 <div className="flex justify-between items-start opacity-50 group-hover:opacity-100 transition-opacity duration-300">
                     <span className="font-mono text-[9px] tracking-widest text-[#DC2626]">{(index + 1).toString().padStart(3, '0')}</span>
                 </div>
-                <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                <div className="transform translate-y-1 group-hover:translate-y-0 transition-transform duration-500 ease-out">
                     <h3 className="text-sm font-brick text-white leading-tight mb-1.5 tracking-tight group-hover:text-[#DC2626] transition-colors line-clamp-2">{work.title}</h3>
                     <p className="text-[9px] text-white font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-1">{work.desc}</p>
                 </div>
