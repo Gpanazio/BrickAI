@@ -1443,19 +1443,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
     const containerRef = useRef<HTMLDivElement>(null);
     const bgRef = useRef<HTMLDivElement>(null);
     const settings = work.imageSettingsHome || { x: 50, y: 50, scale: 1.2 };
-
-    // State only for hover visibility
     const [isHovered, setIsHovered] = useState(false);
-
-    const { t } = useTranslation();
-    const randomHash = useMemo(() => Math.random().toString(36).substring(7).toUpperCase(), []);
-    const [categoryLabel, categoryMeta] = useMemo(() => {
-        if (work.category.includes(':')) {
-            const parts = work.category.split(':');
-            return [parts[0].trim(), parts.slice(1).join(':').trim()];
-        }
-        return [work.id, work.category];
-    }, [work.category, work.id]);
 
     return (
         <div
@@ -1463,79 +1451,65 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             onClick={() => work.hasDetail && onOpen(work)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={`reveal relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-[#DC2626] transition-colors duration-300 bg-[#050505]/90 group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
+            className={`reveal relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-[#DC2626] transition-colors duration-300 bg-brick-black group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
             style={{
+                containerType: 'inline-size',
                 flexGrow: isHovered ? 1.6 : 1,
                 flexShrink: 0,
-                willChange: 'flex-grow, opacity, transform, border-color',
-                transition: `flex-grow 1.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.2s ease-out, transform 1.2s ease-out, border-color 500ms ease`,
+                willChange: 'flex-grow',
+                transition: 'flex-grow 1.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms ease',
             }}
         >
-            {/* BACKGROUND LAYER - AUTONOMOUS PARALLAX */}
+            {/* BACKGROUND IMAGE */}
             <div
-                className={`absolute inset-0 z-10 animate-float-parallax`}
-                style={{
-                    animationDelay: `${index * -4}s`,
-                    willChange: 'transform',
-                }}
+                className="absolute inset-0 z-10 animate-float-parallax"
+                style={{ animationDelay: `${index * -4}s` }}
             >
                 <div
                     ref={bgRef}
-                    className="absolute inset-0 opacity-100 sharp-image filter saturate-[0.8] group-hover:saturate-100 contrast-[1.05] brightness-[1.0] group-hover:brightness-[1.1] transition-[filter] duration-[3000ms] ease-out"
+                    className="absolute inset-0 sharp-image saturate-[0.8] group-hover:saturate-100 contrast-[1.05] group-hover:brightness-[1.1] transition-[filter] duration-700 ease-out"
                     style={{
                         backgroundImage: `url('${work.imageHome}')`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center center',
                         transform: `scale(${settings.scale}) translate(${(settings.x - 50) * 2}%, ${(settings.y - 50) * 2}%) translateZ(0)`,
                     }}
-                ></div>
+                />
             </div>
 
-            {/* ARTIFICIAL DEPTH OVERLAYS REMOVED FOR CLEANER LOOK */}
-
             {/* VIGNETTE & GRADIENT */}
-            <div className="absolute inset-0 z-30 transition-opacity duration-[6000ms] ease-linear opacity-90 group-hover:opacity-80" style={{ background: 'linear-gradient(to top, #050505cc 0%, #05050580 20%, #05050540 40%, transparent 65%)' }}></div>
-            <div className={`absolute inset-0 z-30 transition-opacity duration-[6000ms] ease-linear pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.8)] ${isHovered ? 'opacity-40' : 'opacity-60'}`}></div>
+            <div className="absolute inset-0 z-30 opacity-90 group-hover:opacity-80 transition-opacity duration-700" style={{ background: 'linear-gradient(to top, #050505cc 0%, #05050580 20%, #05050540 40%, transparent 65%)' }} />
+            <div className={`absolute inset-0 z-30 pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.8)] transition-opacity duration-700 ${isHovered ? 'opacity-40' : 'opacity-60'}`} />
 
-            {/* CONTENT LAYER - ULTRA MINIMALIST NO BLOCKS */}
-            <div className={`absolute inset-x-0 bottom-0 z-40 p-6 md:p-10 flex flex-col justify-end transition-all duration-500 pointer-events-none ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-
-                {/* DECORATIVE LINE */}
-                <div className="w-12 h-[2px] bg-[#DC2626] mb-4 shadow-[0_0_8px_#DC2626]"></div>
-
-                {/* CATEGORY & META */}
-                <div className="flex items-center gap-3 mb-2">
-                    <span className="font-mono text-[10px] text-[#DC2626] tracking-[0.2em] uppercase">{categoryLabel}</span>
-                    <span className="text-white/20 text-[10px] font-light">|</span>
-                    <span className="font-mono text-[10px] text-white/60 tracking-widest uppercase">{categoryMeta}</span>
-                </div>
-
-                {/* TITLE - CLEAN & BOLD */}
-                <h3 className="text-3xl md:text-5xl font-brick text-white leading-[0.9] tracking-tight drop-shadow-lg mb-2">
+            {/* CONTENT */}
+            <div className={`absolute inset-x-0 bottom-0 z-40 p-4 md:p-6 flex flex-col justify-end transition-all duration-500 pointer-events-none ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
+                <div className="w-12 h-[2px] bg-brick-red mb-4 shadow-[0_0_8px_#DC2626]" />
+                <h3
+                    className="font-brick text-white leading-[0.9] drop-shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-2"
+                    style={{ fontSize: 'clamp(0.75rem, 7cqw, 3rem)' }}
+                >
                     {work.title}
                 </h3>
-
-                {/* SUBTITLE - LIGHT MONOJET */}
-                <p className="text-white/70 text-[10px] md:text-xs font-mono font-light tracking-wide max-w-md drop-shadow-md uppercase opacity-80 mt-2">
+                <p className="text-white/40 text-[10px] font-mono tracking-widest uppercase mt-2">
                     {work.subtitle}
                 </p>
             </div>
 
-            {/* ID TAG - Always Visible Minimal */}
-            <div className={`absolute top-6 left-6 transition-all duration-500 ${isHovered ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'}`}>
+            {/* ID TAG */}
+            <div className={`absolute top-4 left-4 md:top-6 md:left-6 transition-all duration-500 ${isHovered ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'}`}>
                 <span className="font-mono text-[10px] text-white/40 tracking-widest border border-white/10 px-2 py-1">
                     {work.id.toUpperCase()}
                 </span>
             </div>
 
-            {/* EDGE DECOR */}
-            <div className="absolute top-6 right-6 z-40 opacity-0 group-hover:opacity-60 transition-all duration-700 text-[10px] font-mono text-white/40 hidden md:block">
+            {/* INDEX */}
+            <div className="absolute top-4 right-4 md:top-6 md:right-6 z-40 opacity-0 group-hover:opacity-60 transition-opacity duration-700 text-[10px] font-mono text-white/40 hidden md:block">
                 {(index + 1).toString().padStart(2, '0')}
             </div>
 
-            {/* SCANLINE OVERLAY ON HOVER */}
-            <div className="absolute inset-0 scanline-effect opacity-0 group-hover:opacity-20 transition-opacity duration-1000 z-20 pointer-events-none"></div>
-        </div >
+            {/* SCANLINE */}
+            <div className="absolute inset-0 scanline-effect opacity-0 group-hover:opacity-20 transition-opacity duration-1000 z-20 pointer-events-none" />
+        </div>
     );
 };
 
@@ -2628,8 +2602,6 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                                         fontSize: 'clamp(1.6rem, 3vw, 2.8rem)',
                                         lineHeight: '0.85',
                                         letterSpacing: '-0.03em',
-                                        letterSpacing: '-0.03em',
-                                    }}
                                     }}
                                 >
                                     {project.titleFull || project.title}
@@ -3087,7 +3059,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             {/* Terminal Header */}
                             <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-white/[0.02]">
                                 <div className="flex items-center gap-3">
-                                    <div className={`w-2 h-2 rounded-full ${isProcessing ? 'bg-[#DC2626] animate-pulse' : 'bg-green-500'}`}></div>
+                                    <div className={`w-2 h-2 rounded-full ${isProcessing ? 'bg-[#DC2626] animate-pulse' : 'bg-[#DC2626]'}`}></div>
                                     <span className="text-[9px] font-mono text-white/50 tracking-[0.2em] uppercase font-bold">
                                         /USR/BIN/MASON_CHAT // v3.2
                                     </span>
@@ -3261,10 +3233,10 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                     <div className="flex flex-col items-center text-center gap-10 pb-8">
                         {/* MONOLITH */}
                         <div className="relative">
-                            <div className="monolith-structure w-[100px] h-[200px] md:w-[130px] md:h-[260px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
+                            <div className="monolith-structure w-[120px] h-[240px] md:w-[150px] md:h-[300px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
                                 <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
                                 <div className="centered-layer aura-atmos pointer-events-none opacity-60" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
-                                <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(220,38,38,0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
+                                <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '500px', height: '500px', background: 'radial-gradient(circle at center, rgba(220,38,38,0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
                                 <div className="centered-layer core-atmos animate-breathe pointer-events-none" style={{ width: '40px', height: '40px', filter: 'blur(10px)', background: 'radial-gradient(circle, rgba(220,38,38,1) 0%, rgba(220,38,38,0.4) 40%, transparent 80%)' }}></div>
                                 <div className="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10 rounded-[2px]"></div>
                             </div>
