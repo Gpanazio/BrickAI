@@ -15,6 +15,8 @@ export default {
                 'brick-black': '#050505',
                 'brick-red': '#DC2626',
                 'brick-gray': '#9CA3AF',
+                'brick-dark': '#0a0a0a',
+                'brick-surface': '#070707',
             }
         },
     },
