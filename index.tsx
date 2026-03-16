@@ -2637,7 +2637,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
 
                         <div className="px-8 py-4 mb-8">
                             <div className="font-mono text-[8px] text-white/20 mb-4 tracking-[0.4em]">// SYSTEM_LOG</div>
-                            <p className="text-white/50 text-[12px] leading-[1.7] tracking-[0.04em] max-w-md font-mono border-l border-white/5 pl-5">
+                            <p className="text-white text-[12px] leading-[1.7] tracking-[0.04em] max-w-md font-mono border-l border-white/5 pl-5">
                                 {project.longDesc || project.desc}
                             </p>
                         </div>
@@ -2711,7 +2711,7 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
                 </div>
                 <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                     <h3 className="text-sm font-brick text-white leading-tight mb-1.5 tracking-tight group-hover:text-[#DC2626] transition-colors line-clamp-2">{work.title}</h3>
-                    <p className="text-[9px] text-[#9CA3AF] font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-1">{work.desc}</p>
+                    <p className="text-[9px] text-white font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-1">{work.desc}</p>
                 </div>
             </div>
             <div className="absolute top-0 left-0 w-2 h-2 border-l border-t border-white/30 group-hover:border-[#DC2626] transition-colors z-40"></div>
