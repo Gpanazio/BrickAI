@@ -2628,8 +2628,8 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                                         fontSize: 'clamp(1.6rem, 3vw, 2.8rem)',
                                         lineHeight: '0.85',
                                         letterSpacing: '-0.03em',
-                                        overflowWrap: 'anywhere',
-                                        wordBreak: 'break-word',
+                                        letterSpacing: '-0.03em',
+                                    }}
                                     }}
                                 >
                                     {project.titleFull || project.title}
