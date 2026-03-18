@@ -1,0 +1,127 @@
+- generic [ref=e3]:
+  - banner:
+    - generic [ref=e124] [cursor=pointer]:
+      - img "BRICK" [ref=e125]
+      - generic [ref=e126]: _
+      - generic [ref=e127]: AI
+    - generic [ref=e128]:
+      - button ">HOME" [ref=e129] [cursor=pointer]
+      - button ">SOBRE" [ref=e130] [cursor=pointer]
+      - button ">TRABALHOS" [ref=e131] [cursor=pointer]
+      - button ">TRANSMISSÕES" [ref=e132] [cursor=pointer]
+      - button ">FALE CONOSCO _" [ref=e133] [cursor=pointer]
+      - button "EN" [ref=e134] [cursor=pointer]:
+        - img [ref=e135]
+        - text: EN
+  - generic:
+    - generic:
+      - button "HOME"
+      - button "SOBRE"
+      - button "TRABALHOS"
+      - button "TRANSMISSÕES"
+      - button "FALE CONOSCO _"
+      - button "SWITCH TO ENGLISH":
+        - img
+        - text: SWITCH TO ENGLISH
+  - button "< VOLTAR" [ref=e138] [cursor=pointer]:
+    - generic [ref=e139]: <
+    - text: VOLTAR
+  - main [ref=e140]:
+    - generic [ref=e141]:
+      - generic [ref=e142]:
+        - generic [ref=e143]:
+          - paragraph [ref=e144]: DNA_ORIGIN
+          - paragraph [ref=e145]: ">> ACCESS_GRANTED"
+        - paragraph [ref=e146]: EST_2016
+      - generic [ref=e147]:
+        - complementary [ref=e148]:
+          - generic [ref=e149]:
+            - generic [ref=e150]: MANIFESTO
+            - generic [ref=e151]: EST_2016
+          - generic [ref=e155]:
+            - paragraph [ref=e156]: Nossa visão não veio do ChatGPT.
+            - paragraph [ref=e157]: "Para nós, a tecnologia não é um atalho para o medíocre, mas um multiplicador de potência: o critério artístico continua sendo puramente humano, mas agora a execução final alcança o que a nossa imaginação sempre buscou."
+            - generic [ref=e158]:
+              - button "TRABALHOS" [ref=e159] [cursor=pointer]
+              - button "FALE CONOSCO" [ref=e160] [cursor=pointer]
+        - generic [ref=e161]:
+          - generic [ref=e162]:
+            - generic [ref=e163]:
+              - generic [ref=e164]: Brick AI // DNA_ORIGIN
+              - heading "VISÃO DE CINEMA" [level=1] [ref=e165]:
+                - text: VISÃO DE
+                - generic [ref=e166]: CINEMA
+              - paragraph [ref=e167]: Ela é o resultado de anos de set, direção e execução no mundo real. Muito antes do primeiro prompt, nossa trajetória já era pautada pela produção visual de alta complexidade. Entendemos narrativa e estética porque o nosso olhar foi refinado no dia a dia do set e no rigor técnico da pós-produção clássica.
+            - generic [ref=e168]:
+              - generic [ref=e169]:
+                - text: "01"
+                - paragraph [ref=e171]: Somos uma produtora com 10 anos de set. A IA é a nossa ferramenta, não a nossa identidade.
+              - generic [ref=e172]:
+                - text: "02"
+                - paragraph [ref=e174]: Criamos do roteiro ao filme finalizado — conceito, direção, estética e entrega.
+              - generic [ref=e175]:
+                - text: "03"
+                - paragraph [ref=e177]: Visuais impecáveis para qualquer tipo de produção. Sem limite de formato, sem limite de escala.
+          - generic [ref=e178]:
+            - generic [ref=e179]:
+              - text: TRAJETÓRIA
+              - paragraph [ref=e180]: A Brick não chegou à IA pela tecnologia. Chegou pela busca de escala sem abrir mão de autoria.
+            - generic [ref=e181]:
+              - generic [ref=e182]: REGISTRO_002
+              - generic [ref=e183]:
+                - paragraph [ref=e184]: GRAMADO 2025
+                - paragraph [ref=e185]: "Inheritance: um dos primeiros filmes gerativos selecionados em um dos maiores festivais da América Latina."
+    - generic [ref=e187]:
+      - generic [ref=e188]:
+        - text: MANIFESTO
+        - heading "Nossa visão não veio do ChatGPT." [level=2] [ref=e189]
+      - generic [ref=e193]:
+        - paragraph [ref=e194]: Ela é o resultado de anos de set, direção e execução no mundo real. Muito antes do primeiro prompt, nossa trajetória já era pautada pela produção visual de alta complexidade. Entendemos narrativa e estética porque o nosso olhar foi refinado no dia a dia do set e no rigor técnico da pós-produção clássica.
+        - generic [ref=e195]:
+          - paragraph [ref=e196]: "Para nós, a tecnologia não é um atalho para o medíocre, mas um multiplicador de potência: o critério artístico continua sendo puramente humano, mas agora a execução final alcança o que a nossa imaginação sempre buscou."
+          - generic [ref=e197]:
+            - paragraph [ref=e198]: DNA_ORIGIN
+            - paragraph [ref=e199]: VISÃO DE CINEMA
+    - generic [ref=e200]:
+      - generic [ref=e201]:
+        - generic [ref=e202]:
+          - text: TRAJETÓRIA
+          - heading "NASCIDOS NO SET" [level=2] [ref=e203]
+        - paragraph [ref=e204]: A Brick não chegou à IA pela tecnologia. Chegou pela busca de escala sem abrir mão de autoria.
+      - generic [ref=e205]:
+        - article [ref=e206]:
+          - generic [ref=e208]: "01"
+          - generic [ref=e209]:
+            - generic [ref=e210]:
+              - paragraph [ref=e211]: REGISTRO_001
+              - heading "10 ANOS DE SET" [level=3] [ref=e212]
+            - paragraph [ref=e213]: De 2016 até aqui. De câmera na mão a ferramentas sem limite. Mesma alma.
+        - article [ref=e214]:
+          - generic [ref=e216]: "02"
+          - generic [ref=e217]:
+            - generic [ref=e218]:
+              - paragraph [ref=e219]: REGISTRO_002
+              - heading "GRAMADO 2025" [level=3] [ref=e220]
+            - paragraph [ref=e221]: "Inheritance: um dos primeiros filmes gerativos selecionados em um dos maiores festivais da América Latina."
+        - article [ref=e222]:
+          - generic [ref=e224]: "03"
+          - generic [ref=e225]:
+            - generic [ref=e226]:
+              - paragraph [ref=e227]: REGISTRO_003
+              - heading "BBC • VISA • STONE • L'ORÉAL" [level=3] [ref=e228]
+            - paragraph [ref=e229]: O mesmo padrão de entrega de uma produtora tradicional. Contratos, compliance, escala.
+  - contentinfo [ref=e230]:
+    - generic [ref=e231]:
+      - heading "TEM UMA IDEIA IMPOSSÍVEL?" [level=2] [ref=e232]
+      - paragraph [ref=e233]: NÓS TEMOS A VISÃO
+      - button "FALE CONOSCO _" [ref=e234] [cursor=pointer]
+    - generic [ref=e235]:
+      - generic [ref=e236]:
+        - link "LinkedIn" [ref=e237] [cursor=pointer]:
+          - /url: https://linkedin.com/brickai
+        - link "Instagram" [ref=e238] [cursor=pointer]:
+          - /url: https://instagram.com/brickai
+      - generic [ref=e239]:
+        - generic [ref=e240]: © 2026 Brick AI.
+        - text: A Divisão Generativa
+        - generic [ref=e241]: Todos os Direitos Reservados
