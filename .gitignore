@@ -6,3 +6,5 @@ dist-ssr
 .env
 vite_debug.log
 *.log
+*.mp4
+exports/
