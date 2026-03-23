@@ -844,6 +844,7 @@ const CustomCursor = ({ active }: { active: boolean }) => {
     return (
         <div
             ref={dotRef}
+            aria-hidden="true"
             className={`hidden fixed top-0 left-0 w-2 h-2 bg-brick-red rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform transition-opacity duration-200 ${active || isPointer ? 'opacity-100 scale-[3]' : 'opacity-0 scale-100'}`}
             style={{ transform: 'translate(-100px, -100px)' }}
         />
@@ -905,27 +906,29 @@ const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
 
     return (
         <React.Fragment>
-            <header className="fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none transition-all duration-300 bg-gradient-to-b from-brick-black/70 from-[45%] to-transparent">
-                <div onClick={onHome} className="pointer-events-auto flex items-baseline group cursor-pointer select-none z-50 relative">
+            <header role="banner" className="fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none transition-all duration-300 bg-gradient-to-b from-brick-black/70 from-[45%] to-transparent">
+                <a href="/" onClick={(e) => { e.preventDefault(); onHome(); }} role="link" aria-label="Brick AI — Go to homepage" tabIndex={0} className="pointer-events-auto flex items-baseline group cursor-pointer select-none z-50 relative">
                     <img src="/01.png" alt="BRICK" className="h-6 md:h-8 w-auto object-contain mr-1" />
                     <span className="text-brick-red font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[2px]">_</span>
                     <span className="text-gray-300 font-ai text-xl md:text-2xl group-hover:text-white transition-colors duration-500">AI</span>
-                </div>
+                </a>
 
                 {/* MOBILE MENU TOGGLE */}
                 {!isChatView && (
                     <button
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                        aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+                        aria-expanded={mobileMenuOpen}
                         className="pointer-events-auto md:hidden text-white hover:text-brick-red transition-colors z-50 relative p-2"
                     >
-                        {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                        {mobileMenuOpen ? <X size={24} aria-hidden="true" /> : <Menu size={24} aria-hidden="true" />}
                     </button>
                 )}
 
                 {/* DESKTOP NAV */}
                 {
                     !isChatView && (
-                        <div className="hidden md:flex items-center gap-6 pointer-events-auto relative z-10">
+                        <nav aria-label="Main navigation" className="hidden md:flex items-center gap-6 pointer-events-auto relative z-10">
                             {/* NAV STYLE: Raw Text Links */}
 
                             <MagneticButton onClick={onHome} className="group text-xs md:text-sm font-ai text-brick-gray hover:text-brick-red transition-colors duration-300">
@@ -957,18 +960,19 @@ const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
                             {/* LANGUAGE TOGGLE */}
                             <button
                                 onClick={toggleLanguage}
+                                aria-label={i18n.language === 'en' ? 'Switch to Portuguese' : 'Switch to English'}
                                 className="ml-4 text-xs font-mono text-brick-gray hover:text-white transition-colors flex items-center gap-1 uppercase tracking-widest"
                             >
-                                <Globe size={12} /> {i18n.language === 'en' ? 'PT' : 'EN'}
+                                <Globe size={12} aria-hidden="true" /> {i18n.language === 'en' ? 'PT' : 'EN'}
                             </button>
-                        </div>
+                        </nav>
                     )
                 }
             </header>
 
             {/* MOBILE MENU OVERLAY */}
-            <div className={`fixed inset-0 z-40 bg-brick-black/95 backdrop-blur-xl flex flex-col items-center justify-center transition-all duration-500 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
-                <div className="scanline-effect absolute inset-0 z-0 opacity-20 pointer-events-none"></div>
+            <nav aria-label="Mobile navigation" role="dialog" aria-modal="true" aria-hidden={!mobileMenuOpen} className={`fixed inset-0 z-40 bg-brick-black/95 backdrop-blur-xl flex flex-col items-center justify-center transition-all duration-500 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+                <div className="scanline-effect absolute inset-0 z-0 opacity-20 pointer-events-none" aria-hidden="true"></div>
                 <div className="flex flex-col items-center gap-8 relative z-10 w-full px-8">
                     <button onClick={() => handleNav(onHome)} className="text-2xl font-brick text-white hover:text-brick-red transition-colors w-full text-center border-b border-white/10 pb-4">
                         HOME
@@ -988,12 +992,13 @@ const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
 
                     <button
                         onClick={toggleLanguage}
+                        aria-label={i18n.language === 'en' ? 'Switch to Portuguese' : 'Switch to English'}
                         className="mt-8 text-sm font-mono text-brick-gray hover:text-white transition-colors flex items-center gap-2 uppercase tracking-widest border border-white/20 px-6 py-2 rounded-full"
                     >
-                        <Globe size={14} /> {i18n.language === 'en' ? 'SWITCH TO PORTUGUESE' : 'SWITCH TO ENGLISH'}
+                        <Globe size={14} aria-hidden="true" /> {i18n.language === 'en' ? 'SWITCH TO PORTUGUESE' : 'SWITCH TO ENGLISH'}
                     </button>
                 </div>
-            </div>
+            </nav>
         </React.Fragment>
     );
 };
@@ -1059,8 +1064,8 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
     }, [monolithHover]);
 
     return (
-        <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-visible pt-20">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-brick-red/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-40"></div>
+        <section aria-label="Hero" className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-visible pt-20">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-brick-red/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-40" aria-hidden="true"></div>
 
             <div className="reveal relative z-10 w-full flex justify-center mb-10 md:mb-16">
                 <div className="relative">
@@ -1232,8 +1237,8 @@ const ParticleScene = ({ fixed = false, reactToMouse = true }: { fixed?: boolean
     }, [fixed, reactToMouse]);
 
     return fixed
-        ? <div ref={mountRef} className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }} />
-        : <div ref={mountRef} className="absolute inset-0 pointer-events-none z-0" />;
+        ? <div ref={mountRef} aria-hidden="true" className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }} />
+        : <div ref={mountRef} aria-hidden="true" className="absolute inset-0 pointer-events-none z-0" />;
 };
 
 // Aliases kept for backward compatibility within this file
@@ -1339,6 +1344,10 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
             className={`reveal relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-brick-red transition-colors duration-300 bg-brick-black group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
+            role={work.hasDetail ? 'button' : undefined}
+            tabIndex={work.hasDetail ? 0 : undefined}
+            aria-label={`View project: ${work.title}`}
+            onKeyDown={(e) => { if (work.hasDetail && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); onOpen(work); } }}
             style={{
                 containerType: 'inline-size',
                 flexGrow: isHovered ? 1.6 : 1,
@@ -2373,12 +2382,12 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
     const isVideoFile = project.videoUrl ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(project.videoUrl) : false;
 
     return (
-        <div className="fixed inset-0 z-[110] flex items-center justify-center p-4">
-            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-700" onClick={onClose}></div>
+        <div role="dialog" aria-modal="true" aria-label={`Project: ${project.title}`} className="fixed inset-0 z-[110] flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-700" onClick={onClose} role="presentation" aria-label="Close modal overlay"></div>
 
             {/* NAV PREV */}
             {onPrev && (
-                <button onClick={onPrev} className="hidden md:flex items-center justify-center z-[115] text-red-500/60 nav-btn-crt transition-all duration-300 hover:scale-125 hover:-translate-x-1 px-4 active:scale-90 shrink-0"
+                <button onClick={onPrev} aria-label="Previous project" className="hidden md:flex items-center justify-center z-[115] text-red-500/60 nav-btn-crt transition-all duration-300 hover:scale-125 hover:-translate-x-1 px-4 active:scale-90 shrink-0"
                     style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '36px' }}>
                     &lt;
                 </button>
@@ -2444,6 +2453,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                 {panelHidden && (
                     <button
                         onClick={() => setPanelHidden(false)}
+                        aria-label="Show project info panel"
                         className={`absolute z-30 flex items-center justify-center transition-all duration-300
                             border border-white/20 bg-brick-black/80 backdrop-blur-sm hover:bg-white/10 hover:border-white/40
                             ${isHorizontal
@@ -2475,6 +2485,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                                 <span className="font-mono text-[9px] tracking-[0.4em] uppercase"><span className="text-red-500">&gt;&gt; </span><span className="text-white/40"> ACCESSING_DATA</span><span className="text-red-500 animate-blink tracking-normal">_</span></span>
                                 <button
                                     onClick={onClose}
+                                    aria-label="Close project modal"
                                     className="text-white/20 hover:text-white transition-all p-1 active:scale-95 flex-shrink-0"
                                     style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', letterSpacing: '0.2em' }}
                                 >
@@ -2535,7 +2546,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
 
             {/* NAV NEXT */}
             {onNext && (
-                <button onClick={onNext} className="hidden md:flex items-center justify-center z-[115] text-red-500/60 nav-btn-crt transition-all duration-300 hover:scale-125 hover:translate-x-1 px-4 active:scale-90 shrink-0"
+                <button onClick={onNext} aria-label="Next project" className="hidden md:flex items-center justify-center z-[115] text-red-500/60 nav-btn-crt transition-all duration-300 hover:scale-125 hover:translate-x-1 px-4 active:scale-90 shrink-0"
                     style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '36px' }}>
                     &gt;
                 </button>
@@ -2551,7 +2562,11 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
         <div
             className={`group relative w-full aspect-square border border-white/10 bg-brick-black overflow-hidden cursor-pointer hover:border-brick-red transition-colors duration-300 reveal`}
             style={{ animationDelay: `${index * 50}ms` }}
+            role="button"
+            tabIndex={0}
+            aria-label={`View project: ${work.title}`}
             onClick={() => onOpen(work)}
+            onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onOpen(work); } }}
         >
             {/* UPDATED FILTERS FOR VISIBILITY */}
             <div
@@ -2643,10 +2658,10 @@ const WorksPage = ({ onSelectProject }: {
     return (
         <React.Fragment>
             <Header />
-            <button onClick={goHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+            <button onClick={goHome} aria-label="Return to homepage" className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
-            <main className="pt-32 md:pt-40 min-h-screen flex flex-col">
+            <main id="main-content" className="pt-32 md:pt-40 min-h-screen flex flex-col">
                 <section className="w-full px-6 md:px-12 lg:px-24 mb-16 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
@@ -2680,10 +2695,10 @@ const BlogPostPage = ({ post }: { post: Post }) => {
     return (
         <React.Fragment>
             <Header />
-            <button onClick={onBack} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+            <button onClick={onBack} aria-label="Return to transmissions" className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_index')}
             </button>
-            <main className="pt-32 md:pt-40 min-h-screen flex flex-col bg-brick-black pb-32 md:pb-40 px-4 md:px-8" onClick={onBack}>
+            <main id="main-content" className="pt-32 md:pt-40 min-h-screen flex flex-col bg-brick-black pb-32 md:pb-40 px-4 md:px-8" onClick={onBack}>
                 <article className="w-full max-w-5xl mx-auto mt-12 md:mt-16 animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
                     <div className="relative border border-white/10 bg-brick-surface backdrop-blur-sm overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brick-red to-transparent opacity-80"></div>
@@ -2741,10 +2756,10 @@ const TransmissionsPage = () => {
     return (
         <React.Fragment>
             <Header />
-            <button onClick={goHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+            <button onClick={goHome} aria-label="Return to homepage" className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
-            <main className="pt-32 md:pt-40 min-h-screen flex flex-col bg-brick-black">
+            <main id="main-content" className="pt-32 md:pt-40 min-h-screen flex flex-col bg-brick-black">
                 <section className="w-full px-6 md:px-12 lg:px-24 mb-16 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
@@ -2756,7 +2771,7 @@ const TransmissionsPage = () => {
                 <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 md:pb-40 reveal">
                     <div className="space-y-2 md:space-y-3 bg-transparent border-t border-white/10">
                         {transmissions.map((post) => (
-                            <div key={post.id} onClick={() => goPost(post.id)} className="block group bg-brick-black hover:bg-brick-dark transition-colors p-8 md:p-10 border border-white/10 cursor-pointer">
+                            <div key={post.id} onClick={() => goPost(post.id)} role="button" tabIndex={0} aria-label={`Read: ${getLocalizedField(post.title, i18n.language, 'UNTITLED')}`} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goPost(post.id); } }} className="block group bg-brick-black hover:bg-brick-dark transition-colors p-8 md:p-10 border border-white/10 cursor-pointer">
                                 <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-4">
                                     <h3 className="text-xl md:text-2xl font-brick text-white tracking-tight group-hover:text-brick-red transition-colors">
                                         {getLocalizedField(post.title, i18n.language, 'UNTITLED')}
@@ -2786,7 +2801,7 @@ const Footer = () => {
     const onChat = goChat;
     const { t } = useTranslation();
     return (
-        <footer className="w-full py-12 px-6 md:px-12 lg:px-24 bg-brick-black border-t border-white/10 relative z-10 overflow-hidden">
+        <footer role="contentinfo" className="w-full py-12 px-6 md:px-12 lg:px-24 bg-brick-black border-t border-white/10 relative z-10 overflow-hidden">
             <ParticleBackground reactToMouse={false} />
             <div className="absolute inset-0 bg-gradient-to-t from-brick-black via-transparent to-transparent pointer-events-none z-[1]"></div>
 
@@ -2867,7 +2882,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
         <div className="min-h-screen pt-32 md:pt-40 pb-32 md:pb-40 flex flex-col items-center justify-start font-mono relative bg-brick-black overflow-x-hidden">
 
             {/* RETURN BUTTON */}
-            <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+            <button onClick={onBack} aria-label="Return to homepage" className="fixed top-24 left-6 md:left-12 text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
@@ -3015,10 +3030,11 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
                                         placeholder={t('chat.placeholder')}
+                                        aria-label="Type your message to Mason"
                                         className="w-full bg-transparent py-2 text-white font-mono text-sm focus:outline-none placeholder:text-white/20 placeholder:tracking-[0.1em]"
                                         autoFocus
                                     />
-                                    <button type="submit" className="text-[10px] font-brick text-white/50 hover:text-white uppercase tracking-[0.2em] transition-colors">
+                                    <button type="submit" aria-label="Send message" className="text-[10px] font-brick text-white/50 hover:text-white uppercase tracking-[0.2em] transition-colors">
                                         {t('chat.execute')}
                                     </button>
                                 </form>
@@ -3039,7 +3055,7 @@ const HomePage = ({ onSelectProject, setMonolithHover, monolithHover }: {
 }) => (
     <React.Fragment>
         <Header />
-        <main>
+        <main id="main-content">
             <Hero setMonolithHover={setMonolithHover} monolithHover={monolithHover} />
             <SelectedWorks onSelectProject={onSelectProject} />
             <UnifiedEnding />
@@ -3110,11 +3126,11 @@ const AboutPage = () => {
     return (
         <React.Fragment>
             <Header />
-            <button onClick={goHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+            <button onClick={goHome} aria-label="Return to homepage" className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
-            <main className="pt-32 md:pt-40 min-h-screen flex flex-col bg-brick-black relative overflow-hidden">
+            <main id="main-content" className="pt-32 md:pt-40 min-h-screen flex flex-col bg-brick-black relative overflow-hidden">
                 {/* ATMOSPHERE */}
                 <div className="absolute top-0 right-0 w-[60vw] h-[60vh] bg-brick-red/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-30"></div>
                 <div className="scanline-effect fixed inset-0 z-0 pointer-events-none opacity-20"></div>
@@ -3968,7 +3984,7 @@ const NotFoundPage = () => {
         <React.Fragment>
             <Header />
             
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+            <button onClick={onHome} aria-label="Return to homepage" className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
             
