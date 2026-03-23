@@ -8,7 +8,7 @@ import './src/i18n';
 import './src/index.css';
 
 // Extend Window for gtag (GA4)
-declare global { interface Window { gtag?: (...args: any[]) => void; } }
+declare global { interface Window { gtag?: (...args: [string, ...any[]]) => void; } }
 
 // --- STYLES & CONFIG ---
 const GlobalStyles = () => (
@@ -4302,9 +4302,9 @@ if (container) {
 }
 
 // Core Web Vitals → GA4
-import { onCLS, onINP, onLCP, onFCP, onTTFB } from 'web-vitals';
+import { onCLS, onINP, onLCP, onFCP, onTTFB, type Metric } from 'web-vitals';
 
-function sendToGA4({ name, value, id }: { name: string; value: number; id: string }) {
+function sendToGA4({ name, value, id }: Metric) {
     if (typeof window.gtag === 'function') {
         window.gtag('event', name, {
             value: Math.round(name === 'CLS' ? value * 1000 : value),
