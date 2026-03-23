@@ -347,8 +347,8 @@ app.post('/api/chat', async (req, res) => {
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
-            'HTTP-Referer': 'https://brick.mov',
-            'X-Title': 'Brick AI - Mason Chat'
+            'HTTP-Referer': process.env.OPENROUTER_HTTP_REFERER || 'https://brick.mov',
+            'X-Title': process.env.OPENROUTER_X_TITLE || 'Brick AI - Mason Chat'
         },
         body: JSON.stringify({
             model,
@@ -381,12 +381,12 @@ app.post('/api/chat', async (req, res) => {
             data = await response.json();
         }
 
-        if (data.error) {
-            console.error("OpenRouter API Error:", data.error);
+        if (data.error || !data.choices?.[0]?.message?.content) {
+            console.error("OpenRouter API Error (after fallback):", data.error || "No content from fallback model");
             return res.status(500).json({ error: "Neural link unstable." });
         }
 
-        const aiResponse = data.choices?.[0]?.message?.content || "NO_DATA";
+        const aiResponse = data.choices[0].message.content;
 
         // 5. Increment Usage
         userInteractions.set(sessionId, usage + 1);
