@@ -468,11 +468,19 @@ app.delete('/api/transmissions/:id', authenticateToken, async (req, res) => {
 app.get('/sitemap.xml', async (req, res) => {
     try {
         const staticPages = [
-            { loc: 'https://ai.brick.mov/', priority: '1.0', changefreq: 'weekly', image: 'https://ai.brick.mov/og-image.jpg', imageTitle: 'Brick AI — AI Video Production' },
-            { loc: 'https://ai.brick.mov/works', priority: '0.9', changefreq: 'weekly' },
-            { loc: 'https://ai.brick.mov/about', priority: '0.8', changefreq: 'monthly' },
-            { loc: 'https://ai.brick.mov/transmissions', priority: '0.8', changefreq: 'weekly' },
-            { loc: 'https://ai.brick.mov/chat', priority: '0.7', changefreq: 'monthly' },
+            { loc: `${BASE_URL}/`, priority: '1.0', changefreq: 'weekly', image: `${BASE_URL}/og-image.jpg`, imageTitle: 'Brick AI — AI Video Production' },
+            { loc: `${BASE_URL}/works`, priority: '0.9', changefreq: 'weekly' },
+            { loc: `${BASE_URL}/about`, priority: '0.8', changefreq: 'monthly' },
+            { loc: `${BASE_URL}/transmissions`, priority: '0.8', changefreq: 'weekly' },
+            { loc: `${BASE_URL}/chat`, priority: '0.7', changefreq: 'monthly' },
+            // Individual case study pages
+            ...WORKS_SCHEMA.map(w => ({
+                loc: `${BASE_URL}/works/${w.slug}`,
+                priority: '0.8',
+                changefreq: 'monthly',
+                image: w.thumbnailUrl,
+                imageTitle: w.name.en
+            }))
         ];
 
         // Fetch transmissions from DB for dynamic URLs (with image data)
@@ -483,11 +491,11 @@ app.get('/sitemap.xml', async (req, res) => {
                 const d = row.data;
                 const thumb = d.thumbnail || d.image || null;
                 return {
-                    loc: `https://ai.brick.mov/transmissions/${row.id}`,
+                    loc: `${BASE_URL}/transmissions/${row.id}`,
                     lastmod: new Date(row.created_at).toISOString().split('T')[0],
                     priority: '0.6',
                     changefreq: 'monthly',
-                    image: thumb ? (thumb.startsWith('http') ? thumb : `https://ai.brick.mov${thumb}`) : null,
+                    image: thumb ? (thumb.startsWith('http') ? thumb : `${BASE_URL}${thumb}`) : null,
                     imageTitle: (typeof d.title === 'object' ? (d.title.en || d.title.pt) : d.title) || 'Brick AI Article'
                 };
             });
@@ -537,7 +545,7 @@ app.get('/rss.xml', async (req, res) => {
             const title = (d.title && typeof d.title === 'object') ? (d.title.en || d.title.pt || 'Untitled') : (d.title || 'Untitled');
             const excerpt = (d.excerpt && typeof d.excerpt === 'object') ? (d.excerpt.en || d.excerpt.pt || '') : (d.excerpt || '');
             const date = new Date(row.created_at).toUTCString();
-            const link = `https://ai.brick.mov/transmissions/${row.id}`;
+            const link = `${BASE_URL}/transmissions/${row.id}`;
             return `    <item>
       <title><![CDATA[${title}]]></title>
       <description><![CDATA[${excerpt}]]></description>
@@ -554,10 +562,10 @@ app.get('/rss.xml', async (req, res) => {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Brick AI — Transmissions</title>
-    <link>https://ai.brick.mov/transmissions</link>
+    <link>${BASE_URL}/transmissions</link>
     <description>Insights on AI video production from a team with 10+ years on real film sets.</description>
     <language>en</language>
-    <atom:link href="https://ai.brick.mov/rss.xml" rel="self" type="application/rss+xml"/>
+    <atom:link href="${BASE_URL}/rss.xml" rel="self" type="application/rss+xml"/>
 ${items}
   </channel>
 </rss>`;
@@ -609,6 +617,14 @@ app.get('*', async (req, res) => {
     let postData = null;
 
     if (urlPath === 'works') view = 'works';
+    else if (urlPath.startsWith('works/')) {
+        view = 'work-detail';
+        const slug = urlPath.split('/')[1];
+        const projectData = WORKS_SCHEMA.find(w => w.slug === slug);
+        if (projectData) {
+            postData = projectData;
+        }
+    }
     else if (urlPath === 'about') view = 'about';
     else if (urlPath === 'transmissions') view = 'transmissions';
     else if (urlPath === 'chat') view = 'chat';
@@ -625,9 +641,9 @@ app.get('*', async (req, res) => {
         }
     }
 
-    // 404 handling for unknown routes AND missing posts
-    const knownViews = ['home', 'works', 'about', 'transmissions', 'chat', 'post'];
-    const is404 = (!knownViews.includes(view) && urlPath !== '') || (view === 'post' && !postData);
+    // 404 handling for unknown routes, missing posts, and unknown project slugs
+    const knownViews = ['home', 'works', 'work-detail', 'about', 'transmissions', 'chat', 'post'];
+    const is404 = (!knownViews.includes(view) && urlPath !== '') || (view === 'post' && !postData) || (view === 'work-detail' && !postData);
     if (is404) {
         const seo404 = {
             title: lang === 'en' ? 'Page Not Found | Brick AI' : 'Página Não Encontrada | Brick AI',
@@ -640,13 +656,13 @@ app.get('*', async (req, res) => {
             .replace(/__OG_TITLE__/g, '404 | Brick AI')
             .replace(/__OG_DESCRIPTION__/g, seo404.description)
             .replace(/__OG_TYPE__/g, 'website')
-            .replace(/__OG_URL__/g, 'https://ai.brick.mov/')
-            .replace(/__OG_IMAGE__/g, 'https://ai.brick.mov/og-image.jpg')
+            .replace(/__OG_URL__/g, `${BASE_URL}/`)
+            .replace(/__OG_IMAGE__/g, `${BASE_URL}/og-image.jpg`)
             .replace(/__OG_LOCALE__/g, lang === 'pt' ? 'pt_BR' : 'en_US')
             .replace(/__OG_LOCALE_ALT__/g, lang === 'pt' ? 'en_US' : 'pt_BR')
-            .replace(/__CANONICAL_URL__/g, 'https://ai.brick.mov/')
-            .replace(/__HREFLANG_PT__/g, 'https://ai.brick.mov/')
-            .replace(/__HREFLANG_EN__/g, 'https://ai.brick.mov/?lang=en')
+            .replace(/__CANONICAL_URL__/g, `${BASE_URL}/`)
+            .replace(/__HREFLANG_PT__/g, `${BASE_URL}/`)
+            .replace(/__HREFLANG_EN__/g, `${BASE_URL}/?lang=en`)
             .replace(/__GOOGLE_VERIFICATION__/g, process.env.GOOGLE_SITE_VERIFICATION || '')
             .replace(/__BING_VERIFICATION__/g, process.env.BING_VERIFICATION || '')
             .replace(/<!--__JSON_LD__-->/g, '');
@@ -675,15 +691,29 @@ app.get('*', async (req, res) => {
         ogDescription = postExcerpt || ogDescription;
     }
 
+    // Individual case study pages (/works/:slug)
+    if (view === 'work-detail' && postData) {
+        const isEn = lang === 'en';
+        const projectName = isEn ? postData.name.en : postData.name.pt;
+        const projectDesc = isEn ? postData.description.en : postData.description.pt;
+        title = `${projectName} | Brick AI`;
+        description = projectDesc;
+        ogTitle = projectName;
+        ogDescription = projectDesc;
+    }
+
     const canonicalPath = view === 'home' ? '' : urlPath;
-    const canonicalUrl = `https://ai.brick.mov/${canonicalPath}`;
+    const canonicalUrl = `${BASE_URL}/${canonicalPath}`;
     const langParam = lang === 'en' ? '?lang=en' : '';
 
-    // Dynamic OG image — use post thumbnail if available, otherwise default
-    let ogImage = 'https://ai.brick.mov/og-image.jpg';
+    // Dynamic OG image — use post/project thumbnail if available, otherwise default
+    let ogImage = `${BASE_URL}/og-image.jpg`;
     if (view === 'post' && postData) {
         const thumb = postData.thumbnail || postData.image || null;
-        if (thumb) ogImage = thumb.startsWith('http') ? thumb : `https://ai.brick.mov${thumb}`;
+        if (thumb) ogImage = thumb.startsWith('http') ? thumb : `${BASE_URL}${thumb}`;
+    }
+    if (view === 'work-detail' && postData) {
+        ogImage = postData.thumbnailUrl || ogImage;
     }
 
     // Build route-specific JSON-LD
@@ -696,11 +726,11 @@ app.get('*', async (req, res) => {
         "@graph": [
             {
                 "@type": "Organization",
-                "@id": "https://ai.brick.mov/#organization",
+                "@id": "${BASE_URL}/#organization",
                 "name": "Brick AI",
                 "alternateName": isEn ? "Brick AI — The Generative Division" : "Brick AI — A Divisão Generativa",
-                "url": "https://ai.brick.mov",
-                "logo": { "@type": "ImageObject", "url": "https://ai.brick.mov/og-image.jpg" },
+                "url": "${BASE_URL}",
+                "logo": { "@type": "ImageObject", "url": "${BASE_URL}/og-image.jpg" },
                 "foundingDate": "2016",
                 "description": isEn
                     ? "Brazilian generative production company specializing in hybrid video production. We combine human cinematic direction with synthetic generation systems to deliver campaigns, VFX and premium visual content. Clients include Stone, Visa, BBC, Record TV, AliExpress, Facebook, O Boticário and L'Oréal."
@@ -769,11 +799,11 @@ app.get('*', async (req, res) => {
             },
             {
                 "@type": "WebSite",
-                "@id": "https://ai.brick.mov/#website",
+                "@id": "${BASE_URL}/#website",
                 "name": "Brick AI",
-                "url": "https://ai.brick.mov",
+                "url": "${BASE_URL}",
                 "inLanguage": [isEn ? "en" : "pt-BR", isEn ? "pt-BR" : "en"],
-                "publisher": { "@id": "https://ai.brick.mov/#organization" },
+                "publisher": { "@id": "${BASE_URL}/#organization" },
                 "speakable": {
                     "@type": "SpeakableSpecification",
                     "xpath": ["/html/head/meta[@name='description']/@content", "/html/head/title"]
@@ -792,7 +822,7 @@ app.get('*', async (req, res) => {
         "itemListElement": breadcrumbItems
     })}</script>`);
 
-    // VideoObject + CreativeWork — structured data for Works page
+    // VideoObject + CreativeWork — structured data for Works page (all projects)
     if (view === 'works') {
         const worksJsonLd = WORKS_SCHEMA.map(w => ([
             {
@@ -803,7 +833,7 @@ app.get('*', async (req, res) => {
                 "contentUrl": w.contentUrl,
                 "uploadDate": w.dateCreated,
                 "duration": w.duration,
-                "productionCompany": { "@id": "https://ai.brick.mov/#organization" }
+                "productionCompany": { "@id": `${BASE_URL}/#organization` }
             },
             {
                 "@type": "CreativeWork",
@@ -811,7 +841,7 @@ app.get('*', async (req, res) => {
                 "description": isEn ? w.description.en : w.description.pt,
                 "dateCreated": w.dateCreated,
                 "genre": w.genre,
-                "productionCompany": { "@id": "https://ai.brick.mov/#organization" },
+                "productionCompany": { "@id": `${BASE_URL}/#organization` },
                 ...(w.award ? { "award": w.award } : {})
             }
         ])).flat();
@@ -819,6 +849,36 @@ app.get('*', async (req, res) => {
         jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
             "@context": "https://schema.org",
             "@graph": worksJsonLd
+        })}</script>`);
+    }
+
+    // VideoObject + CreativeWork — individual case study page
+    if (view === 'work-detail' && postData) {
+        jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+                {
+                    "@type": "VideoObject",
+                    "name": isEn ? postData.name.en : postData.name.pt,
+                    "description": isEn ? postData.description.en : postData.description.pt,
+                    "thumbnailUrl": postData.thumbnailUrl,
+                    "contentUrl": postData.contentUrl,
+                    "uploadDate": postData.dateCreated,
+                    "duration": postData.duration,
+                    "productionCompany": { "@id": `${BASE_URL}/#organization` },
+                    ...(postData.award ? { "award": postData.award } : {})
+                },
+                {
+                    "@type": "CreativeWork",
+                    "name": isEn ? postData.name.en : postData.name.pt,
+                    "description": isEn ? postData.description.en : postData.description.pt,
+                    "dateCreated": postData.dateCreated,
+                    "genre": postData.genre,
+                    "productionCompany": { "@id": `${BASE_URL}/#organization` },
+                    ...(postData.award ? { "award": postData.award } : {}),
+                    "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalUrl }
+                }
+            ]
         })}</script>`);
     }
 
@@ -877,8 +937,8 @@ app.get('*', async (req, res) => {
             "headline": postTitle,
             "description": postExcerpt,
             "inLanguage": isEn ? "en" : "pt-BR",
-            "author": { "@type": "Organization", "name": "Brick AI", "url": "https://ai.brick.mov" },
-            "publisher": { "@type": "Organization", "name": "Brick AI", "logo": { "@type": "ImageObject", "url": "https://ai.brick.mov/og-image.jpg" } },
+            "author": { "@type": "Organization", "name": "Brick AI", "url": "${BASE_URL}" },
+            "publisher": { "@type": "Organization", "name": "Brick AI", "logo": { "@type": "ImageObject", "url": "${BASE_URL}/og-image.jpg" } },
             "datePublished": isoDate,
             "dateModified": isoDate,
             "url": canonicalUrl,
@@ -902,8 +962,8 @@ app.get('*', async (req, res) => {
         .replace(/__OG_LOCALE__/g, lang === 'pt' ? 'pt_BR' : 'en_US')
         .replace(/__OG_LOCALE_ALT__/g, lang === 'pt' ? 'en_US' : 'pt_BR')
         .replace(/__CANONICAL_URL__/g, canonicalUrl)
-        .replace(/__HREFLANG_PT__/g, `https://ai.brick.mov/${canonicalPath}`)
-        .replace(/__HREFLANG_EN__/g, `https://ai.brick.mov/${canonicalPath}?lang=en`)
+        .replace(/__HREFLANG_PT__/g, `${BASE_URL}/${canonicalPath}`)
+        .replace(/__HREFLANG_EN__/g, `${BASE_URL}/${canonicalPath}?lang=en`)
         .replace(/<!--__JSON_LD__-->/g, jsonLdScripts.join('\n    '))
         .replace(/__GOOGLE_VERIFICATION__/g, process.env.GOOGLE_SITE_VERIFICATION || '')
         .replace(/__BING_VERIFICATION__/g, process.env.BING_VERIFICATION || '');
