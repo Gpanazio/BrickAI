@@ -93,7 +93,28 @@ app.use((req, res, next) => {
 // Health check — responde 200 sem depender do DB (Railway precisa disso)
 app.get('/health', (req, res) => res.status(200).json({ status: 'ok', uptime: process.uptime() }));
 
-app.use('/uploads', express.static(UPLOADS_DIR)); // Serve as imagens salvas
+// Serve uploaded images with production fallback for missing files
+app.use('/uploads', express.static(UPLOADS_DIR));
+app.use('/uploads', async (req, res, next) => {
+    // If static didn't find the file, try fetching from production
+    const filename = path.basename(req.path);
+    const localPath = path.join(UPLOADS_DIR, filename);
+    const prodUrl = `https://brickai-production.up.railway.app/uploads/${filename}`;
+    try {
+        const response = await fetch(prodUrl);
+        if (!response.ok) return res.status(404).send('Not found');
+        const buffer = Buffer.from(await response.arrayBuffer());
+        fs.writeFileSync(localPath, buffer);
+        console.log(`[proxy] Cached from production: ${filename}`);
+        const ext = path.extname(filename).toLowerCase();
+        const mimeTypes = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.gif': 'image/gif', '.webp': 'image/webp' };
+        res.set('Content-Type', mimeTypes[ext] || 'application/octet-stream');
+        res.send(buffer);
+    } catch (err) {
+        console.error(`[proxy] Failed to fetch ${filename} from production:`, err.message);
+        res.status(404).send('Not found');
+    }
+});
 app.use(express.static(path.join(__dirname, 'dist'))); // Serve o frontend buildado
 
 // Cache headers for static assets
