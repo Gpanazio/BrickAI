@@ -4034,6 +4034,112 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
     return null;
 };
 
+const NotFoundPage = ({ onHome, goChat }: { onHome: () => void, goChat: () => void }) => {
+    const { t, i18n } = useTranslation();
+    const [monolithHover, setMonolithHover] = useState(false);
+    
+    // Auto scramble effect for glitch text
+    const [scrambledTitle, setScrambledTitle] = useState("CONEXÃO PERDIDA");
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*";
+    
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (Math.random() > 0.95 && !monolithHover) {
+                const target = i18n.language === 'en' ? "CONNECTION LOST" : "CONEXÃO PERDIDA";
+                const chars = target.split("");
+                const idx = Math.floor(Math.random() * chars.length);
+                const original = chars[idx];
+                chars[idx] = ["!", "@", "#", "$", "%", "0", "1"][Math.floor(Math.random() * 7)];
+                setScrambledTitle(chars.join(""));
+                setTimeout(() => setScrambledTitle(target), 150);
+            }
+        }, 200);
+        return () => clearInterval(interval);
+    }, [i18n.language, monolithHover]);
+
+    useEffect(() => {
+        setScrambledTitle(i18n.language === 'en' ? "CONNECTION LOST" : "CONEXÃO PERDIDA");
+    }, [i18n.language]);
+
+    return (
+        <React.Fragment>
+            <Header onChat={goChat} onWorks={() => {}} onTransmissions={() => {}} onHome={onHome} onAbout={() => {}} isChatView={false} />
+            <main className="min-h-screen pt-32 flex flex-col items-center justify-center p-6 md:p-12 relative bg-brick-black overflow-hidden relative z-10 w-full">
+                
+                {/* Giant Background 404 */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none mt-10">
+                    <div className="text-[250px] md:text-[500px] font-brick text-brick-white leading-none tracking-tighter select-none mix-blend-screen">
+                        404
+                    </div>
+                </div>
+
+                <div className="relative z-20 flex flex-col items-center text-center animate-fade-in-up mt-8">
+                    
+                    {/* Mason Monolith */}
+                    <div 
+                        className="w-[80px] h-[160px] md:w-[120px] md:h-[240px] mb-12 cursor-pointer group"
+                        onMouseEnter={() => setMonolithHover(true)}
+                        onMouseLeave={() => setMonolithHover(false)}
+                        onClick={goChat}
+                    >
+                        <div className={`monolith-structure w-full h-full rounded-[2px] relative z-10 shadow-2xl transition-all duration-300 ${monolithHover ? 'shadow-[0_0_60px_rgba(var(--brick-red-rgb),0.5)] scale-105' : ''}`}>
+                            <div className="absolute inset-0 monolith-texture opacity-80 mix-blend-overlay pointer-events-none rounded-[2px] overflow-hidden"></div>
+                            
+                            {/* Atmospherics */}
+                            <div className="centered-layer aura-atmos pointer-events-none opacity-40" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
+                            <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(var(--brick-red-rgb),0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
+                            
+                            {/* Core Glow */}
+                            <div className={`centered-layer core-atmos pointer-events-none shadow-[0_0_40px_rgba(var(--brick-red-rgb),1)] transition-all duration-200 ${monolithHover ? 'animate-talking scale-150 opacity-100' : 'animate-thinking opacity-80'}`}></div>
+                            
+                            {/* Glass Reflection */}
+                            <div className="absolute inset-0 border border-white/10 opacity-30 pointer-events-none z-10 rounded-[2px] group-hover:border-brick-red/50 transition-colors"></div>
+                            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-20"></div>
+                        </div>
+                    </div>
+
+                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-brick text-white mb-6 uppercase tracking-tighter">
+                        <span className={monolithHover ? "text-brick-red" : ""}>{scrambledTitle}</span>
+                    </h1>
+                    
+                    <div className="max-w-lg mx-auto bg-dark-surface/50 border border-white/10 p-6 md:p-8 mb-10 transition-colors duration-300 hover:border-brick-red/30">
+                        <p className="font-mono text-sm md:text-base text-brick-gray leading-relaxed text-left">
+                            <span className="text-brick-red font-bold uppercase tracking-widest text-xs mb-3 block">[{i18n.language === 'en' ? "MASON INTERVENE" : "INTERVENÇÃO MASON"}]</span>
+                            {i18n.language === 'en' ? (
+                                <>
+                                    I couldn't find this path in my latent space. It seems you wandered out of the set.<br/><br/>
+                                    You might want to <span className="text-white hover:text-brick-red cursor-pointer transition-colors" onClick={goChat}>talk to me</span> to recover the coordinates, or simply return to base.
+                                </>
+                            ) : (
+                                <>
+                                    Não encontrei essa rota nos meus domínios latentes. Parece que você vagou para fora do set de filmagem.<br/><br/>
+                                    Talvez devesse <span className="text-white hover:text-brick-red cursor-pointer transition-colors" onClick={goChat}>falar comigo</span> pra recuperar as coordenadas corretas, ou simplesmente voltar para a base.
+                                </>
+                            )}
+                        </p>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-sm">
+                        <MagneticButton 
+                            onClick={onHome} 
+                            className="w-full sm:w-auto px-8 py-4 bg-transparent border border-white/20 text-white font-mono text-xs tracking-widest uppercase hover:bg-white/10 transition-colors"
+                        >
+                            {i18n.language === 'en' ? "RETURN TO BASE" : "RETORNAR À BASE"}
+                        </MagneticButton>
+                        <MagneticButton 
+                            onClick={goChat}
+                            className="w-full sm:w-auto px-8 py-4 bg-brick-red text-white font-mono text-xs tracking-widest uppercase hover:bg-brick-red/80 transition-colors"
+                        >
+                            {i18n.language === 'en' ? "TALK TO MASON" : "FALAR COM MASON"}
+                        </MagneticButton>
+                    </div>
+
+                </div>
+            </main>
+        </React.Fragment>
+    );
+};
+
 const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedProject, setSelectedProject, selectedPost, setSelectedPost, goHome, goWorks, goTransmissions, goChat, goAdmin, goAbout, handleSelectPost }: any) => {
     const { works, transmissions } = useContext(DataContext)!;
 
@@ -4095,6 +4201,9 @@ const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedPr
             {view === 'admin' && (
                 <AdminPage onHome={goHome} />
             )}
+            {view === '404' && (
+                <NotFoundPage onHome={goHome} goChat={goChat} />
+            )}
         </div>
     );
 };
@@ -4107,13 +4216,25 @@ const ContextConsumer = ({ children }: { children: (data: any) => React.ReactNod
 };
 
 const App = () => {
-    const [view, setView] = useState(() => {
+    const getInitialView = () => {
         try {
+            const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
+            const validViews = ['home', 'works', 'transmissions', 'chat', 'about', 'admin'];
+            
+            // Allow URL driven SPA navigation
+            if (path !== '') {
+                if (validViews.includes(path)) return path;
+                if (path.startsWith('transmissions/')) return 'post';
+                return '404'; // Path is invalid!
+            }
+            
             return sessionStorage.getItem('brick_view') || 'home';
         } catch {
             return 'home';
         }
-    });
+    };
+
+    const [view, setView] = useState(getInitialView);
     const [monolithHover, setMonolithHover] = useState(false);
     const [selectedProject, setSelectedProject] = useState<Work | null>(null);
     const [selectedPost, setSelectedPost] = useState<Post | null>(null);
