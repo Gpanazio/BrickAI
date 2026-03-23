@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useContext } from 'react';
+import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useContext, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Eye, Fingerprint, Globe, Menu, X } from 'lucide-react';
 import {
@@ -326,10 +326,6 @@ const GlobalStyles = () => (
         }
 
         /* LEGACY SECTION UTILS */
-        .text-stroke {
-            -webkit-text-stroke: 1px rgba(255, 255, 255, 0.1);
-            color: transparent;
-        }
 
         /* DEEP SPACE NOISE OVERLAY */
         .modal-video-noise::after {
@@ -599,7 +595,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 // --- UTILS COMPONENTS ---
-const GlitchText = ({ text, className }: { text: string, className?: string }) => {
+const GlitchText = React.memo(({ text, className }: { text: string, className?: string }) => {
     const glitchChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_#@!";
     const [displayed, setDisplayed] = useState('');
     const [ready, setReady] = useState(false);
@@ -650,28 +646,32 @@ const GlitchText = ({ text, className }: { text: string, className?: string }) =
                 : displayed}
         </span>
     );
-};
+});
 
 const TypewriterText = ({ text, className, delay = 0, onComplete }: { text: string, className?: string, delay?: number, onComplete?: () => void }) => {
     const [displayed, setDisplayed] = useState('');
     const [done, setDone] = useState(false);
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
     useEffect(() => {
         let i = 0;
         const timeout = setTimeout(() => {
-            const interval = setInterval(() => {
+            intervalRef.current = setInterval(() => {
                 i++;
                 setDisplayed(text.slice(0, i));
                 if (i >= text.length) {
-                    clearInterval(interval);
+                    clearInterval(intervalRef.current!);
+                    intervalRef.current = null;
                     setDone(true);
                     if (onComplete) onComplete();
                 }
             }, 120);
-            return () => clearInterval(interval);
         }, delay);
 
-        return () => clearTimeout(timeout);
+        return () => {
+            clearTimeout(timeout);
+            if (intervalRef.current) clearInterval(intervalRef.current);
+        };
     }, [text, delay, onComplete]);
 
     return (
@@ -681,7 +681,7 @@ const TypewriterText = ({ text, className, delay = 0, onComplete }: { text: stri
     );
 };
 
-const ScrambleText = ({ text, className, hoverTrigger = false, triggerOnReveal = false, delay = 0 }: { text: string, className?: string, hoverTrigger?: boolean, triggerOnReveal?: boolean, delay?: number }) => {
+const ScrambleText = React.memo(({ text, className, hoverTrigger = false, triggerOnReveal = false, delay = 0 }: { text: string, className?: string, hoverTrigger?: boolean, triggerOnReveal?: boolean, delay?: number }) => {
     const [displayText, setDisplayText] = useState(text);
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*";
     const intervalRef = useRef<any>(null);
@@ -749,9 +749,9 @@ const ScrambleText = ({ text, className, hoverTrigger = false, triggerOnReveal =
             {triggerOnReveal && !hasBeenRevealed ? text.split("").map(c => c === " " ? " " : chars[Math.floor(Math.random() * chars.length)]).join("") : displayText}
         </span>
     );
-};
+});
 
-const MagneticButton = ({ children, onClick, className }: { children: React.ReactNode, onClick: () => void, className?: string }) => {
+const MagneticButton = React.memo(({ children, onClick, className }: { children: React.ReactNode, onClick: () => void, className?: string }) => {
     const btnRef = useRef<HTMLButtonElement>(null);
 
     const handleMouseMove = (e: React.MouseEvent) => {
@@ -778,7 +778,7 @@ const MagneticButton = ({ children, onClick, className }: { children: React.Reac
             {children}
         </button>
     );
-};
+});
 
 const useScrollReveal = (view: string) => {
     useEffect(() => {
@@ -894,7 +894,11 @@ const BrickLogo = ({ className }: { className?: string }) => (
 
 const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
     const { goHome, goWorks, goTransmissions, goChat, goAbout } = useAppNav();
-    const onHome = goHome, onWorks = goWorks, onTransmissions = goTransmissions, onChat = goChat, onAbout = goAbout;
+    const onHome = useCallback(goHome, [goHome]);
+    const onWorks = useCallback(goWorks, [goWorks]);
+    const onTransmissions = useCallback(goTransmissions, [goTransmissions]);
+    const onChat = useCallback(goChat, [goChat]);
+    const onAbout = useCallback(goAbout, [goAbout]);
     const { t, i18n } = useTranslation();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -1007,7 +1011,7 @@ const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
     );
 };
 
-const FadeEntryText = ({ text, className, delay = 0 }: { text: string, className?: string, delay?: number }) => {
+const FadeEntryText = React.memo(({ text, className, delay = 0 }: { text: string, className?: string, delay?: number }) => {
     const [render, setRender] = useState(false);
     useEffect(() => {
         const t = setTimeout(() => {
@@ -1021,7 +1025,7 @@ const FadeEntryText = ({ text, className, delay = 0 }: { text: string, className
             {render ? text : ''}
         </span>
     );
-};
+});
 
 const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boolean) => void, monolithHover: boolean }) => {
     const radiationRef = useRef<HTMLDivElement>(null);
@@ -1176,9 +1180,12 @@ const ParticleScene = ({ fixed = false, reactToMouse = true }: { fixed?: boolean
         }
         const particleTexture = new CanvasTexture(offscreen);
 
+        const isMobile = window.innerWidth < 768;
+
         const makeMesh = (count: number, size: number, zClear: number) => {
-            const pos = new Float32Array(count * 3);
-            for (let i = 0; i < count; i++) {
+            const finalCount = isMobile ? Math.round(count * 0.4) : count;
+            const pos = new Float32Array(finalCount * 3);
+            for (let i = 0; i < finalCount; i++) {
                 pos[i * 3]     = (Math.random() - 0.5) * 20;
                 pos[i * 3 + 1] = (Math.random() - 0.5) * 20;
                 let z = (Math.random() - 0.5) * 20;
@@ -1208,7 +1215,17 @@ const ParticleScene = ({ fixed = false, reactToMouse = true }: { fixed?: boolean
         if (reactToMouse) window.addEventListener('mousemove', onMouseMove);
 
         let rafId: number;
+        let isVisible = true;
+
+        // Pause RAF when canvas is off-screen to save GPU/CPU
+        const visibilityObserver = new IntersectionObserver(([entry]) => {
+            isVisible = entry.isIntersecting;
+            if (isVisible && !rafId) animate();
+        }, { threshold: 0 });
+        visibilityObserver.observe(container);
+
         const animate = () => {
+            if (!isVisible) { rafId = 0; return; }
             rafId = requestAnimationFrame(animate);
             const tx = reactToMouse ? mouseX * 0.5 : 0;
             const ty = reactToMouse ? mouseY * 0.5 : 0;
@@ -1229,6 +1246,7 @@ const ParticleScene = ({ fixed = false, reactToMouse = true }: { fixed?: boolean
         window.addEventListener('resize', onResize);
 
         return () => {
+            visibilityObserver.disconnect();
             if (reactToMouse) window.removeEventListener('mousemove', onMouseMove);
             window.removeEventListener('resize', onResize);
             cancelAnimationFrame(rafId);
@@ -1432,7 +1450,7 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
             <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] px-6 md:px-12 lg:px-24">
                 <DataContext.Consumer>
                     {(data) => data ? data.works.slice(0, 5).map((work, idx) => (
-                        <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />
+                        <WorkCard key={work.id} work={work} index={idx} onOpen={onSelectProject} />
                     )) : null}
                 </DataContext.Consumer>
             </div>
@@ -4144,7 +4162,9 @@ const AppShell = () => {
             <GlobalStyles />
             <ScrollToTop />
             <div className="noise-overlay"></div>
-            <CustomCursor active={monolithHover || selectedProject !== null} />
+            {(pathname === '/' || pathname === '/works') && (
+                <CustomCursor active={monolithHover || selectedProject !== null} />
+            )}
             {selectedProject && (
                 <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} onPrev={() => navigateProject(-1)} onNext={() => navigateProject(1)} />
             )}
