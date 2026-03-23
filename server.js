@@ -282,7 +282,7 @@ app.post('/api/contact', async (req, res) => {
     }
 });
 
-// 1.5 MASON CHAT (OPENROUTER / MISTRAL SMALL CREATIVE)
+// 1.5 MASON CHAT (OPENROUTER / GEMINI 2.5 FLASH)
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const userInteractions = new Map(); // Simple in-memory rate limiting (Resets on restart)
 
@@ -400,8 +400,8 @@ app.post('/api/chat', async (req, res) => {
     });
 
     try {
-        // 4. Call OpenRouter API (Primary: DeepSeek R1T2 Chimera, Fallback: Mistral Small Creative)
-        const PRIMARY_MODEL = 'tngtech/deepseek-r1t2-chimera';
+        // 4. Call OpenRouter API (Primary: Gemini 2.5 Flash, Fallback: Mistral Small Creative)
+        const PRIMARY_MODEL = 'google/gemini-2.5-flash-preview';
         const FALLBACK_MODEL = 'mistralai/mistral-small-creative';
 
         let response = await openRouterRequest(PRIMARY_MODEL);
