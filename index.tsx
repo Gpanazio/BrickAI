@@ -840,7 +840,7 @@ const chatWithMono = async (history: any[], message: string) => {
     try {
         const response = await fetch('/api/chat', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
             body: JSON.stringify({ history, message }),
             credentials: 'include' // Important for cookies (session limit)
         });
@@ -3362,7 +3362,7 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
         try {
             const res = await fetch('/api/login', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
                 body: JSON.stringify({ identifier, password }),
                 credentials: 'include'
             });
@@ -3379,21 +3379,21 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
 
     // Logout handler
     const handleLogout = async () => {
-        await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+        await fetch('/api/auth/logout', { method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'include' });
         setIsLoggedIn(false);
     };
 
     // Delete work
     const deleteWork = async (id: string) => {
         if (!confirm('Delete this work?')) return;
-        await fetch(`/api/works/${id}`, { method: 'DELETE', credentials: 'include' });
+        await fetch(`/api/works/${id}`, { method: 'DELETE', headers: { 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'include' });
         setWorks(works.filter(w => w.id !== id));
     };
 
     // Delete transmission
     const deleteTransmission = async (id: string) => {
         if (!confirm('Delete this transmission?')) return;
-        await fetch(`/api/transmissions/${id}`, { method: 'DELETE', credentials: 'include' });
+        await fetch(`/api/transmissions/${id}`, { method: 'DELETE', headers: { 'X-Requested-With': 'XMLHttpRequest' }, credentials: 'include' });
         setTransmissions(transmissions.filter(t => t.id !== id));
     };
 
@@ -3403,7 +3403,7 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
         const endpoint = activeTab === 'works' ? '/api/works' : '/api/transmissions';
         await fetch(endpoint, {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
             body: JSON.stringify(editingItem),
             credentials: 'include'
         });
@@ -3682,7 +3682,7 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                                                         const formData = new FormData();
                                                         formData.append('file', file);
                                                         try {
-                                                            const res = await fetch('/api/upload', { method: 'POST', body: formData, credentials: 'include' });
+                                                            const res = await fetch('/api/upload', { method: 'POST', headers: { 'X-Requested-With': 'XMLHttpRequest' }, body: formData, credentials: 'include' });
                                                             const data = await res.json();
                                                             if (data.url) setEditingItem({ ...editingItem, imageHome: data.url, imageWorks: data.url });
                                                         } catch (err) { console.error('Upload failed', err); }

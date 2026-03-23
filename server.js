@@ -20,7 +20,11 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 3002;
 const BASE_URL = process.env.BASE_URL || 'https://ai.brick.mov';
-const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'production' ? (() => { throw new Error('JWT_SECRET is required in production'); })() : 'brick_secret_key_2025');
+const JWT_SECRET = process.env.JWT_SECRET;
+if (!JWT_SECRET) {
+    console.error('FATAL: JWT_SECRET environment variable is required. Set it in .env or your hosting provider.');
+    process.exit(1);
+}
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 
 // Garantir que a pasta de uploads existe
@@ -117,8 +121,36 @@ app.use((req, res, next) => {
     res.setHeader('X-Frame-Options', 'SAMEORIGIN');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    // Content-Security-Policy — whitelist sources to mitigate XSS
+    res.setHeader('Content-Security-Policy', [
+        "default-src 'self'",
+        "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+        "font-src 'self' https://fonts.gstatic.com",
+        "img-src 'self' data: blob: https:",
+        "media-src 'self' https:",
+        "connect-src 'self' https://www.google-analytics.com",
+        "frame-src 'self' https://player.vimeo.com https://www.youtube.com"
+    ].join('; '));
     next();
 });
+
+// CSRF protection: require custom header on state-changing API requests.
+// Browsers prevent cross-origin sites from setting custom headers on simple requests,
+// so this blocks form-based CSRF attacks without needing tokens.
+const csrfProtection = (req, res, next) => {
+    if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(req.method)) {
+        if (req.headers['x-requested-with'] !== 'XMLHttpRequest') {
+            return res.status(403).json({ error: 'Forbidden: missing required header' });
+        }
+    }
+    next();
+};
+app.use('/api', csrfProtection);
+
+// Sanitize JSON-LD output to prevent script injection from DB content.
+// Replaces sequences that could break out of a <script> tag.
+const safeJsonLd = (obj) => JSON.stringify(obj).replace(/<\//g, '<\\/');
 
 // Health check — responde 200 sem depender do DB (Railway precisa disso)
 app.get('/health', (req, res) => res.status(200).json({ status: 'ok', uptime: process.uptime() }));
@@ -271,7 +303,7 @@ app.post('/api/login', async (req, res) => {
                 loginAttempts.delete(clientIp);
                 delete user.password_hash;
                 const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
-                res.cookie('admin_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 7 * 24 * 60 * 60 * 1000 });
+                res.cookie('admin_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict', maxAge: 7 * 24 * 60 * 60 * 1000 });
                 res.json({ success: true, user });
             } else {
                 if (attempts) { attempts.count++; } else { loginAttempts.set(clientIp, { count: 1, firstAttempt: now }); }
@@ -355,7 +387,7 @@ app.post('/api/chat', async (req, res) => {
     let sessionId = req.cookies.mason_session;
     if (!sessionId) {
         sessionId = randomUUID();
-        res.cookie('mason_session', sessionId, { httpOnly: true, maxAge: 3 * 60 * 60 * 1000 }); // 3 hours
+        res.cookie('mason_session', sessionId, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 3 * 60 * 60 * 1000 }); // 3 hours
     }
 
     const usage = userInteractions.get(sessionId) || 0;
@@ -831,7 +863,7 @@ app.get('*', async (req, res) => {
     const isEn = lang === 'en';
 
     // Organization + WebSite — language-adaptive structured data
-    jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
+    jsonLdScripts.push(`<script type="application/ld+json">${safeJsonLd({
         "@context": "https://schema.org",
         "@graph": [
             {
@@ -926,7 +958,7 @@ app.get('*', async (req, res) => {
     const breadcrumbItems = buildBreadcrumbItems(view, lang,
         (view === 'post' && postData) ? { title: postTitle, canonicalUrl } : null
     );
-    jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
+    jsonLdScripts.push(`<script type="application/ld+json">${safeJsonLd({
         "@context": "https://schema.org",
         "@type": "BreadcrumbList",
         "itemListElement": breadcrumbItems
@@ -956,7 +988,7 @@ app.get('*', async (req, res) => {
             }
         ])).flat();
 
-        jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
+        jsonLdScripts.push(`<script type="application/ld+json">${safeJsonLd({
             "@context": "https://schema.org",
             "@graph": worksJsonLd
         })}</script>`);
@@ -964,7 +996,7 @@ app.get('*', async (req, res) => {
 
     // VideoObject + CreativeWork — individual case study page
     if (view === 'work-detail' && postData) {
-        jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
+        jsonLdScripts.push(`<script type="application/ld+json">${safeJsonLd({
             "@context": "https://schema.org",
             "@graph": [
                 {
@@ -1028,7 +1060,7 @@ app.get('*', async (req, res) => {
             { "@type": "Question", "name": "Do you work with international clients?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We work with brands and agencies worldwide. Our website is bilingual (Portuguese and English) and all communication can be in English. Our workflow is 100% remote." } },
             { "@type": "Question", "name": "What is hybrid production (AI + real set)?", "acceptedAnswer": { "@type": "Answer", "text": "It combines traditional filmed footage with AI-generated elements. This includes environment replacement, character generation, VFX augmentation, and seamless integration between real and synthetic footage." } }
         ];
-        jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
+        jsonLdScripts.push(`<script type="application/ld+json">${safeJsonLd({
             "@context": "https://schema.org",
             "@type": "FAQPage",
             "inLanguage": isEn ? "en" : "pt-BR",
@@ -1041,7 +1073,7 @@ app.get('*', async (req, res) => {
         const isoDate = typeof postData.date === 'string'
             ? postData.date.replace(/\./g, '-')
             : new Date().toISOString().split('T')[0];
-        jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
+        jsonLdScripts.push(`<script type="application/ld+json">${safeJsonLd({
             "@context": "https://schema.org",
             "@type": "Article",
             "headline": postTitle,
