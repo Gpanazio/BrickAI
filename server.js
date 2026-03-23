@@ -94,21 +94,23 @@ app.use((req, res, next) => {
 app.get('/health', (req, res) => res.status(200).json({ status: 'ok', uptime: process.uptime() }));
 
 // Serve uploaded images with production fallback for missing files
+const PROD_BASE_URL = process.env.PRODUCTION_UPLOADS_BASE_URL || 'https://brickai-production.up.railway.app';
 app.use('/uploads', express.static(UPLOADS_DIR));
 app.use('/uploads', async (req, res, next) => {
     // If static didn't find the file, try fetching from production
     const filename = path.basename(req.path);
     const localPath = path.join(UPLOADS_DIR, filename);
-    const prodUrl = `https://brickai-production.up.railway.app/uploads/${filename}`;
+    const prodUrl = `${PROD_BASE_URL}/uploads/${filename}`;
     try {
         const response = await fetch(prodUrl);
         if (!response.ok) return res.status(404).send('Not found');
         const buffer = Buffer.from(await response.arrayBuffer());
         fs.writeFileSync(localPath, buffer);
         console.log(`[proxy] Cached from production: ${filename}`);
+        const contentType = response.headers.get('Content-Type');
         const ext = path.extname(filename).toLowerCase();
         const mimeTypes = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.gif': 'image/gif', '.webp': 'image/webp' };
-        res.set('Content-Type', mimeTypes[ext] || 'application/octet-stream');
+        res.set('Content-Type', contentType || mimeTypes[ext] || 'application/octet-stream');
         res.send(buffer);
     } catch (err) {
         console.error(`[proxy] Failed to fetch ${filename} from production:`, err.message);
