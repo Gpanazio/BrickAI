@@ -4,8 +4,23 @@ import { ArrowRight, Eye, Fingerprint, Globe, Globe2, Menu, X } from 'lucide-rea
 import * as THREE from 'three';
 import { useTranslation } from 'react-i18next';
 import { motion, useScroll, useTransform, useSpring, useReducedMotion, type Easing } from 'framer-motion';
+import { BrowserRouter, Routes, Route, useNavigate, useParams, useLocation, Navigate } from 'react-router-dom';
 import './src/i18n';
 import './src/index.css';
+
+// --- NAVIGATION HOOK (replaces prop-drilled callbacks) ---
+const useAppNav = () => {
+    const nav = useNavigate();
+    return {
+        goHome: () => nav('/'),
+        goWorks: () => nav('/works'),
+        goTransmissions: () => nav('/transmissions'),
+        goChat: () => nav('/chat'),
+        goAbout: () => nav('/about'),
+        goAdmin: () => nav('/admin'),
+        goPost: (id: string) => nav(`/transmissions/${id}`),
+    };
+};
 
 // Extend Window for gtag (GA4)
 declare global { interface Window { gtag?: (...args: [string, ...any[]]) => void; } }
@@ -872,7 +887,9 @@ const BrickLogo = ({ className }: { className?: string }) => (
     </svg>
 );
 
-const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView }: { onChat: () => void, onWorks: () => void, onTransmissions: () => void, onHome: () => void, onAbout: () => void, isChatView: boolean }) => {
+const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
+    const { goHome, goWorks, goTransmissions, goChat, goAbout } = useAppNav();
+    const onHome = goHome, onWorks = goWorks, onTransmissions = goTransmissions, onChat = goChat, onAbout = goAbout;
     const { t, i18n } = useTranslation();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -1400,11 +1417,11 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
                 <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] uppercase leading-none">{t('works_page.title')}</span>
             </motion.div>
             <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] px-6 md:px-12 lg:px-24">
-                <ContextConsumer>
-                    {({ works }) => works.slice(0, 5).map((work, idx) => (
+                <DataContext.Consumer>
+                    {(data) => data ? data.works.slice(0, 5).map((work, idx) => (
                         <WorkCard key={idx} work={work} index={idx} onOpen={onSelectProject} />
-                    ))}
-                </ContextConsumer>
+                    )) : null}
+                </DataContext.Consumer>
             </div>
         </section>
     );
@@ -1902,7 +1919,8 @@ const monolithAnimations = {
     }
 };
 
-const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => {
+const UnifiedEnding = () => {
+    const { goChat, goAdmin } = useAppNav();
     const ref = useRef<HTMLElement>(null);
     const { t } = useTranslation();
     const clients = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO"];
@@ -2254,7 +2272,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                     </h1>
 
                     {/* Highly polished, weighty contact button */}
-                    <MagneticButton onClick={onChat} className="group relative overflow-hidden border border-white/10 hover:border-brick-red hover:bg-brick-red/5 hover:shadow-[0_0_40px_rgba(var(--brick-red-rgb),0.2)] transition-all duration-700 px-10 py-5 md:px-16 md:py-6 backdrop-blur-sm">
+                    <MagneticButton onClick={goChat} className="group relative overflow-hidden border border-white/10 hover:border-brick-red hover:bg-brick-red/5 hover:shadow-[0_0_40px_rgba(var(--brick-red-rgb),0.2)] transition-all duration-700 px-10 py-5 md:px-16 md:py-6 backdrop-blur-sm">
                         {/* Hover glass scanner beam */}
                         <div className="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-45deg] group-hover:left-[200%] transition-all duration-1000 ease-in-out"></div>
                         <span className="relative z-10 text-xs md:text-sm font-ai font-bold text-white tracking-[0.2em] md:tracking-[0.3em] uppercase">
@@ -2586,19 +2604,10 @@ const WorksFilter = ({ categories, activeCategory, onSelect }: { categories: str
     );
 };
 
-type PageNavProps = {
-    onHome: () => void;
-    onChat: () => void;
-    onWorks: () => void;
-    onTransmissions: () => void;
-    onAbout: () => void;
-};
-
-const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, onAbout }: PageNavProps & {
+const WorksPage = ({ onSelectProject }: {
     onSelectProject: (project: Work) => void;
-    setMonolithHover?: (v: boolean) => void;
-    monolithHover?: boolean;
 }) => {
+    const { goHome } = useAppNav();
     const { t } = useTranslation();
     const [activeCategory, setActiveCategory] = useState("ALL");
     const { works } = useContext(DataContext)!;
@@ -2633,8 +2642,8 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
 
     return (
         <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+            <Header />
+            <button onClick={goHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
             <main className="pt-32 md:pt-40 min-h-screen flex flex-col">
@@ -2657,21 +2666,20 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
                     )}
                 </section>
             </main>
-            <Footer onChat={onChat} />
+            <Footer />
         </React.Fragment>
     );
 }
 
-const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, onAbout }: PageNavProps & {
-    post: Post;
-    onBack: () => void;
-}) => {
+const BlogPostPage = ({ post }: { post: Post }) => {
+    const { goTransmissions } = useAppNav();
+    const onBack = goTransmissions;
     const { t, i18n } = useTranslation();
     const postTitle = getLocalizedField(post.title, i18n.language, 'UNTITLED');
     const postExcerpt = getLocalizedField(post.excerpt, i18n.language, '');
     return (
         <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
+            <Header />
             <button onClick={onBack} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_index')}
             </button>
@@ -2721,20 +2729,19 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, 
                     </div>
                 </article>
             </main>
-            <Footer onChat={onChat} />
+            <Footer />
         </React.Fragment>
     );
 };
 
-const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectPost, onAbout }: PageNavProps & {
-    onSelectPost: (post: Post) => void;
-}) => {
+const TransmissionsPage = () => {
+    const { goHome, goPost } = useAppNav();
     const { t, i18n } = useTranslation();
     const { transmissions } = useContext(DataContext)!;
     return (
         <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+            <Header />
+            <button onClick={goHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
             <main className="pt-32 md:pt-40 min-h-screen flex flex-col bg-brick-black">
@@ -2749,7 +2756,7 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
                 <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 md:pb-40 reveal">
                     <div className="space-y-2 md:space-y-3 bg-transparent border-t border-white/10">
                         {transmissions.map((post) => (
-                            <div key={post.id} onClick={() => onSelectPost(post)} className="block group bg-brick-black hover:bg-brick-dark transition-colors p-8 md:p-10 border border-white/10 cursor-pointer">
+                            <div key={post.id} onClick={() => goPost(post.id)} className="block group bg-brick-black hover:bg-brick-dark transition-colors p-8 md:p-10 border border-white/10 cursor-pointer">
                                 <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-4">
                                     <h3 className="text-xl md:text-2xl font-brick text-white tracking-tight group-hover:text-brick-red transition-colors">
                                         {getLocalizedField(post.title, i18n.language, 'UNTITLED')}
@@ -2769,12 +2776,14 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
                     </div>
                 </section>
             </main>
-            <Footer onChat={onChat} />
+            <Footer />
         </React.Fragment>
     );
 };
 
-const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => {
+const Footer = () => {
+    const { goChat } = useAppNav();
+    const onChat = goChat;
     const { t } = useTranslation();
     return (
         <footer className="w-full py-12 px-6 md:px-12 lg:px-24 bg-brick-black border-t border-white/10 relative z-10 overflow-hidden">
@@ -3023,18 +3032,17 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
 };
 
 
-const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, onAbout, setMonolithHover, monolithHover, onAdmin }: PageNavProps & {
+const HomePage = ({ onSelectProject, setMonolithHover, monolithHover }: {
     onSelectProject: (project: Work) => void;
     setMonolithHover: (v: boolean) => void;
     monolithHover: boolean;
-    onAdmin: () => void;
 }) => (
     <React.Fragment>
-        <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
+        <Header />
         <main>
             <Hero setMonolithHover={setMonolithHover} monolithHover={monolithHover} />
             <SelectedWorks onSelectProject={onSelectProject} />
-            <UnifiedEnding onChat={onChat} onAdmin={onAdmin} />
+            <UnifiedEnding />
         </main>
     </React.Fragment>
 );
@@ -3096,12 +3104,13 @@ const TeamMember = ({ name, role, id }: { name: string, role: string, id: string
     </div>
 );
 
-const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: PageNavProps) => {
+const AboutPage = () => {
+    const { goHome } = useAppNav();
     const { t } = useTranslation();
     return (
         <React.Fragment>
-            <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+            <Header />
+            <button onClick={goHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
@@ -3208,7 +3217,7 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: PageNa
                     </section>
             </main>
 
-            <Footer onChat={onChat} />
+            <Footer />
         </React.Fragment>
     );
 };
@@ -3216,7 +3225,9 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: PageNa
 // --- ADMIN PAGE ---
 
 
-const AdminPage = ({ onHome }: { onHome: () => void }) => {
+const AdminPage = () => {
+    const { goHome } = useAppNav();
+    const onHome = goHome;
     const { t, i18n } = useTranslation();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
@@ -3926,7 +3937,9 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
     return null;
 };
 
-const NotFoundPage = ({ onHome, goChat }: { onHome: () => void, goChat: () => void }) => {
+const NotFoundPage = () => {
+    const { goHome, goChat } = useAppNav();
+    const onHome = goHome;
     const { t, i18n } = useTranslation();
     const isEn = i18n.language === 'en';
     
@@ -3953,7 +3966,7 @@ const NotFoundPage = ({ onHome, goChat }: { onHome: () => void, goChat: () => vo
 
     return (
         <React.Fragment>
-            <Header onChat={goChat} onWorks={() => {}} onTransmissions={() => {}} onHome={onHome} onAbout={() => {}} isChatView={false} />
+            <Header />
             
             <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
@@ -4053,26 +4066,48 @@ const NotFoundPage = ({ onHome, goChat }: { onHome: () => void, goChat: () => vo
     );
 };
 
-type AppContentProps = {
-    view: string;
-    setView: (v: string) => void;
-    monolithHover: boolean;
-    setMonolithHover: (v: boolean) => void;
-    selectedProject: Work | null;
-    setSelectedProject: (p: Work | null) => void;
-    selectedPost: Post | null;
-    setSelectedPost: (p: Post | null) => void;
-    goHome: () => void;
-    goWorks: () => void;
-    goTransmissions: () => void;
-    goChat: () => void;
-    goAdmin: () => void;
-    goAbout: () => void;
-    handleSelectPost: (post: Post) => void;
+// --- SCROLL-TO-TOP ON ROUTE CHANGE ---
+const ScrollToTop = () => {
+    const { pathname } = useLocation();
+    useLayoutEffect(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+    }, [pathname]);
+    return null;
 };
 
-const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedProject, setSelectedProject, selectedPost, setSelectedPost, goHome, goWorks, goTransmissions, goChat, goAdmin, goAbout, handleSelectPost }: AppContentProps) => {
-    const { works, transmissions } = useContext(DataContext)!;
+// --- BLOG POST WRAPPER (reads :id from URL) ---
+const BlogPostRoute = () => {
+    const { id } = useParams<{ id: string }>();
+    const { transmissions } = useContext(DataContext)!;
+    const { goTransmissions } = useAppNav();
+    const post = transmissions.find(t => t.id === id);
+
+    useEffect(() => {
+        if (transmissions.length > 0 && !post) goTransmissions();
+    }, [transmissions, post]);
+
+    if (!post) return null;
+    return <BlogPostPage post={post} />;
+};
+
+// --- SEO WRAPPER (maps route to view name for legacy SEO component) ---
+const SEORoute = () => {
+    const { pathname } = useLocation();
+    const path = pathname.replace(/^\/+|\/+$/g, '');
+    const viewMap: Record<string, string> = {
+        '': 'home', works: 'works', transmissions: 'transmissions',
+        chat: 'chat', about: 'about', admin: 'admin',
+    };
+    const view = path.startsWith('transmissions/') ? 'post' : (viewMap[path] || '404');
+    // For post view, we'd need selectedPost — SEO component handles null gracefully
+    return <SEO view={view} selectedPost={null} />;
+};
+
+const AppShell = () => {
+    const [monolithHover, setMonolithHover] = useState(false);
+    const [selectedProject, setSelectedProject] = useState<Work | null>(null);
+    const { works } = useContext(DataContext)!;
+    const { pathname } = useLocation();
 
     const navigateProject = (dir: -1 | 1) => {
         if (!selectedProject || !works.length) return;
@@ -4081,124 +4116,43 @@ const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedPr
         setSelectedProject(works[next]);
     };
 
-    useLayoutEffect(() => {
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
-    }, [view]);
-
-    useEffect(() => {
-        if (view === 'post' && !selectedPost && transmissions.length > 0) {
-            const pathParts = window.location.pathname.split('/');
-            const id = pathParts[pathParts.length - 1];
-            const post = transmissions.find(t => t.id === id);
-            if (post) setSelectedPost(post);
-            else goTransmissions();
-        }
-    }, [view, selectedPost, transmissions]);
+    useScrollReveal(pathname);
 
     return (
         <div className="min-h-screen bg-brick-black text-brick-white selection:bg-brick-red selection:text-white font-sans">
-            <SEO view={view} selectedPost={selectedPost} />
+            <SEORoute />
             <GlobalStyles />
+            <ScrollToTop />
             <div className="noise-overlay"></div>
             <CustomCursor active={monolithHover || selectedProject !== null} />
             {selectedProject && (
                 <ProjectModal project={selectedProject} onClose={() => setSelectedProject(null)} onPrev={() => navigateProject(-1)} onNext={() => navigateProject(1)} />
             )}
-            {view === 'home' && (
-                <>
-                    <GlobalParticleBackground />
-                    <HomePage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} onAdmin={goAdmin} onAbout={goAbout} /></>
-            )}
-            {view === 'about' && (
-                <AboutPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} />
-            )}
-            {view === 'works' && (
-                <WorksPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} onAbout={goAbout} />
-            )}
-            {view === 'transmissions' && (
-                <TransmissionsPage onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onSelectPost={handleSelectPost} onAbout={goAbout} />
-            )}
-            {view === 'post' && selectedPost && (
-                <BlogPostPage post={selectedPost} onBack={goTransmissions} onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} />
-            )}
-            {view === 'chat' && (
-                <React.Fragment>
-                    <Header onChat={goChat} onWorks={goWorks} onTransmissions={goTransmissions} onHome={goHome} onAbout={goAbout} isChatView={false} />
-                    <SystemChat onBack={goHome} />
-                </React.Fragment>
-            )}
-            {view === 'admin' && (
-                <AdminPage onHome={goHome} />
-            )}
-            {view === '404' && (
-                <NotFoundPage onHome={goHome} goChat={goChat} />
-            )}
+            <Routes>
+                <Route path="/" element={
+                    <><GlobalParticleBackground /><HomePage onSelectProject={setSelectedProject} setMonolithHover={setMonolithHover} monolithHover={monolithHover} /></>
+                } />
+                <Route path="/about" element={<AboutPage />} />
+                <Route path="/works" element={<WorksPage onSelectProject={setSelectedProject} />} />
+                <Route path="/transmissions" element={<TransmissionsPage />} />
+                <Route path="/transmissions/:id" element={<BlogPostRoute />} />
+                <Route path="/chat" element={
+                    <><Header isChatView={false} /><SystemChat onBack={() => window.history.back()} /></>
+                } />
+                <Route path="/admin" element={<AdminPage />} />
+                <Route path="*" element={<NotFoundPage />} />
+            </Routes>
         </div>
     );
 };
 
-// Helper for Context Consumption
-type DataContextType = { works: Work[]; setWorks: React.Dispatch<React.SetStateAction<Work[]>>; transmissions: Post[]; setTransmissions: React.Dispatch<React.SetStateAction<Post[]>>; };
-const ContextConsumer = ({ children }: { children: (data: DataContextType) => React.ReactNode }) => {
-    const data = useContext(DataContext);
-    if (!data) return null;
-    return <>{children(data)}</>;
-};
-
-const App = () => {
-    const getInitialView = () => {
-        try {
-            const path = window.location.pathname.replace(/^\/+|\/+$/g, '');
-            const validViews = ['home', 'works', 'transmissions', 'chat', 'about', 'admin'];
-            
-            // Allow URL driven SPA navigation
-            if (path !== '') {
-                if (validViews.includes(path)) return path;
-                if (path.startsWith('transmissions/')) return 'post';
-                return '404'; // Path is invalid!
-            }
-            
-            return sessionStorage.getItem('brick_view') || 'home';
-        } catch {
-            return 'home';
-        }
-    };
-
-    const [view, setView] = useState(getInitialView);
-    const [monolithHover, setMonolithHover] = useState(false);
-    const [selectedProject, setSelectedProject] = useState<Work | null>(null);
-    const [selectedPost, setSelectedPost] = useState<Post | null>(null);
-
-    const navigate = (newView: string) => {
-        setView(newView);
-        try {
-            sessionStorage.setItem('brick_view', newView);
-        } catch { }
-        window.scrollTo(0, 0);
-    };
-
-    const goHome = () => { navigate('home'); setSelectedPost(null); };
-    const goWorks = () => { navigate('works'); setSelectedPost(null); };
-    const goTransmissions = () => { navigate('transmissions'); setSelectedPost(null); };
-    const goChat = () => { navigate('chat'); setSelectedPost(null); };
-    const goAdmin = () => { navigate('admin'); setSelectedPost(null); };
-    const goAbout = () => { navigate('about'); setSelectedPost(null); };
-
-    const handleSelectPost = (post: Post) => {
-        setSelectedPost(post);
-        navigate('post');
-    };
-
-    useScrollReveal(view);
-
-    return (
+const App = () => (
+    <BrowserRouter>
         <DataProvider>
-            <AppContent view={view} setView={setView} monolithHover={monolithHover} setMonolithHover={setMonolithHover} selectedProject={selectedProject} setSelectedProject={setSelectedProject} selectedPost={selectedPost} setSelectedPost={setSelectedPost} goHome={goHome} goWorks={goWorks} goTransmissions={goTransmissions} goChat={goChat} goAdmin={goAdmin} goAbout={goAbout} handleSelectPost={handleSelectPost} />
+            <AppShell />
         </DataProvider>
-    );
-};
+    </BrowserRouter>
+);
 
 export default App;
 
