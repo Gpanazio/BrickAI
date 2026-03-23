@@ -419,7 +419,18 @@ app.post('/api/chat', async (req, res) => {
             return res.status(500).json({ error: "Neural link unstable." });
         }
 
-        const aiResponse = data.choices[0].message.content;
+        // Strip thinking/reasoning blocks that some models (e.g. Gemini 2.5 Flash) include
+        const rawResponse = data.choices[0].message.content;
+        const aiResponse = rawResponse
+            .replace(/<think>[\s\S]*?<\/think>/gi, '')
+            .replace(/<reasoning>[\s\S]*?<\/reasoning>/gi, '')
+            .replace(/<thought>[\s\S]*?<\/thought>/gi, '')
+            .trim();
+
+        if (!aiResponse) {
+            console.error("Empty response after stripping thinking blocks");
+            return res.status(500).json({ error: "Neural link unstable." });
+        }
 
         // 5. Increment Usage
         userInteractions.set(sessionId, usage + 1);
