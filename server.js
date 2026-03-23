@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import pg from 'pg';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -18,6 +19,7 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3002;
+const BASE_URL = process.env.BASE_URL || 'https://ai.brick.mov';
 const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'production' ? (() => { throw new Error('JWT_SECRET is required in production'); })() : 'brick_secret_key_2025');
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 
@@ -27,6 +29,7 @@ if (!fs.existsSync(UPLOADS_DIR)) {
 }
 
 // Configuração do Multer para salvar no disco local
+const ALLOWED_FILE_TYPES = /jpeg|jpg|png|gif|webp|svg/;
 const storage = multer.diskStorage({
     destination: (req, file, cb) => cb(null, UPLOADS_DIR),
     filename: (req, file, cb) => {
@@ -34,12 +37,25 @@ const storage = multer.diskStorage({
         cb(null, `${randomUUID()}${ext}`);
     }
 });
-const upload = multer({ storage });
+const upload = multer({
+    storage,
+    limits: { fileSize: 10 * 1024 * 1024 }, // 10 MB
+    fileFilter: (req, file, cb) => {
+        const extOk = ALLOWED_FILE_TYPES.test(path.extname(file.originalname).toLowerCase());
+        const mimeOk = ALLOWED_FILE_TYPES.test(file.mimetype);
+        if (extOk && mimeOk) { cb(null, true); }
+        else { cb(new Error('Invalid file type')); }
+    }
+});
 
 // Conexão com o Banco de Dados (Railway fornece DATABASE_URL)
+// SSL only needed for external proxy connections; internal Railway connections skip SSL
+const dbSslConfig = process.env.DATABASE_URL?.includes('proxy.rlwy.net')
+    ? { rejectUnauthorized: false }
+    : undefined;
 const pool = new pg.Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }, // Necessário para Railway
+    ssl: dbSslConfig,
     connectionTimeoutMillis: 10000,     // Desiste de uma tentativa após 10s
     idleTimeoutMillis: 30000,           // Fecha conexões ociosas após 30s
     max: 5                              // Limita conexões simultâneas no proxy Railway
@@ -80,6 +96,20 @@ if (process.env.DATABASE_URL) {
 
 app.use(express.json({ limit: '10mb' }));
 app.use(cookieParser());
+app.use(cors({
+    origin: process.env.CORS_ORIGIN || 'https://ai.brick.mov',
+    credentials: true
+}));
+
+// Login rate limiting
+const loginAttempts = new Map();
+const LOGIN_RATE_LIMIT = { maxAttempts: 5, windowMs: 15 * 60 * 1000 };
+setInterval(() => {
+    const now = Date.now();
+    for (const [key, data] of loginAttempts) {
+        if (now - data.firstAttempt > LOGIN_RATE_LIMIT.windowMs) loginAttempts.delete(key);
+    }
+}, 5 * 60 * 1000);
 
 // Security headers (SEO quality signal + protection)
 app.use((req, res, next) => {
@@ -216,32 +246,44 @@ const authenticateToken = async (req, res, next) => {
 // 1. LOGIN (Conectado a master_users)
 app.post('/api/login', async (req, res) => {
     const { identifier, password } = req.body;
+
+    // Input validation
+    if (!identifier || typeof identifier !== 'string' || !password || typeof password !== 'string') {
+        return res.status(400).json({ error: "Invalid request" });
+    }
+
+    // Rate limiting
+    const clientIp = req.ip;
+    const now = Date.now();
+    const attempts = loginAttempts.get(clientIp);
+    if (attempts && attempts.count >= LOGIN_RATE_LIMIT.maxAttempts && (now - attempts.firstAttempt) < LOGIN_RATE_LIMIT.windowMs) {
+        return res.status(429).json({ error: "Too many login attempts. Try again later." });
+    }
+
     try {
-        // Busca usuário pelo email OU username
         const result = await pool.query('SELECT * FROM master_users WHERE email = $1 OR username = $1', [identifier]);
 
         if (result.rows.length > 0) {
             const user = result.rows[0];
-
-            // Compara a senha enviada com o password_hash do banco
             const match = await bcrypt.compare(password, user.password_hash);
 
             if (match) {
-                // Remove o hash antes de enviar de volta (segurança)
+                loginAttempts.delete(clientIp);
                 delete user.password_hash;
-
-                // Gera Token JWT
                 const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, { expiresIn: '7d' });
-                res.cookie('admin_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', maxAge: 7 * 24 * 60 * 60 * 1000 });
+                res.cookie('admin_token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'lax', maxAge: 7 * 24 * 60 * 60 * 1000 });
                 res.json({ success: true, user });
             } else {
+                if (attempts) { attempts.count++; } else { loginAttempts.set(clientIp, { count: 1, firstAttempt: now }); }
                 res.status(401).json({ error: "Invalid credentials" });
             }
         } else {
-            res.status(401).json({ error: "User not found" });
+            // Same message to prevent user enumeration
+            if (attempts) { attempts.count++; } else { loginAttempts.set(clientIp, { count: 1, firstAttempt: now }); }
+            res.status(401).json({ error: "Invalid credentials" });
         }
     } catch (err) {
-        res.status(500).json({ error: "Database error" });
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
@@ -270,6 +312,15 @@ app.post('/api/upload', authenticateToken, upload.single('file'), (req, res) => 
 // 1.4 CONTACT / LEADS
 app.post('/api/contact', async (req, res) => {
     const { email, message } = req.body;
+
+    // Input validation
+    if (!email || typeof email !== 'string' || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        return res.status(400).json({ error: "Invalid email" });
+    }
+    if (!message || typeof message !== 'string' || message.length > 5000) {
+        return res.status(400).json({ error: "Invalid message" });
+    }
+
     try {
         await pool.query(
             'INSERT INTO leads (id, email, message) VALUES ($1, $2, $3)',
@@ -278,16 +329,26 @@ app.post('/api/contact', async (req, res) => {
         res.json({ success: true });
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: "Failed to save contact" });
+        res.status(500).json({ error: "Internal server error" });
     }
 });
 
 // 1.5 MASON CHAT (OPENROUTER / GEMINI 2.5 FLASH)
 const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const userInteractions = new Map(); // Simple in-memory rate limiting (Resets on restart)
+// Clean stale sessions every 30 minutes to prevent unbounded memory growth
+setInterval(() => { userInteractions.clear(); }, 30 * 60 * 1000);
 
 app.post('/api/chat', async (req, res) => {
     const { history, message } = req.body;
+
+    // Input validation
+    if (!message || typeof message !== 'string' || message.length > 2000) {
+        return res.status(400).json({ error: "Invalid message" });
+    }
+    if (!Array.isArray(history)) {
+        return res.status(400).json({ error: "Invalid request" });
+    }
 
     // 1. Interaction Limiting (Session/IP based would be better, but cookie is easiest for now)
     // We'll use a simple cookie-based session ID if available, or generate one
@@ -449,11 +510,14 @@ app.get('/api/works', async (req, res) => {
         const result = await pool.query('SELECT data FROM works ORDER BY created_at DESC');
         const works = result.rows.map(row => row.data);
         res.json(works);
-    } catch (err) { res.status(500).json({ error: err.message }); }
+    } catch (err) { res.status(500).json({ error: "Internal server error" }); }
 });
 
 app.post('/api/works', authenticateToken, async (req, res) => {
     const item = req.body;
+    if (!item || !item.id) {
+        return res.status(400).json({ error: "Invalid request: missing id" });
+    }
     try {
         // Upsert (Inserir ou Atualizar)
         await pool.query(
@@ -461,14 +525,14 @@ app.post('/api/works', authenticateToken, async (req, res) => {
             [item.id, item]
         );
         res.json({ success: true });
-    } catch (err) { res.status(500).json({ error: err.message }); }
+    } catch (err) { res.status(500).json({ error: "Internal server error" }); }
 });
 
 app.delete('/api/works/:id', authenticateToken, async (req, res) => {
     try {
         await pool.query('DELETE FROM works WHERE id = $1', [req.params.id]);
         res.json({ success: true });
-    } catch (err) { res.status(500).json({ error: err.message }); }
+    } catch (err) { res.status(500).json({ error: "Internal server error" }); }
 });
 
 // 3. TRANSMISSIONS (GET, POST, DELETE)
@@ -477,25 +541,28 @@ app.get('/api/transmissions', async (req, res) => {
         const result = await pool.query('SELECT data FROM transmissions ORDER BY created_at DESC');
         const posts = result.rows.map(row => row.data);
         res.json(posts);
-    } catch (err) { res.status(500).json({ error: err.message }); }
+    } catch (err) { res.status(500).json({ error: "Internal server error" }); }
 });
 
 app.post('/api/transmissions', authenticateToken, async (req, res) => {
     const item = req.body;
+    if (!item || !item.id) {
+        return res.status(400).json({ error: "Invalid request: missing id" });
+    }
     try {
         await pool.query(
             'INSERT INTO transmissions (id, data) VALUES ($1, $2) ON CONFLICT (id) DO UPDATE SET data = $2',
             [item.id, item]
         );
         res.json({ success: true });
-    } catch (err) { res.status(500).json({ error: err.message }); }
+    } catch (err) { res.status(500).json({ error: "Internal server error" }); }
 });
 
 app.delete('/api/transmissions/:id', authenticateToken, async (req, res) => {
     try {
         await pool.query('DELETE FROM transmissions WHERE id = $1', [req.params.id]);
         res.json({ success: true });
-    } catch (err) { res.status(500).json({ error: err.message }); }
+    } catch (err) { res.status(500).json({ error: "Internal server error" }); }
 });
 
 // Dynamic sitemap
@@ -769,11 +836,11 @@ app.get('*', async (req, res) => {
         "@graph": [
             {
                 "@type": "Organization",
-                "@id": "${BASE_URL}/#organization",
+                "@id": BASE_URL + "/#organization",
                 "name": "Brick AI",
                 "alternateName": isEn ? "Brick AI — The Generative Division" : "Brick AI — A Divisão Generativa",
-                "url": "${BASE_URL}",
-                "logo": { "@type": "ImageObject", "url": "${BASE_URL}/og-image.jpg" },
+                "url": BASE_URL,
+                "logo": { "@type": "ImageObject", "url": BASE_URL + "/og-image.jpg" },
                 "foundingDate": "2016",
                 "description": isEn
                     ? "Brazilian generative production company specializing in hybrid video production. We combine human cinematic direction with synthetic generation systems to deliver campaigns, VFX and premium visual content. Clients include Stone, Visa, BBC, Record TV, AliExpress, Facebook, O Boticário and L'Oréal."
@@ -842,11 +909,11 @@ app.get('*', async (req, res) => {
             },
             {
                 "@type": "WebSite",
-                "@id": "${BASE_URL}/#website",
+                "@id": BASE_URL + "/#website",
                 "name": "Brick AI",
-                "url": "${BASE_URL}",
+                "url": BASE_URL,
                 "inLanguage": [isEn ? "en" : "pt-BR", isEn ? "pt-BR" : "en"],
-                "publisher": { "@id": "${BASE_URL}/#organization" },
+                "publisher": { "@id": BASE_URL + "/#organization" },
                 "speakable": {
                     "@type": "SpeakableSpecification",
                     "xpath": ["/html/head/meta[@name='description']/@content", "/html/head/title"]
@@ -980,8 +1047,8 @@ app.get('*', async (req, res) => {
             "headline": postTitle,
             "description": postExcerpt,
             "inLanguage": isEn ? "en" : "pt-BR",
-            "author": { "@type": "Organization", "name": "Brick AI", "url": "${BASE_URL}" },
-            "publisher": { "@type": "Organization", "name": "Brick AI", "logo": { "@type": "ImageObject", "url": "${BASE_URL}/og-image.jpg" } },
+            "author": { "@type": "Organization", "name": "Brick AI", "url": BASE_URL },
+            "publisher": { "@type": "Organization", "name": "Brick AI", "logo": { "@type": "ImageObject", "url": BASE_URL + "/og-image.jpg" } },
             "datePublished": isoDate,
             "dateModified": isoDate,
             "url": canonicalUrl,

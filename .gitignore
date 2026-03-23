@@ -8,3 +8,4 @@ vite_debug.log
 *.log
 *.mp4
 exports/
+SECURITY_INCIDENT.md
