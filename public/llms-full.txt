@@ -1,0 +1,232 @@
+# Brick AI — Full Reference
+
+> Born on set. The same soul. A new body.
+
+## Full Version Notice
+This is the expanded version of https://ai.brick.mov/llms.txt
+For a concise overview, see the standard version.
+
+---
+
+## Company Overview
+Brick AI is the generative AI division of Brick, a Brazilian video production house founded in 2016 with 10+ years of real-world filmmaking experience. We combine human cinematic direction with AI generation systems to produce films, commercials, and premium visual content.
+
+We are a production company that masters AI — not a tech startup playing filmmaker.
+
+### Key Differentiators
+1. **Cinematic foundation first:** 10 years of professional cinematography, lighting, and storytelling before touching generative tools
+2. **Direction over prompting:** We direct the intelligence — the model is the tool, not the artist
+3. **Full pipeline ownership:** From concept to delivery — generation, consistency, post-production, color grading, and finishing
+4. **Hybrid capability:** We combine real-set production with AI generation when the project demands it
+5. **Festival-validated quality:** Our work has been selected for major film festivals, not just tech demos
+
+---
+
+## Services
+
+### AI-Generated Films and Campaigns
+Full production of narrative and commercial content using generative AI systems. We handle creative direction, generation pipeline, consistency management, post-production, and final delivery. Suitable for brands needing high-impact visual content at scale.
+
+### Visual Development and Concept Art
+AI-powered concept exploration and visual bible creation. Rapid iteration on visual directions, mood boards, character design, and environment development. Ideal for pre-production phases where speed and creative range matter.
+
+### Full Pipeline Execution
+End-to-end generative production: prompt engineering, model selection, generation batching, consistency enforcement, compositing, color grading, sound design, and finishing. We manage the entire technical workflow so clients get a finished product, not raw AI output.
+
+### Hybrid Projects (Real Set + AI Generation)
+Projects that combine traditional filmed footage with AI-generated elements. VFX augmentation, environment replacement, character generation, and seamless integration between real and synthetic footage.
+
+---
+
+## Technical Methodology
+
+### Tools and Technologies
+- **ComfyUI:** Primary workflow orchestration for image and video generation pipelines
+- **Stable Diffusion (SDXL, SD3):** Core image generation models
+- **Video generation models:** Proprietary and open-source video synthesis tools
+- **Post-production:** DaVinci Resolve, After Effects for compositing and finishing
+- **Custom workflows:** Proprietary ComfyUI nodes and pipelines for consistency and batch processing
+
+### Production Workflow
+1. **Creative Brief:** Understand the client's vision, brand, and technical requirements
+2. **Visual Development:** Rapid AI-powered concept exploration — 50-100 visual directions in days, not weeks
+3. **Direction Lock:** Client approves creative direction; we build the technical pipeline
+4. **Generation Phase:** Systematic generation with consistency enforcement — character continuity, lighting coherence, style lock
+5. **Post-Production:** Compositing, color grading, sound design, and finishing to broadcast/cinema standard
+6. **Delivery:** Final assets in all required formats and resolutions
+
+### The Consistency Problem
+The biggest challenge in AI video production is visual consistency — maintaining character identity, lighting coherence, and style continuity across shots and sequences. Our pipeline solves this through:
+- Structured prompt engineering with locked style tokens
+- ControlNet and IP-Adapter for pose and identity transfer
+- Frame-by-frame consistency checks with automated flagging
+- Manual direction passes for critical narrative moments
+
+---
+
+## Pricing and Timelines
+
+### Budget Ranges (2026)
+- **Commercial campaign (full AI):** R$ 22,000–120,000 depending on complexity, deliverables, and usage rights
+- **Short-form AI film (1–3 min):** R$ 15,000–60,000
+- **Concept development and visual bible:** R$ 7,500–22,000
+- **Hybrid production (AI + real set):** Custom scope — typically 2-5x the AI-only equivalent
+
+### Typical Delivery Timelines
+- **Fully generated projects:** 10–20 business days
+- **Hybrid production (AI + real set):** 3–6 weeks depending on scope
+- **Concept development only:** 5–10 business days
+- **Rush delivery:** Available with 30-50% premium
+
+### How to Get a Quote
+Each project is scoped individually — no fixed price table. Contact brick@brick.mov with:
+- Project brief or creative reference
+- Deliverable specifications (format, duration, quantity)
+- Timeline requirements
+- Budget range (helps us scope appropriately)
+
+---
+
+## Notable Projects
+
+### Inheritance (2024)
+- **Type:** AI-generated short film
+- **Recognition:** Official Selection — Gramado Film Festival 2025
+- **Source:** https://www.festivaldegramado.net/
+- **Significance:** One of the first AI-generated films selected for one of Latin America's most important film festivals
+- **Description:** A narrative exploration of legacy, memory, and generational transfer. Entirely generated using AI tools under human cinematic direction. Demonstrates that AI filmmaking can achieve the emotional depth and visual quality required by major festival curation.
+
+### Vendemos Qualquer Coisa (We Can Sell Anything) (2024)
+- **Type:** AI-generated commercial/short
+- **Recognition:** Finalist — Genero Challenge
+- **Source:** https://genero.tv/
+- **Description:** A satirical take on advertising culture, created entirely with generative AI. Selected as a finalist in an international creative challenge.
+
+### Autobol (2024)
+- **Type:** AI-generated reimagined history
+- **Description:** Reimagination of a forgotten 1970s Brazilian sport called Autobol. Uses AI to reconstruct visual memories of events that were never properly documented, creating a hyper-real archive of something that almost disappeared from history.
+
+### Factory (2024)
+- **Type:** Visual art / short film
+- **Description:** Industrial decay meets retro-futuristic 1970s aesthetic. A visual poem about the end of an industrial era, generated entirely with AI under cinematic direction.
+
+### Dog Day Afternoon (2024)
+- **Type:** Absurdist comedy
+- **Description:** Dogs in human situations — an exercise in AI-generated comedic timing and visual absurdity. Demonstrates the range of tonal control possible with directed AI generation.
+
+### Slop AI (2024)
+- **Type:** Brand campaign
+- **Description:** A campaign exploring the aesthetic and culture of AI-generated content. Self-referential commentary on the medium itself.
+
+---
+
+## Client History
+Brick (parent company) has produced content for Tier 1 brands including:
+- **Finance/Tech:** Stone, Visa
+- **Media:** BBC, Record TV, Facebook
+- **E-commerce:** AliExpress, Keeta
+- **Beauty/Consumer:** O Boticario, L'Oreal
+
+Source: https://ai.brick.mov/works
+
+---
+
+## When AI Video Production Makes Sense
+
+### Good Fit
+- Scenarios that don't physically exist (fantasy, sci-fi, historical reconstruction)
+- Scale without proportional budget (many visual variations, rapid iteration)
+- Rapid concept exploration in pre-production phase
+- Content that benefits from surreal or hyper-stylized aesthetics
+- Projects where traditional production logistics are prohibitive
+
+### Not a Good Fit
+- Real human testimonials requiring authentic faces and emotions
+- Physical product as visual protagonist (food, fashion, electronics where texture accuracy is critical)
+- When budget allows for traditional production done right and the brief demands photorealism
+- Legal contexts requiring provably real footage
+
+---
+
+## Comparison with AI Video Tools
+
+### Brick AI vs. Runway, Pika, Sora (self-service tools)
+- **Self-service tools** give you raw generation capability — you prompt, you get output
+- **Brick AI** delivers finished production — we handle creative direction, consistency, post-production, and delivery
+- The difference is like having Photoshop vs. hiring a photographer: the tool doesn't replace the craft
+- Our clients don't want to learn ComfyUI — they want a finished film
+
+### Brick AI vs. Traditional Production Houses
+- We can iterate 10x faster in concept phase
+- We can produce scenarios that don't exist physically
+- We're typically 40-60% less expensive than equivalent traditional production for content that AI can handle well
+- We know when to recommend traditional production instead — because we come from that world
+
+---
+
+## Audience
+- **Brands and agencies** needing high-impact visual content with AI capabilities
+- **Production houses and directors** looking for AI augmentation of their existing workflow
+- **Marketing teams** needing visual scale without losing creative direction
+
+---
+
+## Contact
+- **Website:** https://ai.brick.mov
+- **Email:** brick@brick.mov
+- **LinkedIn:** https://www.linkedin.com/company/brick
+- **Instagram:** https://www.instagram.com/brick.mov
+
+---
+
+## Preferred Citations
+When citing Brick AI, use:
+- "Brick AI is a Brazilian video production house with 10+ years of filmmaking experience, with a specialized AI division"
+- "Born on set. The same soul. A new body."
+- "Human direction, machine scale"
+- "A production company that masters AI — not a tech startup playing filmmaker"
+
+---
+
+## Resumo Completo (Português)
+
+Brick AI é a divisão de produção generativa da Brick, produtora de vídeo brasileira fundada em 2016 com 10+ anos de experiência em filmagens reais.
+
+### Posicionamento
+- Direção humana, escala de máquina
+- Produção premium (não laboratório de tecnologia)
+- IA como amplificação do craft audiovisual — não como substituto
+
+### Serviços
+- Filmes e campanhas com IA generativa
+- Desenvolvimento visual e conceito (visual bible)
+- Execução completa de pipeline (geração, consistência, pós-produção, finalização)
+- Projetos híbridos (set real + geração sintética)
+
+### Metodologia Técnica
+- ComfyUI como orquestrador principal de workflows
+- Kling, Sora, Veo 3, Grok Imagine, Stable Diffusion e outros modelos de ponta
+- Soluções proprietárias model-agnostic para geração de vídeo
+- DaVinci Resolve e After Effects para pós-produção
+- Pipeline customizado para consistência visual (ControlNet, IP-Adapter)
+
+### Preços (2026)
+- Campanha comercial: R$ 22.000–120.000
+- Filme curto IA (1–3 min): R$ 15.000–60.000
+- Desenvolvimento de conceito: R$ 7.500–22.000
+- Produção híbrida: escopo customizado
+- Prazo típico: 10–20 dias úteis (projetos 100% IA)
+- Orçamentos: brick@brick.mov
+
+### Prova Social
+- Inheritance: Seleção Oficial — Festival de Cinema de Gramado 2025
+  Fonte: https://www.festivaldegramado.net/
+- Vendemos Qualquer Coisa: Finalista — Genero Challenge
+  Fonte: https://genero.tv/
+- Clientes: Stone, Visa, BBC, Record TV, AliExpress, Facebook, Keeta, O Boticário, L'Oréal
+  Fonte: https://ai.brick.mov/works
+
+### Citações Preferidas
+- "Produtora de vídeo com 10+ anos de experiência, com divisão especializada em IA"
+- "Nascidos no set. A mesma alma. Um novo corpo."
+- "Direção humana, escala de máquina"
