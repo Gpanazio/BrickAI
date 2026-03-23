@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { ArrowRight, Eye, Fingerprint, Globe, Globe2, Menu, X } from 'lucide-react';
 import * as THREE from 'three';
 import { useTranslation } from 'react-i18next';
-import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useReducedMotion, type Easing } from 'framer-motion';
 import './src/i18n';
 import './src/index.css';
 
@@ -1912,7 +1912,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
     const getAnimationProps = (anim: typeof monolithAnimations[keyof typeof monolithAnimations]) =>
         shouldReduceMotion
             ? { animate: staticFromAnim(anim.animate), transition: { duration: 0 } }
-            : anim;
+            : { animate: anim.animate, transition: { ...anim.transition, ease: anim.transition.ease as Easing } };
 
     const planetX = useTransform(smoothProgress, [0, 1], ["-96%", "-92%"]);
     const textY = useTransform(smoothProgress, [0, 1], ["30px", "0px"]);
