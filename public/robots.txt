@@ -1,5 +1,8 @@
 User-agent: *
 Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+Allow: /rss.xml
 Disallow: /admin
 Disallow: /api/
 Disallow: /pages/
@@ -30,3 +33,5 @@ Sitemap: https://ai.brick.mov/sitemap.xml
 
 # For AI crawlers and LLMs
 # See also: https://ai.brick.mov/llms.txt
+# Full version: https://ai.brick.mov/llms-full.txt
+# RSS Feed: https://ai.brick.mov/rss.xml
