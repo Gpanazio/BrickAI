@@ -43,7 +43,7 @@ async function syncUploads() {
         for (const row of rows) {
             const work = row.data;
             // Arrays com chaves que possivelmente guardam URLs de imagem no JSON
-            const imageKeys = ['imageHome', 'imageInner', 'video']; 
+            const imageKeys = ['imageHome', 'imageWorks', 'imageInner', 'video'];
             
             for (const key of imageKeys) {
                 if (work[key] && work[key].startsWith('/uploads/')) {
@@ -63,6 +63,27 @@ async function syncUploads() {
                 }
             }
         }
+        // Also sync transmissions images
+        const { rows: transRows } = await pool.query('SELECT data FROM transmissions');
+        for (const row of transRows) {
+            const post = row.data;
+            const transImageKeys = ['thumbnail', 'image'];
+            for (const key of transImageKeys) {
+                if (post[key] && post[key].startsWith('/uploads/')) {
+                    const filename = path.basename(post[key]);
+                    const localPath = path.join(UPLOADS_DIR, filename);
+                    const prodUrl = `https://brickai-production.up.railway.app/uploads/${filename}`;
+                    try {
+                        await downloadFile(prodUrl, localPath);
+                        console.log(`[+] Downloaded (transmission): ${filename}`);
+                        count++;
+                    } catch (e) {
+                        console.log(`[-] Failed: ${filename} (Maybe deleted in production)`);
+                    }
+                }
+            }
+        }
+
         console.log(`\nDONE. Downloaded ${count} files.`);
     } catch (e) {
         console.error("Error:", e.message);
