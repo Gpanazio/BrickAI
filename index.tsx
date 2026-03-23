@@ -434,18 +434,19 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
             {
                 id: "slop-ai",
                 orientation: "horizontal",
-                subtitle: "GERAÇÃO AUTÔNOMA DE CONTEÚDO",
+                subtitle: t('works.slopai.subtitle'),
                 category: "CONCEITO : CINEMATOGRAFIA SINTÉTICA",
-                title: "SLOP AI",
-                desc: "Experimento de geração massiva de conteúdo visual com IA.",
-                longDesc: "Experimento de geração massiva de conteúdo visual com IA.",
+                title: t('works.slopai.title'),
+                desc: t('works.slopai.desc'),
+                longDesc: t('works.slopai.longDesc'),
                 credits: [],
                 gradient: "from-neutral-950 to-brick-red/20",
                 imageHome: "/slopai.jpg",
                 imageWorks: "/slopai.jpg",
                 imageSettingsHome: { x: 50, y: 50, scale: 1.0 },
                 imageSettingsWorks: { x: 50, y: 50, scale: 1.0 },
-                hasDetail: false
+                videoUrl: "https://review.brick.mov/portfolio/embed/11",
+                hasDetail: true
             },
             {
                 id: "DOG DAY AFTERNOON",

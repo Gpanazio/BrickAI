@@ -249,8 +249,8 @@ app.post('/api/contact', async (req, res) => {
     }
 });
 
-// 1.5 MASON CHAT (GEMINI API)
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+// 1.5 MASON CHAT (OPENROUTER / MISTRAL SMALL CREATIVE)
+const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
 const userInteractions = new Map(); // Simple in-memory rate limiting (Resets on restart)
 
 app.post('/api/chat', async (req, res) => {
@@ -275,8 +275,8 @@ app.post('/api/chat', async (req, res) => {
     }
 
     // 2. Validate API Key
-    if (!GEMINI_API_KEY) {
-        console.error("GEMINI_API_KEY is missing in environment variables.");
+    if (!OPENROUTER_API_KEY) {
+        console.error("OPENROUTER_API_KEY is missing in environment variables.");
         return res.status(500).json({ error: "System configuraton error." });
     }
 
@@ -342,37 +342,51 @@ app.post('/api/chat', async (req, res) => {
            - Direcione para contato humano: brick@brick.mov
     `;
 
-    try {
-        // 4. Call Gemini API
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                contents: [
-                    { role: "user", parts: [{ text: SYSTEM_PROMPT }] },
-                    ...history.map(msg => ({
-                        role: msg.role === 'user' ? 'user' : 'model',
-                        parts: [{ text: msg.content }]
-                    })),
-                    { role: "user", parts: [{ text: message }] }
-                ],
-                generationConfig: {
-                    temperature: 0.85,
-                    topP: 0.95,
-                    topK: 40,
-                    maxOutputTokens: 300,
-                }
-            })
-        });
+    const openRouterRequest = (model) => fetch('https://openrouter.ai/api/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${OPENROUTER_API_KEY}`,
+            'HTTP-Referer': 'https://brick.mov',
+            'X-Title': 'Brick AI - Mason Chat'
+        },
+        body: JSON.stringify({
+            model,
+            messages: [
+                { role: 'system', content: SYSTEM_PROMPT },
+                ...history.map(msg => ({
+                    role: msg.role === 'user' ? 'user' : 'assistant',
+                    content: msg.content
+                })),
+                { role: 'user', content: message }
+            ],
+            temperature: 0.7,
+            top_p: 0.9,
+            max_tokens: 300,
+        })
+    });
 
-        const data = await response.json();
+    try {
+        // 4. Call OpenRouter API (Primary: DeepSeek R1T2 Chimera, Fallback: Mistral Small Creative)
+        const PRIMARY_MODEL = 'tngtech/deepseek-r1t2-chimera';
+        const FALLBACK_MODEL = 'mistralai/mistral-small-creative';
+
+        let response = await openRouterRequest(PRIMARY_MODEL);
+        let data = await response.json();
+
+        // Fallback to Mistral if primary fails
+        if (data.error || !data.choices?.[0]?.message?.content) {
+            console.warn(`Primary model (${PRIMARY_MODEL}) failed, falling back to ${FALLBACK_MODEL}`);
+            response = await openRouterRequest(FALLBACK_MODEL);
+            data = await response.json();
+        }
 
         if (data.error) {
-            console.error("Gemini API Error:", data.error);
+            console.error("OpenRouter API Error:", data.error);
             return res.status(500).json({ error: "Neural link unstable." });
         }
 
-        const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || "NO_DATA";
+        const aiResponse = data.choices?.[0]?.message?.content || "NO_DATA";
 
         // 5. Increment Usage
         userInteractions.set(sessionId, usage + 1);
@@ -743,7 +757,7 @@ const start = async () => {
     console.log(`>> NODE_ENV: ${process.env.NODE_ENV || 'development'}`);
     console.log(`>> DATABASE_URL: ${process.env.DATABASE_URL ? 'PRESENT (Masked)' : 'MISSING'}`);
     console.log(`>> JWT_SECRET: ${process.env.JWT_SECRET ? 'PRESENT' : 'MISSING (Using Default)'}`);
-    console.log(`>> GEMINI_API_KEY: ${process.env.GEMINI_API_KEY ? 'PRESENT' : 'MISSING'}`);
+    console.log(`>> OPENROUTER_API_KEY: ${process.env.OPENROUTER_API_KEY ? 'PRESENT' : 'MISSING'}`);
     console.log("--------------------------------------------------");
 
     // 1. Bind to port IMMEDIATELY so Railway sees the application is alive
