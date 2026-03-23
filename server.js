@@ -11,13 +11,14 @@ import fs from 'fs';
 import 'dotenv/config';
 import { SEO_DATA } from './seo-data.js';
 import { buildBreadcrumbItems } from './shared/breadcrumbs.js';
+import { WORKS_SCHEMA } from './works-schema-data.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 3002;
-const JWT_SECRET = process.env.JWT_SECRET || 'brick_secret_key_2025';
+const JWT_SECRET = process.env.JWT_SECRET || (process.env.NODE_ENV === 'production' ? (() => { throw new Error('JWT_SECRET is required in production'); })() : 'brick_secret_key_2025');
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
 
 // Garantir que a pasta de uploads existe
@@ -77,8 +78,17 @@ if (process.env.DATABASE_URL) {
     } catch (e) { console.log(">> DB CONFIG: Invalid URL format"); }
 }
 
-app.use(express.json({ limit: '50mb' })); // Limite alto para imagens em Base64
+app.use(express.json({ limit: '10mb' }));
 app.use(cookieParser());
+
+// Security headers (SEO quality signal + protection)
+app.use((req, res, next) => {
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+    res.setHeader('X-Frame-Options', 'SAMEORIGIN');
+    res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+    next();
+});
 
 // Health check — responde 200 sem depender do DB (Railway precisa disso)
 app.get('/health', (req, res) => res.status(200).json({ status: 'ok', uptime: process.uptime() }));
@@ -458,23 +468,29 @@ app.delete('/api/transmissions/:id', authenticateToken, async (req, res) => {
 app.get('/sitemap.xml', async (req, res) => {
     try {
         const staticPages = [
-            { loc: 'https://ai.brick.mov/', priority: '1.0', changefreq: 'weekly' },
+            { loc: 'https://ai.brick.mov/', priority: '1.0', changefreq: 'weekly', image: 'https://ai.brick.mov/og-image.jpg', imageTitle: 'Brick AI — AI Video Production' },
             { loc: 'https://ai.brick.mov/works', priority: '0.9', changefreq: 'weekly' },
             { loc: 'https://ai.brick.mov/about', priority: '0.8', changefreq: 'monthly' },
             { loc: 'https://ai.brick.mov/transmissions', priority: '0.8', changefreq: 'weekly' },
             { loc: 'https://ai.brick.mov/chat', priority: '0.7', changefreq: 'monthly' },
         ];
 
-        // Fetch transmissions from DB for dynamic URLs
+        // Fetch transmissions from DB for dynamic URLs (with image data)
         let postUrls = [];
         try {
-            const result = await pool.query('SELECT id, created_at FROM transmissions ORDER BY created_at DESC');
-            postUrls = result.rows.map(row => ({
-                loc: `https://ai.brick.mov/transmissions/${row.id}`,
-                lastmod: new Date(row.created_at).toISOString().split('T')[0],
-                priority: '0.6',
-                changefreq: 'monthly'
-            }));
+            const result = await pool.query('SELECT id, data, created_at FROM transmissions ORDER BY created_at DESC');
+            postUrls = result.rows.map(row => {
+                const d = row.data;
+                const thumb = d.thumbnail || d.image || null;
+                return {
+                    loc: `https://ai.brick.mov/transmissions/${row.id}`,
+                    lastmod: new Date(row.created_at).toISOString().split('T')[0],
+                    priority: '0.6',
+                    changefreq: 'monthly',
+                    image: thumb ? (thumb.startsWith('http') ? thumb : `https://ai.brick.mov${thumb}`) : null,
+                    imageTitle: (typeof d.title === 'object' ? (d.title.en || d.title.pt) : d.title) || 'Brick AI Article'
+                };
+            });
         } catch (e) {
             console.error('Sitemap: Could not fetch transmissions', e.message);
         }
@@ -484,7 +500,8 @@ app.get('/sitemap.xml', async (req, res) => {
 
         const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
 ${allPages.map(p => `  <url>
     <loc>${p.loc}</loc>
     <xhtml:link rel="alternate" hreflang="pt-BR" href="${p.loc}"/>
@@ -492,7 +509,11 @@ ${allPages.map(p => `  <url>
     <xhtml:link rel="alternate" hreflang="x-default" href="${p.loc}"/>
     <lastmod>${p.lastmod || today}</lastmod>
     <changefreq>${p.changefreq}</changefreq>
-    <priority>${p.priority}</priority>
+    <priority>${p.priority}</priority>${p.image ? `
+    <image:image>
+      <image:loc>${p.image}</image:loc>
+      <image:title>${p.imageTitle}</image:title>
+    </image:image>` : ''}
   </url>`).join('\n')}
 </urlset>`;
 
@@ -502,6 +523,47 @@ ${allPages.map(p => `  <url>
         console.error('Sitemap generation error:', err);
         res.status(500).send('Error generating sitemap');
     }
+});
+
+// RSS Feed for Transmissions
+app.get('/rss.xml', async (req, res) => {
+    let items = '';
+    try {
+        const result = await pool.query(
+            "SELECT id, data, created_at FROM transmissions ORDER BY created_at DESC LIMIT 50"
+        );
+        items = result.rows.map(row => {
+            const d = row.data;
+            const title = (d.title && typeof d.title === 'object') ? (d.title.en || d.title.pt || 'Untitled') : (d.title || 'Untitled');
+            const excerpt = (d.excerpt && typeof d.excerpt === 'object') ? (d.excerpt.en || d.excerpt.pt || '') : (d.excerpt || '');
+            const date = new Date(row.created_at).toUTCString();
+            const link = `https://ai.brick.mov/transmissions/${row.id}`;
+            return `    <item>
+      <title><![CDATA[${title}]]></title>
+      <description><![CDATA[${excerpt}]]></description>
+      <link>${link}</link>
+      <guid isPermaLink="true">${link}</guid>
+      <pubDate>${date}</pubDate>
+    </item>`;
+        }).join('\n');
+    } catch (e) {
+        console.error('RSS: Could not fetch transmissions', e.message);
+    }
+
+    const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Brick AI — Transmissions</title>
+    <link>https://ai.brick.mov/transmissions</link>
+    <description>Insights on AI video production from a team with 10+ years on real film sets.</description>
+    <language>en</language>
+    <atom:link href="https://ai.brick.mov/rss.xml" rel="self" type="application/rss+xml"/>
+${items}
+  </channel>
+</rss>`;
+
+    res.set('Content-Type', 'application/rss+xml');
+    res.send(xml);
 });
 
 // Read HTML template once at startup
@@ -516,6 +578,13 @@ try {
 app.get('*', async (req, res) => {
     if (!htmlTemplate) {
         return res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    }
+
+    // Redirect trailing slashes to non-trailing (SEO canonical consistency)
+    if (req.path !== '/' && req.path.endsWith('/')) {
+        const cleanPath = req.path.replace(/\/+$/, '');
+        const query = req.url.includes('?') ? req.url.slice(req.url.indexOf('?')) : '';
+        return res.redirect(301, cleanPath + query);
     }
 
     const urlPath = req.path.replace(/^\/+|\/+$/g, '');
@@ -556,6 +625,34 @@ app.get('*', async (req, res) => {
         }
     }
 
+    // 404 handling for unknown routes AND missing posts
+    const knownViews = ['home', 'works', 'about', 'transmissions', 'chat', 'post'];
+    const is404 = (!knownViews.includes(view) && urlPath !== '') || (view === 'post' && !postData);
+    if (is404) {
+        const seo404 = {
+            title: lang === 'en' ? 'Page Not Found | Brick AI' : 'Página Não Encontrada | Brick AI',
+            description: lang === 'en' ? 'The page you are looking for does not exist.' : 'A página que você procura não existe.',
+        };
+        const html404 = htmlTemplate
+            .replace(/__LANG__/g, lang === 'pt' ? 'pt-BR' : 'en')
+            .replace(/__META_TITLE__/g, seo404.title)
+            .replace(/__META_DESCRIPTION__/g, seo404.description)
+            .replace(/__OG_TITLE__/g, '404 | Brick AI')
+            .replace(/__OG_DESCRIPTION__/g, seo404.description)
+            .replace(/__OG_TYPE__/g, 'website')
+            .replace(/__OG_URL__/g, 'https://ai.brick.mov/')
+            .replace(/__OG_IMAGE__/g, 'https://ai.brick.mov/og-image.jpg')
+            .replace(/__OG_LOCALE__/g, lang === 'pt' ? 'pt_BR' : 'en_US')
+            .replace(/__OG_LOCALE_ALT__/g, lang === 'pt' ? 'en_US' : 'pt_BR')
+            .replace(/__CANONICAL_URL__/g, 'https://ai.brick.mov/')
+            .replace(/__HREFLANG_PT__/g, 'https://ai.brick.mov/')
+            .replace(/__HREFLANG_EN__/g, 'https://ai.brick.mov/?lang=en')
+            .replace(/__GOOGLE_VERIFICATION__/g, process.env.GOOGLE_SITE_VERIFICATION || '')
+            .replace(/__BING_VERIFICATION__/g, process.env.BING_VERIFICATION || '')
+            .replace(/<!--__JSON_LD__-->/g, '');
+        return res.status(404).send(html404);
+    }
+
     const seoData = SEO_DATA[lang][view] || SEO_DATA[lang].home;
 
     // For individual posts, use post data
@@ -581,6 +678,13 @@ app.get('*', async (req, res) => {
     const canonicalPath = view === 'home' ? '' : urlPath;
     const canonicalUrl = `https://ai.brick.mov/${canonicalPath}`;
     const langParam = lang === 'en' ? '?lang=en' : '';
+
+    // Dynamic OG image — use post thumbnail if available, otherwise default
+    let ogImage = 'https://ai.brick.mov/og-image.jpg';
+    if (view === 'post' && postData) {
+        const thumb = postData.thumbnail || postData.image || null;
+        if (thumb) ogImage = thumb.startsWith('http') ? thumb : `https://ai.brick.mov${thumb}`;
+    }
 
     // Build route-specific JSON-LD
     const jsonLdScripts = [];
@@ -669,7 +773,11 @@ app.get('*', async (req, res) => {
                 "name": "Brick AI",
                 "url": "https://ai.brick.mov",
                 "inLanguage": [isEn ? "en" : "pt-BR", isEn ? "pt-BR" : "en"],
-                "publisher": { "@id": "https://ai.brick.mov/#organization" }
+                "publisher": { "@id": "https://ai.brick.mov/#organization" },
+                "speakable": {
+                    "@type": "SpeakableSpecification",
+                    "xpath": ["/html/head/meta[@name='description']/@content", "/html/head/title"]
+                }
             }
         ]
     })}</script>`);
@@ -684,25 +792,71 @@ app.get('*', async (req, res) => {
         "itemListElement": breadcrumbItems
     })}</script>`);
 
+    // VideoObject + CreativeWork — structured data for Works page
+    if (view === 'works') {
+        const worksJsonLd = WORKS_SCHEMA.map(w => ([
+            {
+                "@type": "VideoObject",
+                "name": isEn ? w.name.en : w.name.pt,
+                "description": isEn ? w.description.en : w.description.pt,
+                "thumbnailUrl": w.thumbnailUrl,
+                "contentUrl": w.contentUrl,
+                "uploadDate": w.dateCreated,
+                "duration": w.duration,
+                "productionCompany": { "@id": "https://ai.brick.mov/#organization" }
+            },
+            {
+                "@type": "CreativeWork",
+                "name": isEn ? w.name.en : w.name.pt,
+                "description": isEn ? w.description.en : w.description.pt,
+                "dateCreated": w.dateCreated,
+                "genre": w.genre,
+                "productionCompany": { "@id": "https://ai.brick.mov/#organization" },
+                ...(w.award ? { "award": w.award } : {})
+            }
+        ])).flat();
+
+        jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": worksJsonLd
+        })}</script>`);
+    }
+
     // FAQPage — injected in correct language for home view
     if (view === 'home') {
         const faqEntitiesPt = [
             { "@type": "Question", "name": "O que é a Brick AI?", "acceptedAnswer": { "@type": "Answer", "text": "Brick AI é a divisão de produção generativa da Brick, uma produtora de vídeo com 10+ anos de set. Combinamos direção cinematográfica humana com sistemas de IA para criar filmes, campanhas e conteúdo visual premium." } },
             { "@type": "Question", "name": "O que a Brick AI produz?", "acceptedAnswer": { "@type": "Answer", "text": "Produzimos filmes e campanhas com IA, desenvolvimento visual e conceito, execução completa de pipeline (geração, consistência, pós-produção e finalização) e projetos híbridos combinando set real com geração sintética." } },
-            { "@type": "Question", "name": "Quais marcas já trabalharam com a Brick AI?", "acceptedAnswer": { "@type": "Answer", "text": "A Brick tem histórico com marcas Tier 1 como Stone, Visa, BBC, Record TV, AliExpress, Facebook, O Boticário e L'Oréal." } },
-            { "@type": "Question", "name": "Quando vale a pena usar produção com IA?", "acceptedAnswer": { "@type": "Answer", "text": "IA faz sentido para cenários que não existem fisicamente, quando há necessidade de escala sem orçamento proporcional, ou para iteração rápida na fase de conceito. Não indicamos IA para depoimentos com rostos reais, produto físico como protagonista ou quando o orçamento permite produção tradicional." } },
+            { "@type": "Question", "name": "Quais marcas já trabalharam com a Brick AI?", "acceptedAnswer": { "@type": "Answer", "text": "A Brick AI é um lançamento recente, mas herda o histórico de 10+ anos da Brick tradicional, que produziu para marcas Tier 1 como Stone, Visa, BBC, Record TV, AliExpress, Facebook, O Boticário e L'Oréal." } },
+            { "@type": "Question", "name": "Quando vale a pena usar produção com IA?", "acceptedAnswer": { "@type": "Answer", "text": "IA faz sentido para cenários que não existem fisicamente, quando há necessidade de escala sem orçamento proporcional, ou para iteração rápida na fase de conceito. Não indicamos IA para depoimentos com rostos reais ou quando o orçamento permite produção tradicional bem feita." } },
             { "@type": "Question", "name": "Qual é o diferencial da Brick AI em relação a outras empresas de IA?", "acceptedAnswer": { "@type": "Answer", "text": "Somos antes uma produtora de cinema, depois uma empresa de IA. 10 anos de set nos deram o olhar de direção artística que transforma geração sintética em produção cinematográfica de alto padrão. Não vendemos prompts, entregamos filmes." } },
             { "@type": "Question", "name": "Como entrar em contato para um projeto?", "acceptedAnswer": { "@type": "Answer", "text": "Entre em contato pelo e-mail brick@brick.mov ou pelo formulário em ai.brick.mov. Cada projeto é tratado de forma personalizada." } },
-            { "@type": "Question", "name": "A Brick AI já teve reconhecimento em festivais?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. O filme 'Inheritance' foi selecionado oficialmente para o Festival de Cinema de Gramado 2025, um dos festivais mais importantes da América Latina. O projeto 'Vendemos Qualquer Coisa' foi finalista no Genero Challenge." } }
+            { "@type": "Question", "name": "A Brick AI já teve reconhecimento em festivais?", "acceptedAnswer": { "@type": "Answer", "text": "Sim, e foi um momento histórico. O filme 'Inheritance' foi um dos apenas 4 projetos com IA selecionados para o Festival de Cinema de Gramado 2025, um dos festivais mais importantes da América Latina. Foi a primeira vez que filmes gerados por IA entraram na seleção oficial do festival. O projeto 'Vendemos Qualquer Coisa' também foi finalista no Genero Challenge." } },
+            { "@type": "Question", "name": "Quanto tempo leva um projeto de vídeo com IA?", "acceptedAnswer": { "@type": "Answer", "text": "Projetos totalmente gerados por IA levam de 10 a 20 dias úteis. Produções híbridas (IA + set real) levam de 3 a 6 semanas. Desenvolvimento de conceito leva de 5 a 10 dias úteis." } },
+            { "@type": "Question", "name": "Qual a faixa de preço para produção de vídeo com IA?", "acceptedAnswer": { "@type": "Answer", "text": "Campanhas comerciais variam de R$ 22.000 a R$ 120.000. Filmes curtos de IA (1-3 min) de R$ 15.000 a R$ 60.000. Desenvolvimento de conceito e visual bible de R$ 7.500 a R$ 22.000. Cada projeto é orçado individualmente." } },
+            { "@type": "Question", "name": "Quais ferramentas a Brick AI usa?", "acceptedAnswer": { "@type": "Answer", "text": "Criamos soluções proprietárias que exploram todos os modelos top tier do mercado. Trabalhamos com Kling, Sora, Veo 3, Grok Imagine, Stable Diffusion e outros modelos de ponta, orquestrados via ComfyUI com pipelines customizados. Essa abordagem model-agnostic nos permite escolher a melhor ferramenta para cada cena, combinando geração de imagem e vídeo com pós-produção profissional em DaVinci Resolve e After Effects." } },
+            { "@type": "Question", "name": "IA pode substituir uma equipe de filmagem?", "acceptedAnswer": { "@type": "Answer", "text": "Não em todos os casos. IA é excelente para cenários impossíveis, escala sem orçamento proporcional e iteração rápida. Mas para depoimentos reais, produtos físicos e quando o orçamento permite produção tradicional bem feita, recomendamos filmagem real." } },
+            { "@type": "Question", "name": "Como vocês garantem consistência visual no vídeo com IA?", "acceptedAnswer": { "@type": "Answer", "text": "Usamos ControlNet e IP-Adapter para transferência de pose e identidade, engenharia de prompt estruturada com tokens de estilo travados, checagem frame a frame automatizada e revisões manuais de direção para momentos narrativos críticos." } },
+            { "@type": "Question", "name": "Qual a diferença entre a Brick AI e ferramentas como Runway?", "acceptedAnswer": { "@type": "Answer", "text": "Ferramentas como Runway dão capacidade de geração bruta — você prompta e recebe o resultado. A Brick AI entrega produção finalizada: direção criativa, consistência, pós-produção e entrega. A diferença é ter Photoshop versus contratar um fotógrafo." } },
+            { "@type": "Question", "name": "Vocês trabalham com clientes internacionais?", "acceptedAnswer": { "@type": "Answer", "text": "Sim. Trabalhamos com marcas e agências no mundo todo. Nosso site é bilíngue (português e inglês) e toda a comunicação pode ser feita em inglês. O fluxo de trabalho é 100% remoto." } },
+            { "@type": "Question", "name": "O que é produção híbrida (IA + set real)?", "acceptedAnswer": { "@type": "Answer", "text": "É a combinação de filmagem tradicional com elementos gerados por IA. Isso inclui substituição de ambientes, geração de personagens, ampliação de VFX e integração perfeita entre filmagem real e conteúdo sintético." } }
         ];
         const faqEntitiesEn = [
             { "@type": "Question", "name": "What is Brick AI?", "acceptedAnswer": { "@type": "Answer", "text": "Brick AI is the generative production division of Brick, a video production house with 10+ years of real-world filmmaking experience. We combine human cinematic direction with AI systems to create films, campaigns, and premium visual content." } },
             { "@type": "Question", "name": "What does Brick AI produce?", "acceptedAnswer": { "@type": "Answer", "text": "We produce AI-generated films and campaigns, visual development and concept art, full pipeline execution (generation, consistency, post-production, and finishing), and hybrid projects combining real sets with synthetic generation." } },
-            { "@type": "Question", "name": "Which brands have worked with Brick AI?", "acceptedAnswer": { "@type": "Answer", "text": "Brick has a track record with Tier 1 brands including Stone, Visa, BBC, Record TV, AliExpress, Facebook, O Boticário, and L'Oréal." } },
-            { "@type": "Question", "name": "When does AI production make sense?", "acceptedAnswer": { "@type": "Answer", "text": "AI makes sense for scenarios that don't physically exist, when scale is needed without proportional budget, or for rapid iteration in the concept phase. We don't recommend AI for real human testimonials, physical products as protagonists, or when budget allows for traditional production done right." } },
+            { "@type": "Question", "name": "Which brands have worked with Brick AI?", "acceptedAnswer": { "@type": "Answer", "text": "Brick AI is a recent launch, but it inherits the 10+ year track record of Brick's traditional production house, which has produced for Tier 1 brands including Stone, Visa, BBC, Record TV, AliExpress, Facebook, O Boticário, and L'Oréal." } },
+            { "@type": "Question", "name": "When does AI production make sense?", "acceptedAnswer": { "@type": "Answer", "text": "AI makes sense for scenarios that don't physically exist, when scale is needed without proportional budget, or for rapid iteration in the concept phase. We don't recommend AI for real human testimonials or when budget allows for traditional production done right." } },
             { "@type": "Question", "name": "What sets Brick AI apart from other AI companies?", "acceptedAnswer": { "@type": "Answer", "text": "We are a film production company first, an AI company second. 10 years on real sets gave us the artistic direction eye that transforms synthetic generation into high-standard cinematic production. We don't sell prompts — we deliver films." } },
             { "@type": "Question", "name": "How can I contact Brick AI for a project?", "acceptedAnswer": { "@type": "Answer", "text": "Contact us at brick@brick.mov or through the form at ai.brick.mov. Each project is handled individually." } },
-            { "@type": "Question", "name": "Has Brick AI received festival recognition?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. The film 'Inheritance' was officially selected for the Gramado Film Festival 2025, one of the most important festivals in Latin America. 'Vendemos Qualquer Coisa' (We Can Sell Anything) was a finalist in the Genero Challenge." } }
+            { "@type": "Question", "name": "Has Brick AI received festival recognition?", "acceptedAnswer": { "@type": "Answer", "text": "Yes, and it was a historic moment. The film 'Inheritance' was one of only 4 AI projects selected for the Gramado Film Festival 2025, one of the most important film festivals in Latin America. It was the first time AI-generated films entered the festival's official selection. 'Vendemos Qualquer Coisa' (We Can Sell Anything) was also a finalist in the Genero Challenge." } },
+            { "@type": "Question", "name": "How long does an AI video project take?", "acceptedAnswer": { "@type": "Answer", "text": "Fully AI-generated projects take 10-20 business days. Hybrid productions (AI + real set) take 3-6 weeks. Concept development takes 5-10 business days." } },
+            { "@type": "Question", "name": "What is the budget range for AI video production?", "acceptedAnswer": { "@type": "Answer", "text": "Commercial campaigns range from R$ 22,000 to R$ 120,000. Short AI films (1-3 min) from R$ 15,000 to R$ 60,000. Concept development from R$ 7,500 to R$ 22,000. Each project is scoped individually." } },
+            { "@type": "Question", "name": "What tools does Brick AI use?", "acceptedAnswer": { "@type": "Answer", "text": "We build proprietary solutions that leverage all top-tier models on the market. We work with Kling, Sora, Veo 3, Grok Imagine, Stable Diffusion and other cutting-edge models, orchestrated via ComfyUI with custom pipelines. This model-agnostic approach lets us pick the best tool for each scene, combining image and video generation with professional post-production in DaVinci Resolve and After Effects." } },
+            { "@type": "Question", "name": "Can AI replace a film crew?", "acceptedAnswer": { "@type": "Answer", "text": "Not in all cases. AI excels at impossible scenarios, scale without proportional budget, and rapid iteration. But for real testimonials, physical products, and when budget allows traditional production done right, we recommend real filming." } },
+            { "@type": "Question", "name": "How do you ensure visual consistency in AI video?", "acceptedAnswer": { "@type": "Answer", "text": "We use ControlNet and IP-Adapter for pose and identity transfer, structured prompt engineering with locked style tokens, automated frame-by-frame consistency checks, and manual direction passes for critical narrative moments." } },
+            { "@type": "Question", "name": "What's the difference between Brick AI and tools like Runway?", "acceptedAnswer": { "@type": "Answer", "text": "Tools like Runway give you raw generation capability — you prompt and get output. Brick AI delivers finished production: creative direction, consistency, post-production, and delivery. The difference is having Photoshop versus hiring a photographer." } },
+            { "@type": "Question", "name": "Do you work with international clients?", "acceptedAnswer": { "@type": "Answer", "text": "Yes. We work with brands and agencies worldwide. Our website is bilingual (Portuguese and English) and all communication can be in English. Our workflow is 100% remote." } },
+            { "@type": "Question", "name": "What is hybrid production (AI + real set)?", "acceptedAnswer": { "@type": "Answer", "text": "It combines traditional filmed footage with AI-generated elements. This includes environment replacement, character generation, VFX augmentation, and seamless integration between real and synthetic footage." } }
         ];
         jsonLdScripts.push(`<script type="application/ld+json">${JSON.stringify({
             "@context": "https://schema.org",
@@ -728,7 +882,11 @@ app.get('*', async (req, res) => {
             "datePublished": isoDate,
             "dateModified": isoDate,
             "url": canonicalUrl,
-            "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalUrl }
+            "mainEntityOfPage": { "@type": "WebPage", "@id": canonicalUrl },
+            "speakable": {
+                "@type": "SpeakableSpecification",
+                "xpath": ["/html/head/meta[@name='description']/@content", "/html/head/title"]
+            }
         })}</script>`);
     }
 
@@ -739,13 +897,16 @@ app.get('*', async (req, res) => {
         .replace(/__OG_TITLE__/g, ogTitle)
         .replace(/__OG_DESCRIPTION__/g, ogDescription)
         .replace(/__OG_TYPE__/g, view === 'post' ? 'article' : 'website')
-        .replace(/__OG_URL__/g, canonicalUrl + langParam)
+        .replace(/__OG_URL__/g, canonicalUrl)
+        .replace(/__OG_IMAGE__/g, ogImage)
         .replace(/__OG_LOCALE__/g, lang === 'pt' ? 'pt_BR' : 'en_US')
         .replace(/__OG_LOCALE_ALT__/g, lang === 'pt' ? 'en_US' : 'pt_BR')
         .replace(/__CANONICAL_URL__/g, canonicalUrl)
         .replace(/__HREFLANG_PT__/g, `https://ai.brick.mov/${canonicalPath}`)
         .replace(/__HREFLANG_EN__/g, `https://ai.brick.mov/${canonicalPath}?lang=en`)
-        .replace(/<!--__JSON_LD__-->/g, jsonLdScripts.join('\n    '));
+        .replace(/<!--__JSON_LD__-->/g, jsonLdScripts.join('\n    '))
+        .replace(/__GOOGLE_VERIFICATION__/g, process.env.GOOGLE_SITE_VERIFICATION || '')
+        .replace(/__BING_VERIFICATION__/g, process.env.BING_VERIFICATION || '');
 
     res.send(html);
 });

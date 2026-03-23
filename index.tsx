@@ -3027,7 +3027,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                 <section className="w-full flex flex-col md:flex-row gap-0 items-start animate-fade-in-up border-t border-white/10 pt-12" style={{ animationDelay: '0.2s' }}>
 
                     {/* LEFT: THE AVATAR (Static Monolith) */}
-                    <div className="w-full md:w-5/12 flex flex-col items-center justify-center p-12 border-r border-white/10 relative bg-brick-black">
+                    <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-12 border-r border-white/10 relative bg-brick-black">
                         <div className="relative w-[120px] h-[240px] md:w-[150px] md:h-[300px]">
                             {/* The Monolith Shape - Identical to Hero but no mouse interaction */}
                             <div
@@ -3057,7 +3057,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                     </div>
 
                     {/* RIGHT: THE TERMINAL (Chat Interface) */}
-                    <div className="w-full md:w-7/12 pl-0 md:pl-12">
+                    <div className="w-full md:w-1/2 pl-0 md:pl-12">
                         <div className="w-full bg-brick-dark border border-white/10 flex flex-col h-[70vh] min-h-[500px] md:h-[600px] relative overflow-hidden shadow-2xl">
                             {/* Terminal Header */}
                             <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/[0.02]">
@@ -4084,7 +4084,7 @@ const NotFoundPage = ({ onHome, goChat }: { onHome: () => void, goChat: () => vo
                     <section className="w-full flex flex-col md:flex-row gap-0 items-start animate-fade-in-up border-t border-white/10 pt-12" style={{ animationDelay: '0.2s' }}>
                         
                         {/* LEFT: THE AVATAR (Static Monolith) - Identical to SystemChat */}
-                        <div className="w-full md:w-5/12 flex flex-col items-center justify-center p-12 border-r border-white/10 relative bg-brick-black">
+                        <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-12 border-r border-white/10 relative bg-brick-black">
                             <div className="relative w-[120px] h-[240px] md:w-[150px] md:h-[300px]">
                                 <div className="monolith-structure w-full h-full rounded-[2px] relative z-10 shadow-2xl transition-all duration-300">
                                     <div className="absolute inset-0 monolith-texture opacity-80 mix-blend-overlay pointer-events-none rounded-[2px] overflow-hidden"></div>
@@ -4104,7 +4104,7 @@ const NotFoundPage = ({ onHome, goChat }: { onHome: () => void, goChat: () => vo
                         </div>
 
                         {/* RIGHT: THE TERMINAL (Chat Dialog Box) */}
-                        <div className="w-full md:w-7/12 pl-0 md:pl-12 mt-12 md:mt-0">
+                        <div className="w-full md:w-1/2 pl-0 md:pl-12 mt-12 md:mt-0">
                             <div className="w-full bg-brick-dark border border-white/10 flex flex-col h-[70vh] min-h-[500px] md:h-[600px] relative overflow-hidden shadow-2xl">
                                 {/* Terminal Header */}
                                 <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/[0.02]">
