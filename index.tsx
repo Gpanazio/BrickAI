@@ -233,6 +233,11 @@ const GlobalStyles = () => (
             mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
             -webkit-mask-image: linear-gradient(to bottom, black 20%, transparent 100%);
         }
+        
+        /* INLINE GENERATIVE NOISE SVG TO FIX 403 EXTERNAL ERROR */
+        .bg-noise-svg {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
 
         /* SHARPNESS UTILS */
         .sharp-image {
@@ -1392,7 +1397,7 @@ const Philosophy = () => {
             <ParticleBackground />
 
             {/* NOISE OVERLAY */}
-            <div className="absolute inset-0 z-[2] opacity-20 pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
+            <div className="absolute inset-0 z-[2] opacity-20 pointer-events-none mix-blend-overlay bg-noise-svg brightness-100 contrast-150"></div>
 
             <div className="absolute inset-0 z-[1] bg-[radial-gradient(circle,transparent_40%,rgba(5,5,5,0.9)_100%)] pointer-events-none"></div>
             <div className="absolute -bottom-44 left-[-12%] w-[95vw] h-[70vh] bg-red-700/10 blur-[180px] pointer-events-none z-[3] origin-left" style={{ animation: 'red-emanation 9.5s ease-in-out infinite' }}></div>
@@ -2336,7 +2341,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                     </motion.div>
 
                 </motion.div>
-                <div className="absolute inset-0 z-[40] opacity-[0.08] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150" style={{ maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' }}></div>
+                <div className="absolute inset-0 z-[40] opacity-[0.08] pointer-events-none mix-blend-overlay bg-noise-svg brightness-100 contrast-150" style={{ maskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to bottom, black 80%, transparent 100%)' }}></div>
             </section>
 
             {/* PART 2: O MÉTODO / A CRENÇA - Estrelas de fundo */}
@@ -2421,7 +2426,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                     </div>
                 </div>
 
-                <div className="absolute inset-0 z-[40] opacity-[0.11] pointer-events-none mix-blend-overlay bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-100 contrast-150"></div>
+                <div className="absolute inset-0 z-[40] opacity-[0.11] pointer-events-none mix-blend-overlay bg-noise-svg brightness-100 contrast-150"></div>
             </section>
         </React.Fragment>
     );

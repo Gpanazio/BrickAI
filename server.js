@@ -574,16 +574,25 @@ ${items}
     res.send(xml);
 });
 
-// Read HTML template once at startup
-let htmlTemplate = '';
-try {
-    htmlTemplate = fs.readFileSync(path.join(__dirname, 'dist', 'index.html'), 'utf-8');
-} catch (e) {
-    console.error('Could not read dist/index.html template:', e.message);
-}
+// Function to read HTML template
+const getHtmlTemplate = () => {
+    try {
+        return fs.readFileSync(path.join(__dirname, 'dist', 'index.html'), 'utf-8');
+    } catch (e) {
+        console.error('Could not read dist/index.html template:', e.message);
+        return '';
+    }
+};
+
+let htmlTemplate = getHtmlTemplate();
 
 // SEO meta tag injection for SPA routes
 app.get('*', async (req, res) => {
+    // In development mode, always reload the template to avoid stale JS hashes
+    if (process.env.NODE_ENV !== 'production') {
+        htmlTemplate = getHtmlTemplate();
+    }
+
     if (!htmlTemplate) {
         return res.sendFile(path.join(__dirname, 'dist', 'index.html'));
     }
