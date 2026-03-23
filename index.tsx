@@ -432,19 +432,20 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 hasDetail: true
             },
             {
-                id: "factory",
-                orientation: "vertical",
-                subtitle: t('works.factory.subtitle'),
-                category: "CONCEITO : CINEMATOGRAFIA GENERATIVA",
-                title: t('works.factory.title'),
-                desc: t('works.factory.desc'),
-                longDesc: t('works.factory.longDesc'),
+                id: "slop-ai",
+                orientation: "horizontal",
+                subtitle: "GERAÇÃO AUTÔNOMA DE CONTEÚDO",
+                category: "CONCEITO : CINEMATOGRAFIA SINTÉTICA",
+                title: "SLOP AI",
+                desc: "Experimento de geração massiva de conteúdo visual com IA.",
+                longDesc: "Experimento de geração massiva de conteúdo visual com IA.",
                 credits: [],
                 gradient: "from-neutral-950 to-brick-red/20",
-                imageHome: "/uploads/adfee249-a46b-44ca-8d7b-b7b5db4ba60b.jpg",
-                imageWorks: "/uploads/adfee249-a46b-44ca-8d7b-b7b5db4ba60b.jpg",
-                videoUrl: "https://review.brick.mov/portfolio/embed/8",
-                hasDetail: true
+                imageHome: "/slopai.jpg",
+                imageWorks: "/slopai.jpg",
+                imageSettingsHome: { x: 50, y: 50, scale: 1.0 },
+                imageSettingsWorks: { x: 50, y: 50, scale: 1.0 },
+                hasDetail: false
             },
             {
                 id: "DOG DAY AFTERNOON",
@@ -462,20 +463,19 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 hasDetail: true
             },
             {
-                id: "slop-ai",
-                orientation: "horizontal",
-                subtitle: "GERAÇÃO AUTÔNOMA DE CONTEÚDO",
-                category: "CONCEITO : CINEMATOGRAFIA SINTÉTICA",
-                title: "SLOP AI",
-                desc: "Experimento de geração massiva de conteúdo visual com IA.",
-                longDesc: "Experimento de geração massiva de conteúdo visual com IA.",
+                id: "factory",
+                orientation: "vertical",
+                subtitle: t('works.factory.subtitle'),
+                category: "CONCEITO : CINEMATOGRAFIA GENERATIVA",
+                title: t('works.factory.title'),
+                desc: t('works.factory.desc'),
+                longDesc: t('works.factory.longDesc'),
                 credits: [],
                 gradient: "from-neutral-950 to-brick-red/20",
-                imageHome: "/slopai.jpg",
-                imageWorks: "/slopai.jpg",
-                imageSettingsHome: { x: 50, y: 50, scale: 1.0 },
-                imageSettingsWorks: { x: 50, y: 50, scale: 1.0 },
-                hasDetail: false
+                imageHome: "/uploads/adfee249-a46b-44ca-8d7b-b7b5db4ba60b.jpg",
+                imageWorks: "/uploads/adfee249-a46b-44ca-8d7b-b7b5db4ba60b.jpg",
+                videoUrl: "https://review.brick.mov/portfolio/embed/8",
+                hasDetail: true
             },
         ];
 
