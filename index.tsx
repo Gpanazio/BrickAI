@@ -3023,8 +3023,11 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             </div>
                             <h3 className="text-2xl font-brick text-white mb-4 group-hover:text-brick-red transition-colors">{t('chat.network_nodes')}</h3>
                             <div className="flex flex-wrap gap-4">
-                                {['LinkedIn', 'Instagram'].map(social => (
-                                    <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-brick-gray hover:text-white uppercase tracking-wider underline decoration-white/20 hover:decoration-white">{social}</a>
+                                {[
+                                    { name: 'LinkedIn', url: 'https://www.linkedin.com/company/brick-mov/' },
+                                    { name: 'Instagram', url: 'https://www.instagram.com/brick.mov' }
+                                ].map(social => (
+                                    <a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-brick-gray hover:text-white uppercase tracking-wider underline decoration-white/20 hover:decoration-white">{social.name}</a>
                                 ))}
                             </div>
                         </div>
