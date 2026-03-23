@@ -8,6 +8,15 @@ DIFFS.txt
 # Uploads de usuário (em produção ficam no volume do Railway)
 uploads/
 
+# Exports (frames PNG, MP4s renderizados)
+exports/
+
+# Playwright CLI binaries
+.playwright-cli/
+
+# Remotion render output
+remotion-hero/out/
+
 # Build output
 dist/
 
