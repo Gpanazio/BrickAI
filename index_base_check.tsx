@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import { ArrowRight, Eye, Fingerprint, Globe, Globe2, Menu, X } from 'lucide-react';
 import * as THREE from 'three';
 import { useTranslation } from 'react-i18next';
-import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import './src/i18n';
 import './src/index.css';
 
@@ -19,7 +19,7 @@ const GlobalStyles = () => (
             text-transform: uppercase;
         }
         .climax-title {
-            background: linear-gradient(to bottom, #ffffff, var(--brick-gray));
+            background: linear-gradient(to bottom, #ffffff, #9CA3AF);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -28,19 +28,17 @@ const GlobalStyles = () => (
             line-height: 1.2;
         }
         .climax-title:hover {
-            -webkit-text-fill-color: var(--brick-red);
+            -webkit-text-fill-color: #DC2626;
             background: none;
-            filter: drop-shadow(0 0 100px rgba(var(--brick-red-rgb),0.95));
+            filter: drop-shadow(0 0 100px rgba(220,38,38,0.95));
         }
         /* COLORS & UTILS */
         :root {
             --brick-black: #050505;
-            --brick-dark: #0a0a0a;
+            --brick-dark: #050505; 
             --brick-red: #DC2626;
-            --brick-red-rgb: 220, 38, 38;
             --brick-gray: #9CA3AF;
             --brick-white: #E5E5E5;
-            --brick-surface: #070707;
         }
         html, body, #root {
             width: 100%;
@@ -119,8 +117,8 @@ const GlobalStyles = () => (
         }
         .animate-soul { animation: soul-breathe 5s ease-in-out infinite; }
         @keyframes dot-pulse {
-            0%, 100% { opacity: 0.7; box-shadow: 0 0 4px 1px rgba(var(--brick-red-rgb),0.3); }
-            50% { opacity: 1; box-shadow: 0 0 8px 3px rgba(var(--brick-red-rgb),0.6); }
+            0%, 100% { opacity: 0.7; box-shadow: 0 0 4px 1px rgba(220,38,38,0.3); }
+            50% { opacity: 1; box-shadow: 0 0 8px 3px rgba(220,38,38,0.6); }
         }
         .animate-dot-pulse { animation: dot-pulse 4s ease-in-out infinite; }
         @keyframes fiber-travel {
@@ -161,11 +159,11 @@ const GlobalStyles = () => (
 
         @keyframes pulse-halo {
             0%, 100% {
-                box-shadow: inset -6px 0 15px rgba(var(--brick-red-rgb),0.4), 0 0 20px rgba(var(--brick-red-rgb),0.1), 0 0 40px rgba(var(--brick-red-rgb),0.05);
+                box-shadow: inset -6px 0 15px rgba(220,38,38,0.4), 0 0 20px rgba(220,38,38,0.1), 0 0 40px rgba(220,38,38,0.05);
                 opacity: 0.6;
             }
             50% {
-                box-shadow: inset -8px 0 25px rgba(255,80,80,0.8), 0 0 35px rgba(var(--brick-red-rgb),0.25), 0 0 70px rgba(var(--brick-red-rgb),0.12);
+                box-shadow: inset -8px 0 25px rgba(255,80,80,0.8), 0 0 35px rgba(220,38,38,0.25), 0 0 70px rgba(220,38,38,0.12);
                 opacity: 0.9;
             }
         }
@@ -208,12 +206,12 @@ const GlobalStyles = () => (
         }
 
         @keyframes crt-glitch-text {
-            0% { text-shadow: 2px 0 0 rgba(var(--brick-red-rgb),0.8), -2px 0 0 rgba(0,255,255,0.5), 0 0 10px rgba(var(--brick-red-rgb),0.6); }
-            20% { text-shadow: -2px 0 0 rgba(var(--brick-red-rgb),0.8), 2px 0 0 rgba(0,255,255,0.5), 0 0 15px rgba(var(--brick-red-rgb),0.6); }
-            40% { text-shadow: 2px 0 0 rgba(var(--brick-red-rgb),0.8), -2px 0 0 rgba(0,255,255,0.5), 0 0 10px rgba(var(--brick-red-rgb),0.8); }
-            60% { text-shadow: -2px 0 0 rgba(var(--brick-red-rgb),0.8), 2px 0 0 rgba(0,255,255,0.5), 0 0 15px rgba(var(--brick-red-rgb),0.5); }
-            80% { text-shadow: 2px 0 0 rgba(var(--brick-red-rgb),0.8), -2px 0 0 rgba(0,255,255,0.5), 0 0 20px rgba(var(--brick-red-rgb),0.8); }
-            100% { text-shadow: -2px 0 0 rgba(var(--brick-red-rgb),0.8), 2px 0 0 rgba(0,255,255,0.5), 0 0 10px rgba(var(--brick-red-rgb),0.6); }
+            0% { text-shadow: 2px 0 0 rgba(220,38,38,0.8), -2px 0 0 rgba(0,255,255,0.5), 0 0 10px rgba(220,38,38,0.6); }
+            20% { text-shadow: -2px 0 0 rgba(220,38,38,0.8), 2px 0 0 rgba(0,255,255,0.5), 0 0 15px rgba(220,38,38,0.6); }
+            40% { text-shadow: 2px 0 0 rgba(220,38,38,0.8), -2px 0 0 rgba(0,255,255,0.5), 0 0 10px rgba(220,38,38,0.8); }
+            60% { text-shadow: -2px 0 0 rgba(220,38,38,0.8), 2px 0 0 rgba(0,255,255,0.5), 0 0 15px rgba(220,38,38,0.5); }
+            80% { text-shadow: 2px 0 0 rgba(220,38,38,0.8), -2px 0 0 rgba(0,255,255,0.5), 0 0 20px rgba(220,38,38,0.8); }
+            100% { text-shadow: -2px 0 0 rgba(220,38,38,0.8), 2px 0 0 rgba(0,255,255,0.5), 0 0 10px rgba(220,38,38,0.6); }
         }
         .nav-btn-crt:hover {
             animation: crt-glitch-text 0.12s infinite;
@@ -240,7 +238,7 @@ const GlobalStyles = () => (
         }
 
         .monolith-structure {
-            background: linear-gradient(to bottom, var(--brick-black), #000000);
+            background: linear-gradient(to bottom, #050505, #000000);
             border: 1px solid #1a1a1a;
             box-shadow: inset 0 0 40px rgba(0,0,0,0.9);
         }
@@ -328,7 +326,6 @@ interface Work {
     subtitle: string;
     category: string;
     title: string;
-    titleFull?: string;
     desc: string;
     videoUrl?: string;
     longDesc?: string;
@@ -391,7 +388,6 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 subtitle: t('works.inheritance.subtitle'),
                 category: "SELEÇÃO OFICIAL : FESTIVAL DE GRAMADO",
                 title: t('works.inheritance.title'),
-                titleFull: t('works.inheritance.titleFull'),
                 desc: t('works.inheritance.desc'),
                 longDesc: t('works.inheritance.longDesc'),
                 credits: [],
@@ -410,7 +406,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 desc: t('works.shift.desc'),
                 longDesc: t('works.shift.longDesc'),
                 credits: [],
-                gradient: "from-neutral-900 via-brick-red/10 to-neutral-900",
+                gradient: "from-neutral-900 via-[#DC2626]/10 to-neutral-900",
                 imageHome: "/uploads/30e2d6e0-e967-4204-a455-ae1bb91dec1e.jpeg",
                 imageWorks: "/uploads/30e2d6e0-e967-4204-a455-ae1bb91dec1e.jpeg",
                 videoUrl: "https://review.brick.mov/portfolio/embed/9",
@@ -432,20 +428,18 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 hasDetail: true
             },
             {
-                id: "slop-ai",
-                orientation: "horizontal",
-                subtitle: t('works.slopai.subtitle'),
-                category: "CONCEITO : CINEMATOGRAFIA SINTÉTICA",
-                title: t('works.slopai.title'),
-                desc: t('works.slopai.desc'),
-                longDesc: t('works.slopai.longDesc'),
+                id: "factory",
+                orientation: "vertical",
+                subtitle: t('works.factory.subtitle'),
+                category: "CONCEITO : CINEMATOGRAFIA GENERATIVA",
+                title: t('works.factory.title'),
+                desc: t('works.factory.desc'),
+                longDesc: t('works.factory.longDesc'),
                 credits: [],
-                gradient: "from-neutral-950 to-brick-red/20",
-                imageHome: "/slopai.jpg",
-                imageWorks: "/slopai.jpg",
-                imageSettingsHome: { x: 50, y: 50, scale: 1.0 },
-                imageSettingsWorks: { x: 50, y: 50, scale: 1.0 },
-                videoUrl: "https://review.brick.mov/portfolio/embed/11",
+                gradient: "from-neutral-950 to-[#DC2626]/20",
+                imageHome: "/uploads/adfee249-a46b-44ca-8d7b-b7b5db4ba60b.jpg",
+                imageWorks: "/uploads/adfee249-a46b-44ca-8d7b-b7b5db4ba60b.jpg",
+                videoUrl: "https://review.brick.mov/portfolio/embed/8",
                 hasDetail: true
             },
             {
@@ -457,26 +451,25 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 desc: t('works.dogday.desc'),
                 longDesc: t('works.dogday.longDesc'),
                 credits: [],
-                gradient: "from-neutral-950 to-brick-red/20",
+                gradient: "from-neutral-950 to-[#DC2626]/20",
                 imageHome: "/uploads/f9c13e36-0abe-43c9-8161-805cd9f2d1f3.jpeg",
                 imageWorks: "/uploads/f9c13e36-0abe-43c9-8161-805cd9f2d1f3.jpeg",
                 videoUrl: "https://review.brick.mov/portfolio/embed/6",
                 hasDetail: true
             },
             {
-                id: "factory",
-                orientation: "vertical",
-                subtitle: t('works.factory.subtitle'),
-                category: "CONCEITO : CINEMATOGRAFIA GENERATIVA",
-                title: t('works.factory.title'),
-                desc: t('works.factory.desc'),
-                longDesc: t('works.factory.longDesc'),
+                id: "slop-ai",
+                orientation: "horizontal",
+                subtitle: "GERAÇÃO AUTÔNOMA DE CONTEÚDO",
+                category: "CONCEITO : CINEMATOGRAFIA SINTÉTICA",
+                title: "SLOP AI",
+                desc: "Experimento de geração massiva de conteúdo visual com IA.",
+                longDesc: "Experimento de geração massiva de conteúdo visual com IA.",
                 credits: [],
-                gradient: "from-neutral-950 to-brick-red/20",
-                imageHome: "/uploads/adfee249-a46b-44ca-8d7b-b7b5db4ba60b.jpg",
-                imageWorks: "/uploads/adfee249-a46b-44ca-8d7b-b7b5db4ba60b.jpg",
-                videoUrl: "https://review.brick.mov/portfolio/embed/8",
-                hasDetail: true
+                gradient: "from-neutral-950 to-[#DC2626]/20",
+                imageHome: "",
+                imageWorks: "",
+                hasDetail: false
             },
         ];
 
@@ -618,7 +611,7 @@ const GlitchText = ({ text, className }: { text: string, className?: string }) =
         <span className={className}>
             {ready
                 ? chars.map(({ char, glitched }, i) => (
-                    <span key={i} style={glitched ? { color: 'var(--brick-red)' } : undefined}>{char}</span>
+                    <span key={i} style={glitched ? { color: '#DC2626' } : undefined}>{char}</span>
                 ))
                 : displayed}
         </span>
@@ -649,7 +642,7 @@ const TypewriterText = ({ text, className, delay = 0, onComplete }: { text: stri
 
     return (
         <span className={className}>
-            {displayed}<span className={`text-brick-red ${done ? 'animate-blink' : 'opacity-100'}`}>_</span>
+            {displayed}<span className={`text-[#DC2626] ${done ? 'animate-blink' : 'opacity-100'}`}>_</span>
         </span>
     );
 };
@@ -821,7 +814,7 @@ const CustomCursor = ({ active }: { active: boolean }) => {
     return (
         <div
             ref={dotRef}
-            className={`hidden fixed top-0 left-0 w-2 h-2 bg-brick-red rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform transition-opacity duration-200 ${active || isPointer ? 'opacity-100 scale-[3]' : 'opacity-0 scale-100'}`}
+            className={`hidden fixed top-0 left-0 w-2 h-2 bg-[#DC2626] rounded-full pointer-events-none z-[9999] mix-blend-difference will-change-transform transition-opacity duration-200 ${active || isPointer ? 'opacity-100 scale-[3]' : 'opacity-0 scale-100'}`}
             style={{ transform: 'translate(-100px, -100px)' }}
         />
     );
@@ -860,7 +853,7 @@ const BrickLogo = ({ className }: { className?: string }) => (
     <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M10 10H90V90H10V10Z" fill="currentColor" fillOpacity="0.1" />
         <path d="M20 20H80V80H20V20Z" stroke="currentColor" strokeWidth="4" />
-        <rect x="35" y="35" width="30" height="30" fill="var(--brick-red)" />
+        <rect x="35" y="35" width="30" height="30" fill="#DC2626" />
     </svg>
 );
 
@@ -880,10 +873,10 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
 
     return (
         <React.Fragment>
-            <header className="fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none transition-all duration-300 bg-gradient-to-b from-brick-black/70 from-[45%] to-transparent">
+            <header className="fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none transition-all duration-300 bg-gradient-to-b from-[#050505]/70 from-[45%] to-transparent">
                 <div onClick={onHome} className="pointer-events-auto flex items-baseline group cursor-pointer select-none z-50 relative">
                     <img src="/01.png" alt="BRICK" className="h-6 md:h-8 w-auto object-contain mr-1" />
-                    <span className="text-brick-red font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[2px]">_</span>
+                    <span className="text-[#DC2626] font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[2px]">_</span>
                     <span className="text-gray-300 font-ai text-xl md:text-2xl group-hover:text-white transition-colors duration-500">AI</span>
                 </div>
 
@@ -891,7 +884,7 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
                 {!isChatView && (
                     <button
                         onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                        className="pointer-events-auto md:hidden text-white hover:text-brick-red transition-colors z-50 relative p-2"
+                        className="pointer-events-auto md:hidden text-white hover:text-[#DC2626] transition-colors z-50 relative p-2"
                     >
                         {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
                     </button>
@@ -903,36 +896,36 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
                         <div className="hidden md:flex items-center gap-6 pointer-events-auto relative z-10">
                             {/* NAV STYLE: Raw Text Links */}
 
-                            <MagneticButton onClick={onHome} className="group text-xs md:text-sm font-ai text-brick-gray hover:text-brick-red transition-colors duration-300">
+                            <MagneticButton onClick={onHome} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
                                 <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
                                 HOME
                             </MagneticButton>
 
-                            <MagneticButton onClick={onAbout} className="group text-xs md:text-sm font-ai text-brick-gray hover:text-brick-red transition-colors duration-300">
+                            <MagneticButton onClick={onAbout} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
                                 <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
                                 {t('header.about')}
                             </MagneticButton>
 
-                            <MagneticButton onClick={onWorks} className="group text-xs md:text-sm font-ai text-brick-gray hover:text-brick-red transition-colors duration-300">
+                            <MagneticButton onClick={onWorks} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
                                 <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
                                 {t('header.works')}
                             </MagneticButton>
 
-                            <MagneticButton onClick={onTransmissions} className="group text-xs md:text-sm font-ai text-brick-gray hover:text-brick-red transition-colors duration-300">
+                            <MagneticButton onClick={onTransmissions} className="group text-xs md:text-sm font-ai text-[#9CA3AF] hover:text-[#DC2626] transition-colors duration-300">
                                 <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
                                 {t('header.transmissions')}
                             </MagneticButton>
 
                             {/* CTA STYLE: Subtle Blinking Underscore */}
-                            <MagneticButton onClick={onChat} className="group text-xs md:text-sm font-ai text-white hover:text-brick-red transition-colors duration-300">
+                            <MagneticButton onClick={onChat} className="group text-xs md:text-sm font-ai text-white hover:text-[#DC2626] transition-colors duration-300">
                                 <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
-                                {t('header.talk_to_us')} <span className="text-brick-red animate-blink group-hover:text-white">_</span>
+                                {t('header.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
                             </MagneticButton>
 
                             {/* LANGUAGE TOGGLE */}
                             <button
                                 onClick={toggleLanguage}
-                                className="ml-4 text-xs font-mono text-brick-gray hover:text-white transition-colors flex items-center gap-1 uppercase tracking-widest"
+                                className="ml-4 text-xs font-mono text-[#9CA3AF] hover:text-white transition-colors flex items-center gap-1 uppercase tracking-widest"
                             >
                                 <Globe size={12} /> {i18n.language === 'en' ? 'PT' : 'EN'}
                             </button>
@@ -942,28 +935,28 @@ const Header = ({ onChat, onWorks, onTransmissions, onHome, onAbout, isChatView 
             </header>
 
             {/* MOBILE MENU OVERLAY */}
-            <div className={`fixed inset-0 z-40 bg-brick-black/95 backdrop-blur-xl flex flex-col items-center justify-center transition-all duration-500 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
+            <div className={`fixed inset-0 z-40 bg-[#050505]/95 backdrop-blur-xl flex flex-col items-center justify-center transition-all duration-500 ${mobileMenuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'}`}>
                 <div className="scanline-effect absolute inset-0 z-0 opacity-20 pointer-events-none"></div>
                 <div className="flex flex-col items-center gap-8 relative z-10 w-full px-8">
-                    <button onClick={() => handleNav(onHome)} className="text-2xl font-brick text-white hover:text-brick-red transition-colors w-full text-center border-b border-white/10 pb-4">
+                    <button onClick={() => handleNav(onHome)} className="text-2xl font-brick text-white hover:text-[#DC2626] transition-colors w-full text-center border-b border-white/10 pb-4">
                         HOME
                     </button>
-                    <button onClick={() => handleNav(onAbout)} className="text-2xl font-brick text-white hover:text-brick-red transition-colors w-full text-center border-b border-white/10 pb-4">
+                    <button onClick={() => handleNav(onAbout)} className="text-2xl font-brick text-white hover:text-[#DC2626] transition-colors w-full text-center border-b border-white/10 pb-4">
                         {t('header.about')}
                     </button>
-                    <button onClick={() => handleNav(onWorks)} className="text-2xl font-brick text-white hover:text-brick-red transition-colors w-full text-center border-b border-white/10 pb-4">
+                    <button onClick={() => handleNav(onWorks)} className="text-2xl font-brick text-white hover:text-[#DC2626] transition-colors w-full text-center border-b border-white/10 pb-4">
                         {t('header.works')}
                     </button>
-                    <button onClick={() => handleNav(onTransmissions)} className="text-2xl font-brick text-white hover:text-brick-red transition-colors w-full text-center border-b border-white/10 pb-4">
+                    <button onClick={() => handleNav(onTransmissions)} className="text-2xl font-brick text-white hover:text-[#DC2626] transition-colors w-full text-center border-b border-white/10 pb-4">
                         {t('header.transmissions')}
                     </button>
-                    <button onClick={() => handleNav(onChat)} className="text-2xl font-brick text-brick-red hover:text-white transition-colors w-full text-center pb-4 animate-pulse">
+                    <button onClick={() => handleNav(onChat)} className="text-2xl font-brick text-[#DC2626] hover:text-white transition-colors w-full text-center pb-4 animate-pulse">
                         {t('header.talk_to_us')} _
                     </button>
 
                     <button
                         onClick={toggleLanguage}
-                        className="mt-8 text-sm font-mono text-brick-gray hover:text-white transition-colors flex items-center gap-2 uppercase tracking-widest border border-white/20 px-6 py-2 rounded-full"
+                        className="mt-8 text-sm font-mono text-[#9CA3AF] hover:text-white transition-colors flex items-center gap-2 uppercase tracking-widest border border-white/20 px-6 py-2 rounded-full"
                     >
                         <Globe size={14} /> {i18n.language === 'en' ? 'SWITCH TO PORTUGUESE' : 'SWITCH TO ENGLISH'}
                     </button>
@@ -1034,8 +1027,8 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
     }, [monolithHover]);
 
     return (
-        <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-visible pt-20">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-brick-red/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-40"></div>
+        <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-visible">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[100vw] h-[100vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-40"></div>
 
             <div className="reveal relative z-10 w-full flex justify-center mb-10 md:mb-16">
                 <div className="relative">
@@ -1045,8 +1038,8 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                     >
                         <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
                         <div className="centered-layer aura-atmos pointer-events-none opacity-60" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
-                        <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '500px', height: '500px', background: 'radial-gradient(circle at center, rgba(var(--brick-red-rgb),0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
-                        <div className="centered-layer core-atmos animate-breathe pointer-events-none" style={{ width: '40px', height: '40px', filter: 'blur(10px)', background: 'radial-gradient(circle, rgba(var(--brick-red-rgb),1) 0%, rgba(var(--brick-red-rgb),0.4) 40%, transparent 80%)' }}></div>
+                        <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '500px', height: '500px', background: 'radial-gradient(circle at center, rgba(220,38,38,0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
+                        <div className="centered-layer core-atmos animate-breathe pointer-events-none" style={{ width: '40px', height: '40px', filter: 'blur(10px)', background: 'radial-gradient(circle, rgba(220,38,38,1) 0%, rgba(220,38,38,0.4) 40%, transparent 80%)' }}></div>
 
                         {/* INTERACTIVE RED DOT & RADIATION (Strictly Inside Monolith) */}
                         <div className="absolute inset-0 overflow-hidden rounded-[2px] pointer-events-none z-30">
@@ -1060,7 +1053,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                                     left: '50%',
                                     marginTop: '-3px',
                                     marginLeft: '-3px',
-                                    backgroundColor: 'var(--brick-red)',
+                                    backgroundColor: '#DC2626',
                                     boxShadow: '0 0 10px 2px rgba(220, 38, 38, 0.6), 0 0 20px 4px rgba(220, 38, 38, 0.2)',
                                     opacity: 0,
                                     willChange: 'transform, opacity'
@@ -1071,7 +1064,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                                 ref={radiationRef}
                                 className="absolute w-[600px] h-[600px] -ml-[300px] -mt-[300px] top-1/2 left-1/2 pointer-events-none transition-opacity duration-700 ease-out"
                                 style={{
-                                    background: 'radial-gradient(circle, rgba(var(--brick-red-rgb),0.25) 0%, rgba(var(--brick-red-rgb),0.05) 50%, transparent 80%)',
+                                    background: 'radial-gradient(circle, rgba(220,38,38,0.25) 0%, rgba(220,38,38,0.05) 50%, transparent 80%)',
                                     filter: 'blur(60px)',
                                     zIndex: 5,
                                     opacity: 0,
@@ -1083,7 +1076,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                                 }}
                             ></div>
                         </div>
-                        <div className="absolute inset-0 border border-white/10 opacity-50 pointer-events-none z-10 rounded-[2px]"></div>
+                        <div className="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10 rounded-[2px]"></div>
                     </div>
                     <div
                         className="absolute inset-0 z-20 cursor-none"
@@ -1097,11 +1090,11 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                 <p className="reveal delay-2000 text-base md:text-xl lg:text-2xl font-mono text-white drop-shadow-2xl">
                     <TypewriterText text={t('hero.scramble') as string} delay={2000} onComplete={() => setTypewriterDone(true)} />
                 </p>
-                <h2 className="text-2xl md:text-4xl lg:text-5xl font-brick text-brick-red drop-shadow-[0_0_15px_rgba(var(--brick-red-rgb),0.5)] min-h-[50px] flex items-center justify-center">
+                <h2 className="text-2xl md:text-4xl lg:text-5xl font-brick text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.5)] min-h-[50px] flex items-center justify-center">
                     {typewriterDone && <FadeEntryText text={t('hero.subtitle') as string} delay={900} />}
                 </h2>
             </div>
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-brick-red/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-[#DC2626]/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
         </section>
     );
 };
@@ -1385,7 +1378,7 @@ const Philosophy = () => {
     const { t } = useTranslation();
 
     return (
-        <section className="relative w-full pt-20 pb-0 bg-brick-black z-20 border-t border-white/10 overflow-hidden">
+        <section className="relative w-full pt-20 pb-0 bg-[#050505] z-20 border-t border-white/5 overflow-hidden">
             <ParticleBackground />
 
             {/* NOISE OVERLAY */}
@@ -1397,11 +1390,11 @@ const Philosophy = () => {
                 <div className="mb-20 reveal w-full flex flex-col items-center">
                     <div className="w-full flex justify-center mb-6">
                         <div className="relative w-5 h-5">
-                            <div className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full animate-breathe blur-[2px]" style={{ background: 'radial-gradient(circle at center, rgba(var(--brick-red-rgb),0.55) 0%, rgba(var(--brick-red-rgb),0.18) 45%, rgba(var(--brick-red-rgb),0) 75%)' }}></div>
-                            <div className="absolute left-1/2 top-1/2 w-[2px] h-[2px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brick-red/60"></div>
+                            <div className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full animate-breathe blur-[2px]" style={{ background: 'radial-gradient(circle at center, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0.18) 45%, rgba(220,38,38,0) 75%)' }}></div>
+                            <div className="absolute left-1/2 top-1/2 w-[2px] h-[2px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DC2626]/60"></div>
                         </div>
                     </div>
-                    <span className="text-4xl md:text-6xl font-brick text-white bg-brick-black px-4 text-center">{t('philosophy.belief_label')}</span>
+                    <span className="text-4xl md:text-6xl font-brick text-white bg-[#050505] px-4 text-center">{t('philosophy.belief_label')}</span>
                 </div>
                 <div className="flex flex-col gap-24 w-full">
                     <PhilosophyItem title={t('philosophy.raw.title')} text={t('philosophy.raw.text')} titleSize="text-2xl md:text-3xl" index={0} />
@@ -1428,7 +1421,7 @@ const PhilosophyItem = ({ title, text, titleSize = 'text-4xl md:text-6xl', index
         transition={{ duration: 2.2, delay: index * 0.4, ease: "easeOut" }}
         className="flex flex-col items-center group cursor-default"
     >
-        <h2 className={`${titleSize} font-brick text-white mb-4 transition-colors duration-500 group-hover:text-brick-red`}>{title}</h2>
+        <h2 className={`${titleSize} font-brick text-white mb-4 transition-colors duration-500 group-hover:text-[#DC2626]`}>{title}</h2>
         <p className="text-base md:text-lg text-white font-light max-w-lg leading-relaxed transition-colors duration-300">{text}</p>
     </motion.div>
 );
@@ -1437,7 +1430,7 @@ const PhilosophyItem = ({ title, text, titleSize = 'text-4xl md:text-6xl', index
 // Um pequeno elemento decorativo de "dado" que processa
 const DataChip = ({ label, value }: { label: string, value: string }) => (
     <div className="flex flex-col gap-1">
-        <span className="text-[8px] font-mono text-brick-gray/60 tracking-widest uppercase">{label}</span>
+        <span className="text-[8px] font-mono text-[#9CA3AF]/60 tracking-widest uppercase">{label}</span>
         <span className="text-[10px] font-mono text-white/90 tracking-widest uppercase border-b border-white/10 pb-0.5">{value}</span>
     </div>
 );
@@ -1446,7 +1439,19 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
     const containerRef = useRef<HTMLDivElement>(null);
     const bgRef = useRef<HTMLDivElement>(null);
     const settings = work.imageSettingsHome || { x: 50, y: 50, scale: 1.2 };
+
+    // State only for hover visibility
     const [isHovered, setIsHovered] = useState(false);
+
+    const { t } = useTranslation();
+    const randomHash = useMemo(() => Math.random().toString(36).substring(7).toUpperCase(), []);
+    const [categoryLabel, categoryMeta] = useMemo(() => {
+        if (work.category.includes(':')) {
+            const parts = work.category.split(':');
+            return [parts[0].trim(), parts.slice(1).join(':').trim()];
+        }
+        return [work.id, work.category];
+    }, [work.category, work.id]);
 
     return (
         <div
@@ -1454,65 +1459,79 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             onClick={() => work.hasDetail && onOpen(work)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={`reveal relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-brick-red transition-colors duration-300 bg-brick-black group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
+            className={`reveal relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-[#DC2626] transition-colors duration-300 bg-[#050505]/90 group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
             style={{
-                containerType: 'inline-size',
                 flexGrow: isHovered ? 1.6 : 1,
                 flexShrink: 0,
-                willChange: 'flex-grow',
-                transition: 'flex-grow 1.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms ease',
+                willChange: 'flex-grow, opacity, transform, border-color',
+                transition: `flex-grow 1.4s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.2s ease-out, transform 1.2s ease-out, border-color 500ms ease`,
             }}
         >
-            {/* BACKGROUND IMAGE */}
+            {/* BACKGROUND LAYER - AUTONOMOUS PARALLAX */}
             <div
-                className="absolute inset-0 z-10 animate-float-parallax"
-                style={{ animationDelay: `${index * -4}s` }}
+                className={`absolute inset-0 z-10 animate-float-parallax`}
+                style={{
+                    animationDelay: `${index * -4}s`,
+                    willChange: 'transform',
+                }}
             >
                 <div
                     ref={bgRef}
-                    className="absolute inset-0 sharp-image saturate-[0.8] group-hover:saturate-100 contrast-[1.05] group-hover:brightness-[1.1] transition-[filter] duration-700 ease-out"
+                    className="absolute inset-0 opacity-100 sharp-image filter saturate-[0.8] group-hover:saturate-100 contrast-[1.05] brightness-[1.0] group-hover:brightness-[1.1] transition-[filter] duration-[3000ms] ease-out"
                     style={{
                         backgroundImage: `url('${work.imageHome}')`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center center',
                         transform: `scale(${settings.scale}) translate(${(settings.x - 50) * 2}%, ${(settings.y - 50) * 2}%) translateZ(0)`,
                     }}
-                />
+                ></div>
             </div>
 
-            {/* VIGNETTE & GRADIENT */}
-            <div className="absolute inset-0 z-30 opacity-90 group-hover:opacity-80 transition-opacity duration-700" style={{ background: 'linear-gradient(to top, rgba(5,5,5,0.8) 0%, rgba(5,5,5,0.5) 20%, rgba(5,5,5,0.25) 40%, transparent 65%)' }} />
-            <div className={`absolute inset-0 z-30 pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.8)] transition-opacity duration-700 ${isHovered ? 'opacity-40' : 'opacity-60'}`} />
+            {/* ARTIFICIAL DEPTH OVERLAYS REMOVED FOR CLEANER LOOK */}
 
-            {/* CONTENT */}
-            <div className={`absolute inset-x-0 bottom-0 z-40 p-4 md:p-6 flex flex-col justify-end transition-all duration-500 pointer-events-none ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-                <div className="w-12 h-[2px] bg-brick-red mb-4 shadow-[0_0_8px_#DC2626]" />
-                <h3
-                    className="font-brick text-white leading-[0.9] drop-shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-2"
-                    style={{ fontSize: 'clamp(0.75rem, 7cqw, 3rem)' }}
-                >
+            {/* VIGNETTE & GRADIENT */}
+            <div className="absolute inset-0 z-30 transition-opacity duration-[6000ms] ease-linear opacity-90 group-hover:opacity-80" style={{ background: 'linear-gradient(to top, #050505cc 0%, #05050580 20%, #05050540 40%, transparent 65%)' }}></div>
+            <div className={`absolute inset-0 z-30 transition-opacity duration-[6000ms] ease-linear pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.8)] ${isHovered ? 'opacity-40' : 'opacity-60'}`}></div>
+
+            {/* CONTENT LAYER - ULTRA MINIMALIST NO BLOCKS */}
+            <div className={`absolute inset-x-0 bottom-0 z-40 p-6 md:p-10 flex flex-col justify-end transition-all duration-500 pointer-events-none ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
+
+                {/* DECORATIVE LINE */}
+                <div className="w-12 h-[2px] bg-[#DC2626] mb-4 shadow-[0_0_8px_#DC2626]"></div>
+
+                {/* CATEGORY & META */}
+                <div className="flex items-center gap-3 mb-2">
+                    <span className="font-mono text-[10px] text-[#DC2626] tracking-[0.2em] uppercase">{categoryLabel}</span>
+                    <span className="text-white/20 text-[10px] font-light">|</span>
+                    <span className="font-mono text-[10px] text-white/60 tracking-widest uppercase">{categoryMeta}</span>
+                </div>
+
+                {/* TITLE - CLEAN & BOLD */}
+                <h3 className="text-3xl md:text-5xl font-brick text-white leading-[0.9] tracking-tight drop-shadow-lg mb-2">
                     {work.title}
                 </h3>
-                <p className="text-white/40 text-[10px] font-mono tracking-widest uppercase mt-2">
+
+                {/* SUBTITLE - LIGHT MONOJET */}
+                <p className="text-white/70 text-[10px] md:text-xs font-mono font-light tracking-wide max-w-md drop-shadow-md uppercase opacity-80 mt-2">
                     {work.subtitle}
                 </p>
             </div>
 
-            {/* ID TAG */}
-            <div className={`absolute top-4 left-4 md:top-6 md:left-6 transition-all duration-500 ${isHovered ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'}`}>
+            {/* ID TAG - Always Visible Minimal */}
+            <div className={`absolute top-6 left-6 transition-all duration-500 ${isHovered ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'}`}>
                 <span className="font-mono text-[10px] text-white/40 tracking-widest border border-white/10 px-2 py-1">
                     {work.id.toUpperCase()}
                 </span>
             </div>
 
-            {/* INDEX */}
-            <div className="absolute top-4 right-4 md:top-6 md:right-6 z-40 opacity-0 group-hover:opacity-60 transition-opacity duration-700 text-[10px] font-mono text-white/40 hidden md:block">
+            {/* EDGE DECOR */}
+            <div className="absolute top-6 right-6 z-40 opacity-0 group-hover:opacity-60 transition-all duration-700 text-[10px] font-mono text-white/40 hidden md:block">
                 {(index + 1).toString().padStart(2, '0')}
             </div>
 
-            {/* SCANLINE */}
-            <div className="absolute inset-0 scanline-effect opacity-0 group-hover:opacity-20 transition-opacity duration-1000 z-20 pointer-events-none" />
-        </div>
+            {/* SCANLINE OVERLAY ON HOVER */}
+            <div className="absolute inset-0 scanline-effect opacity-0 group-hover:opacity-20 transition-opacity duration-1000 z-20 pointer-events-none"></div>
+        </div >
     );
 };
 
@@ -1528,7 +1547,7 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
                 className="px-6 md:px-12 lg:px-24 mb-6 flex items-center gap-3"
             >
                 <span className="flex-shrink-0 flex items-center self-center">
-                    <span className="block w-1 h-1 rounded-full bg-brick-red animate-dot-pulse"></span>
+                    <span className="block w-1 h-1 rounded-full bg-[#DC2626] animate-dot-pulse"></span>
                 </span>
                 <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] uppercase leading-none">{t('works_page.title')}</span>
             </motion.div>
@@ -1635,7 +1654,7 @@ const TunnelBackground = () => {
                 const ptsA = getOctPoints(cx, cy, a.w, a.h);
                 const ptsB = getOctPoints(cx, cy, b.w, b.h);
                 const lo = Math.min(a.opacity, b.opacity) * 0.13;
-                ctx.strokeStyle = `rgba(var(--brick-red-rgb),${lo})`;
+                ctx.strokeStyle = `rgba(220,38,38,${lo})`;
                 ctx.lineWidth = 0.5;
                 ctx.beginPath();
                 for (let j = 0; j < 8; j++) {
@@ -1649,7 +1668,7 @@ const TunnelBackground = () => {
             computed.forEach(({ w, h, opacity, isAccent }) => {
                 if (w < 2 || h < 2) return;
                 ctx.strokeStyle = isAccent
-                    ? `rgba(var(--brick-red-rgb),${opacity * 0.6})`
+                    ? `rgba(220,38,38,${opacity * 0.6})`
                     : `rgba(255,255,255,${opacity * 0.07})`;
                 ctx.lineWidth = isAccent ? 1 : 0.5;
                 drawOctagon(cx, cy, w, h);
@@ -1903,21 +1922,21 @@ const StarchildBackground = () => {
             <motion.div
                 animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.25, 0.1] }}
                 transition={{ duration: 24, ease: "easeInOut", repeat: Infinity }}
-                className="absolute w-[150vw] h-[150vw] md:w-[90vw] md:h-[90vw] bg-brick-red rounded-full blur-[150px] mix-blend-screen"
+                className="absolute w-[150vw] h-[150vw] md:w-[90vw] md:h-[90vw] bg-[#DC2626] rounded-full blur-[150px] mix-blend-screen"
             />
 
             {/* The Starchild Core Light */}
             <motion.div
                 animate={{ scale: [0.95, 1.05, 0.95], opacity: [0.3, 0.6, 0.3] }}
                 transition={{ duration: 12, ease: "easeInOut", repeat: Infinity, delay: 2 }}
-                className="absolute w-[60vw] h-[60vw] md:w-[35vw] md:h-[35vw] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7)_0%,rgba(var(--brick-red-rgb),0.5)_40%,transparent_70%)] rounded-full blur-[80px] mix-blend-screen"
+                className="absolute w-[60vw] h-[60vw] md:w-[35vw] md:h-[35vw] bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.7)_0%,rgba(220,38,38,0.5)_40%,transparent_70%)] rounded-full blur-[80px] mix-blend-screen"
             />
 
             {/* Majestic Orbital Sweep (Jupiter/Monolith Eclipse style) */}
             <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ duration: 120, ease: "linear", repeat: Infinity }}
-                className="absolute w-[200vw] h-[200vw] md:w-[150vw] md:h-[150vw] bg-[conic-gradient(from_0deg,transparent_0deg,rgba(var(--brick-red-rgb),0.15)_45deg,transparent_90deg,rgba(var(--brick-red-rgb),0.15)_225deg,transparent_270deg)] blur-[60px] z-0"
+                className="absolute w-[200vw] h-[200vw] md:w-[150vw] md:h-[150vw] bg-[conic-gradient(from_0deg,transparent_0deg,rgba(220,38,38,0.15)_45deg,transparent_90deg,rgba(220,38,38,0.15)_225deg,transparent_270deg)] blur-[60px] z-0"
             />
 
             {/* Floating Star Spores */}
@@ -1945,107 +1964,12 @@ const StarchildBackground = () => {
     );
 };
 
-// --- MONOLITH ANIMATION VARIANTS ---
-const staticFromAnim = (anim: Record<string, number[] | string[]>) =>
-    Object.fromEntries(Object.entries(anim).map(([key, values]) => [key, values[0]]));
-
-const monolithAnimations = {
-    // Inner monolith lights
-    leftGleam: {
-        animate: { y: ["1%", "-1%", "0.5%", "-1.5%", "1%"], scaleY: [0.97, 1.03, 0.98, 1.02, 0.97], opacity: [0.08, 0.12, 0.09, 0.13, 0.08] },
-        transition: { duration: 18, ease: "easeInOut", repeat: Infinity, times: [0, 0.28, 0.48, 0.72, 1] }
-    },
-    rightGleam: {
-        animate: { y: ["-1%", "1.5%", "0%", "2%", "-1%"], scaleY: [1.02, 0.97, 1.01, 0.98, 1.02], opacity: [0.07, 0.11, 0.08, 0.12, 0.07] },
-        transition: { duration: 20, ease: "easeInOut", repeat: Infinity, times: [0, 0.22, 0.5, 0.76, 1] }
-    },
-    bottomGlow: {
-        animate: { scaleY: [0.97, 1.03, 0.98, 1.04, 0.97], scaleX: [1.01, 0.98, 1.01, 0.97, 1.01], opacity: [0.12, 0.17, 0.13, 0.18, 0.12] },
-        transition: { duration: 16, ease: "easeInOut", repeat: Infinity, times: [0, 0.3, 0.52, 0.78, 1] }
-    },
-    // Birth cloud (behind monolith)
-    mainNebula: {
-        animate: { opacity: [0.62, 0.72, 0.65, 0.74, 0.6, 0.62], scaleX: [0.98, 1.02, 0.99, 1.03, 0.97, 0.98], scaleY: [1.02, 0.98, 1.01, 0.97, 1.02, 1.02], y: ["0%", "-1%", "-0.5%", "-1.5%", "0.5%", "0%"] },
-        transition: { duration: 22, ease: "easeInOut", repeat: Infinity, times: [0, 0.2, 0.4, 0.62, 0.84, 1] }
-    },
-    innerGlow: {
-        animate: { opacity: [0.75, 0.85, 0.72, 0.88, 0.76, 0.75], scaleX: [0.99, 1.02, 0.98, 1.03, 0.99, 0.99], scaleY: [1.01, 0.98, 1.01, 0.97, 1.02, 1.01], y: ["0.5%", "-1%", "0%", "-1.5%", "0.5%", "0.5%"] },
-        transition: { duration: 19, ease: "easeInOut", repeat: Infinity, delay: 0.2, times: [0, 0.18, 0.38, 0.6, 0.82, 1] }
-    },
-    leftVapor: {
-        animate: { scaleX: [0.98, 1.02, 0.99, 1.03, 0.97, 0.98], scaleY: [1.02, 0.98, 1.01, 0.97, 1.02, 1.02], rotate: [0, 1.5, 0.5, 2, -0.5, 0], y: ["0%", "-1.5%", "-0.5%", "-2.5%", "-0.3%", "0%"], opacity: [0.6, 0.72, 0.64, 0.76, 0.58, 0.6] },
-        transition: { duration: 20, ease: "easeInOut", repeat: Infinity, times: [0, 0.22, 0.42, 0.65, 0.85, 1] }
-    },
-    rightVapor: {
-        animate: { scaleX: [1.02, 0.98, 1.01, 0.97, 1.03, 1.02], scaleY: [0.98, 1.02, 0.99, 1.03, 0.97, 0.98], rotate: [0, -1.5, -0.3, -2, 0.5, 0], y: ["0%", "-1.2%", "-0.3%", "-2%", "0.3%", "0%"], opacity: [0.56, 0.68, 0.6, 0.72, 0.54, 0.56] },
-        transition: { duration: 21, ease: "easeInOut", repeat: Infinity, delay: 0.9, times: [0, 0.2, 0.44, 0.68, 0.86, 1] }
-    },
-    horizonStreak: {
-        animate: { scaleX: [0.98, 1.02, 0.99, 1.03, 0.98], scaleY: [1.02, 0.98, 1.01, 0.97, 1.02], opacity: [0.16, 0.22, 0.18, 0.24, 0.16], y: ["0px", "-1px", "0px", "-2px", "0px"] },
-        transition: { duration: 18, ease: "easeInOut", repeat: Infinity, delay: 0.4, times: [0, 0.24, 0.46, 0.72, 1] }
-    },
-    lowerStreak: {
-        animate: { scaleY: [0.98, 1.03, 0.99, 1.02, 0.98], opacity: [0.12, 0.17, 0.14, 0.18, 0.12], y: ["14px", "12px", "13px", "11px", "14px"] },
-        transition: { duration: 17, ease: "easeInOut", repeat: Infinity, delay: 1.1, times: [0, 0.26, 0.48, 0.74, 1] }
-    },
-    leftWispRed: {
-        animate: { rotate: [0, 2, 0.5, 3, 0], scaleX: [0.98, 1.02, 0.99, 1.03, 0.98], scaleY: [1.02, 0.98, 1.01, 0.97, 1.02], y: ["0%", "-2%", "-0.5%", "-3%", "0%"], opacity: [0.08, 0.13, 0.1, 0.14, 0.08] },
-        transition: { duration: 19, ease: "easeInOut", repeat: Infinity, delay: 0.3, times: [0, 0.24, 0.46, 0.72, 1] }
-    },
-    rightWispRed: {
-        animate: { rotate: [0, -2, -0.5, -3, 0], scaleX: [1.02, 0.98, 1.01, 0.97, 1.02], scaleY: [0.98, 1.02, 0.99, 1.03, 0.98], y: ["0%", "-1.5%", "-0.5%", "-2.5%", "0%"], opacity: [0.08, 0.12, 0.09, 0.13, 0.08] },
-        transition: { duration: 21, ease: "easeInOut", repeat: Infinity, delay: 1.1, times: [0, 0.22, 0.46, 0.74, 1] }
-    },
-    // Front vapor (in front of monolith)
-    broadVapor: {
-        animate: { opacity: [0.34, 0.4, 0.36, 0.42, 0.33, 0.34], scaleX: [0.99, 1.01, 0.99, 1.02, 0.98, 0.99], scaleY: [1.01, 0.98, 1.01, 0.98, 1.02, 1.01], y: ["0px", "-2px", "-1px", "-3px", "1px", "0px"] },
-        transition: { duration: 20, ease: "easeInOut", repeat: Infinity, times: [0, 0.22, 0.42, 0.64, 0.84, 1] }
-    },
-    coreGlow: {
-        animate: { opacity: [0.65, 0.74, 0.68, 0.76, 0.64, 0.65], scaleY: [0.98, 1.02, 0.99, 1.03, 0.97, 0.98], scaleX: [1.01, 0.98, 1.01, 0.98, 1.02, 1.01], y: ["-20px", "-22px", "-20.5px", "-23px", "-19px", "-20px"] },
-        transition: { duration: 18, ease: "easeInOut", repeat: Infinity, times: [0, 0.24, 0.44, 0.66, 0.86, 1] }
-    },
-    horizonLight: {
-        animate: { opacity: [0.72, 0.82, 0.75, 0.85, 0.7, 0.72], scaleX: [0.99, 1.02, 0.99, 1.02, 0.98, 0.99], scaleY: [1.01, 0.98, 1.01, 0.98, 1.02, 1.01], y: ["0px", "-1px", "0px", "-1.5px", "0.5px", "0px"] },
-        transition: { duration: 19, ease: "easeInOut", repeat: Infinity, delay: 0.3, times: [0, 0.2, 0.4, 0.62, 0.84, 1] }
-    },
-    sharpHorizon: {
-        animate: { opacity: [0.45, 0.54, 0.48, 0.56, 0.44, 0.45], scaleX: [0.99, 1.02, 0.99, 1.02, 0.98, 0.99], scaleY: [1.02, 0.98, 1.01, 0.97, 1.03, 1.02] },
-        transition: { duration: 17, ease: "easeInOut", repeat: Infinity, times: [0, 0.22, 0.44, 0.66, 0.86, 1] }
-    },
-    leftWispWhite: {
-        animate: { opacity: [0.24, 0.3, 0.26, 0.31, 0.24], scaleY: [0.98, 1.02, 0.99, 1.03, 0.98], rotate: [-1, 0.5, -0.5, 1, -1], y: ["-12px", "-14px", "-12.5px", "-15px", "-12px"] },
-        transition: { duration: 18, ease: "easeInOut", repeat: Infinity, times: [0, 0.24, 0.46, 0.74, 1] }
-    },
-    rightWispWhite: {
-        animate: { opacity: [0.18, 0.24, 0.2, 0.25, 0.18], scaleY: [1.02, 0.98, 1.01, 0.97, 1.02], rotate: [1, -0.5, 0.5, -1, 1], y: ["6px", "4px", "5.5px", "3px", "6px"] },
-        transition: { duration: 19, ease: "easeInOut", repeat: Infinity, delay: 0.9, times: [0, 0.22, 0.46, 0.74, 1] }
-    },
-    thinStreak: {
-        animate: { opacity: [0.18, 0.23, 0.19, 0.24, 0.18], scaleY: [0.98, 1.02, 0.99, 1.03, 0.98], y: ["1px", "-1px", "0.5px", "-1.5px", "1px"] },
-        transition: { duration: 17, ease: "easeInOut", repeat: Infinity, delay: 0.2, times: [0, 0.24, 0.48, 0.76, 1] }
-    },
-    upperLeftTendril: {
-        animate: { rotate: [0, 2, 0.5, 2.5, 0], scaleX: [0.99, 1.02, 0.99, 1.02, 0.99], scaleY: [1.01, 0.98, 1.01, 0.98, 1.01], y: ["0%", "-2%", "-0.5%", "-3%", "0%"], opacity: [0.14, 0.18, 0.15, 0.19, 0.14] },
-        transition: { duration: 19, ease: "easeInOut", repeat: Infinity, times: [0, 0.24, 0.46, 0.72, 1] }
-    },
-    lowerRightTendril: {
-        animate: { rotate: [0, -2, -0.5, -2.5, 0], scaleX: [1.01, 0.98, 1.01, 0.98, 1.01], scaleY: [0.99, 1.02, 0.99, 1.02, 0.99], y: ["8%", "6%", "7.5%", "5%", "8%"], opacity: [0.12, 0.16, 0.13, 0.17, 0.12] },
-        transition: { duration: 20, ease: "easeInOut", repeat: Infinity, delay: 0.8, times: [0, 0.22, 0.46, 0.74, 1] }
-    }
-};
-
 const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => {
     const ref = useRef<HTMLElement>(null);
     const { t } = useTranslation();
     const clients = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO"];
     const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
     const smoothProgress = useSpring(scrollYProgress, { stiffness: 40, damping: 15, mass: 0.5 });
-    const shouldReduceMotion = useReducedMotion();
-    const getAnimationProps = (anim: typeof monolithAnimations[keyof typeof monolithAnimations]) =>
-        shouldReduceMotion
-            ? { animate: staticFromAnim(anim.animate), transition: { duration: 0 } }
-            : anim;
 
     const planetX = useTransform(smoothProgress, [0, 1], ["-96%", "-92%"]);
     const textY = useTransform(smoothProgress, [0, 1], ["30px", "0px"]);
@@ -2071,7 +1995,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
 
                             <h2 className="font-brick text-[40px] md:text-[60px] lg:text-[80px] text-white tracking-[0.1em] leading-[1.1] uppercase drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
                                 {t('legacy.title_part1')} <br />
-                                <span className="text-brick-red">{t('legacy.title_part2')}</span>
+                                <span className="text-[#DC2626]">{t('legacy.title_part2')}</span>
                             </h2>
 
                             <p className="text-base md:text-lg text-white font-light max-w-lg leading-relaxed text-center">
@@ -2096,17 +2020,32 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                                 className="absolute inset-0"
                                 style={{ willChange: "transform" }}
                             >
-                                <div className="relative w-full h-full rounded-t-[2px] bg-[#000000] border border-white/10 shadow-[inset_0_0_40px_rgba(0,0,0,0.9)] overflow-hidden">
+                                <div className="relative w-full h-full rounded-t-[2px] bg-[#000000] border border-[#1a1a1a] shadow-[inset_0_0_40px_rgba(0,0,0,0.9)] overflow-hidden">
                                     <motion.div
-                                        {...getAnimationProps(monolithAnimations.leftGleam)}
+                                        animate={{
+                                            y: ["1%", "-1%", "0.5%", "-1.5%", "1%"],
+                                            scaleY: [0.97, 1.03, 0.98, 1.02, 0.97],
+                                            opacity: [0.08, 0.12, 0.09, 0.13, 0.08]
+                                        }}
+                                        transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, times: [0, 0.28, 0.48, 0.72, 1] }}
                                         className="absolute inset-y-0 left-[-16%] w-[52%] bg-gradient-to-r from-transparent via-white/18 to-transparent blur-[10px] mix-blend-screen"
                                     />
                                     <motion.div
-                                        {...getAnimationProps(monolithAnimations.rightGleam)}
-                                        className="absolute inset-y-0 right-[-20%] w-[46%] bg-gradient-to-l from-transparent via-brick-red/18 to-transparent blur-[12px] mix-blend-screen"
+                                        animate={{
+                                            y: ["-1%", "1.5%", "0%", "2%", "-1%"],
+                                            scaleY: [1.02, 0.97, 1.01, 0.98, 1.02],
+                                            opacity: [0.07, 0.11, 0.08, 0.12, 0.07]
+                                        }}
+                                        transition={{ duration: 20, ease: "easeInOut", repeat: Infinity, times: [0, 0.22, 0.5, 0.76, 1] }}
+                                        className="absolute inset-y-0 right-[-20%] w-[46%] bg-gradient-to-l from-transparent via-[#DC2626]/18 to-transparent blur-[12px] mix-blend-screen"
                                     />
                                     <motion.div
-                                        {...getAnimationProps(monolithAnimations.bottomGlow)}
+                                        animate={{
+                                            scaleY: [0.97, 1.03, 0.98, 1.04, 0.97],
+                                            scaleX: [1.01, 0.98, 1.01, 0.97, 1.01],
+                                            opacity: [0.12, 0.17, 0.13, 0.18, 0.12]
+                                        }}
+                                        transition={{ duration: 16, ease: "easeInOut", repeat: Infinity, times: [0, 0.3, 0.52, 0.78, 1] }}
                                         className="absolute bottom-[-8%] left-1/2 h-[40%] w-[132%] -translate-x-1/2 bg-[radial-gradient(ellipse_at_center,rgba(255,255,255,0.34)_0%,rgba(255,255,255,0.12)_32%,rgba(255,255,255,0)_76%)] blur-[12px] mix-blend-screen"
                                     />
                                 </div>
@@ -2120,61 +2059,89 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                         >
                             {/* Main nebula — breathes + morphs */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.mainNebula)}
+                                animate={{
+                                    opacity: [0.62, 0.72, 0.65, 0.74, 0.6, 0.62],
+                                    scaleX: [0.98, 1.02, 0.99, 1.03, 0.97, 0.98],
+                                    scaleY: [1.02, 0.98, 1.01, 0.97, 1.02, 1.02],
+                                    y: ["0%", "-1%", "-0.5%", "-1.5%", "0.5%", "0%"]
+                                }}
+                                transition={{ duration: 22, ease: "easeInOut", repeat: Infinity, times: [0, 0.2, 0.4, 0.62, 0.84, 1] }}
                                 className="absolute h-[220px] md:h-[250px] rounded-full mix-blend-screen"
                                 style={{
                                     willChange: "transform, opacity",
                                     width: "min(94vw, 1120px)",
-                                    background: "radial-gradient(ellipse at center, rgba(255,120,120,0.16) 0%, rgba(var(--brick-red-rgb),0.56) 22%, rgba(var(--brick-red-rgb),0.38) 44%, rgba(120,10,10,0.18) 63%, rgba(0,0,0,0) 84%)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,120,120,0.16) 0%, rgba(220,38,38,0.56) 22%, rgba(220,38,38,0.38) 44%, rgba(120,10,10,0.18) 63%, rgba(0,0,0,0) 84%)",
                                     filter: "blur(74px) saturate(1.08)"
                                 }}
                             />
                             {/* Inner glow band — vertical drift */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.innerGlow)}
+                                animate={{
+                                    opacity: [0.75, 0.85, 0.72, 0.88, 0.76, 0.75],
+                                    scaleX: [0.99, 1.02, 0.98, 1.03, 0.99, 0.99],
+                                    scaleY: [1.01, 0.98, 1.01, 0.97, 1.02, 1.01],
+                                    y: ["0.5%", "-1%", "0%", "-1.5%", "0.5%", "0.5%"]
+                                }}
+                                transition={{ duration: 19, ease: "easeInOut", repeat: Infinity, delay: 0.2, times: [0, 0.18, 0.38, 0.6, 0.82, 1] }}
                                 className="absolute h-[84px] md:h-[110px] rounded-full"
                                 style={{
                                     width: "min(82vw, 760px)",
-                                    background: "radial-gradient(ellipse at center, rgba(255,170,170,0.12) 0%, rgba(var(--brick-red-rgb),0.34) 22%, rgba(var(--brick-red-rgb),0.16) 52%, rgba(0,0,0,0) 78%)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,170,170,0.12) 0%, rgba(220,38,38,0.34) 22%, rgba(220,38,38,0.16) 52%, rgba(0,0,0,0) 78%)",
                                     filter: "blur(26px)",
                                     opacity: 0.95
                                 }}
                             />
                             {/* Left vapor — rises + rotates */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.leftVapor)}
+                                animate={{
+                                    scaleX: [0.98, 1.02, 0.99, 1.03, 0.97, 0.98],
+                                    scaleY: [1.02, 0.98, 1.01, 0.97, 1.02, 1.02],
+                                    rotate: [0, 1.5, 0.5, 2, -0.5, 0],
+                                    y: ["0%", "-1.5%", "-0.5%", "-2.5%", "-0.3%", "0%"],
+                                    opacity: [0.6, 0.72, 0.64, 0.76, 0.58, 0.6]
+                                }}
+                                transition={{ duration: 20, ease: "easeInOut", repeat: Infinity, times: [0, 0.22, 0.42, 0.65, 0.85, 1] }}
                                 className="absolute -translate-x-[30%] h-[96px] md:h-[118px] rounded-full"
                                 style={{
                                     width: "min(30vw, 280px)",
-                                    background: "radial-gradient(ellipse at center, rgba(255,140,140,0.18) 0%, rgba(var(--brick-red-rgb),0.26) 34%, rgba(0,0,0,0) 76%)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,140,140,0.18) 0%, rgba(220,38,38,0.26) 34%, rgba(0,0,0,0) 76%)",
                                     filter: "blur(28px)",
                                     opacity: 0.9
                                 }}
                             />
                             {/* Right vapor — counter-drifts */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.rightVapor)}
+                                animate={{
+                                    scaleX: [1.02, 0.98, 1.01, 0.97, 1.03, 1.02],
+                                    scaleY: [0.98, 1.02, 0.99, 1.03, 0.97, 0.98],
+                                    rotate: [0, -1.5, -0.3, -2, 0.5, 0],
+                                    y: ["0%", "-1.2%", "-0.3%", "-2%", "0.3%", "0%"],
+                                    opacity: [0.56, 0.68, 0.6, 0.72, 0.54, 0.56]
+                                }}
+                                transition={{ duration: 21, ease: "easeInOut", repeat: Infinity, delay: 0.9, times: [0, 0.2, 0.44, 0.68, 0.86, 1] }}
                                 className="absolute translate-x-[30%] h-[88px] md:h-[110px] rounded-full"
                                 style={{
                                     width: "min(28vw, 260px)",
-                                    background: "radial-gradient(ellipse at center, rgba(255,150,150,0.16) 0%, rgba(var(--brick-red-rgb),0.24) 34%, rgba(0,0,0,0) 76%)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,150,150,0.16) 0%, rgba(220,38,38,0.24) 34%, rgba(0,0,0,0) 76%)",
                                     filter: "blur(26px)",
                                     opacity: 0.82
                                 }}
                             />
                             {/* Horizon streak — pulses + morphs */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.horizonStreak)}
+                                animate={{ scaleX: [0.98, 1.02, 0.99, 1.03, 0.98], scaleY: [1.02, 0.98, 1.01, 0.97, 1.02], opacity: [0.16, 0.22, 0.18, 0.24, 0.16], y: ["0px", "-1px", "0px", "-2px", "0px"] }}
+                                transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, delay: 0.4, times: [0, 0.24, 0.46, 0.72, 1] }}
                                 className="absolute h-[42px] md:h-[52px] rounded-full mix-blend-screen"
                                 style={{
                                     width: "min(48vw, 360px)",
-                                    background: "linear-gradient(90deg, rgba(var(--brick-red-rgb),0) 0%, rgba(255,170,170,0.22) 20%, rgba(255,210,210,0.34) 50%, rgba(255,170,170,0.22) 78%, rgba(var(--brick-red-rgb),0) 100%)",
+                                    background: "linear-gradient(90deg, rgba(220,38,38,0) 0%, rgba(255,170,170,0.22) 20%, rgba(255,210,210,0.34) 50%, rgba(255,170,170,0.22) 78%, rgba(220,38,38,0) 100%)",
                                     filter: "blur(18px)"
                                 }}
                             />
                             {/* Lower streak — drifts up */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.lowerStreak)}
+                                animate={{ scaleY: [0.98, 1.03, 0.99, 1.02, 0.98], opacity: [0.12, 0.17, 0.14, 0.18, 0.12], y: ["14px", "12px", "13px", "11px", "14px"] }}
+                                transition={{ duration: 17, ease: "easeInOut", repeat: Infinity, delay: 1.1, times: [0, 0.26, 0.48, 0.74, 1] }}
                                 className="absolute h-[30px] md:h-[38px] rounded-full mix-blend-screen"
                                 style={{
                                     width: "min(40vw, 300px)",
@@ -2184,21 +2151,23 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Left wisp — swirls upward */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.leftWispRed)}
+                                animate={{ rotate: [0, 2, 0.5, 3, 0], scaleX: [0.98, 1.02, 0.99, 1.03, 0.98], scaleY: [1.02, 0.98, 1.01, 0.97, 1.02], y: ["0%", "-2%", "-0.5%", "-3%", "0%"], opacity: [0.08, 0.13, 0.1, 0.14, 0.08] }}
+                                transition={{ duration: 19, ease: "easeInOut", repeat: Infinity, delay: 0.3, times: [0, 0.24, 0.46, 0.72, 1] }}
                                 className="absolute -translate-x-[18%] -translate-y-[10%] h-[58px] md:h-[72px] rounded-full mix-blend-screen"
                                 style={{
                                     width: "min(16vw, 140px)",
-                                    background: "radial-gradient(ellipse at center, rgba(255,180,180,0.18) 0%, rgba(var(--brick-red-rgb),0.2) 40%, rgba(0,0,0,0) 78%)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,180,180,0.18) 0%, rgba(220,38,38,0.2) 40%, rgba(0,0,0,0) 78%)",
                                     filter: "blur(18px)"
                                 }}
                             />
                             {/* Right wisp — swirls opposite */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.rightWispRed)}
+                                animate={{ rotate: [0, -2, -0.5, -3, 0], scaleX: [1.02, 0.98, 1.01, 0.97, 1.02], scaleY: [0.98, 1.02, 0.99, 1.03, 0.98], y: ["0%", "-1.5%", "-0.5%", "-2.5%", "0%"], opacity: [0.08, 0.12, 0.09, 0.13, 0.08] }}
+                                transition={{ duration: 21, ease: "easeInOut", repeat: Infinity, delay: 1.1, times: [0, 0.22, 0.46, 0.74, 1] }}
                                 className="absolute translate-x-[16%] translate-y-[6%] h-[54px] md:h-[68px] rounded-full mix-blend-screen"
                                 style={{
                                     width: "min(15vw, 128px)",
-                                    background: "radial-gradient(ellipse at center, rgba(255,170,170,0.14) 0%, rgba(var(--brick-red-rgb),0.18) 42%, rgba(0,0,0,0) 78%)",
+                                    background: "radial-gradient(ellipse at center, rgba(255,170,170,0.14) 0%, rgba(220,38,38,0.18) 42%, rgba(0,0,0,0) 78%)",
                                     filter: "blur(18px)"
                                 }}
                             />
@@ -2211,7 +2180,13 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                         >
                             {/* Broad white vapor — breathes + morphs vertically */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.broadVapor)}
+                                animate={{
+                                    opacity: [0.34, 0.4, 0.36, 0.42, 0.33, 0.34],
+                                    scaleX: [0.99, 1.01, 0.99, 1.02, 0.98, 0.99],
+                                    scaleY: [1.01, 0.98, 1.01, 0.98, 1.02, 1.01],
+                                    y: ["0px", "-2px", "-1px", "-3px", "1px", "0px"]
+                                }}
+                                transition={{ duration: 20, ease: "easeInOut", repeat: Infinity, times: [0, 0.22, 0.42, 0.64, 0.84, 1] }}
                                 className="absolute h-[104px] md:h-[130px] rounded-full mix-blend-normal"
                                 style={{
                                     willChange: "opacity, transform",
@@ -2222,7 +2197,13 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Core glow — rises gently */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.coreGlow)}
+                                animate={{
+                                    opacity: [0.65, 0.74, 0.68, 0.76, 0.64, 0.65],
+                                    scaleY: [0.98, 1.02, 0.99, 1.03, 0.97, 0.98],
+                                    scaleX: [1.01, 0.98, 1.01, 0.98, 1.02, 1.01],
+                                    y: ["-20px", "-22px", "-20.5px", "-23px", "-19px", "-20px"]
+                                }}
+                                transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, times: [0, 0.24, 0.44, 0.66, 0.86, 1] }}
                                 className="absolute h-[96px] md:h-[128px] rounded-full"
                                 style={{
                                     width: "min(24vw, 220px)",
@@ -2233,7 +2214,13 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Horizon light — pulses with vertical morph */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.horizonLight)}
+                                animate={{
+                                    opacity: [0.72, 0.82, 0.75, 0.85, 0.7, 0.72],
+                                    scaleX: [0.99, 1.02, 0.99, 1.02, 0.98, 0.99],
+                                    scaleY: [1.01, 0.98, 1.01, 0.98, 1.02, 1.01],
+                                    y: ["0px", "-1px", "0px", "-1.5px", "0.5px", "0px"]
+                                }}
+                                transition={{ duration: 19, ease: "easeInOut", repeat: Infinity, delay: 0.3, times: [0, 0.2, 0.4, 0.62, 0.84, 1] }}
                                 className="absolute h-[42px] md:h-[56px] rounded-full"
                                 style={{
                                     width: "min(74vw, 580px)",
@@ -2244,7 +2231,12 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Sharp horizon line — breathes */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.sharpHorizon)}
+                                animate={{
+                                    opacity: [0.45, 0.54, 0.48, 0.56, 0.44, 0.45],
+                                    scaleX: [0.99, 1.02, 0.99, 1.02, 0.98, 0.99],
+                                    scaleY: [1.02, 0.98, 1.01, 0.97, 1.03, 1.02]
+                                }}
+                                transition={{ duration: 17, ease: "easeInOut", repeat: Infinity, times: [0, 0.22, 0.44, 0.66, 0.86, 1] }}
                                 className="absolute h-[24px] md:h-[30px] rounded-full mix-blend-normal"
                                 style={{
                                     willChange: "opacity",
@@ -2255,7 +2247,8 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Left wisp — swirls upward */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.leftWispWhite)}
+                                animate={{ opacity: [0.24, 0.3, 0.26, 0.31, 0.24], scaleY: [0.98, 1.02, 0.99, 1.03, 0.98], rotate: [-1, 0.5, -0.5, 1, -1], y: ["-12px", "-14px", "-12.5px", "-15px", "-12px"] }}
+                                transition={{ duration: 18, ease: "easeInOut", repeat: Infinity, times: [0, 0.24, 0.46, 0.74, 1] }}
                                 className="absolute -translate-x-[16%] h-[18px] md:h-[22px] rounded-full mix-blend-normal"
                                 style={{
                                     willChange: "opacity",
@@ -2266,7 +2259,8 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Right wisp — counter-swirls */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.rightWispWhite)}
+                                animate={{ opacity: [0.18, 0.24, 0.2, 0.25, 0.18], scaleY: [1.02, 0.98, 1.01, 0.97, 1.02], rotate: [1, -0.5, 0.5, -1, 1], y: ["6px", "4px", "5.5px", "3px", "6px"] }}
+                                transition={{ duration: 19, ease: "easeInOut", repeat: Infinity, delay: 0.9, times: [0, 0.22, 0.46, 0.74, 1] }}
                                 className="absolute translate-x-[18%] h-[16px] md:h-[20px] rounded-full mix-blend-normal"
                                 style={{
                                     willChange: "opacity",
@@ -2277,7 +2271,8 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Thin inner streak — vertical pulse */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.thinStreak)}
+                                animate={{ opacity: [0.18, 0.23, 0.19, 0.24, 0.18], scaleY: [0.98, 1.02, 0.99, 1.03, 0.98], y: ["1px", "-1px", "0.5px", "-1.5px", "1px"] }}
+                                transition={{ duration: 17, ease: "easeInOut", repeat: Infinity, delay: 0.2, times: [0, 0.24, 0.48, 0.76, 1] }}
                                 className="absolute h-[12px] md:h-[16px] rounded-full mix-blend-normal"
                                 style={{
                                     width: "min(34vw, 250px)",
@@ -2287,7 +2282,8 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Upper-left tendril — spirals upward */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.upperLeftTendril)}
+                                animate={{ rotate: [0, 2, 0.5, 2.5, 0], scaleX: [0.99, 1.02, 0.99, 1.02, 0.99], scaleY: [1.01, 0.98, 1.01, 0.98, 1.01], y: ["0%", "-2%", "-0.5%", "-3%", "0%"], opacity: [0.14, 0.18, 0.15, 0.19, 0.14] }}
+                                transition={{ duration: 19, ease: "easeInOut", repeat: Infinity, times: [0, 0.24, 0.46, 0.72, 1] }}
                                 className="absolute -translate-x-[10%] -translate-y-[12%] h-[24px] md:h-[30px] rounded-full mix-blend-normal"
                                 style={{
                                     width: "min(12vw, 100px)",
@@ -2297,7 +2293,8 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                             />
                             {/* Lower-right tendril — spirals opposite */}
                             <motion.div
-                                {...getAnimationProps(monolithAnimations.lowerRightTendril)}
+                                animate={{ rotate: [0, -2, -0.5, -2.5, 0], scaleX: [1.01, 0.98, 1.01, 0.98, 1.01], scaleY: [0.99, 1.02, 0.99, 1.02, 0.99], y: ["8%", "6%", "7.5%", "5%", "8%"], opacity: [0.12, 0.16, 0.13, 0.17, 0.12] }}
+                                transition={{ duration: 20, ease: "easeInOut", repeat: Infinity, delay: 0.8, times: [0, 0.22, 0.46, 0.74, 1] }}
                                 className="absolute translate-x-[12%] translate-y-[10%] h-[20px] md:h-[26px] rounded-full mix-blend-normal"
                                 style={{
                                     width: "min(10vw, 84px)",
@@ -2317,15 +2314,15 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                         className="flex flex-col items-center text-center px-6 w-full max-w-4xl z-30 relative gap-10 md:gap-12"
                     >
                         <div className="flex items-center justify-center gap-3 w-full">
-                            <span className="h-px w-12 md:w-24 bg-gradient-to-r from-transparent to-brick-red/40"></span>
-                            <span className="font-sans font-bold text-[9px] md:text-[10px] text-brick-gray uppercase tracking-[0.2em] md:tracking-[0.3em]">Clientes Brick</span>
-                            <span className="h-px w-12 md:w-24 bg-gradient-to-l from-transparent to-brick-red/40"></span>
+                            <span className="h-px w-12 md:w-24 bg-gradient-to-r from-transparent to-[#DC2626]/40"></span>
+                            <span className="font-sans font-bold text-[9px] md:text-[10px] text-[#9CA3AF] uppercase tracking-[0.2em] md:tracking-[0.3em]">Clientes Brick</span>
+                            <span className="h-px w-12 md:w-24 bg-gradient-to-l from-transparent to-[#DC2626]/40"></span>
                         </div>
 
                         {/* Clients as Silent Constellations */}
                         <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 md:gap-x-16 md:gap-y-6 opacity-60 hover:opacity-100 transition-opacity duration-1000">
                             {clients.map((client, i) => (
-                                <span key={i} className="font-mono text-[8px] md:text-[10px] text-brick-gray uppercase tracking-[0.3em] md:tracking-[0.4em] transition-all duration-700 hover:text-white hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] cursor-default">
+                                <span key={i} className="font-mono text-[8px] md:text-[10px] text-[#9CA3AF] uppercase tracking-[0.3em] md:tracking-[0.4em] transition-all duration-700 hover:text-white hover:drop-shadow-[0_0_10px_rgba(255,255,255,0.5)] cursor-default">
                                     {client}
                                 </span>
                             ))}
@@ -2339,14 +2336,14 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
             {/* PART 2: O MÉTODO / A CRENÇA - Estrelas de fundo */}
             <section ref={ref} className="relative w-full bg-transparent flex flex-col items-center py-16 md:py-20 overflow-hidden border-none text-white">
                 {/* Subtle red ambiance replacing the heavy planet */}
-                <div className="absolute top-1/2 left-0 w-[150vw] md:w-[100vw] h-[150vh] bg-[radial-gradient(ellipse_at_left_center,rgba(var(--brick-red-rgb),0.05)_0%,transparent_60%)] pointer-events-none z-10 -translate-y-1/2 -translate-x-1/2"></div>
+                <div className="absolute top-1/2 left-0 w-[150vw] md:w-[100vw] h-[150vh] bg-[radial-gradient(ellipse_at_left_center,rgba(220,38,38,0.05)_0%,transparent_60%)] pointer-events-none z-10 -translate-y-1/2 -translate-x-1/2"></div>
 
                 <div className="max-w-4xl mx-auto px-6 relative z-30 flex flex-col items-center text-center w-full">
                     <div className="mb-16 md:mb-20 reveal w-full flex flex-col items-center gap-10 md:gap-12">
                         <div className="w-full flex justify-center">
                             <div className="relative w-5 h-5">
-                                <div className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full animate-breathe blur-[2px]" style={{ background: 'radial-gradient(circle at center, rgba(var(--brick-red-rgb),0.55) 0%, rgba(var(--brick-red-rgb),0.18) 45%, rgba(var(--brick-red-rgb),0) 75%)' }}></div>
-                                <div className="absolute left-1/2 top-1/2 w-[2px] h-[2px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-brick-red/60"></div>
+                                <div className="absolute left-1/2 top-1/2 w-5 h-5 -translate-x-1/2 -translate-y-1/2 rounded-full animate-breathe blur-[2px]" style={{ background: 'radial-gradient(circle at center, rgba(220,38,38,0.55) 0%, rgba(220,38,38,0.18) 45%, rgba(220,38,38,0) 75%)' }}></div>
+                                <div className="absolute left-1/2 top-1/2 w-[2px] h-[2px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#DC2626]/60"></div>
                             </div>
                         </div>
                         <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] md:tracking-[1em] uppercase">
@@ -2364,7 +2361,7 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
             {/* PART 3: FOOTER CTA (The Climax) */}
             <section className="relative w-full bg-transparent flex flex-col items-center pt-16 md:pt-20 pb-0 overflow-x-hidden">
                 {/* Colossal Red Aura emanating from the CTA to set the mood */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] md:w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_at_center,rgba(var(--brick-red-rgb),0.12)_0%,transparent_50%)] pointer-events-none z-0 blur-[100px]"></div>
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] md:w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_at_center,rgba(220,38,38,0.12)_0%,transparent_50%)] pointer-events-none z-0 blur-[100px]"></div>
 
                 <div className="flex flex-col items-center text-center reveal relative z-30 w-full mb-32 md:mb-36 px-6 md:px-12 gap-10 md:gap-12">
 
@@ -2374,11 +2371,11 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
 
                     {/* Subtitle with Scramble Effect & Lasers */}
                     <div className="flex items-center gap-4 md:gap-6">
-                        <div className="w-8 md:w-16 h-[1px] bg-gradient-to-r from-transparent to-brick-red"></div>
-                        <h2 className="text-[10px] md:text-xs font-ai text-brick-red uppercase tracking-[0.3em] md:tracking-[0.5em] drop-shadow-[0_0_10px_rgba(var(--brick-red-rgb),0.8)]">
+                        <div className="w-8 md:w-16 h-[1px] bg-gradient-to-r from-transparent to-[#DC2626]"></div>
+                        <h2 className="text-[10px] md:text-xs font-ai text-[#DC2626] uppercase tracking-[0.3em] md:tracking-[0.5em] drop-shadow-[0_0_10px_rgba(220,38,38,0.8)]">
                             <ScrambleText text={t('footer.complex_problem')} hoverTrigger={true} triggerOnReveal={true} delay={500} />
                         </h2>
-                        <div className="w-8 md:w-16 h-[1px] bg-gradient-to-l from-transparent to-brick-red"></div>
+                        <div className="w-8 md:w-16 h-[1px] bg-gradient-to-l from-transparent to-[#DC2626]"></div>
                     </div>
 
                     {/* Massive Climax Typography */}
@@ -2387,11 +2384,11 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                     </h1>
 
                     {/* Highly polished, weighty contact button */}
-                    <MagneticButton onClick={onChat} className="group relative overflow-hidden border border-white/10 hover:border-brick-red hover:bg-brick-red/5 hover:shadow-[0_0_40px_rgba(var(--brick-red-rgb),0.2)] transition-all duration-700 px-10 py-5 md:px-16 md:py-6 backdrop-blur-sm">
+                    <MagneticButton onClick={onChat} className="group relative overflow-hidden border border-white/10 hover:border-[#DC2626] hover:bg-[#DC2626]/5 hover:shadow-[0_0_40px_rgba(220,38,38,0.2)] transition-all duration-700 px-10 py-5 md:px-16 md:py-6 backdrop-blur-sm">
                         {/* Hover glass scanner beam */}
                         <div className="absolute top-0 left-[-100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-[-45deg] group-hover:left-[200%] transition-all duration-1000 ease-in-out"></div>
                         <span className="relative z-10 text-xs md:text-sm font-ai font-bold text-white tracking-[0.2em] md:tracking-[0.3em] uppercase">
-                            {t('footer.talk_to_us')} <span className="text-brick-red animate-blink group-hover:text-white">_</span>
+                            {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
                         </span>
                     </MagneticButton>
                 </div>
@@ -2400,17 +2397,17 @@ const UnifiedEnding = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () =
                 <div className="mt-auto w-full relative z-30">
                     {/* Digital fiber separator */}
                     <div className="w-full h-px mb-6 relative overflow-hidden">
-                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brick-red/10 to-transparent" />
-                        <div className="absolute top-0 h-full w-[15%] animate-fiber bg-[linear-gradient(90deg,transparent,rgba(var(--brick-red-rgb),0.25),transparent)]" />
-                        <div className="absolute top-0 h-full w-[15%] animate-fiber-b bg-[linear-gradient(90deg,transparent,rgba(var(--brick-red-rgb),0.25),transparent)]" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#DC2626]/10 to-transparent" />
+                        <div className="absolute top-0 h-full w-[15%] animate-fiber bg-[linear-gradient(90deg,transparent,rgba(220,38,38,0.25),transparent)]" />
+                        <div className="absolute top-0 h-full w-[15%] animate-fiber-b bg-[linear-gradient(90deg,transparent,rgba(220,38,38,0.25),transparent)]" />
                     </div>
                     <div className="w-full px-6 md:px-12 lg:px-24 pb-6 flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="flex gap-6">
                             {['LinkedIn', 'Instagram'].map((social) => (
-                                <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white/50 hover:text-brick-red tracking-widest uppercase transition-colors duration-500">{social}</a>
+                                <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white/50 hover:text-[#DC2626] tracking-widest uppercase transition-colors duration-500">{social}</a>
                             ))}
                         </div>
-                        <div className="text-[9px] uppercase tracking-[0.2em] text-brick-gray/30 font-bold text-center md:text-right flex flex-col items-center md:items-end gap-1">
+                        <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/30 font-bold text-center md:text-right flex flex-col items-center md:items-end gap-1">
                             <span>&copy; 2026 Brick AI.</span>
                             <span className="hidden md:inline">{t('footer.generative_division')}</span>
                             <span>{t('footer.rights_reserved')}</span>
@@ -2535,10 +2532,10 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                                 {project.videoUrl && (
                                     <div className={`absolute top-0 left-0 flex items-center justify-center right-0 bottom-[55%] ${isHorizontal ? 'md:bottom-0 md:right-[380px]' : ''}`}>
                                         <div className="relative group/mono">
-                                            <div className="absolute -inset-3 border border-brick-red/20 transition-all duration-1000 group-hover/mono:border-brick-red/50"></div>
-                                            <div className="w-14 h-28 border border-brick-red flex items-center justify-center group-hover/mono:shadow-[0_0_20px_rgba(var(--brick-red-rgb),0.4)] transition-all duration-700 bg-transparent">
+                                            <div className="absolute -inset-3 border border-[#DC2626]/20 transition-all duration-1000 group-hover/mono:border-[#DC2626]/50"></div>
+                                            <div className="w-14 h-28 border border-[#DC2626] flex items-center justify-center group-hover/mono:shadow-[0_0_20px_rgba(220,38,38,0.4)] transition-all duration-700 bg-transparent">
                                                 <svg viewBox="0 0 20 22" className="w-4 h-[18px] ml-0.5" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <polygon points="2,1 18,11 2,21" stroke="var(--brick-red)" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
+                                                    <polygon points="2,1 18,11 2,21" stroke="#DC2626" strokeWidth="1.5" strokeLinejoin="round" fill="none" />
                                                 </svg>
                                             </div>
                                         </div>
@@ -2560,7 +2557,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                     <button
                         onClick={() => setPanelHidden(false)}
                         className={`absolute z-30 flex items-center justify-center transition-all duration-300
-                            border border-white/20 bg-brick-black/80 backdrop-blur-sm hover:bg-white/10 hover:border-white/40
+                            border border-white/20 bg-[#050505]/80 backdrop-blur-sm hover:bg-white/10 hover:border-white/40
                             ${isHorizontal
                                 ? 'hidden md:flex top-1/2 -translate-y-1/2 right-0 w-5 h-14 rounded-l-sm'
                                 : 'left-1/2 -translate-x-1/2 bottom-0 h-5 w-14 rounded-t-sm'
@@ -2576,10 +2573,10 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                 {/* ─── INFO PANEL HUD OVERLAY ───────────────────────────── */}
                 <div className={`absolute z-20 flex flex-col overflow-hidden transition-all duration-700
                     ${isHorizontal
-                        ? `bottom-0 left-0 right-0 h-[55%] border-t border-white/10 bg-brick-black/95 backdrop-blur-xl
-                           md:bottom-0 md:left-auto md:right-0 md:top-0 md:h-full md:w-[380px] md:border-t-0 md:border-l md:bg-brick-black/80
+                        ? `bottom-0 left-0 right-0 h-[55%] border-t border-white/10 bg-[#050505]/95 backdrop-blur-xl
+                           md:bottom-0 md:left-auto md:right-0 md:top-0 md:h-full md:w-[380px] md:border-t-0 md:border-l md:bg-[#050505]/80
                            ${panelHidden ? 'translate-y-full md:translate-y-0 md:translate-x-full' : 'translate-y-0 md:translate-x-0'}`
-                        : `bottom-0 left-0 right-0 h-[55%] border-t border-white/10 bg-brick-black/95 backdrop-blur-xl
+                        : `bottom-0 left-0 right-0 h-[55%] border-t border-white/10 bg-[#050505]/95 backdrop-blur-xl
                            ${panelHidden ? 'translate-y-full' : 'translate-y-0'}`
                     }`}>
 
@@ -2600,14 +2597,14 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                             {/* Title */}
                             <div className="relative">
                                 <h2
-                                    className="font-brick text-white uppercase break-words overflow-wrap-anywhere"
+                                    className="font-brick text-white uppercase"
                                     style={{
-                                        fontSize: 'clamp(1.6rem, 3vw, 2.8rem)',
-                                        lineHeight: '0.85',
+                                        fontSize: 'clamp(2rem, 3.5vw, 3.2rem)',
+                                        lineHeight: '0.82',
                                         letterSpacing: '-0.03em',
                                     }}
                                 >
-                                    {project.titleFull || project.title}
+                                    {project.title}
                                 </h2>
                                 <div className="flex items-center gap-4 mt-4">
                                     <div className="h-px w-6 bg-white/20"></div>
@@ -2618,7 +2615,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
 
                         <div className="px-8 py-4 mb-8">
                             <div className="font-mono text-[8px] text-white/20 mb-4 tracking-[0.4em]">// SYSTEM_LOG</div>
-                            <p className="text-white text-[12px] leading-[1.7] tracking-[0.04em] max-w-md font-mono border-l border-white/10 pl-5">
+                            <p className="text-white/50 text-[12px] leading-[1.7] tracking-[0.04em] max-w-md font-mono border-l border-white/5 pl-5">
                                 {project.longDesc || project.desc}
                             </p>
                         </div>
@@ -2629,7 +2626,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                                 <div className="space-y-4">
                                     <div className="font-mono text-[7px] text-white/20 mb-4 tracking-[0.4em] uppercase">COLABORADORES_PROJETO</div>
                                     {project.credits.map((credit, idx) => (
-                                        <div key={idx} className="flex justify-between items-baseline border-b border-white/10 pb-2">
+                                        <div key={idx} className="flex justify-between items-baseline border-b border-white/5 pb-2">
                                             <span className="font-mono text-[8px] text-white/30 uppercase tracking-[0.2em]">{credit.role}</span>
                                             <span className="font-mono text-[10px] text-white/80 tracking-wider uppercase">{credit.name}</span>
                                         </div>
@@ -2639,7 +2636,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                         )}
                     </div>
                     {/* FIXED FOOTER: GEN_DIVISION */}
-                    <div className="flex-shrink-0 px-4 pb-4 md:px-10 md:pb-6 border-t border-white/10 pt-3">
+                    <div className="flex-shrink-0 px-4 pb-4 md:px-10 md:pb-6 border-t border-white/5 pt-3">
                         <div className="flex items-center justify-between font-mono text-[9px] text-white/20 tracking-[0.5em] uppercase">
                             <span>GEN_DIVISION // AUTHENTICATED</span>
                             <span className="text-white/5">0XBRK_772</span>
@@ -2664,13 +2661,13 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
 
     return (
         <div
-            className={`group relative w-full aspect-square border border-white/10 bg-brick-black overflow-hidden cursor-pointer hover:border-brick-red transition-colors duration-300 reveal`}
+            className={`group relative w-full aspect-square border border-white/10 bg-[#050505] overflow-hidden cursor-pointer hover:border-[#DC2626] transition-colors duration-300 reveal`}
             style={{ animationDelay: `${index * 50}ms` }}
             onClick={() => onOpen(work)}
         >
             {/* UPDATED FILTERS FOR VISIBILITY */}
             <div
-                className="absolute inset-0 opacity-100 sharp-image saturate-[0.9] group-hover:saturate-110 brightness-95 group-hover:brightness-105 transition-[filter] duration-700"
+                className="absolute inset-0 opacity-100 sharp-image saturate-[0.9] group-hover:saturate-110 brightness-95 group-hover:brightness-105 group-hover:opacity-100 transition-all duration-700"
                 style={{
                     backgroundImage: `url('${work.imageWorks || work.imageHome}')`,
                     backgroundSize: 'cover',
@@ -2680,23 +2677,23 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
             ></div>
 
             {/* Tech Grid Overlay for consistency */}
-            <div className="absolute inset-0 bg-tech-grid opacity-20 z-10 pointer-events-none group-hover:opacity-10 transition-opacity duration-700"></div>
+            <div className="absolute inset-0 bg-tech-grid opacity-20 z-10 pointer-events-none group-hover:opacity-10 transition-opacity duration-300"></div>
 
             <div className="scanline-effect z-20"></div>
             {/* UPDATED GRADIENT OPACITY */}
-            <div className="absolute inset-0 bg-gradient-to-t from-brick-black/90 via-transparent to-transparent opacity-100 group-hover:opacity-85 transition-opacity duration-1000 ease-out z-20"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-transparent to-transparent group-hover:opacity-70 transition-opacity duration-300 z-20"></div>
 
             <div className="absolute inset-0 p-4 flex flex-col justify-between z-30">
                 <div className="flex justify-between items-start opacity-50 group-hover:opacity-100 transition-opacity duration-300">
-                    <span className="font-mono text-[9px] tracking-widest text-brick-red">{(index + 1).toString().padStart(3, '0')}</span>
+                    <span className="font-mono text-[9px] tracking-widest text-[#DC2626]">{(index + 1).toString().padStart(3, '0')}</span>
                 </div>
-                <div className="transform translate-y-1 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    <h3 className="text-sm font-brick text-white leading-tight mb-1.5 tracking-tight group-hover:text-brick-red transition-colors line-clamp-2">{work.title}</h3>
-                    <p className="text-[9px] text-white font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-1">{work.desc}</p>
+                <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                    <h3 className="text-sm font-brick text-white leading-tight mb-1.5 tracking-tight group-hover:text-[#DC2626] transition-colors line-clamp-2">{work.title}</h3>
+                    <p className="text-[9px] text-[#9CA3AF] font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-1">{work.desc}</p>
                 </div>
             </div>
-            <div className="absolute top-0 left-0 w-2 h-2 border-l border-t border-white/30 group-hover:border-brick-red transition-colors z-40"></div>
-            <div className="absolute bottom-0 right-0 w-2 h-2 border-r border-b border-white/30 group-hover:border-brick-red transition-colors z-40"></div>
+            <div className="absolute top-0 left-0 w-2 h-2 border-l border-t border-white/30 group-hover:border-[#DC2626] transition-colors z-40"></div>
+            <div className="absolute bottom-0 right-0 w-2 h-2 border-r border-b border-white/30 group-hover:border-[#DC2626] transition-colors z-40"></div>
         </div>
     );
 };
@@ -2705,12 +2702,12 @@ const WorksFilter = ({ categories, activeCategory, onSelect }: { categories: str
     const { t } = useTranslation();
     return (
         <div className="flex flex-wrap gap-4 mb-12 border-b border-white/10 pb-6 reveal">
-            <span className="text-[10px] font-ai text-brick-gray uppercase py-2 mr-4 hidden md:block">{t('works_page.protocols')} //</span>
+            <span className="text-[10px] font-ai text-[#9CA3AF] uppercase py-2 mr-4 hidden md:block">{t('works_page.protocols')} //</span>
             {categories.map((cat) => (
                 <button
                     key={cat}
                     onClick={() => onSelect(cat)}
-                    className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 px-3 py-1 border ${activeCategory === 'ALL' && cat === 'ALL' ? 'bg-brick-red border-brick-red text-white' : activeCategory === cat ? 'bg-brick-red border-brick-red text-white' : 'bg-transparent border-transparent text-brick-gray hover:text-white hover:border-white/20'}`}
+                    className={`text-[10px] font-bold tracking-[0.2em] uppercase transition-all duration-300 px-3 py-1 border ${activeCategory === 'ALL' && cat === 'ALL' ? 'bg-[#DC2626] border-[#DC2626] text-white' : activeCategory === cat ? 'bg-[#DC2626] border-[#DC2626] text-white' : 'bg-transparent border-transparent text-[#9CA3AF] hover:text-white hover:border-white/20'}`}
                 >
                     {cat}
                 </button>
@@ -2755,15 +2752,15 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-                <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
+            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
             <main className="pt-32 md:pt-40 min-h-screen flex flex-col">
                 <section className="w-full px-6 md:px-12 lg:px-24 mb-16 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('works_page.archive_index').split('_').slice(0, -1).join('_')}_<span className="text-brick-red">{t('works_page.archive_index').split('_').slice(-1)[0]}</span></h1>
-                            <p className="font-mono text-[10px] md:text-xs tracking-widest max-w-xl animate-system-input"><span className="text-brick-red">&gt;&gt; </span> <span className="text-brick-gray">{t('works_page.accessing')} <span className="text-white">{works.length}</span> {t('works_page.entries_found')}</span></p>
+                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('works_page.archive_index').split('_').slice(0, -1).join('_')}_<span className="text-[#DC2626]">{t('works_page.archive_index').split('_').slice(-1)[0]}</span></h1>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest max-w-xl animate-system-input"><span className="text-[#DC2626]">&gt;&gt; </span> <span className="text-[#9CA3AF]">{t('works_page.accessing')} <span className="text-white">{works.length}</span> {t('works_page.entries_found')}</span></p>
                         </div>
                     </div>
                 </section>
@@ -2774,7 +2771,7 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
                         ))}
                     </div>
                     {filteredWorks.length === 0 && (
-                        <div className="w-full h-64 flex items-center justify-center border border-white/10 border-dashed text-brick-gray font-mono text-sm tracking-widest reveal">{t('works_page.no_data')}</div>
+                        <div className="w-full h-64 flex items-center justify-center border border-white/10 border-dashed text-[#9CA3AF] font-mono text-sm tracking-widest reveal">{t('works_page.no_data')}</div>
                     )}
                 </section>
             </main>
@@ -2790,21 +2787,21 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, 
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
-            <button onClick={onBack} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-                <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_index')}
+            <button onClick={onBack} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_index')}
             </button>
-            <main className="pt-32 md:pt-40 min-h-screen flex flex-col bg-brick-black pb-32 md:pb-40 px-4 md:px-8" onClick={onBack}>
+            <main className="pt-32 md:pt-40 min-h-screen flex flex-col bg-[#050505] pb-32 md:pb-40 px-4 md:px-8" onClick={onBack}>
                 <article className="w-full max-w-5xl mx-auto mt-12 md:mt-16 animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
-                    <div className="relative border border-white/10 bg-brick-surface backdrop-blur-sm overflow-hidden">
-                        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brick-red to-transparent opacity-80"></div>
+                    <div className="relative border border-white/10 bg-[#070707] backdrop-blur-sm overflow-hidden">
+                        <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-[#DC2626] to-transparent opacity-80"></div>
 
                         <header className="px-7 md:px-14 pt-12 md:pt-16 pb-12 border-b border-white/10">
                             <div className="max-w-3xl mx-auto">
                                 <div className="flex flex-wrap justify-start gap-3 md:gap-4 items-center mb-7 text-[10px] font-mono uppercase tracking-widest md:-ml-8">
-                                    <span className="text-brick-red">LOG_ID: {post.id}</span>
-                                    <span className="text-brick-gray">DATE: {post.date}</span>
+                                    <span className="text-[#DC2626]">LOG_ID: {post.id}</span>
+                                    <span className="text-[#9CA3AF]">DATE: {post.date}</span>
                                     {post.tags.map((tag: string) => (
-                                        <span key={tag} className="border border-white/15 bg-white/[0.02] px-2 py-1 text-white/40">{tag}</span>
+                                        <span key={tag} className="border border-white/15 bg-white/[0.02] px-2 py-1 text-white/60">{tag}</span>
                                     ))}
                                 </div>
 
@@ -2812,7 +2809,7 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, 
                                     {postTitle.toUpperCase() === 'A MÁQUINA NÃO TEM ALMA. NÓS TEMOS.' ? (
                                         <>
                                             A MÁQUINA NÃO TEM ALMA.{' '}
-                                            <span className="text-brick-red drop-shadow-[0_0_15px_rgba(var(--brick-red-rgb),0.45)]">NÓS TEMOS.</span>
+                                            <span className="text-[#DC2626] drop-shadow-[0_0_15px_rgba(220,38,38,0.45)]">NÓS TEMOS.</span>
                                         </>
                                     ) : postTitle}
                                 </h1>
@@ -2825,7 +2822,7 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, 
 
                         <div className="px-7 md:px-14 py-12 md:py-16">
                             <div className="max-w-3xl mx-auto">
-                                <div className="prose prose-invert prose-lg max-w-none prose-p:text-[#d2d5db] prose-p:leading-relaxed md:prose-p:leading-loose prose-p:mb-6 md:prose-p:mb-8 prose-headings:font-brick prose-headings:text-white prose-headings:mt-10 prose-headings:mb-4 prose-strong:text-white prose-blockquote:border-brick-red prose-blockquote:text-white/85 prose-blockquote:my-8 prose-a:text-brick-red hover:prose-a:text-white">
+                                <div className="prose prose-invert prose-lg max-w-none prose-p:text-[#d2d5db] prose-p:leading-relaxed md:prose-p:leading-loose prose-p:mb-6 md:prose-p:mb-8 prose-headings:font-brick prose-headings:text-white prose-headings:mt-10 prose-headings:mb-4 prose-strong:text-white prose-blockquote:border-[#DC2626] prose-blockquote:text-white/85 prose-blockquote:my-8 prose-a:text-[#DC2626] hover:prose-a:text-white">
                                     {typeof post.content === 'string'
                                         ? (post.content as string).split('\n\n').filter(Boolean).map((paragraph, idx) => (
                                             <p key={idx} className="mb-8 text-base md:text-lg font-light text-[#d2d5db] leading-relaxed md:leading-loose">
@@ -2850,34 +2847,34 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-                <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
+            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
-            <main className="pt-32 md:pt-40 min-h-screen flex flex-col bg-brick-black">
+            <main className="pt-32 md:pt-40 min-h-screen flex flex-col bg-[#050505]">
                 <section className="w-full px-6 md:px-12 lg:px-24 mb-16 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
-                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('transmissions_page.title').split('_').slice(0, -1).join('_')}_<span className="text-brick-red">{t('transmissions_page.title').split('_').slice(-1)[0]}</span></h1>
-                            <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input"><span className="text-brick-red">&gt;&gt; </span> <span className="text-brick-gray">{t('transmissions_page.incoming')} <span className="text-white">{transmissions.length}</span> {t('transmissions_page.records')}</span></p>
+                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('transmissions_page.title').split('_').slice(0, -1).join('_')}_<span className="text-[#DC2626]">{t('transmissions_page.title').split('_').slice(-1)[0]}</span></h1>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input"><span className="text-[#DC2626]">&gt;&gt; </span> <span className="text-[#9CA3AF]">{t('transmissions_page.incoming')} <span className="text-white">{transmissions.length}</span> {t('transmissions_page.records')}</span></p>
                         </div>
                     </div>
                 </section>
                 <section className="w-full px-6 md:px-12 lg:px-24 flex-1 pb-32 md:pb-40 reveal">
                     <div className="space-y-2 md:space-y-3 bg-transparent border-t border-white/10">
                         {transmissions.map((post) => (
-                            <div key={post.id} onClick={() => onSelectPost(post)} className="block group bg-brick-black hover:bg-brick-dark transition-colors p-8 md:p-10 border border-white/10 cursor-pointer">
+                            <div key={post.id} onClick={() => onSelectPost(post)} className="block group bg-[#050505] hover:bg-[#0a0a0a] transition-colors p-9 md:p-12 border border-white/10 cursor-pointer">
                                 <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-4">
-                                    <h3 className="text-xl md:text-2xl font-brick text-white tracking-tight group-hover:text-brick-red transition-colors">
+                                    <h3 className="text-xl md:text-3xl font-brick text-white tracking-tight group-hover:text-[#DC2626] transition-colors">
                                         {getLocalizedField(post.title, i18n.language, 'UNTITLED')}
                                     </h3>
-                                    <span className="font-mono text-[10px] text-brick-red tracking-widest whitespace-nowrap">{post.date}</span>
+                                    <span className="font-mono text-[10px] text-[#DC2626] tracking-widest whitespace-nowrap">{post.date}</span>
                                 </div>
-                                <p className="text-brick-gray text-sm md:text-base font-light max-w-3xl mb-6 leading-relaxed">
+                                <p className="text-[#9CA3AF] text-sm md:text-base font-light max-w-3xl mb-6 leading-relaxed">
                                     {getLocalizedField(post.excerpt, i18n.language, '')}
                                 </p>
                                 <div className="flex gap-3">
                                     {post.tags.map(tag => (
-                                        <span key={tag} className="text-[9px] font-mono border border-white/10 px-3 py-1.5 text-brick-gray/60 uppercase tracking-wider">{tag}</span>
+                                        <span key={tag} className="text-[9px] font-mono border border-white/10 px-3 py-1.5 text-[#9CA3AF]/60 uppercase tracking-wider">{tag}</span>
                                     ))}
                                 </div>
                             </div>
@@ -2893,24 +2890,24 @@ const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectP
 const Footer = ({ onChat, onAdmin }: { onChat: () => void, onAdmin?: () => void }) => {
     const { t } = useTranslation();
     return (
-        <footer className="w-full py-12 px-6 md:px-12 lg:px-24 bg-brick-black border-t border-white/10 relative z-10 overflow-hidden">
+        <footer className="w-full py-12 px-6 md:px-12 lg:px-24 bg-[#050505] border-t border-white/5 relative z-10 overflow-hidden">
             <ParticleBackground reactToMouse={false} />
-            <div className="absolute inset-0 bg-gradient-to-t from-brick-black via-transparent to-transparent pointer-events-none z-[1]"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#050505] via-transparent to-transparent pointer-events-none z-[1]"></div>
 
             <div className="flex flex-col items-center text-center gap-8 reveal relative z-10">
-                <h2 className="text-xs md:text-sm font-ai text-brick-gray uppercase tracking-[0.2em]">{t('footer.complex_problem')}</h2>
-                <p className="text-3xl md:text-5xl lg:text-6xl font-brick text-brick-red leading-none max-w-5xl drop-shadow-[0_0_15px_rgba(var(--brick-red-rgb),0.5)]">{t('footer.we_have_intelligence')}</p>
-                <MagneticButton onClick={onChat} className="mt-6 text-base md:text-lg font-ai font-bold text-white hover:text-brick-red group">
-                    {t('footer.talk_to_us')} <span className="text-brick-red animate-blink group-hover:text-white">_</span>
+                <h2 className="text-xs md:text-sm font-ai text-[#9CA3AF] uppercase tracking-[0.2em]">{t('footer.complex_problem')}</h2>
+                <p className="text-3xl md:text-5xl lg:text-6xl font-brick text-[#DC2626] leading-none max-w-5xl drop-shadow-[0_0_15px_rgba(220,38,38,0.5)]">{t('footer.we_have_intelligence')}</p>
+                <MagneticButton onClick={onChat} className="mt-6 text-base md:text-lg font-ai font-bold text-white hover:text-[#DC2626] group">
+                    {t('footer.talk_to_us')} <span className="text-[#DC2626] animate-blink group-hover:text-white">_</span>
                 </MagneticButton>
             </div>
-            <div className="mt-8 border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-start gap-4 reveal">
+            <div className="mt-8 border-t border-white/5 pt-6 flex flex-col md:flex-row justify-between items-start gap-4 reveal">
                 <div className="flex gap-6">
                     {['LinkedIn', 'Instagram'].map((social) => (
-                        <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-brick-red tracking-widest uppercase transition-colors">{social}</a>
+                        <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-[#DC2626] tracking-widest uppercase transition-colors">{social}</a>
                     ))}
                 </div>
-                <div className="text-[9px] uppercase tracking-[0.2em] text-brick-gray/40 font-bold text-right">
+                <div className="text-[9px] uppercase tracking-[0.2em] text-[#9CA3AF]/40 font-bold text-right">
                     <span className="block mb-2">&copy; 2026 Brick AI.</span>
                     <span className="hidden md:inline">{t('footer.generative_division')}</span>
                     <span className="block mt-1">{t('footer.rights_reserved')}</span>
@@ -2971,11 +2968,11 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
     };
 
     return (
-        <div className="min-h-screen pt-32 md:pt-40 pb-32 md:pb-40 flex flex-col items-center justify-start font-mono relative bg-brick-black overflow-x-hidden">
+        <div className="min-h-screen pt-32 md:pt-40 pb-32 md:pb-40 flex flex-col items-center justify-start font-mono relative bg-[#050505] overflow-x-hidden">
 
             {/* RETURN BUTTON */}
-            <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-                <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
+            <button onClick={onBack} className="fixed top-24 left-6 md:left-12 text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
             <main className="w-full px-6 md:px-12 lg:px-24 relative z-10 flex flex-col gap-24">
@@ -2984,39 +2981,39 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                 <section className="w-full animate-fade-in-up">
                     <div className="flex flex-col md:flex-row justify-between items-end mb-12">
                         <div>
-                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">REACH_<span className="text-brick-red">HUMANS</span></h1>
-                            <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input"><span className="text-brick-red">&gt;&gt; </span> <span className="text-brick-gray">{t('chat.manual_override')}</span></p>
+                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">REACH_<span className="text-[#DC2626]">HUMANS</span></h1>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input"><span className="text-[#DC2626]">&gt;&gt; </span> <span className="text-[#9CA3AF]">{t('chat.manual_override')}</span></p>
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
                         {/* EMAIL */}
-                        <a href="mailto:brick@brick.mov" className="group block bg-brick-dark border border-white/10 p-8 md:p-10 hover:border-brick-red transition-colors duration-300">
-                            <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
-                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">Channel_01</span>
+                        <a href="mailto:brick@brick.mov" className="group block bg-[#0A0A0A] border border-white/5 p-8 hover:border-[#DC2626] transition-colors duration-500">
+                            <div className="mb-4 text-[#DC2626] opacity-50 group-hover:opacity-100 transition-opacity">
+                                <span className="text-[10px] uppercase tracking-widest border border-[#DC2626] px-2 py-1">Channel_01</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-brick-red transition-colors">{t('chat.email_streams')}</h3>
-                            <p className="text-brick-gray text-xs font-mono tracking-widest">BRICK@BRICK.MOV</p>
+                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-[#DC2626] transition-colors">{t('chat.email_streams')}</h3>
+                            <p className="text-[#9CA3AF] text-xs font-mono tracking-widest">BRICK@BRICK.MOV</p>
                         </a>
 
                         {/* WHATSAPP */}
-                        <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="group block bg-brick-dark border border-white/10 p-8 md:p-10 hover:border-brick-red transition-colors duration-300">
-                            <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
-                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">Channel_02</span>
+                        <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="group block bg-[#0A0A0A] border border-white/5 p-8 hover:border-[#DC2626] transition-colors duration-500">
+                            <div className="mb-4 text-[#DC2626] opacity-50 group-hover:opacity-100 transition-opacity">
+                                <span className="text-[10px] uppercase tracking-widest border border-[#DC2626] px-2 py-1">Channel_02</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-brick-red transition-colors">{t('chat.direct_message')}</h3>
-                            <p className="text-brick-gray text-xs font-mono tracking-widest">WHATSAPP</p>
+                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-[#DC2626] transition-colors">{t('chat.direct_message')}</h3>
+                            <p className="text-[#9CA3AF] text-xs font-mono tracking-widest">WHATSAPP</p>
                         </a>
 
                         {/* SOCIAL */}
-                        <div className="group block bg-brick-dark border border-white/10 p-8 md:p-10 hover:border-brick-red transition-colors duration-300">
-                            <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
-                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">Channel_03</span>
+                        <div className="group block bg-[#0A0A0A] border border-white/5 p-8 hover:border-[#DC2626] transition-colors duration-500">
+                            <div className="mb-4 text-[#DC2626] opacity-50 group-hover:opacity-100 transition-opacity">
+                                <span className="text-[10px] uppercase tracking-widest border border-[#DC2626] px-2 py-1">Channel_03</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-4 group-hover:text-brick-red transition-colors">{t('chat.network_nodes')}</h3>
+                            <h3 className="text-2xl font-brick text-white mb-4 group-hover:text-[#DC2626] transition-colors">{t('chat.network_nodes')}</h3>
                             <div className="flex flex-wrap gap-4">
                                 {['LinkedIn', 'Instagram'].map(social => (
-                                    <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-brick-gray hover:text-white uppercase tracking-wider underline decoration-white/20 hover:decoration-white">{social}</a>
+                                    <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-[#9CA3AF] hover:text-white uppercase tracking-wider underline decoration-white/20 hover:decoration-white">{social}</a>
                                 ))}
                             </div>
                         </div>
@@ -3027,30 +3024,30 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                 <section className="w-full flex flex-col md:flex-row gap-0 items-start animate-fade-in-up border-t border-white/10 pt-12" style={{ animationDelay: '0.2s' }}>
 
                     {/* LEFT: THE AVATAR (Static Monolith) */}
-                    <div className="w-full md:w-5/12 flex flex-col items-center justify-center p-12 border-r border-white/10 relative bg-brick-black">
-                        <div className="relative w-[120px] h-[240px] md:w-[150px] md:h-[300px]">
+                    <div className="w-full md:w-5/12 flex flex-col items-center justify-center p-12 border-r border-white/5 relative bg-[#050505]">
+                        <div className="relative w-[150px] h-[300px] md:w-[180px] md:h-[360px]">
                             {/* The Monolith Shape - Identical to Hero but no mouse interaction */}
                             <div
-                                className={`monolith-structure w-full h-full rounded-[2px] relative z-10 shadow-2xl transition-all duration-300 ${isProcessing ? 'shadow-[0_0_60px_rgba(var(--brick-red-rgb),0.3)]' : ''}`}
+                                className={`monolith-structure w-full h-full rounded-[2px] relative z-10 shadow-2xl transition-all duration-300 ${isProcessing ? 'shadow-[0_0_60px_rgba(220,38,38,0.3)]' : ''}`}
                             >
                                 <div className="absolute inset-0 monolith-texture opacity-80 mix-blend-overlay pointer-events-none rounded-[2px] overflow-hidden"></div>
 
                                 {/* Static Atmospherics */}
                                 <div className="centered-layer aura-atmos pointer-events-none opacity-40" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
-                                <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(var(--brick-red-rgb),0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
+                                <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(220,38,38,0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
 
                                 {/* Core Glow / Eye - Pulses on Thinking/Talking */}
-                                <div className={`centered-layer core-atmos pointer-events-none shadow-[0_0_40px_rgba(var(--brick-red-rgb),1)] transition-all duration-200 ${isProcessing ? 'animate-talking scale-150 opacity-100' : 'animate-thinking opacity-80'}`}></div>
+                                <div className={`centered-layer core-atmos pointer-events-none shadow-[0_0_40px_rgba(220,38,38,1)] transition-all duration-200 ${isProcessing ? 'animate-talking scale-150 opacity-100' : 'animate-thinking opacity-80'}`}></div>
 
                                 {/* Glass Reflection */}
-                                <div className="absolute inset-0 border border-white/10 opacity-30 pointer-events-none z-10 rounded-[2px]"></div>
+                                <div className="absolute inset-0 border border-white/5 opacity-30 pointer-events-none z-10 rounded-[2px]"></div>
                                 <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-20"></div>
                             </div>
                         </div>
 
                         <div className="mt-12 text-center">
                             <h2 className="text-4xl font-brick text-white mb-2">{t('chat.mason_intro') ? t('chat.mason_intro').toUpperCase() : "I AM MASON"}</h2>
-                            <p className="text-[10px] text-brick-gray font-mono tracking-widest max-w-[200px] mx-auto uppercase">
+                            <p className="text-[10px] text-[#9CA3AF] font-mono tracking-widest max-w-[200px] mx-auto uppercase">
                                 {t('chat.generative_core')}<br />{t('chat.state')} {isProcessing ? t('chat.active') : t('chat.idle')}
                             </p>
                         </div>
@@ -3058,11 +3055,11 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
 
                     {/* RIGHT: THE TERMINAL (Chat Interface) */}
                     <div className="w-full md:w-7/12 pl-0 md:pl-12">
-                        <div className="w-full bg-brick-dark border border-white/10 flex flex-col h-[70vh] min-h-[500px] md:h-[600px] relative overflow-hidden shadow-2xl">
+                        <div className="w-full bg-[#0A0A0A] border border-white/10 flex flex-col h-[70vh] min-h-[500px] md:h-[600px] relative overflow-hidden shadow-2xl">
                             {/* Terminal Header */}
-                            <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/[0.02]">
+                            <div className="flex items-center justify-between px-6 py-4 border-b border-white/5 bg-white/[0.02]">
                                 <div className="flex items-center gap-3">
-                                    <div className={`w-2 h-2 rounded-full ${isProcessing ? 'bg-brick-red animate-pulse' : 'bg-brick-red'}`}></div>
+                                    <div className={`w-2 h-2 rounded-full ${isProcessing ? 'bg-[#DC2626] animate-pulse' : 'bg-green-500'}`}></div>
                                     <span className="text-[9px] font-mono text-white/50 tracking-[0.2em] uppercase font-bold">
                                         /USR/BIN/MASON_CHAT // v3.2
                                     </span>
@@ -3074,13 +3071,13 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                                 {messages.map((msg, i) => (
                                     <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} animate-fade-in-up`}>
                                         <div className="flex items-center gap-2 mb-2 opacity-50">
-                                            <span className="text-[8px] font-mono text-brick-gray uppercase tracking-[0.2em]">
+                                            <span className="text-[8px] font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">
                                                 {msg.role === 'user' ? 'YOU' : 'MASON'}
                                             </span>
                                         </div>
                                         <div className={`max-w-[90%] p-5 text-sm font-mono leading-relaxed tracking-wide ${msg.role === 'user'
                                             ? 'bg-white/5 text-white/90 border-r-2 border-white/20'
-                                            : 'text-brick-red bg-brick-red/5 border-l-2 border-brick-red/40'
+                                            : 'text-[#DC2626] bg-[#DC2626]/5 border-l-2 border-[#DC2626]/40'
                                             }`}>
                                             {msg.content}
                                         </div>
@@ -3088,9 +3085,9 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                                 ))}
                                 {isProcessing && (
                                     <div className="flex flex-col items-start animate-pulse">
-                                        <span className="text-[8px] font-mono text-brick-red uppercase tracking-[0.2em] mb-2">MASON</span>
-                                        <div className="p-5 bg-brick-red/5 border-l-2 border-brick-red/40">
-                                            <span className="inline-block w-1.5 h-4 bg-brick-red animate-blink"></span>
+                                        <span className="text-[8px] font-mono text-[#DC2626] uppercase tracking-[0.2em] mb-2">MASON</span>
+                                        <div className="p-5 bg-[#DC2626]/5 border-l-2 border-[#DC2626]/40">
+                                            <span className="inline-block w-1.5 h-4 bg-[#DC2626] animate-blink"></span>
                                         </div>
                                     </div>
                                 )}
@@ -3098,14 +3095,14 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             </div>
 
                             {/* Input */}
-                            <div className="p-6 bg-brick-black border-t border-white/10">
+                            <div className="p-6 bg-[#050505] border-t border-white/5">
                                 {!isProcessing && messages.length < 4 && (
                                     <div className="flex flex-wrap gap-2 mb-4">
                                         {SUGGESTIONS.map((query, i) => (
                                             <button
                                                 key={i}
                                                 onClick={() => handleSend(query)}
-                                                className="text-[8px] font-mono uppercase tracking-widest text-brick-gray border border-white/10 bg-white/[0.02] px-3 py-1.5 hover:bg-brick-red hover:text-white hover:border-brick-red transition-all"
+                                                className="text-[8px] font-mono uppercase tracking-widest text-[#9CA3AF] border border-white/10 bg-white/[0.02] px-3 py-1.5 hover:bg-[#DC2626] hover:text-white hover:border-[#DC2626] transition-all"
                                             >
                                                 {query}
                                             </button>
@@ -3113,7 +3110,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                                     </div>
                                 )}
                                 <form onSubmit={handleSend} className="flex items-center gap-4">
-                                    <div className="w-2 h-2 bg-brick-red animate-pulse shrink-0"></div>
+                                    <div className="w-2 h-2 bg-[#DC2626] animate-pulse shrink-0"></div>
                                     <input
                                         type="text"
                                         value={input}
@@ -3149,13 +3146,13 @@ const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, o
 
 
 const InfoCard = ({ number, title, desc }: { number: string, title: string, desc: string }) => (
-    <div className="group relative bg-brick-black p-8 md:p-10 hover:bg-brick-dark transition-colors duration-300 overflow-hidden border border-white/10 hover:border-brick-red border-l-4 border-l-transparent hover:border-l-brick-red flex flex-col">
+    <div className="group relative bg-[#050505] p-8 md:p-10 hover:bg-[#0A0A0A] transition-colors duration-500 overflow-hidden border border-white/5 hover:border-[#DC2626] border-l-4 border-l-transparent hover:border-l-[#DC2626] flex flex-col">
         <div className="absolute top-0 right-0 p-4 opacity-30 group-hover:opacity-100 transition-opacity">
-            <span className="font-mono text-[9px] text-brick-red border border-brick-red px-1 tracking-widest">SEC_{number}</span>
+            <span className="font-mono text-[9px] text-[#DC2626] border border-[#DC2626] px-1 tracking-widest">SEC_{number}</span>
         </div>
         <div className="relative z-10">
-            <h3 className="text-xl md:text-2xl font-brick text-white mb-4 group-hover:text-brick-red transition-colors duration-300 uppercase leading-none">{title}</h3>
-            <p className="text-xs md:text-sm font-mono text-brick-gray leading-relaxed opacity-80">{desc}</p>
+            <h3 className="text-xl md:text-2xl font-brick text-white mb-4 group-hover:text-[#DC2626] transition-colors duration-300 uppercase leading-none">{title}</h3>
+            <p className="text-xs md:text-sm font-mono text-[#9CA3AF] leading-relaxed opacity-80">{desc}</p>
         </div>
         {/* Tech Decor */}
         <div className="scanline-effect opacity-10 group-hover:opacity-20 transition-opacity"></div>
@@ -3163,9 +3160,9 @@ const InfoCard = ({ number, title, desc }: { number: string, title: string, desc
 );
 
 const StatBlock = ({ label, value, sub }: { label: string, value: string, sub: string }) => (
-    <div className="flex flex-col border-l border-white/10 pl-6 py-2 group hover:border-brick-red transition-colors">
-        <span className="font-mono text-[9px] text-brick-gray uppercase tracking-widest mb-1">{label}</span>
-        <span className="font-brick text-3xl md:text-4xl text-white mb-1 group-hover:text-brick-red transition-colors">{value}</span>
+    <div className="flex flex-col border-l border-white/10 pl-6 py-2 group hover:border-[#DC2626] transition-colors">
+        <span className="font-mono text-[9px] text-[#9CA3AF] uppercase tracking-widest mb-1">{label}</span>
+        <span className="font-brick text-3xl md:text-4xl text-white mb-1 group-hover:text-[#DC2626] transition-colors">{value}</span>
         <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">{sub}</span>
     </div>
 );
@@ -3173,33 +3170,33 @@ const StatBlock = ({ label, value, sub }: { label: string, value: string, sub: s
 const LogItem = ({ year, title, desc, highlight = false }: { year: string, title: string, desc: string, highlight?: boolean }) => (
     <div className={`relative pl-8 md:pl-12 group ${highlight ? 'opacity-100' : 'opacity-60 hover:opacity-100'} transition-opacity duration-300`}>
         {/* Dot */}
-        <div className={`absolute left-[-4px] top-1.5 w-2 h-2 rounded-full border-2 border-brick-black z-10 ${highlight ? 'bg-brick-red' : 'bg-[#333] group-hover:bg-white'} transition-colors`}></div>
+        <div className={`absolute left-[-4px] top-1.5 w-2 h-2 rounded-full border-2 border-[#050505] z-10 ${highlight ? 'bg-[#DC2626]' : 'bg-[#333] group-hover:bg-white'} transition-colors`}></div>
 
         <div className="flex flex-col md:flex-row md:items-baseline gap-2 mb-1">
-            <span className={`font-mono text-sm font-bold ${highlight ? 'text-brick-red' : 'text-white'}`}>{year}</span>
+            <span className={`font-mono text-sm font-bold ${highlight ? 'text-[#DC2626]' : 'text-white'}`}>{year}</span>
             <span className="hidden md:inline text-white/20">//</span>
             <h4 className="font-brick text-lg text-white uppercase tracking-wide">{title}</h4>
         </div>
-        <p className="text-xs md:text-sm text-brick-gray font-light leading-relaxed max-w-lg">{desc}</p>
+        <p className="text-xs md:text-sm text-[#9CA3AF] font-light leading-relaxed max-w-lg">{desc}</p>
     </div>
 );
 
 const TeamMember = ({ name, role, id }: { name: string, role: string, id: string }) => (
-    <div className="group relative bg-brick-black border border-white/10 p-8 md:p-10 hover:border-white/20 transition-all duration-300">
+    <div className="group relative bg-[#050505] border border-white/5 p-6 hover:border-white/20 transition-all duration-300">
         <div className="flex justify-between items-start mb-6">
-            <div className="w-12 h-12 bg-white/5 rounded-sm flex items-center justify-center group-hover:bg-brick-red transition-colors duration-300">
-                <span className="font-brick text-brick-red text-xl group-hover:text-black">{name.charAt(0)}</span>
+            <div className="w-12 h-12 bg-white/5 rounded-sm flex items-center justify-center group-hover:bg-[#DC2626] transition-colors duration-300">
+                <span className="font-brick text-[#DC2626] text-xl group-hover:text-black">{name.charAt(0)}</span>
             </div>
             <div className="flex flex-col items-end">
-                <span className="font-mono text-[9px] text-brick-red uppercase tracking-widest mb-1">ID_{id}</span>
+                <span className="font-mono text-[9px] text-[#DC2626] uppercase tracking-widest mb-1">ID_{id}</span>
                 <div className="flex gap-0.5">
                     {[...Array(3)].map((_, i) => <div key={i} className="w-1 h-1 bg-white/20 rounded-full"></div>)}
                 </div>
             </div>
         </div>
         <div>
-            <h4 className="text-lg font-brick text-white group-hover:text-brick-white transition-colors">{name}</h4>
-            <span className="block text-[10px] font-mono text-brick-gray uppercase tracking-widest mt-1 border-t border-white/10 pt-2 inline-block w-full">{role}</span>
+            <h4 className="text-lg font-brick text-white group-hover:text-[#E5E5E5] transition-colors">{name}</h4>
+            <span className="block text-[10px] font-mono text-[#9CA3AF] uppercase tracking-widest mt-1 border-t border-white/10 pt-2 inline-block w-full">{role}</span>
         </div>
     </div>
 );
@@ -3209,13 +3206,13 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
     return (
         <React.Fragment>
             <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
-            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
-                <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
+            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-[#9CA3AF] hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+                <span className="text-[#DC2626] group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
-            <main className="pt-32 md:pt-40 min-h-screen flex flex-col bg-brick-black relative overflow-hidden">
+            <main className="pt-32 md:pt-40 min-h-screen flex flex-col bg-[#050505] relative overflow-hidden">
                 {/* ATMOSPHERE */}
-                <div className="absolute top-0 right-0 w-[60vw] h-[60vh] bg-brick-red/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-30"></div>
+                <div className="absolute top-0 right-0 w-[60vw] h-[60vh] bg-[#DC2626]/5 rounded-full blur-[150px] pointer-events-none z-0 mix-blend-screen opacity-30"></div>
                 <div className="scanline-effect fixed inset-0 z-0 pointer-events-none opacity-20"></div>
 
                 {/* HERO: ORIGIN STORY */}
@@ -3236,12 +3233,12 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                     <div className="flex flex-col items-center text-center gap-10 pb-8">
                         {/* MONOLITH */}
                         <div className="relative">
-                            <div className="monolith-structure w-[120px] h-[240px] md:w-[150px] md:h-[300px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
+                            <div className="monolith-structure w-[100px] h-[200px] md:w-[130px] md:h-[260px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
                                 <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
                                 <div className="centered-layer aura-atmos pointer-events-none opacity-60" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
-                                <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '500px', height: '500px', background: 'radial-gradient(circle at center, rgba(var(--brick-red-rgb),0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
-                                <div className="centered-layer core-atmos animate-breathe pointer-events-none" style={{ width: '40px', height: '40px', filter: 'blur(10px)', background: 'radial-gradient(circle, rgba(var(--brick-red-rgb),1) 0%, rgba(var(--brick-red-rgb),0.4) 40%, transparent 80%)' }}></div>
-                                <div className="absolute inset-0 border border-white/10 opacity-50 pointer-events-none z-10 rounded-[2px]"></div>
+                                <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(220,38,38,0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
+                                <div className="centered-layer core-atmos animate-breathe pointer-events-none" style={{ width: '40px', height: '40px', filter: 'blur(10px)', background: 'radial-gradient(circle, rgba(220,38,38,1) 0%, rgba(220,38,38,0.4) 40%, transparent 80%)' }}></div>
+                                <div className="absolute inset-0 border border-white/5 opacity-50 pointer-events-none z-10 rounded-[2px]"></div>
                             </div>
                         </div>
 
@@ -3249,21 +3246,21 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                         <div className="flex flex-col items-center gap-3">
                             <p className="font-brick text-5xl md:text-6xl lg:text-7xl text-white leading-tight tracking-tight uppercase">
                                 {t('about.title_primary')} {t('about.title_highlight')}<br />
-                                <span className="text-brick-red">{t('about.title_secondary')}</span>
+                                <span className="text-[#DC2626]">{t('about.title_secondary')}</span>
                             </p>
                         </div>
 
                         {/* DESCRIPTION — InfoCard XL */}
-                        <div className="group relative max-w-[692px] w-full bg-brick-black p-8 md:p-10 hover:bg-brick-dark transition-colors duration-300 overflow-hidden border border-white/10 hover:border-brick-red border-l-4 border-l-transparent hover:border-l-brick-red flex flex-col text-left">
+                        <div className="group relative max-w-[692px] w-full bg-[#050505] p-8 md:p-10 hover:bg-[#0A0A0A] transition-colors duration-500 overflow-hidden border border-white/5 hover:border-[#DC2626] border-l-4 border-l-transparent hover:border-l-[#DC2626] flex flex-col text-left">
                             {/* SEC badge */}
                             <div className="absolute top-0 right-0 p-4 opacity-30 group-hover:opacity-100 transition-opacity">
-                                <span className="font-mono text-[9px] text-brick-red border border-brick-red px-1 tracking-widest">SEC_00</span>
+                                <span className="font-mono text-[9px] text-[#DC2626] border border-[#DC2626] px-1 tracking-widest">SEC_00</span>
                             </div>
                             <div className="mb-6 relative z-10">
-                                <h3 className="font-brick text-2xl md:text-3xl text-white mb-4 group-hover:text-brick-red transition-colors duration-300 uppercase leading-none">
+                                <h3 className="font-brick text-2xl md:text-3xl text-white mb-4 group-hover:text-[#DC2626] transition-colors duration-300 uppercase leading-none">
                                     {t('about.description').split('\n\n')[0]}
                                 </h3>
-                                <p className="text-xs md:text-sm font-mono text-brick-gray leading-relaxed opacity-80">
+                                <p className="text-xs md:text-sm font-mono text-[#9CA3AF] leading-relaxed opacity-80">
                                     {t('about.description').split('\n\n')[1]}
                                 </p>
                             </div>
@@ -3276,8 +3273,8 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                     <section className="w-full px-6 md:px-12 lg:px-24 mb-32 reveal">
                         <div>
                         <div className="flex items-center gap-3 mb-8 border-b border-white/10 pb-4">
-                            <Eye className="w-4 h-4 text-brick-red" />
-                            <h2 className="text-xs md:text-sm font-mono text-brick-gray uppercase tracking-[0.2em]">{t('about.manifesto.title')} // {t('about.manifesto.subtitle')}</h2>
+                            <Eye className="w-4 h-4 text-[#DC2626]" />
+                            <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.manifesto.title')} // {t('about.manifesto.subtitle')}</h2>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
                             <InfoCard
@@ -3303,8 +3300,8 @@ const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) =
                     <section className="w-full px-6 md:px-12 lg:px-24 pb-32 md:pb-40 reveal">
                         <div>
                         <div className="flex items-center gap-3 mb-12 border-b border-white/10 pb-4">
-                            <Fingerprint className="w-4 h-4 text-brick-red" />
-                            <h2 className="text-xs md:text-sm font-mono text-brick-gray uppercase tracking-[0.2em]">{t('about.team.title')}</h2>
+                            <Fingerprint className="w-4 h-4 text-[#DC2626]" />
+                            <h2 className="text-xs md:text-sm font-mono text-[#9CA3AF] uppercase tracking-[0.2em]">{t('about.team.title')}</h2>
                         </div>
 
                         <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
@@ -3421,46 +3418,46 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
     };
 
     if (loading) return (
-        <div className="min-h-screen flex items-center justify-center bg-brick-black">
-            <div className="text-brick-red font-mono text-sm animate-pulse">LOADING SYSTEM...</div>
+        <div className="min-h-screen flex items-center justify-center bg-[#050505]">
+            <div className="text-[#DC2626] font-mono text-sm animate-pulse">LOADING SYSTEM...</div>
         </div>
     );
 
     // Login Screen
     if (!isLoggedIn) return (
-        <div className="min-h-screen flex items-center justify-center bg-brick-black p-6">
-            <div className="w-full max-w-md border border-white/10 p-8 bg-brick-dark">
+        <div className="min-h-screen flex items-center justify-center bg-[#050505] p-6">
+            <div className="w-full max-w-md border border-white/10 p-8 bg-[#0a0a0a]">
                 <div className="flex items-center gap-3 mb-8">
-                    <div className="w-3 h-3 bg-brick-red"></div>
+                    <div className="w-3 h-3 bg-[#DC2626]"></div>
                     <h1 className="text-xl font-brick text-white">SYSTEM_ACCESS</h1>
                 </div>
                 <form onSubmit={handleLogin} className="space-y-6">
                     <div>
-                        <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Identifier</label>
+                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Identifier</label>
                         <input
                             type="text"
                             value={identifier}
                             onChange={e => setIdentifier(e.target.value)}
-                            className="w-full bg-transparent border border-white/20 p-3 text-white font-mono text-sm focus:outline-none focus:border-brick-red"
+                            className="w-full bg-transparent border border-white/20 p-3 text-white font-mono text-sm focus:outline-none focus:border-[#DC2626]"
                             placeholder="Email or username"
                         />
                     </div>
                     <div>
-                        <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Password</label>
+                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Password</label>
                         <input
                             type="password"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
-                            className="w-full bg-transparent border border-white/20 p-3 text-white font-mono text-sm focus:outline-none focus:border-brick-red"
+                            className="w-full bg-transparent border border-white/20 p-3 text-white font-mono text-sm focus:outline-none focus:border-[#DC2626]"
                             placeholder="••••••••"
                         />
                     </div>
-                    {loginError && <p className="text-brick-red text-xs font-mono">{loginError}</p>}
-                    <button type="submit" className="w-full bg-brick-red text-white py-3 font-mono text-sm uppercase tracking-widest hover:bg-brick-red/80 transition-colors">
+                    {loginError && <p className="text-[#DC2626] text-xs font-mono">{loginError}</p>}
+                    <button type="submit" className="w-full bg-[#DC2626] text-white py-3 font-mono text-sm uppercase tracking-widest hover:bg-red-700 transition-colors">
                         AUTHENTICATE
                     </button>
                 </form>
-                <button onClick={onHome} className="mt-6 text-brick-gray text-xs font-mono hover:text-white transition-colors">
+                <button onClick={onHome} className="mt-6 text-[#9CA3AF] text-xs font-mono hover:text-white transition-colors">
                     &lt; RETURN TO SURFACE
                 </button>
             </div>
@@ -3469,19 +3466,19 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
 
     // Admin Dashboard
     return (
-        <div className="min-h-screen bg-brick-black p-6 md:p-12">
+        <div className="min-h-screen bg-[#050505] p-6 md:p-12">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
                 <div className="flex justify-between items-center mb-12 border-b border-white/10 pb-6">
                     <div className="flex items-center gap-4">
-                        <div className="w-3 h-3 bg-brick-red animate-pulse"></div>
+                        <div className="w-3 h-3 bg-[#DC2626] animate-pulse"></div>
                         <h1 className="text-2xl font-brick text-white">ADMIN_CONSOLE</h1>
                     </div>
                     <div className="flex gap-4">
-                        <button onClick={onHome} className="text-brick-gray text-xs font-mono hover:text-white transition-colors">
+                        <button onClick={onHome} className="text-[#9CA3AF] text-xs font-mono hover:text-white transition-colors">
                             &lt; HOME
                         </button>
-                        <button onClick={handleLogout} className="text-brick-red text-xs font-mono hover:text-red-400 transition-colors">
+                        <button onClick={handleLogout} className="text-[#DC2626] text-xs font-mono hover:text-red-400 transition-colors">
                             LOGOUT
                         </button>
                     </div>
@@ -3491,13 +3488,13 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                 <div className="flex gap-4 mb-8">
                     <button
                         onClick={() => setActiveTab('works')}
-                        className={`px-6 py-3 text-xs font-mono uppercase tracking-widest border transition-colors ${activeTab === 'works' ? 'bg-brick-red border-brick-red text-white' : 'border-white/20 text-brick-gray hover:text-white'}`}
+                        className={`px-6 py-3 text-xs font-mono uppercase tracking-widest border transition-colors ${activeTab === 'works' ? 'bg-[#DC2626] border-[#DC2626] text-white' : 'border-white/20 text-[#9CA3AF] hover:text-white'}`}
                     >
                         WORKS ({works.length})
                     </button>
                     <button
                         onClick={() => setActiveTab('transmissions')}
-                        className={`px-6 py-3 text-xs font-mono uppercase tracking-widest border transition-colors ${activeTab === 'transmissions' ? 'bg-brick-red border-brick-red text-white' : 'border-white/20 text-brick-gray hover:text-white'}`}
+                        className={`px-6 py-3 text-xs font-mono uppercase tracking-widest border transition-colors ${activeTab === 'transmissions' ? 'bg-[#DC2626] border-[#DC2626] text-white' : 'border-white/20 text-[#9CA3AF] hover:text-white'}`}
                     >
                         TRANSMISSIONS ({transmissions.length})
                     </button>
@@ -3508,7 +3505,7 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                     {activeTab === 'works' && (
                         <div className="space-y-4">
                             <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-sm font-mono text-brick-gray uppercase tracking-widest">Project Database</h2>
+                                <h2 className="text-sm font-mono text-[#9CA3AF] uppercase tracking-widest">Project Database</h2>
                                 <button
                                     onClick={() => setEditingItem({ id: `work_${Date.now()}`, title: '', desc: '', category: 'GENERATIVE', subtitle: '', orientation: 'horizontal', imageHome: '', imageWorks: '', hasDetail: true })}
                                     className="text-xs font-mono bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition-colors"
@@ -3520,11 +3517,11 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                                 <div key={work.id} className="flex justify-between items-center p-4 border border-white/10 hover:border-white/20 transition-colors">
                                     <div>
                                         <h3 className="text-white font-mono text-sm">{work.title}</h3>
-                                        <p className="text-brick-gray text-xs font-mono">{work.category} // {work.subtitle}</p>
+                                        <p className="text-[#9CA3AF] text-xs font-mono">{work.category} // {work.subtitle}</p>
                                     </div>
                                     <div className="flex gap-2">
-                                        <button onClick={() => setEditingItem(work)} className="text-xs font-mono text-brick-gray hover:text-white px-3 py-1 border border-white/10">EDIT</button>
-                                        <button onClick={() => deleteWork(work.id)} className="text-xs font-mono text-brick-red hover:text-red-400 px-3 py-1 border border-brick-red/50">DELETE</button>
+                                        <button onClick={() => setEditingItem(work)} className="text-xs font-mono text-[#9CA3AF] hover:text-white px-3 py-1 border border-white/10">EDIT</button>
+                                        <button onClick={() => deleteWork(work.id)} className="text-xs font-mono text-[#DC2626] hover:text-red-400 px-3 py-1 border border-[#DC2626]/50">DELETE</button>
                                     </div>
                                 </div>
                             ))}
@@ -3534,7 +3531,7 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                     {activeTab === 'transmissions' && (
                         <div className="space-y-4">
                             <div className="flex justify-between items-center mb-6">
-                                <h2 className="text-sm font-mono text-brick-gray uppercase tracking-widest">Neural Logs</h2>
+                                <h2 className="text-sm font-mono text-[#9CA3AF] uppercase tracking-widest">Neural Logs</h2>
                                 <button
                                     onClick={() => setEditingItem({ id: `log_${Date.now()}`, title: '', excerpt: '', date: new Date().toISOString().split('T')[0].replace(/-/g, '.'), tags: [], url: '', content: '' })}
                                     className="text-xs font-mono bg-white/10 px-4 py-2 text-white hover:bg-white/20 transition-colors"
@@ -3546,11 +3543,11 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                                 <div key={post.id} className="flex justify-between items-center p-4 border border-white/10 hover:border-white/20 transition-colors">
                                     <div>
                                         <h3 className="text-white font-mono text-sm">{getLocalizedField(post.title, i18n.language, 'UNTITLED')}</h3>
-                                        <p className="text-brick-gray text-xs font-mono">{post.date} // {post.tags.join(', ')}</p>
+                                        <p className="text-[#9CA3AF] text-xs font-mono">{post.date} // {post.tags.join(', ')}</p>
                                     </div>
                                     <div className="flex gap-2">
-                                        <button onClick={() => setEditingItem(post)} className="text-xs font-mono text-brick-gray hover:text-white px-3 py-1 border border-white/10">EDIT</button>
-                                        <button onClick={() => deleteTransmission(post.id)} className="text-xs font-mono text-brick-red hover:text-red-400 px-3 py-1 border border-brick-red/50">DELETE</button>
+                                        <button onClick={() => setEditingItem(post)} className="text-xs font-mono text-[#9CA3AF] hover:text-white px-3 py-1 border border-white/10">EDIT</button>
+                                        <button onClick={() => deleteTransmission(post.id)} className="text-xs font-mono text-[#DC2626] hover:text-red-400 px-3 py-1 border border-[#DC2626]/50">DELETE</button>
                                     </div>
                                 </div>
                             ))}
@@ -3561,11 +3558,11 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                 {/* Edit Modal - Full Image Editor */}
                 {editingItem && (
                     <div className="fixed inset-0 bg-black/95 z-50 flex items-start justify-center p-6 overflow-y-auto">
-                        <div className="w-full max-w-5xl bg-brick-dark border border-white/10 my-8">
+                        <div className="w-full max-w-5xl bg-[#0a0a0a] border border-white/10 my-8">
                             {/* Header */}
                             <div className="flex justify-between items-center p-6 border-b border-white/10">
                                 <h2 className="text-lg font-brick text-white">{activeTab === 'works' ? 'EDIT_PROJECT' : 'EDIT_TRANSMISSION'}</h2>
-                                <button onClick={() => setEditingItem(null)} className="text-brick-gray hover:text-white text-2xl">&times;</button>
+                                <button onClick={() => setEditingItem(null)} className="text-[#9CA3AF] hover:text-white text-2xl">&times;</button>
                             </div>
 
                             <div className="flex flex-col lg:flex-row">
@@ -3574,15 +3571,15 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
 
                                     {activeTab === 'works' ? (
                                         <>
-                                            <h3 className="text-xs font-mono text-brick-red mb-4 uppercase tracking-widest">Project Info</h3>
+                                            <h3 className="text-xs font-mono text-[#DC2626] mb-4 uppercase tracking-widest">Project Info</h3>
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div>
-                                                    <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">ID</label>
-                                                    <input type="text" value={editingItem.id || ''} onChange={e => setEditingItem({ ...editingItem, id: e.target.value })} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-brick-red" />
+                                                    <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">ID</label>
+                                                    <input type="text" value={editingItem.id || ''} onChange={e => setEditingItem({ ...editingItem, id: e.target.value })} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Category</label>
-                                                    <select value={editingItem.category || ''} onChange={e => setEditingItem({ ...editingItem, category: e.target.value })} className="w-full bg-brick-dark border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-brick-red">
+                                                    <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Category</label>
+                                                    <select value={editingItem.category || ''} onChange={e => setEditingItem({ ...editingItem, category: e.target.value })} className="w-full bg-[#0a0a0a] border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]">
                                                         <option value="GENERATIVE">GENERATIVE</option>
                                                         <option value="VFX">VFX</option>
                                                         <option value="STYLE TRANSFER">STYLE TRANSFER</option>
@@ -3592,63 +3589,63 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                                                 </div>
                                             </div>
                                             <div>
-                                                <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Title</label>
-                                                <input type="text" value={editingItem.title || ''} onChange={e => setEditingItem({ ...editingItem, title: e.target.value })} className="w-full bg-transparent border border-white/20 p-3 text-white font-mono text-sm focus:outline-none focus:border-brick-red" />
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Title</label>
+                                                <input type="text" value={editingItem.title || ''} onChange={e => setEditingItem({ ...editingItem, title: e.target.value })} className="w-full bg-transparent border border-white/20 p-3 text-white font-mono text-sm focus:outline-none focus:border-[#DC2626]" />
                                             </div>
                                             <div>
-                                                <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Subtitle</label>
-                                                <input type="text" value={editingItem.subtitle || ''} onChange={e => setEditingItem({ ...editingItem, subtitle: e.target.value })} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-brick-red" />
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Subtitle</label>
+                                                <input type="text" value={editingItem.subtitle || ''} onChange={e => setEditingItem({ ...editingItem, subtitle: e.target.value })} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
                                             </div>
                                             <div>
-                                                <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Description</label>
-                                                <textarea value={editingItem.desc || ''} onChange={e => setEditingItem({ ...editingItem, desc: e.target.value })} rows={2} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-brick-red resize-none" />
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Description</label>
+                                                <textarea value={editingItem.desc || ''} onChange={e => setEditingItem({ ...editingItem, desc: e.target.value })} rows={2} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626] resize-none" />
                                             </div>
                                             <div>
-                                                <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Long Description</label>
-                                                <textarea value={editingItem.longDesc || ''} onChange={e => setEditingItem({ ...editingItem, longDesc: e.target.value })} rows={3} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-brick-red resize-none" />
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Long Description</label>
+                                                <textarea value={editingItem.longDesc || ''} onChange={e => setEditingItem({ ...editingItem, longDesc: e.target.value })} rows={3} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626] resize-none" />
                                             </div>
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div>
-                                                    <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Orientation</label>
-                                                    <select value={editingItem.orientation || 'horizontal'} onChange={e => setEditingItem({ ...editingItem, orientation: e.target.value })} className="w-full bg-brick-dark border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-brick-red">
+                                                    <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Orientation</label>
+                                                    <select value={editingItem.orientation || 'horizontal'} onChange={e => setEditingItem({ ...editingItem, orientation: e.target.value })} className="w-full bg-[#0a0a0a] border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]">
                                                         <option value="horizontal">Horizontal</option>
                                                         <option value="vertical">Vertical</option>
                                                     </select>
                                                 </div>
                                                 <div>
-                                                    <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Video URL</label>
-                                                    <input type="text" value={editingItem.videoUrl || ''} onChange={e => setEditingItem({ ...editingItem, videoUrl: e.target.value })} placeholder="Vimeo or MP4 URL" className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-brick-red" />
+                                                    <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Video URL</label>
+                                                    <input type="text" value={editingItem.videoUrl || ''} onChange={e => setEditingItem({ ...editingItem, videoUrl: e.target.value })} placeholder="Vimeo or MP4 URL" className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
                                                 </div>
                                             </div>
                                         </>
                                     ) : (
                                         <>
-                                            <h3 className="text-xs font-mono text-brick-red mb-4 uppercase tracking-widest">Transmission Info</h3>
+                                            <h3 className="text-xs font-mono text-[#DC2626] mb-4 uppercase tracking-widest">Transmission Info</h3>
                                             <div>
-                                                <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Title</label>
-                                                <input type="text" value={editingItem.title || ''} onChange={e => setEditingItem({ ...editingItem, title: e.target.value })} className="w-full bg-transparent border border-white/20 p-3 text-white font-mono text-sm focus:outline-none focus:border-brick-red" />
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Title</label>
+                                                <input type="text" value={editingItem.title || ''} onChange={e => setEditingItem({ ...editingItem, title: e.target.value })} className="w-full bg-transparent border border-white/20 p-3 text-white font-mono text-sm focus:outline-none focus:border-[#DC2626]" />
                                             </div>
                                             <div>
-                                                <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Excerpt</label>
-                                                <textarea value={editingItem.excerpt || ''} onChange={e => setEditingItem({ ...editingItem, excerpt: e.target.value })} rows={2} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-brick-red resize-none" />
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Excerpt</label>
+                                                <textarea value={editingItem.excerpt || ''} onChange={e => setEditingItem({ ...editingItem, excerpt: e.target.value })} rows={2} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626] resize-none" />
                                             </div>
                                             <div>
-                                                <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Content</label>
-                                                <textarea value={typeof editingItem.content === 'string' ? editingItem.content : ''} onChange={e => setEditingItem({ ...editingItem, content: e.target.value })} rows={8} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-brick-red resize-none" placeholder="Full article content..." />
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Content</label>
+                                                <textarea value={typeof editingItem.content === 'string' ? editingItem.content : ''} onChange={e => setEditingItem({ ...editingItem, content: e.target.value })} rows={8} className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626] resize-none" placeholder="Full article content..." />
                                             </div>
                                             <div className="grid grid-cols-2 gap-4">
                                                 <div>
-                                                    <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Date</label>
-                                                    <input type="text" value={editingItem.date || ''} onChange={e => setEditingItem({ ...editingItem, date: e.target.value })} placeholder="2025.01.01" className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-brick-red" />
+                                                    <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Date</label>
+                                                    <input type="text" value={editingItem.date || ''} onChange={e => setEditingItem({ ...editingItem, date: e.target.value })} placeholder="2025.01.01" className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
                                                 </div>
                                                 <div>
-                                                    <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Tags (comma sep.)</label>
-                                                    <input type="text" value={Array.isArray(editingItem.tags) ? editingItem.tags.join(', ') : ''} onChange={e => setEditingItem({ ...editingItem, tags: e.target.value.split(',').map((t: string) => t.trim()).filter(Boolean) })} placeholder="TAG1, TAG2" className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-brick-red" />
+                                                    <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Tags (comma sep.)</label>
+                                                    <input type="text" value={Array.isArray(editingItem.tags) ? editingItem.tags.join(', ') : ''} onChange={e => setEditingItem({ ...editingItem, tags: e.target.value.split(',').map((t: string) => t.trim()).filter(Boolean) })} placeholder="TAG1, TAG2" className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
                                                 </div>
                                             </div>
                                             <div>
-                                                <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">URL (slug)</label>
-                                                <input type="text" value={editingItem.url || ''} onChange={e => setEditingItem({ ...editingItem, url: e.target.value })} placeholder="article-slug" className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-brick-red" />
+                                                <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">URL (slug)</label>
+                                                <input type="text" value={editingItem.url || ''} onChange={e => setEditingItem({ ...editingItem, url: e.target.value })} placeholder="article-slug" className="w-full bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
                                             </div>
                                         </>
                                     )}
@@ -3656,13 +3653,13 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
 
                                 {/* Right Side - Image Editor (works only) */}
                                 <div className={`${activeTab === 'works' ? 'lg:w-1/2' : 'hidden'} p-6 space-y-6`}>
-                                    <h3 className="text-xs font-mono text-brick-red mb-4 uppercase tracking-widest">Image Settings</h3>
+                                    <h3 className="text-xs font-mono text-[#DC2626] mb-4 uppercase tracking-widest">Image Settings</h3>
 
                                     {/* Image Upload */}
                                     <div>
-                                        <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Image URL / Upload</label>
+                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Image URL / Upload</label>
                                         <div className="flex gap-2">
-                                            <input type="text" value={editingItem.imageHome || ''} onChange={e => setEditingItem({ ...editingItem, imageHome: e.target.value, imageWorks: e.target.value })} placeholder="Image URL" className="flex-1 bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-brick-red" />
+                                            <input type="text" value={editingItem.imageHome || ''} onChange={e => setEditingItem({ ...editingItem, imageHome: e.target.value, imageWorks: e.target.value })} placeholder="Image URL" className="flex-1 bg-transparent border border-white/20 p-2 text-white font-mono text-xs focus:outline-none focus:border-[#DC2626]" />
                                             <label className="px-4 py-2 bg-white/10 text-white font-mono text-xs cursor-pointer hover:bg-white/20 transition-colors flex items-center">
                                                 UPLOAD
                                                 <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
@@ -3683,34 +3680,34 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
 
                                     {/* Position Controls */}
                                     <div>
-                                        <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">X Position</label>
+                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">X Position</label>
                                         <input type="range" min="0" max="100" step="0.1" value={editingItem.imageSettingsHome?.x ?? 50} onChange={e => {
                                             const newSettings = { ...(editingItem.imageSettingsHome || { x: 50, y: 50, scale: 1.2 }), x: Number(e.target.value) };
                                             setEditingItem({ ...editingItem, imageSettingsHome: newSettings });
-                                        }} className="w-full accent-brick-red" />
+                                        }} className="w-full accent-[#DC2626]" />
                                         <span className="text-[10px] font-mono text-white">{(editingItem.imageSettingsHome?.x || 50).toFixed(1)}%</span>
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Y Position</label>
+                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Y Position</label>
                                         <input type="range" min="0" max="100" step="0.1" value={editingItem.imageSettingsHome?.y ?? 50} onChange={e => {
                                             const newSettings = { ...(editingItem.imageSettingsHome || { x: 50, y: 50, scale: 1.2 }), y: Number(e.target.value) };
                                             setEditingItem({ ...editingItem, imageSettingsHome: newSettings });
-                                        }} className="w-full accent-brick-red" />
+                                        }} className="w-full accent-[#DC2626]" />
                                         <span className="text-[10px] font-mono text-white">{(editingItem.imageSettingsHome?.y || 50).toFixed(1)}%</span>
                                     </div>
                                     <div>
-                                        <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Zoom/Scale</label>
+                                        <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Zoom/Scale</label>
                                         <input type="range" min="100" max="200" step="0.1" value={(editingItem.imageSettingsHome?.scale || 1.2) * 100} onChange={e => {
                                             const newSettings = { ...(editingItem.imageSettingsHome || { x: 50, y: 50, scale: 1.2 }), scale: Number(e.target.value) / 100 };
                                             setEditingItem({ ...editingItem, imageSettingsHome: newSettings });
-                                        }} className="w-full accent-brick-red" />
+                                        }} className="w-full accent-[#DC2626]" />
                                         <span className="text-[10px] font-mono text-white">{((editingItem.imageSettingsHome?.scale || 1.2) * 100).toFixed(1)}%</span>
                                     </div>
 
                                     {/* Live Preview - Home Card */}
                                     <div>
-                                        <label className="block text-[10px] font-mono text-brick-red mb-3 uppercase tracking-widest">HOME PAGE - CARD PREVIEW</label>
-                                        <div className="relative w-64 h-[400px] border border-white/20 overflow-hidden bg-brick-black mx-auto">
+                                        <label className="block text-[10px] font-mono text-[#DC2626] mb-3 uppercase tracking-widest">HOME PAGE - CARD PREVIEW</label>
+                                        <div className="relative w-64 h-[400px] border border-white/20 overflow-hidden bg-[#050505] mx-auto">
                                             {editingItem.imageHome ? (
                                                 <>
                                                     <div
@@ -3722,7 +3719,7 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                                                             transform: `scale(${editingItem.imageSettingsHome?.scale || 1.2}) translate(${((editingItem.imageSettingsHome?.x || 50) - 50) * 2}%, ${((editingItem.imageSettingsHome?.y || 50) - 50) * 2}%) translateZ(0)`
                                                         }}
                                                     />
-                                                    <div className="absolute inset-0 opacity-90" style={{ background: 'linear-gradient(to top, var(--brick-black) 0%, rgba(5,5,5,0.9) 15%, rgba(5,5,5,0.6) 40%, transparent 70%)' }} />
+                                                    <div className="absolute inset-0 opacity-90" style={{ background: 'linear-gradient(to top, #050505 0%, #050505e6 15%, #05050599 40%, transparent 70%)' }} />
                                                     <div className="absolute bottom-4 left-4 right-4 z-10">
                                                         <h4
                                                             className="text-4xl font-brick text-white uppercase tracking-tighter leading-none"
@@ -3733,7 +3730,7 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                                                     </div>
                                                 </>
                                             ) : (
-                                                <div className="flex items-center justify-center h-full text-brick-gray font-mono text-xs">
+                                                <div className="flex items-center justify-center h-full text-[#9CA3AF] font-mono text-xs">
                                                     No image selected
                                                 </div>
                                             )}
@@ -3742,40 +3739,40 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
 
                                     {/* Separator */}
                                     <div className="border-t border-white/10 pt-4 mt-2">
-                                        <label className="block text-[10px] font-mono text-brick-red mb-3 uppercase tracking-widest">WORKS PAGE <span className="text-brick-gray">(1080×1080px)</span></label>
+                                        <label className="block text-[10px] font-mono text-[#DC2626] mb-3 uppercase tracking-widest">WORKS PAGE <span className="text-[#9CA3AF]">(1080×1080px)</span></label>
                                     </div>
 
                                     {/* Works Position Controls */}
                                     <div className="grid grid-cols-3 gap-4">
                                         <div>
-                                            <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">X Position</label>
+                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">X Position</label>
                                             <input type="range" min="0" max="100" step="0.1" value={editingItem.imageSettingsWorks?.x ?? 50} onChange={e => {
                                                 const newSettings = { ...(editingItem.imageSettingsWorks || { x: 50, y: 50, scale: 1.2 }), x: Number(e.target.value) };
                                                 setEditingItem({ ...editingItem, imageSettingsWorks: newSettings });
-                                            }} className="w-full accent-brick-red" />
+                                            }} className="w-full accent-[#DC2626]" />
                                             <span className="text-[10px] font-mono text-white">{(editingItem.imageSettingsWorks?.x || 50).toFixed(1)}%</span>
                                         </div>
                                         <div>
-                                            <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Y Position</label>
+                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Y Position</label>
                                             <input type="range" min="0" max="100" step="0.1" value={editingItem.imageSettingsWorks?.y ?? 50} onChange={e => {
                                                 const newSettings = { ...(editingItem.imageSettingsWorks || { x: 50, y: 50, scale: 1.2 }), y: Number(e.target.value) };
                                                 setEditingItem({ ...editingItem, imageSettingsWorks: newSettings });
-                                            }} className="w-full accent-brick-red" />
+                                            }} className="w-full accent-[#DC2626]" />
                                             <span className="text-[10px] font-mono text-white">{(editingItem.imageSettingsWorks?.y || 50).toFixed(1)}%</span>
                                         </div>
                                         <div>
-                                            <label className="block text-[10px] font-mono text-brick-gray mb-2 uppercase tracking-widest">Zoom/Scale</label>
+                                            <label className="block text-[10px] font-mono text-[#9CA3AF] mb-2 uppercase tracking-widest">Zoom/Scale</label>
                                             <input type="range" min="100" max="200" step="0.1" value={(editingItem.imageSettingsWorks?.scale || 1.2) * 100} onChange={e => {
                                                 const newSettings = { ...(editingItem.imageSettingsWorks || { x: 50, y: 50, scale: 1.2 }), scale: Number(e.target.value) / 100 };
                                                 setEditingItem({ ...editingItem, imageSettingsWorks: newSettings });
-                                            }} className="w-full accent-brick-red" />
+                                            }} className="w-full accent-[#DC2626]" />
                                             <span className="text-[10px] font-mono text-white">{((editingItem.imageSettingsWorks?.scale || 1.2) * 100).toFixed(1)}%</span>
                                         </div>
                                     </div>
 
                                     {/* Live Preview - Works Grid */}
                                     <div>
-                                        <div className="relative w-40 h-40 border border-white/20 overflow-hidden bg-brick-black">
+                                        <div className="relative w-40 h-40 border border-white/20 overflow-hidden bg-[#050505]">
                                             {editingItem.imageWorks || editingItem.imageHome ? (
                                                 <>
                                                     <div
@@ -3787,12 +3784,12 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                                                             transform: `scale(${editingItem.imageSettingsWorks?.scale || 1.2}) translate(${((editingItem.imageSettingsWorks?.x || 50) - 50) * 2}%, ${((editingItem.imageSettingsWorks?.y || 50) - 50) * 2}%)`
                                                         }}
                                                     />
-                                                    <div className="absolute inset-0 bg-gradient-to-t from-brick-black/90 via-transparent to-transparent" />
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-[#050505]/90 via-transparent to-transparent" />
 
                                                     {/* Top Controls / Index / Category */}
                                                     <div className="absolute inset-0 p-3 flex flex-col justify-between z-30">
                                                         <div className="flex justify-between items-start opacity-50">
-                                                            <span className="font-mono text-[8px] tracking-widest text-brick-red">001</span>
+                                                            <span className="font-mono text-[8px] tracking-widest text-[#DC2626]">001</span>
                                                             <span className="font-mono text-[8px] tracking-widest border border-white/20 px-1 py-0.5 rounded-full text-white">{editingItem.category}</span>
                                                         </div>
                                                         <div>
@@ -3805,7 +3802,7 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
                                                     <div className="absolute bottom-0 right-0 w-1.5 h-1.5 border-r border-b border-white/30 z-40"></div>
                                                 </>
                                             ) : (
-                                                <div className="flex items-center justify-center h-full text-brick-gray font-mono text-xs">
+                                                <div className="flex items-center justify-center h-full text-[#9CA3AF] font-mono text-xs">
                                                     No image
                                                 </div>
                                             )}
@@ -3816,7 +3813,7 @@ const AdminPage = ({ onHome }: { onHome: () => void }) => {
 
                             {/* Footer Actions */}
                             <div className="flex gap-4 p-6 border-t border-white/10">
-                                <button onClick={saveItem} className="flex-1 bg-brick-red text-white py-3 font-mono text-sm uppercase tracking-widest hover:bg-brick-red/80 transition-colors">
+                                <button onClick={saveItem} className="flex-1 bg-[#DC2626] text-white py-3 font-mono text-sm uppercase tracking-widest hover:bg-red-700 transition-colors">
                                     SAVE PROJECT
                                 </button>
                                 <button onClick={() => setEditingItem(null)} className="flex-1 border border-white/20 text-white py-3 font-mono text-sm uppercase tracking-widest hover:bg-white/10 transition-colors">
@@ -4061,7 +4058,7 @@ const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedPr
     }, [view, selectedPost, transmissions]);
 
     return (
-        <div className="min-h-screen bg-brick-black text-brick-white selection:bg-brick-red selection:text-white font-sans">
+        <div className="min-h-screen bg-[#050505] text-[#E5E5E5] selection:bg-[#DC2626] selection:text-white font-sans">
             <SEO view={view} selectedPost={selectedPost} />
             <GlobalStyles />
             <div className="noise-overlay"></div>
