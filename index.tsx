@@ -4036,104 +4036,125 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
 
 const NotFoundPage = ({ onHome, goChat }: { onHome: () => void, goChat: () => void }) => {
     const { t, i18n } = useTranslation();
-    const [monolithHover, setMonolithHover] = useState(false);
+    const isEn = i18n.language === 'en';
     
     // Auto scramble effect for glitch text
-    const [scrambledTitle, setScrambledTitle] = useState("CONEXÃO PERDIDA");
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*";
+    const [scrambledTitle, setScrambledTitle] = useState("VÍDEO NÃO ENCONTRADO");
     
     useEffect(() => {
         const interval = setInterval(() => {
-            if (Math.random() > 0.95 && !monolithHover) {
-                const target = i18n.language === 'en' ? "CONNECTION LOST" : "CONEXÃO PERDIDA";
+            if (Math.random() > 0.95) {
+                const target = isEn ? "PATH NOT FOUND" : "ROTA NÃO ENCONTRADA";
                 const chars = target.split("");
                 const idx = Math.floor(Math.random() * chars.length);
-                const original = chars[idx];
                 chars[idx] = ["!", "@", "#", "$", "%", "0", "1"][Math.floor(Math.random() * 7)];
                 setScrambledTitle(chars.join(""));
                 setTimeout(() => setScrambledTitle(target), 150);
             }
         }, 200);
         return () => clearInterval(interval);
-    }, [i18n.language, monolithHover]);
+    }, [isEn]);
 
     useEffect(() => {
-        setScrambledTitle(i18n.language === 'en' ? "CONNECTION LOST" : "CONEXÃO PERDIDA");
-    }, [i18n.language]);
+        setScrambledTitle(isEn ? "PATH NOT FOUND" : "ROTA NÃO ENCONTRADA");
+    }, [isEn]);
 
     return (
         <React.Fragment>
             <Header onChat={goChat} onWorks={() => {}} onTransmissions={() => {}} onHome={onHome} onAbout={() => {}} isChatView={false} />
-            <main className="min-h-screen pt-32 flex flex-col items-center justify-center p-6 md:p-12 relative bg-brick-black overflow-hidden relative z-10 w-full">
-                
-                {/* Giant Background 404 */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 opacity-[0.03] pointer-events-none mt-10">
-                    <div className="text-[250px] md:text-[500px] font-brick text-brick-white leading-none tracking-tighter select-none mix-blend-screen">
-                        404
+            
+            <button onClick={onHome} className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
+                <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
+            </button>
+            
+            <main className="min-h-screen pt-32 md:pt-40 flex flex-col items-center justify-start font-mono relative bg-brick-black overflow-x-hidden">
+                <div className="w-full px-6 md:px-12 lg:px-24 mb-6 reveal active mt-12 md:mt-20">
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+                        <div>
+                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">ERROR_<span className="text-brick-red">404</span></h1>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input">
+                                <span className="text-brick-red">&gt;&gt; </span> 
+                                <span className="text-brick-gray">{scrambledTitle}</span>
+                            </p>
+                        </div>
                     </div>
                 </div>
 
-                <div className="relative z-20 flex flex-col items-center text-center animate-fade-in-up mt-8">
-                    
-                    {/* Mason Monolith */}
-                    <div 
-                        className="w-[80px] h-[160px] md:w-[120px] md:h-[240px] mb-12 cursor-pointer group"
-                        onMouseEnter={() => setMonolithHover(true)}
-                        onMouseLeave={() => setMonolithHover(false)}
-                        onClick={goChat}
-                    >
-                        <div className={`monolith-structure w-full h-full rounded-[2px] relative z-10 shadow-2xl transition-all duration-300 ${monolithHover ? 'shadow-[0_0_60px_rgba(var(--brick-red-rgb),0.5)] scale-105' : ''}`}>
-                            <div className="absolute inset-0 monolith-texture opacity-80 mix-blend-overlay pointer-events-none rounded-[2px] overflow-hidden"></div>
-                            
-                            {/* Atmospherics */}
-                            <div className="centered-layer aura-atmos pointer-events-none opacity-40" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
-                            <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(var(--brick-red-rgb),0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
-                            
-                            {/* Core Glow */}
-                            <div className={`centered-layer core-atmos pointer-events-none shadow-[0_0_40px_rgba(var(--brick-red-rgb),1)] transition-all duration-200 ${monolithHover ? 'animate-talking scale-150 opacity-100' : 'animate-thinking opacity-80'}`}></div>
-                            
-                            {/* Glass Reflection */}
-                            <div className="absolute inset-0 border border-white/10 opacity-30 pointer-events-none z-10 rounded-[2px] group-hover:border-brick-red/50 transition-colors"></div>
-                            <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-20"></div>
+                <div className="w-full px-6 md:px-12 lg:px-24 relative z-10 flex flex-col pb-32">
+                    <section className="w-full flex flex-col md:flex-row gap-0 items-start animate-fade-in-up border-t border-white/10 pt-12" style={{ animationDelay: '0.2s' }}>
+                        
+                        {/* LEFT: THE AVATAR (Static Monolith) - Identical to SystemChat */}
+                        <div className="w-full md:w-5/12 flex flex-col items-center justify-center p-12 border-r border-white/10 relative bg-brick-black">
+                            <div className="relative w-[120px] h-[240px] md:w-[150px] md:h-[300px]">
+                                <div className="monolith-structure w-full h-full rounded-[2px] relative z-10 shadow-2xl transition-all duration-300">
+                                    <div className="absolute inset-0 monolith-texture opacity-80 mix-blend-overlay pointer-events-none rounded-[2px] overflow-hidden"></div>
+                                    <div className="centered-layer aura-atmos pointer-events-none opacity-40" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
+                                    <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(var(--brick-red-rgb),0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
+                                    <div className="centered-layer core-atmos pointer-events-none shadow-[0_0_40px_rgba(var(--brick-red-rgb),1)] transition-all duration-200 animate-thinking opacity-80"></div>
+                                    <div className="absolute inset-0 border border-white/10 opacity-30 pointer-events-none z-10 rounded-[2px]"></div>
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/5 to-transparent opacity-20"></div>
+                                </div>
+                            </div>
+                            <div className="mt-12 text-center">
+                                <h2 className="text-4xl font-brick text-white mb-2">{t('chat.mason_intro') ? t('chat.mason_intro').toUpperCase() : "I AM MASON"}</h2>
+                                <p className="text-[10px] text-brick-gray font-mono tracking-widest max-w-[200px] mx-auto uppercase">
+                                    {t('chat.generative_core')}<br />{t('chat.state')} 404_ERROR
+                                </p>
+                            </div>
                         </div>
-                    </div>
 
-                    <h1 className="text-4xl md:text-5xl lg:text-6xl font-brick text-white mb-6 uppercase tracking-tighter">
-                        <span className={monolithHover ? "text-brick-red" : ""}>{scrambledTitle}</span>
-                    </h1>
-                    
-                    <div className="max-w-lg mx-auto bg-dark-surface/50 border border-white/10 p-6 md:p-8 mb-10 transition-colors duration-300 hover:border-brick-red/30">
-                        <p className="font-mono text-sm md:text-base text-brick-gray leading-relaxed text-left">
-                            <span className="text-brick-red font-bold uppercase tracking-widest text-xs mb-3 block">[{i18n.language === 'en' ? "MASON INTERVENE" : "INTERVENÇÃO MASON"}]</span>
-                            {i18n.language === 'en' ? (
-                                <>
-                                    I couldn't find this path in my latent space. It seems you wandered out of the set.<br/><br/>
-                                    You might want to <span className="text-white hover:text-brick-red cursor-pointer transition-colors" onClick={goChat}>talk to me</span> to recover the coordinates, or simply return to base.
-                                </>
-                            ) : (
-                                <>
-                                    Não encontrei essa rota nos meus domínios latentes. Parece que você vagou para fora do set de filmagem.<br/><br/>
-                                    Talvez devesse <span className="text-white hover:text-brick-red cursor-pointer transition-colors" onClick={goChat}>falar comigo</span> pra recuperar as coordenadas corretas, ou simplesmente voltar para a base.
-                                </>
-                            )}
-                        </p>
-                    </div>
+                        {/* RIGHT: THE TERMINAL (Chat Dialog Box) */}
+                        <div className="w-full md:w-7/12 pl-0 md:pl-12 mt-12 md:mt-0">
+                            <div className="w-full bg-brick-dark border border-white/10 flex flex-col h-[70vh] min-h-[500px] md:h-[600px] relative overflow-hidden shadow-2xl">
+                                {/* Terminal Header */}
+                                <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/[0.02]">
+                                    <div className="flex items-center gap-3">
+                                        <div className="w-2 h-2 rounded-full bg-brick-red animate-pulse"></div>
+                                        <span className="text-[9px] font-mono text-white/50 tracking-[0.2em] uppercase font-bold">
+                                            /USR/BIN/MASON_CHAT // v3.2
+                                        </span>
+                                    </div>
+                                </div>
 
-                    <div className="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-sm">
-                        <MagneticButton 
-                            onClick={onHome} 
-                            className="w-full sm:w-auto px-8 py-4 bg-transparent border border-white/20 text-white font-mono text-xs tracking-widest uppercase hover:bg-white/10 transition-colors"
-                        >
-                            {i18n.language === 'en' ? "RETURN TO BASE" : "RETORNAR À BASE"}
-                        </MagneticButton>
-                        <MagneticButton 
-                            onClick={goChat}
-                            className="w-full sm:w-auto px-8 py-4 bg-brick-red text-white font-mono text-xs tracking-widest uppercase hover:bg-brick-red/80 transition-colors"
-                        >
-                            {i18n.language === 'en' ? "TALK TO MASON" : "FALAR COM MASON"}
-                        </MagneticButton>
-                    </div>
+                                {/* Messages Area */}
+                                <div className="flex-1 p-4 md:p-8 space-y-6 flex flex-col justify-start overflow-y-auto">
+                                    <div className="flex flex-col items-start animate-fade-in-up">
+                                        <div className="flex items-center gap-2 mb-2 opacity-50">
+                                            <span className="text-[8px] font-mono text-brick-gray uppercase tracking-[0.2em]">
+                                                MASON
+                                            </span>
+                                        </div>
+                                        <div className="max-w-[90%] p-5 text-sm font-mono leading-relaxed tracking-wide text-brick-red bg-brick-red/5 border-l-2 border-brick-red/40">
+                                            {isEn ? (
+                                                <>ERROR 404: I couldn't find this path in my latent space. It seems you wandered out of the film set.<br/><br/>You might want to restore connection with me to recover your coordinates.</>
+                                            ) : (
+                                                <>ERRO 404: Não encontrei essa rota nos meus domínios latentes. Parece que você vagou para fora do set de filmagem.<br/><br/>Recomendo que inicie uma transmissão comigo para recuperar as coordenadas corretas.</>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
 
+                                {/* Actions */}
+                                <div className="p-4 md:p-6 border-t border-white/10 bg-white/[0.02]">
+                                    <div className="flex flex-col sm:flex-row gap-4">
+                                        <button 
+                                            onClick={onHome} 
+                                            className="flex-1 py-4 bg-transparent border border-white/20 text-white font-mono text-xs tracking-widest uppercase hover:bg-white/10 transition-colors"
+                                        >
+                                            {isEn ? "RETURN TO BASE" : "RETORNAR À BASE"}
+                                        </button>
+                                        <button 
+                                            onClick={goChat}
+                                            className="flex-1 py-4 bg-brick-red text-white font-mono text-xs tracking-widest uppercase hover:bg-brick-red/80 transition-colors"
+                                        >
+                                            {isEn ? "TALK TO MASON" : "FALAR COM MASON"}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </section>
                 </div>
             </main>
         </React.Fragment>
