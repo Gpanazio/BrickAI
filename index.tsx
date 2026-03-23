@@ -1,10 +1,14 @@
 import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
-import { ArrowRight, Eye, Fingerprint, Globe, Globe2, Menu, X } from 'lucide-react';
-import * as THREE from 'three';
+import { Eye, Fingerprint, Globe, Menu, X } from 'lucide-react';
+import {
+    Scene, PerspectiveCamera, WebGLRenderer,
+    BufferGeometry, BufferAttribute, PointsMaterial,
+    Points, CanvasTexture, AdditiveBlending
+} from 'three';
 import { useTranslation } from 'react-i18next';
 import { motion, useScroll, useTransform, useSpring, useReducedMotion, type Easing } from 'framer-motion';
-import { BrowserRouter, Routes, Route, useNavigate, useParams, useLocation, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useNavigate, useParams, useLocation } from 'react-router-dom';
 import './src/i18n';
 import './src/index.css';
 
@@ -1150,9 +1154,9 @@ const ParticleScene = ({ fixed = false, reactToMouse = true }: { fixed?: boolean
         const getW = () => fixed ? window.innerWidth : container.clientWidth;
         const getH = () => fixed ? window.innerHeight : container.clientHeight;
 
-        const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, getW() / getH(), 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        const scene = new Scene();
+        const camera = new PerspectiveCamera(75, getW() / getH(), 0.1, 1000);
+        const renderer = new WebGLRenderer({ antialias: true, alpha: true });
         renderer.setSize(getW(), getH());
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
         container.appendChild(renderer.domElement);
@@ -1170,7 +1174,7 @@ const ParticleScene = ({ fixed = false, reactToMouse = true }: { fixed?: boolean
             ctx.fillStyle = g;
             ctx.fillRect(0, 0, 32, 32);
         }
-        const particleTexture = new THREE.CanvasTexture(offscreen);
+        const particleTexture = new CanvasTexture(offscreen);
 
         const makeMesh = (count: number, size: number, zClear: number) => {
             const pos = new Float32Array(count * 3);
@@ -1181,14 +1185,14 @@ const ParticleScene = ({ fixed = false, reactToMouse = true }: { fixed?: boolean
                 if (Math.abs(z) < zClear) z = z < 0 ? -zClear : zClear;
                 pos[i * 3 + 2] = z;
             }
-            const geo = new THREE.BufferGeometry();
-            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-            const mat = new THREE.PointsMaterial({
+            const geo = new BufferGeometry();
+            geo.setAttribute('position', new BufferAttribute(pos, 3));
+            const mat = new PointsMaterial({
                 size, color: 0xffffff, map: particleTexture,
                 transparent: true, opacity: 1.0,
-                blending: THREE.AdditiveBlending, depthWrite: false,
+                blending: AdditiveBlending, depthWrite: false,
             });
-            return { mesh: new THREE.Points(geo, mat), geo, mat };
+            return { mesh: new Points(geo, mat), geo, mat };
         };
 
         const small = makeMesh(3500, 0.025, 1.5);

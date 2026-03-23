@@ -9,6 +9,8 @@ import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import multer from 'multer';
 import fs from 'fs';
+import compression from 'compression';
+import sharp from 'sharp';
 import 'dotenv/config';
 import { SEO_DATA } from './seo-data.js';
 import { buildBreadcrumbItems } from './shared/breadcrumbs.js';
@@ -98,6 +100,7 @@ if (process.env.DATABASE_URL) {
     } catch (e) { console.log(">> DB CONFIG: Invalid URL format"); }
 }
 
+app.use(compression());
 app.use(express.json({ limit: '10mb' }));
 app.use(cookieParser());
 app.use(cors({
@@ -155,28 +158,82 @@ const safeJsonLd = (obj) => JSON.stringify(obj).replace(/<\//g, '<\\/');
 // Health check — responde 200 sem depender do DB (Railway precisa disso)
 app.get('/health', (req, res) => res.status(200).json({ status: 'ok', uptime: process.uptime() }));
 
-// Serve uploaded images with production fallback for missing files
+// Serve uploaded images with on-the-fly optimization + production fallback
 const PROD_BASE_URL = process.env.PRODUCTION_UPLOADS_BASE_URL || 'https://brickai-production.up.railway.app';
-app.use('/uploads', express.static(UPLOADS_DIR));
-app.use('/uploads', async (req, res, next) => {
-    // If static didn't find the file, try fetching from production
-    const filename = path.basename(req.path);
-    const localPath = path.join(UPLOADS_DIR, filename);
-    const prodUrl = `${PROD_BASE_URL}/uploads/${filename}`;
+const CACHE_DIR = path.join(UPLOADS_DIR, '.cache');
+if (!fs.existsSync(CACHE_DIR)) fs.mkdirSync(CACHE_DIR, { recursive: true });
+
+// Image optimization middleware — converts to WebP, resizes, and caches
+app.get('/uploads/:filename', async (req, res) => {
+    const { filename } = req.params;
+    const ext = path.extname(filename).toLowerCase();
+    const isImage = ['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext);
+    let localPath = path.join(UPLOADS_DIR, filename);
+
+    // If file doesn't exist locally, try fetching from production
+    if (!fs.existsSync(localPath)) {
+        try {
+            const prodUrl = `${PROD_BASE_URL}/uploads/${filename}`;
+            const response = await fetch(prodUrl);
+            if (!response.ok) return res.status(404).send('Not found');
+            const buffer = Buffer.from(await response.arrayBuffer());
+            fs.writeFileSync(localPath, buffer);
+            console.log(`[proxy] Cached from production: ${filename}`);
+        } catch (err) {
+            console.error(`[proxy] Failed to fetch ${filename}:`, err.message);
+            return res.status(404).send('Not found');
+        }
+    }
+
+    // Non-image files: serve directly
+    if (!isImage) return res.sendFile(localPath);
+
+    // Check Accept header for WebP support
+    const supportsWebp = (req.headers.accept || '').includes('image/webp');
+    const targetFormat = supportsWebp ? 'webp' : 'jpeg';
+    const targetExt = supportsWebp ? '.webp' : '.jpg';
+
+    // Parse optional query params: ?w=800&q=80
+    const width = parseInt(req.query.w) || 1920; // Max width, default 1920
+    const quality = parseInt(req.query.q) || 80;
+
+    // Cache key based on filename + dimensions + format
+    const cacheKey = `${path.basename(filename, ext)}_w${width}_q${quality}${targetExt}`;
+    const cachePath = path.join(CACHE_DIR, cacheKey);
+
+    // Serve from cache if available
+    if (fs.existsSync(cachePath)) {
+        res.set('Content-Type', supportsWebp ? 'image/webp' : 'image/jpeg');
+        res.set('Cache-Control', 'public, max-age=31536000, immutable');
+        return res.sendFile(cachePath);
+    }
+
+    // Optimize with sharp
     try {
-        const response = await fetch(prodUrl);
-        if (!response.ok) return res.status(404).send('Not found');
-        const buffer = Buffer.from(await response.arrayBuffer());
-        fs.writeFileSync(localPath, buffer);
-        console.log(`[proxy] Cached from production: ${filename}`);
-        const contentType = response.headers.get('Content-Type');
-        const ext = path.extname(filename).toLowerCase();
-        const mimeTypes = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.gif': 'image/gif', '.webp': 'image/webp' };
-        res.set('Content-Type', contentType || mimeTypes[ext] || 'application/octet-stream');
-        res.send(buffer);
+        let pipeline = sharp(localPath)
+            .resize({ width, withoutEnlargement: true });
+
+        if (supportsWebp) {
+            pipeline = pipeline.webp({ quality });
+        } else {
+            pipeline = pipeline.jpeg({ quality, mozjpeg: true });
+        }
+
+        const optimized = await pipeline.toBuffer();
+
+        // Write to cache asynchronously
+        fs.writeFile(cachePath, optimized, (err) => {
+            if (err) console.error(`[sharp] Cache write failed for ${cacheKey}:`, err.message);
+        });
+
+        res.set('Content-Type', supportsWebp ? 'image/webp' : 'image/jpeg');
+        res.set('Cache-Control', 'public, max-age=31536000, immutable');
+        res.send(optimized);
     } catch (err) {
-        console.error(`[proxy] Failed to fetch ${filename} from production:`, err.message);
-        res.status(404).send('Not found');
+        console.error(`[sharp] Optimization failed for ${filename}:`, err.message);
+        // Fallback: serve original
+        res.set('Cache-Control', 'public, max-age=86400');
+        res.sendFile(localPath);
     }
 });
 app.use(express.static(path.join(__dirname, 'dist'))); // Serve o frontend buildado
@@ -330,10 +387,36 @@ app.post('/api/auth/logout', (req, res) => {
     res.json({ success: true });
 });
 
-// 1.3 UPLOAD PARA DISCO LOCAL (RAILWAY VOLUME)
-app.post('/api/upload', authenticateToken, upload.single('file'), (req, res) => {
+// 1.3 UPLOAD PARA DISCO LOCAL (RAILWAY VOLUME) — with sharp optimization
+app.post('/api/upload', authenticateToken, upload.single('file'), async (req, res) => {
     try {
         if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+
+        const ext = path.extname(req.file.filename).toLowerCase();
+        const isImage = ['.jpg', '.jpeg', '.png', '.webp'].includes(ext);
+
+        // Optimize image on upload: resize to max 2048px, convert to WebP
+        if (isImage) {
+            const originalPath = path.join(UPLOADS_DIR, req.file.filename);
+            const webpFilename = req.file.filename.replace(/\.[^.]+$/, '.webp');
+            const webpPath = path.join(UPLOADS_DIR, webpFilename);
+
+            try {
+                await sharp(originalPath)
+                    .resize({ width: 2048, withoutEnlargement: true })
+                    .webp({ quality: 82 })
+                    .toFile(webpPath);
+
+                // Remove original, serve optimized
+                fs.unlink(originalPath, () => {});
+                const fileUrl = `/uploads/${webpFilename}`;
+                return res.json({ url: fileUrl });
+            } catch (sharpErr) {
+                console.error('[upload] Sharp optimization failed:', sharpErr.message);
+                // Fallback: serve original
+            }
+        }
+
         const fileUrl = `/uploads/${req.file.filename}`;
         res.json({ url: fileUrl });
     } catch (err) {
