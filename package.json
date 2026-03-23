@@ -9,7 +9,9 @@
     "build": "vite build",
     "start": "node server.js",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "submit-urls": "node scripts/submit-urls.js",
+    "submit-sitemap": "node scripts/submit-urls.js --sitemap"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
