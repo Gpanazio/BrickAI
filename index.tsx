@@ -7,6 +7,9 @@ import { motion, useScroll, useTransform, useSpring, useReducedMotion } from 'fr
 import './src/i18n';
 import './src/index.css';
 
+// Extend Window for gtag (GA4)
+declare global { interface Window { gtag?: (...args: any[]) => void; } }
+
 // --- STYLES & CONFIG ---
 const GlobalStyles = () => (
     <style>{`
@@ -4297,3 +4300,22 @@ if (container) {
     const root = createRoot(container);
     root.render(<App />);
 }
+
+// Core Web Vitals → GA4
+import { onCLS, onINP, onLCP, onFCP, onTTFB } from 'web-vitals';
+
+function sendToGA4({ name, value, id }: { name: string; value: number; id: string }) {
+    if (typeof window.gtag === 'function') {
+        window.gtag('event', name, {
+            value: Math.round(name === 'CLS' ? value * 1000 : value),
+            event_label: id,
+            non_interaction: true,
+        });
+    }
+}
+
+onCLS(sendToGA4);
+onINP(sendToGA4);
+onLCP(sendToGA4);
+onFCP(sendToGA4);
+onTTFB(sendToGA4);
