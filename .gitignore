@@ -1,11 +1,23 @@
-node_modules
-.DS_Store
-dist
-dist-ssr
-*.local
+# Backup files — nunca devem entrar no git
+index_base_check.tsx
+BACKUP_*.tsx
+BACKUP_*.md
+*.backup_*
+DIFFS.txt
+
+# Uploads de usuário (em produção ficam no volume do Railway)
+uploads/
+
+# Build output
+dist/
+
+# Deps
+node_modules/
+
+# Env
 .env
-vite_debug.log
-*.log
-*.mp4
-exports/
-SECURITY_INCIDENT.md
+.env.*
+!.env.example
+
+# OS
+.DS_Store

@@ -605,7 +605,7 @@ const GlitchText = ({ text, className }: { text: string, className?: string }) =
     useEffect(() => {
         if (!ready) return;
         const positions = text.split('').reduce((acc: number[], c, i) => c !== ' ' ? [...acc, i] : acc, []);
-        let timeout: any;
+        let timeout: ReturnType<typeof setTimeout>;
 
         const glitch = () => {
             const count = 2 + Math.floor(Math.random() * 2);
@@ -836,7 +836,7 @@ const CustomCursor = ({ active }: { active: boolean }) => {
 };
 
 // --- GEMINI SERVICE (BACKEND PROXY) ---
-const chatWithMono = async (history: any[], message: string) => {
+const chatWithMono = async (history: { role: string; content: string }[], message: string) => {
     try {
         const response = await fetch('/api/chat', {
             method: 'POST',
@@ -1114,166 +1114,31 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
     );
 };
 
-const ParticleBackground = ({ reactToMouse = true }: { reactToMouse?: boolean }) => {
+// --- SHARED THREE.JS PARTICLE BACKGROUND ---
+// Consolidates the former ParticleBackground + GlobalParticleBackground into one component.
+// `fixed` prop: true = fixed-to-viewport (GlobalParticleBackground), false = absolute within container
+// `reactToMouse` prop: whether to follow mouse movement
+const ParticleScene = ({ fixed = false, reactToMouse = true }: { fixed?: boolean; reactToMouse?: boolean }) => {
     const mountRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (!mountRef.current) return;
+        const container = mountRef.current;
 
-        // Scene setup
-        const scene = new THREE.Scene();
-        // Adjust camera FOV based on container aspect ratio
-        const camera = new THREE.PerspectiveCamera(75, mountRef.current.clientWidth / mountRef.current.clientHeight, 0.1, 1000);
-        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-
-        renderer.setSize(mountRef.current.clientWidth, mountRef.current.clientHeight);
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        mountRef.current.appendChild(renderer.domElement);
-
-        // Create a circular texture for soft particles & nebulas (optimized to 32x32)
-        const canvas = document.createElement('canvas');
-        canvas.width = 32;
-        canvas.height = 32;
-        const context = canvas.getContext('2d');
-        if (context) {
-            const gradient = context.createRadialGradient(16, 16, 0, 16, 16, 16);
-            gradient.addColorStop(0, 'rgba(255,255,255,1)');
-            gradient.addColorStop(0.2, 'rgba(255,255,255,0.7)');
-            gradient.addColorStop(0.5, 'rgba(255,255,255,0.15)');
-            gradient.addColorStop(1, 'rgba(255,255,255,0)');
-            context.fillStyle = gradient;
-            context.fillRect(0, 0, 32, 32);
-        }
-        const particleTexture = new THREE.CanvasTexture(canvas);
-
-        // 1. Small Stars (Backing) - Brighter
-        const smallStarsCount = 3500;
-        const smallPos = new Float32Array(smallStarsCount * 3);
-        for (let i = 0; i < smallStarsCount; i++) {
-            smallPos[i * 3] = (Math.random() - 0.5) * 20;
-            smallPos[i * 3 + 1] = (Math.random() - 0.5) * 20;
-            let z = (Math.random() - 0.5) * 20;
-            if (Math.abs(z) < 1.5) z = z < 0 ? -1.5 : 1.5;
-            smallPos[i * 3 + 2] = z;
-        }
-        const smallGeo = new THREE.BufferGeometry();
-        smallGeo.setAttribute('position', new THREE.BufferAttribute(smallPos, 3));
-        const smallMat = new THREE.PointsMaterial({
-            size: 0.025, color: 0xffffff, map: particleTexture, transparent: true, opacity: 1.0, blending: THREE.AdditiveBlending, depthWrite: false
-        });
-        const smallMesh = new THREE.Points(smallGeo, smallMat);
-        scene.add(smallMesh);
-
-        // 2. Medium Bright Stars - Brighter
-        const medStarsCount = 700;
-        const medPos = new Float32Array(medStarsCount * 3);
-        for (let i = 0; i < medStarsCount; i++) {
-            medPos[i * 3] = (Math.random() - 0.5) * 20;
-            medPos[i * 3 + 1] = (Math.random() - 0.5) * 20;
-            let z = (Math.random() - 0.5) * 20;
-            if (Math.abs(z) < 3.5) z = z < 0 ? -3.5 : 3.5;
-            medPos[i * 3 + 2] = z;
-        }
-        const medGeo = new THREE.BufferGeometry();
-        medGeo.setAttribute('position', new THREE.BufferAttribute(medPos, 3));
-        const medMat = new THREE.PointsMaterial({
-            size: 0.06, color: 0xffffff, map: particleTexture, transparent: true, opacity: 1.0, blending: THREE.AdditiveBlending, depthWrite: false
-        });
-        const medMesh = new THREE.Points(medGeo, medMat);
-        scene.add(medMesh);
-
-        // To make animations easier, expose them in an array
-        const particlesMeshes = [smallMesh, medMesh];
-        camera.position.z = 3;
-
-        // Mouse interaction
-        let mouseX = 0;
-        let mouseY = 0;
-
-        const handleMouseMove = (event: MouseEvent) => {
-            mouseX = (event.clientX / window.innerWidth) - 0.5;
-            mouseY = (event.clientY / window.innerHeight) - 0.5;
-        };
-
-        if (reactToMouse) {
-            window.addEventListener('mousemove', handleMouseMove);
-        }
-
-        // Animation
-        let animationFrameId: number;
-
-        const animate = () => {
-            animationFrameId = requestAnimationFrame(animate);
-
-            // Rotate all backgrounds smoothly
-            particlesMeshes.forEach((mesh) => {
-                mesh.rotation.y += 0.0008;
-            });
-
-            // Mouse influence
-            const targetX = reactToMouse ? mouseX * 0.5 : 0;
-            const targetY = reactToMouse ? mouseY * 0.5 : 0;
-
-            particlesMeshes.forEach(mesh => {
-                mesh.rotation.x += 0.05 * (targetY - mesh.rotation.x);
-                mesh.rotation.y += 0.05 * (targetX - mesh.rotation.y);
-            });
-
-            renderer.render(scene, camera);
-        };
-
-        animate();
-
-        // Resize handler
-        const handleResize = () => {
-            if (!mountRef.current) return;
-            const width = mountRef.current.clientWidth;
-            const height = mountRef.current.clientHeight;
-
-            camera.aspect = width / height;
-            camera.updateProjectionMatrix();
-            renderer.setSize(width, height);
-        };
-
-        window.addEventListener('resize', handleResize);
-
-        return () => {
-            if (reactToMouse) {
-                window.removeEventListener('mousemove', handleMouseMove);
-            }
-            window.removeEventListener('resize', handleResize);
-            cancelAnimationFrame(animationFrameId);
-            if (mountRef.current && renderer.domElement) {
-                mountRef.current.removeChild(renderer.domElement);
-            }
-            smallGeo.dispose();
-            smallMat.dispose();
-            medGeo.dispose();
-            medMat.dispose();
-            particleTexture.dispose();
-            renderer.dispose();
-        };
-    }, []);
-
-    return <div ref={mountRef} className="absolute inset-0 pointer-events-none z-0" />;
-};
-
-const GlobalParticleBackground = () => {
-    const mountRef = useRef<HTMLDivElement>(null);
-
-    useEffect(() => {
-        if (!mountRef.current) return;
+        const getW = () => fixed ? window.innerWidth : container.clientWidth;
+        const getH = () => fixed ? window.innerHeight : container.clientHeight;
 
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const camera = new THREE.PerspectiveCamera(75, getW() / getH(), 0.1, 1000);
         const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setSize(getW(), getH());
         renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        mountRef.current.appendChild(renderer.domElement);
+        container.appendChild(renderer.domElement);
 
-        const canvas = document.createElement('canvas');
-        canvas.width = 32; canvas.height = 32;
-        const ctx = canvas.getContext('2d');
+        // Shared circular soft-particle texture (32x32)
+        const offscreen = document.createElement('canvas');
+        offscreen.width = 32; offscreen.height = 32;
+        const ctx = offscreen.getContext('2d');
         if (ctx) {
             const g = ctx.createRadialGradient(16, 16, 0, 16, 16, 16);
             g.addColorStop(0, 'rgba(255,255,255,1)');
@@ -1283,88 +1148,82 @@ const GlobalParticleBackground = () => {
             ctx.fillStyle = g;
             ctx.fillRect(0, 0, 32, 32);
         }
-        const particleTexture = new THREE.CanvasTexture(canvas);
+        const particleTexture = new THREE.CanvasTexture(offscreen);
 
-        const smallStarsCount = 3500;
-        const smallPos = new Float32Array(smallStarsCount * 3);
-        for (let i = 0; i < smallStarsCount; i++) {
-            smallPos[i * 3] = (Math.random() - 0.5) * 20;
-            smallPos[i * 3 + 1] = (Math.random() - 0.5) * 20;
-            let z = (Math.random() - 0.5) * 20;
-            if (Math.abs(z) < 1.5) z = z < 0 ? -1.5 : 1.5;
-            smallPos[i * 3 + 2] = z;
-        }
-        const smallGeo = new THREE.BufferGeometry();
-        smallGeo.setAttribute('position', new THREE.BufferAttribute(smallPos, 3));
-        const smallMat = new THREE.PointsMaterial({ size: 0.025, color: 0xffffff, map: particleTexture, transparent: true, opacity: 1.0, blending: THREE.AdditiveBlending, depthWrite: false });
-        const smallMesh = new THREE.Points(smallGeo, smallMat);
-        scene.add(smallMesh);
+        const makeMesh = (count: number, size: number, zClear: number) => {
+            const pos = new Float32Array(count * 3);
+            for (let i = 0; i < count; i++) {
+                pos[i * 3]     = (Math.random() - 0.5) * 20;
+                pos[i * 3 + 1] = (Math.random() - 0.5) * 20;
+                let z = (Math.random() - 0.5) * 20;
+                if (Math.abs(z) < zClear) z = z < 0 ? -zClear : zClear;
+                pos[i * 3 + 2] = z;
+            }
+            const geo = new THREE.BufferGeometry();
+            geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+            const mat = new THREE.PointsMaterial({
+                size, color: 0xffffff, map: particleTexture,
+                transparent: true, opacity: 1.0,
+                blending: THREE.AdditiveBlending, depthWrite: false,
+            });
+            return { mesh: new THREE.Points(geo, mat), geo, mat };
+        };
 
-        const medStarsCount = 700;
-        const medPos = new Float32Array(medStarsCount * 3);
-        for (let i = 0; i < medStarsCount; i++) {
-            medPos[i * 3] = (Math.random() - 0.5) * 20;
-            medPos[i * 3 + 1] = (Math.random() - 0.5) * 20;
-            let z = (Math.random() - 0.5) * 20;
-            if (Math.abs(z) < 3.5) z = z < 0 ? -3.5 : 3.5;
-            medPos[i * 3 + 2] = z;
-        }
-        const medGeo = new THREE.BufferGeometry();
-        medGeo.setAttribute('position', new THREE.BufferAttribute(medPos, 3));
-        const medMat = new THREE.PointsMaterial({ size: 0.06, color: 0xffffff, map: particleTexture, transparent: true, opacity: 1.0, blending: THREE.AdditiveBlending, depthWrite: false });
-        const medMesh = new THREE.Points(medGeo, medMat);
-        scene.add(medMesh);
-
-        const particlesMeshes = [smallMesh, medMesh];
+        const small = makeMesh(3500, 0.025, 1.5);
+        const med   = makeMesh(700,  0.060, 3.5);
+        scene.add(small.mesh, med.mesh);
         camera.position.z = 3;
 
-        let mouseX = 0;
-        let mouseY = 0;
-        const handleMouseMove = (e: MouseEvent) => {
+        let mouseX = 0, mouseY = 0;
+        const onMouseMove = (e: MouseEvent) => {
             mouseX = (e.clientX / window.innerWidth) - 0.5;
             mouseY = (e.clientY / window.innerHeight) - 0.5;
         };
-        window.addEventListener('mousemove', handleMouseMove);
+        if (reactToMouse) window.addEventListener('mousemove', onMouseMove);
 
-        let animId: number;
+        let rafId: number;
         const animate = () => {
-            animId = requestAnimationFrame(animate);
-            particlesMeshes.forEach(mesh => {
-                mesh.rotation.y += 0.0008;
-            });
-            const targetX = mouseX * 0.5;
-            const targetY = mouseY * 0.5;
-            particlesMeshes.forEach(mesh => {
-                mesh.rotation.x += 0.05 * (targetY - mesh.rotation.x);
-                mesh.rotation.y += 0.05 * (targetX - mesh.rotation.y);
+            rafId = requestAnimationFrame(animate);
+            const tx = reactToMouse ? mouseX * 0.5 : 0;
+            const ty = reactToMouse ? mouseY * 0.5 : 0;
+            [small.mesh, med.mesh].forEach(m => {
+                m.rotation.y += 0.0008;
+                m.rotation.x += 0.05 * (ty - m.rotation.x);
+                m.rotation.y += 0.05 * (tx - m.rotation.y);
             });
             renderer.render(scene, camera);
         };
         animate();
 
-        const handleResize = () => {
-            camera.aspect = window.innerWidth / window.innerHeight;
+        const onResize = () => {
+            camera.aspect = getW() / getH();
             camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setSize(getW(), getH());
         };
-        window.addEventListener('resize', handleResize);
+        window.addEventListener('resize', onResize);
 
         return () => {
-            window.removeEventListener('mousemove', handleMouseMove);
-            window.removeEventListener('resize', handleResize);
-            cancelAnimationFrame(animId);
-            if (mountRef.current && renderer.domElement) {
-                mountRef.current.removeChild(renderer.domElement);
-            }
-            smallGeo.dispose(); smallMat.dispose();
-            medGeo.dispose(); medMat.dispose();
+            if (reactToMouse) window.removeEventListener('mousemove', onMouseMove);
+            window.removeEventListener('resize', onResize);
+            cancelAnimationFrame(rafId);
+            if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
+            small.geo.dispose(); small.mat.dispose();
+            med.geo.dispose();   med.mat.dispose();
             particleTexture.dispose();
             renderer.dispose();
         };
-    }, []);
+    }, [fixed, reactToMouse]);
 
-    return <div ref={mountRef} className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }} />;
+    return fixed
+        ? <div ref={mountRef} className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }} />
+        : <div ref={mountRef} className="absolute inset-0 pointer-events-none z-0" />;
 };
+
+// Aliases kept for backward compatibility within this file
+const ParticleBackground = ({ reactToMouse = true }: { reactToMouse?: boolean }) =>
+    <ParticleScene fixed={false} reactToMouse={reactToMouse} />;
+const GlobalParticleBackground = () =>
+    <ParticleScene fixed={true} reactToMouse={true} />;
 
 const TwinkleStars = ({ count = 200 }: { count?: number }) => {
     const stars = useMemo(() => Array.from({ length: count }).map(() => ({
@@ -2727,7 +2586,19 @@ const WorksFilter = ({ categories, activeCategory, onSelect }: { categories: str
     );
 };
 
-const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, onAbout }: any) => {
+type PageNavProps = {
+    onHome: () => void;
+    onChat: () => void;
+    onWorks: () => void;
+    onTransmissions: () => void;
+    onAbout: () => void;
+};
+
+const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, onAbout }: PageNavProps & {
+    onSelectProject: (project: Work) => void;
+    setMonolithHover?: (v: boolean) => void;
+    monolithHover?: boolean;
+}) => {
     const { t } = useTranslation();
     const [activeCategory, setActiveCategory] = useState("ALL");
     const { works } = useContext(DataContext)!;
@@ -2791,7 +2662,10 @@ const WorksPage = ({ onChat, onWorks, onTransmissions, onHome, onSelectProject, 
     );
 }
 
-const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, onAbout }: any) => {
+const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, onAbout }: PageNavProps & {
+    post: Post;
+    onBack: () => void;
+}) => {
     const { t, i18n } = useTranslation();
     const postTitle = getLocalizedField(post.title, i18n.language, 'UNTITLED');
     const postExcerpt = getLocalizedField(post.excerpt, i18n.language, '');
@@ -2852,7 +2726,9 @@ const BlogPostPage = ({ post, onBack, onChat, onWorks, onTransmissions, onHome, 
     );
 };
 
-const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectPost, onAbout }: any) => {
+const TransmissionsPage = ({ onHome, onChat, onWorks, onTransmissions, onSelectPost, onAbout }: PageNavProps & {
+    onSelectPost: (post: Post) => void;
+}) => {
     const { t, i18n } = useTranslation();
     const { transmissions } = useContext(DataContext)!;
     return (
@@ -3147,7 +3023,12 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
 };
 
 
-const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, onAbout, setMonolithHover, monolithHover, onAdmin }: any) => (
+const HomePage = ({ onChat, onSelectProject, onWorks, onTransmissions, onHome, onAbout, setMonolithHover, monolithHover, onAdmin }: PageNavProps & {
+    onSelectProject: (project: Work) => void;
+    setMonolithHover: (v: boolean) => void;
+    monolithHover: boolean;
+    onAdmin: () => void;
+}) => (
     <React.Fragment>
         <Header onChat={onChat} onWorks={onWorks} onTransmissions={onTransmissions} onHome={onHome} onAbout={onAbout} isChatView={false} />
         <main>
@@ -3215,7 +3096,7 @@ const TeamMember = ({ name, role, id }: { name: string, role: string, id: string
     </div>
 );
 
-const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: any) => {
+const AboutPage = ({ onChat, onWorks, onTransmissions, onHome, onAbout }: PageNavProps) => {
     const { t } = useTranslation();
     return (
         <React.Fragment>
@@ -3954,7 +3835,7 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
         // Remove all previously injected dynamic JSON-LD scripts
         document.querySelectorAll('script[data-dynamic-ld]').forEach(s => s.remove());
 
-        const addJsonLd = (data: any) => {
+        const addJsonLd = (data: Record<string, unknown>) => {
             const script = document.createElement('script');
             script.type = 'application/ld+json';
             script.setAttribute('data-dynamic-ld', 'true');
@@ -4172,7 +4053,25 @@ const NotFoundPage = ({ onHome, goChat }: { onHome: () => void, goChat: () => vo
     );
 };
 
-const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedProject, setSelectedProject, selectedPost, setSelectedPost, goHome, goWorks, goTransmissions, goChat, goAdmin, goAbout, handleSelectPost }: any) => {
+type AppContentProps = {
+    view: string;
+    setView: (v: string) => void;
+    monolithHover: boolean;
+    setMonolithHover: (v: boolean) => void;
+    selectedProject: Work | null;
+    setSelectedProject: (p: Work | null) => void;
+    selectedPost: Post | null;
+    setSelectedPost: (p: Post | null) => void;
+    goHome: () => void;
+    goWorks: () => void;
+    goTransmissions: () => void;
+    goChat: () => void;
+    goAdmin: () => void;
+    goAbout: () => void;
+    handleSelectPost: (post: Post) => void;
+};
+
+const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedProject, setSelectedProject, selectedPost, setSelectedPost, goHome, goWorks, goTransmissions, goChat, goAdmin, goAbout, handleSelectPost }: AppContentProps) => {
     const { works, transmissions } = useContext(DataContext)!;
 
     const navigateProject = (dir: -1 | 1) => {
@@ -4241,7 +4140,8 @@ const AppContent = ({ view, setView, monolithHover, setMonolithHover, selectedPr
 };
 
 // Helper for Context Consumption
-const ContextConsumer = ({ children }: { children: (data: any) => React.ReactNode }) => {
+type DataContextType = { works: Work[]; setWorks: React.Dispatch<React.SetStateAction<Work[]>>; transmissions: Post[]; setTransmissions: React.Dispatch<React.SetStateAction<Post[]>>; };
+const ContextConsumer = ({ children }: { children: (data: DataContextType) => React.ReactNode }) => {
     const data = useContext(DataContext);
     if (!data) return null;
     return <>{children(data)}</>;
