@@ -3008,7 +3008,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                         </a>
 
                         {/* WHATSAPP */}
-                        <a href="https://wa.me/5511999999999" target="_blank" rel="noopener noreferrer" className="group block bg-brick-dark border border-white/10 p-8 md:p-10 hover:border-brick-red transition-colors duration-300">
+                        <a href="https://wa.me/5521998324335" target="_blank" rel="noopener noreferrer" className="group block bg-brick-dark border border-white/10 p-8 md:p-10 hover:border-brick-red transition-colors duration-300">
                             <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
                                 <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">Channel_02</span>
                             </div>
