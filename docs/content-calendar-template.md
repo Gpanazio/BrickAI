@@ -8,7 +8,7 @@
   - "Como funciona producao de video com IA" / "How AI video production works"
   - "IA vs producao tradicional: quando usar cada uma"
   - "O problema da consistencia em video generativo"
-  - "Quanto custa produzir video com IA em 2026"
+  - "Quanto custa produzir video com IA"
 - **Formato:** 800-1500 palavras, estrutura H2/H3, bilingue PT-BR + EN
 - **Schema:** Article (automatico via SSR)
 
