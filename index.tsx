@@ -1322,6 +1322,121 @@ const PhilosophyItem = ({ title, text, titleSize = 'text-4xl md:text-6xl', index
     </motion.div>
 );
 
+const GlitchDecode = ({ text, delay = 0 }: { text: string, delay?: number }) => {
+    const [display, setDisplay] = useState(text);
+    const ref = useRef<HTMLSpanElement>(null);
+    const hasTriggered = useRef(false);
+    const glyphPool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$@!&%_/\\|{}[]<>+=';
+
+    useEffect(() => {
+        if (!ref.current) return;
+        const el = ref.current;
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting && !hasTriggered.current) {
+                // Only trigger if the parent section has the 'active' class (reveal completed)
+                const section = el.closest('.reveal');
+                if (section && !section.classList.contains('active')) return;
+
+                hasTriggered.current = true;
+                // Start with scrambled text
+                const scrambled = text.split('').map(c =>
+                    c === ' ' || c === '/' || c === '_' ? c : glyphPool[Math.floor(Math.random() * glyphPool.length)]
+                ).join('');
+                setDisplay(scrambled);
+
+                const totalDuration = 800; // ms
+                const iterations = 12;
+                const stepTime = totalDuration / iterations;
+                let step = 0;
+
+                setTimeout(() => {
+                    const interval = setInterval(() => {
+                        step++;
+                        const progress = step / iterations;
+                        const result = text.split('').map((char, i) => {
+                            if (char === ' ' || char === '/' || char === '_') return char;
+                            const charThreshold = (i / text.length) * 0.7;
+                            if (progress > charThreshold + 0.3) return char;
+                            if (progress > charThreshold) {
+                                return Math.random() > 0.5 ? char : glyphPool[Math.floor(Math.random() * glyphPool.length)];
+                            }
+                            return glyphPool[Math.floor(Math.random() * glyphPool.length)];
+                        }).join('');
+                        setDisplay(result);
+
+                        if (step >= iterations) {
+                            clearInterval(interval);
+                            setDisplay(text);
+                        }
+                    }, stepTime);
+                }, delay);
+            }
+        }, { threshold: 0.5, rootMargin: '0px 0px -100px 0px' });
+        observer.observe(el);
+        return () => observer.disconnect();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [text, delay]);
+
+    return <span ref={ref}>{display}</span>;
+};
+
+const ModuleStatus = ({ delay = 0 }: { delay?: number }) => {
+    const [phase, setPhase] = useState<'idle' | 'offline' | 'booting' | 'installed'>('idle');
+    const [displayText, setDisplayText] = useState('');
+    const ref = useRef<HTMLDivElement>(null);
+    const hasTriggered = useRef(false);
+
+    const typeText = useCallback((text: string, onDone?: () => void) => {
+        let i = 0;
+        setDisplayText('');
+        const interval = setInterval(() => {
+            i++;
+            setDisplayText(text.slice(0, i));
+            if (i >= text.length) {
+                clearInterval(interval);
+                onDone?.();
+            }
+        }, 40);
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        if (!ref.current) return;
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting && !hasTriggered.current) {
+                hasTriggered.current = true;
+                // Start sequence after card power-on delay
+                setTimeout(() => {
+                    setPhase('offline');
+                    typeText('OFFLINE', () => {
+                        setTimeout(() => {
+                            setPhase('booting');
+                            typeText('BOOTING...', () => {
+                                setTimeout(() => {
+                                    setPhase('installed');
+                                    typeText('INSTALLED');
+                                }, 600);
+                            });
+                        }, 400);
+                    });
+                }, delay + 300); // wait for power-on animation + stagger
+            }
+        }, { threshold: 0.1 });
+        observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, [delay, typeText]);
+
+    const color = phase === 'installed' ? 'text-white/60' : phase === 'booting' ? 'text-brick-red/70' : 'text-white/30';
+    const dotColor = phase === 'installed' ? 'bg-white/60' : phase === 'booting' ? 'bg-brick-red/70 animate-blink' : 'bg-white/20';
+
+    return (
+        <div ref={ref} className={`flex items-center gap-1.5 font-mono text-[8px] tracking-[0.15em] ${color} transition-colors duration-300`}>
+            <span className={`block w-1 h-1 rounded-full ${dotColor} transition-colors duration-300`} />
+            <span>{displayText}<span className="animate-blink">_</span></span>
+        </div>
+    );
+};
+
 const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: (work: Work) => void }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const bgRef = useRef<HTMLDivElement>(null);
@@ -3095,8 +3210,8 @@ const TeamMember = ({ name, role, id }: { name: string, role: string, id: string
             </div>
             <div className="flex flex-col items-end">
                 <span className="font-mono text-[9px] text-brick-red uppercase tracking-widest mb-1">ID_{id}</span>
-                <div className="flex gap-0.5">
-                    {[...Array(3)].map((_, i) => <div key={i} className="w-1 h-1 bg-white/20 rounded-full"></div>)}
+                <div className="flex gap-1">
+                    {[...Array(3)].map((_, i) => <div key={i} className="w-1 h-1 bg-white/30 rounded-full animate-pulse" style={{ animationDelay: `${i * 300}ms`, animationDuration: '1.5s' }}></div>)}
                 </div>
             </div>
         </div>
@@ -3123,7 +3238,7 @@ const AboutPage = () => {
                 <div className="scanline-effect fixed inset-0 z-0 pointer-events-none opacity-20"></div>
 
                 {/* HERO: ORIGIN STORY */}
-                <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
+                <section className="w-full px-6 md:px-12 lg:px-24 mb-16 md:mb-20 reveal">
                     {/* Compact header — same pattern as Works/Transmissions */}
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
                         <div>
@@ -3176,11 +3291,11 @@ const AboutPage = () => {
                 </section>
 
                     {/* THE INFRASTRUCTURE (DIFFERENTIATORS) */}
-                    <section className="w-full px-6 md:px-12 lg:px-24 mb-32 reveal">
+                    <section className="w-full px-6 md:px-12 lg:px-24 mb-16 md:mb-20 reveal">
                         <div>
                         <div className="flex items-center gap-3 mb-8 border-b border-white/10 pb-4">
                             <Eye className="w-4 h-4 text-brick-red" />
-                            <h2 className="text-xs md:text-sm font-mono text-brick-gray uppercase tracking-[0.2em]">{t('about.manifesto.title')} // {t('about.manifesto.subtitle')}</h2>
+                            <h2 className="text-xs md:text-sm font-mono text-brick-gray uppercase tracking-[0.2em]"><GlitchDecode text={`${t('about.manifesto.title')} // ${t('about.manifesto.subtitle')}`} /></h2>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
                             <InfoCard
@@ -3203,11 +3318,11 @@ const AboutPage = () => {
                     </section>
 
                     {/* LEADERSHIP (REAL ROLES) */}
-                    <section className="w-full px-6 md:px-12 lg:px-24 pb-32 md:pb-40 reveal">
+                    <section className="w-full px-6 md:px-12 lg:px-24 pb-16 md:pb-24 reveal">
                         <div>
                         <div className="flex items-center gap-3 mb-12 border-b border-white/10 pb-4">
                             <Fingerprint className="w-4 h-4 text-brick-red" />
-                            <h2 className="text-xs md:text-sm font-mono text-brick-gray uppercase tracking-[0.2em]">{t('about.team.title')}</h2>
+                            <h2 className="text-xs md:text-sm font-mono text-brick-gray uppercase tracking-[0.2em]"><GlitchDecode text={t('about.team.title')} delay={200} /></h2>
                         </div>
 
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
