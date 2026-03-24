@@ -1041,7 +1041,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                                 }}
                             ></div>
                         </div>
-                        <div className="absolute inset-0 border border-white/10 opacity-50 pointer-events-none z-10 rounded-[2px] hidden md:block"></div>
+                        <div className="absolute inset-0 border border-white/10 opacity-50 pointer-events-none z-10 rounded-[2px]"></div>
                     </div>
                     <div
                         className="absolute inset-0 z-20 cursor-none"
@@ -1871,7 +1871,7 @@ const UnifiedEnding = () => {
     const { goChat } = useAppNav();
     const ref = useRef<HTMLElement>(null);
     const { t } = useTranslation();
-    const clients = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO"];
+    const clients = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "META", "O BOTICÁRIO", "VTEX", "REGREEN", "WEWORK"];
     const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
     const smoothProgress = useSpring(scrollYProgress, { stiffness: 40, damping: 15, mass: 0.5 });
     const shouldReduceMotion = useReducedMotion();
@@ -2467,7 +2467,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                     <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative">
                         <div className="px-4 md:px-8 pt-0 pb-4 mb-8">
                             <div className="font-mono text-[8px] text-white/20 mb-4 tracking-[0.4em]">// SYSTEM_LOG</div>
-                            <p className="text-white text-[12px] leading-[1.7] tracking-[0.04em] max-w-md font-mono border-l border-white/10 pl-5">
+                            <p className="text-white/90 text-[13px] leading-[1.8] tracking-[0.02em] max-w-md border-l border-white/10 pl-5" style={{ fontFamily: "'Share Tech', sans-serif", fontWeight: 400 }}>
                                 {project.longDesc || project.desc}
                             </p>
                         </div>
@@ -2835,11 +2835,11 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
-            <main className="w-full px-6 md:px-12 lg:px-24 relative z-10 flex flex-col gap-24">
+            <main className="w-full px-6 md:px-12 lg:px-24 relative z-10 flex flex-col gap-12 md:gap-16">
 
                 {/* 1. CONTACT SECTION (Humans) */}
                 <section className="w-full animate-fade-in-up">
-                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8">
                         <div>
                             <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">REACH_<span className="text-brick-red">HUMANS</span></h1>
                             <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input"><span className="text-brick-red">&gt;&gt; </span> <span className="text-brick-gray">{t('chat.manual_override')}</span></p>
@@ -2848,7 +2848,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 border border-white/10">
                         {/* EMAIL */}
-                        <a href="mailto:brick@brick.mov" className="group block bg-brick-dark p-8 md:p-10 hover:bg-white/[0.03] transition-colors duration-300 border-b md:border-b-0 md:border-r border-white/10">
+                        <a href="mailto:brick@brick.mov" className="group block bg-brick-dark p-5 md:p-6 hover:bg-white/[0.03] transition-colors duration-300 border-b md:border-b-0 md:border-r border-white/10">
                             <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
                                 <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">CHANNEL_01</span>
                             </div>
@@ -2857,7 +2857,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                         </a>
 
                         {/* WHATSAPP */}
-                        <a href="https://wa.me/5521998324335" target="_blank" rel="noopener noreferrer" className="group block bg-brick-dark p-8 md:p-10 hover:bg-white/[0.03] transition-colors duration-300 border-b md:border-b-0 md:border-r border-white/10">
+                        <a href="https://wa.me/5521998324335" target="_blank" rel="noopener noreferrer" className="group block bg-brick-dark p-5 md:p-6 hover:bg-white/[0.03] transition-colors duration-300 border-b md:border-b-0 md:border-r border-white/10">
                             <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
                                 <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">CHANNEL_02</span>
                             </div>
@@ -2866,7 +2866,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                         </a>
 
                         {/* SOCIAL */}
-                        <div className="group block bg-brick-dark p-8 md:p-10 hover:bg-white/[0.03] transition-colors duration-300">
+                        <div className="group block bg-brick-dark p-5 md:p-6 hover:bg-white/[0.03] transition-colors duration-300">
                             <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
                                 <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">CHANNEL_03</span>
                             </div>
@@ -2884,10 +2884,10 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                 </section>
 
                 {/* 2. MASON INTELLIGENCE - SYMMETRICAL LAYOUT */}
-                <section className="w-full flex flex-col md:flex-row gap-0 items-start animate-fade-in-up border-t border-white/10 pt-12" style={{ animationDelay: '0.2s' }}>
+                <section className="w-full flex flex-col md:flex-row gap-0 items-start animate-fade-in-up border-t border-white/10 pt-8" style={{ animationDelay: '0.2s' }}>
 
                     {/* LEFT: THE AVATAR (Static Monolith) */}
-                    <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-12 relative bg-brick-black">
+                    <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-8 relative bg-brick-black">
                         <div className="relative w-[120px] h-[240px] md:w-[150px] md:h-[300px]">
                             {/* The Monolith Shape - Identical to Hero but no mouse interaction */}
                             <div
@@ -2908,7 +2908,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             </div>
                         </div>
 
-                        <div className="mt-12 text-center">
+                        <div className="mt-8 text-center">
                             <h2 className="text-4xl font-brick text-white mb-2">{t('chat.mason_intro') ? t('chat.mason_intro').toUpperCase() : "I AM MASON"}</h2>
                             <p className="text-[10px] text-brick-gray font-mono tracking-widest max-w-[200px] mx-auto uppercase">
                                 {t('chat.generative_core')}<br />{t('chat.state')} {isProcessing ? t('chat.active') : t('chat.idle')}
@@ -2923,7 +2923,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/[0.02]">
                                 <div className="flex items-center gap-3">
                                     <div className={`w-2 h-2 rounded-full ${isProcessing ? 'bg-brick-red animate-pulse' : 'bg-brick-red'}`}></div>
-                                    <span className="text-[9px] font-mono text-white/50 tracking-[0.2em] uppercase font-bold">
+                                    <span className="text-[9px] text-white/50 tracking-[0.2em] uppercase font-bold" style={{ fontFamily: "'Share Tech Mono', 'IBM Plex Mono', monospace" }}>
                                         /USR/BIN/MASON_CHAT // v3.2
                                     </span>
                                 </div>
@@ -2938,10 +2938,10 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                                                 {msg.role === 'user' ? 'YOU' : 'MASON'}
                                             </span>
                                         </div>
-                                        <div className={`max-w-[90%] p-5 text-sm font-mono leading-relaxed tracking-wide ${msg.role === 'user'
+                                        <div className={`max-w-[90%] p-5 text-sm leading-relaxed tracking-wide ${msg.role === 'user'
                                             ? 'bg-white/5 text-white/90 border-r-2 border-white/20'
                                             : 'text-brick-red bg-brick-red/5 border-l-2 border-brick-red/40'
-                                            }`}>
+                                            }`} style={{ fontFamily: "'Share Tech Mono', 'IBM Plex Mono', monospace" }}>
                                             {msg.content}
                                         </div>
                                     </div>
@@ -2973,14 +2973,14 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                                     </div>
                                 )}
                                 <form onSubmit={handleSend} className="flex items-center gap-4">
-                                    <div className="w-2 h-2 bg-brick-red animate-pulse shrink-0"></div>
+                                    <div className="w-2 h-2 bg-brick-red animate-pulse shrink-0 rounded-full"></div>
                                     <input
                                         type="text"
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
                                         placeholder={t('chat.placeholder')}
                                         aria-label="Type your message to Mason"
-                                        className="w-full bg-transparent py-2 text-white font-mono text-sm focus:outline-none placeholder:text-white/20 placeholder:tracking-[0.1em]"
+                                        className="w-full bg-transparent py-2 text-white text-sm focus:outline-none placeholder:text-white/20 placeholder:tracking-[0.1em]" style={{ fontFamily: "'Share Tech Mono', 'IBM Plex Mono', monospace" }}
                                         autoFocus
                                     />
                                     <button type="submit" aria-label="Send message" className="text-[10px] font-brick text-white/50 hover:text-white uppercase tracking-[0.2em] transition-colors">
