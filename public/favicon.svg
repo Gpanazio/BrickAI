@@ -1,34 +1,49 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
-  <!-- Background -->
-  <rect width="32" height="32" fill="#050505"/>
+  <!-- Solid Dark Background representing Brick AI -->
+  <rect width="32" height="32" rx="4" fill="#050505"/>
+  
+  <!-- Outer Glow / Atmosphere -->
+  <circle cx="16" cy="16" r="14" fill="url(#outerGlow)" opacity="0.3"/>
+  <circle cx="16" cy="16" r="10" fill="url(#innerGlow)" opacity="0.5"/>
+  
+  <!-- Monolith Body -->
+  <rect x="9" y="3" width="14" height="26" rx="1.5" fill="#030303" stroke="#DC2626" stroke-width="0.3" stroke-opacity="0.2"/>
+  <rect x="9.5" y="3.5" width="13" height="25" rx="1" fill="#0a0a0a"/>
+  
+  <!-- Texture Gradient to add dimension -->
+  <rect x="9.5" y="3.5" width="13" height="25" rx="1" fill="url(#tex)" opacity="0.4"/>
+  <rect x="9" y="3" width="14" height="26" rx="1.5" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="0.5"/>
 
-  <!-- Ambient red glow -->
-  <circle cx="16" cy="16" r="12" fill="#DC2626" opacity="0.06"/>
-  <circle cx="16" cy="16" r="7"  fill="#DC2626" opacity="0.08"/>
-
-  <!-- Monolith body -->
-  <rect x="11" y="4" width="10" height="24" rx="0.5" fill="#0e0e0e"/>
-
-  <!-- Monolith inner texture gradient (top to bottom) -->
-  <rect x="11" y="4" width="10" height="24" rx="0.5"
-        fill="url(#tex)" opacity="0.4"/>
-
-  <!-- Monolith subtle border -->
-  <rect x="11" y="4" width="10" height="24" rx="0.5"
-        stroke="rgba(255,255,255,0.07)" stroke-width="0.5" fill="none"/>
-
-  <!-- Red inner glow rings -->
-  <circle cx="16" cy="16" r="4"   fill="#DC2626" opacity="0.12"/>
-  <circle cx="16" cy="16" r="2"   fill="#DC2626" opacity="0.2"/>
-
-  <!-- Red dot core -->
-  <circle cx="16" cy="16" r="1"   fill="#DC2626" opacity="0.9"/>
-
+  <!-- Core Red LED / Pulse -->
+  <circle cx="16" cy="16" r="5" fill="#DC2626" opacity="0.15" filter="url(#drop-shadow)"/>
+  <circle cx="16" cy="16" r="2.5" fill="#DC2626" opacity="0.4"/>
+  <circle cx="16" cy="16" r="0.8" fill="#ffffff" opacity="0.9"/>
+  <circle cx="16" cy="16" r="1.5" fill="#DC2626" opacity="0.8"/>
+  
+  <!-- Definitions -->
   <defs>
+    <!-- Light & Texture Shading -->
     <linearGradient id="tex" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0%"   stop-color="#ffffff" stop-opacity="0.04"/>
-      <stop offset="50%"  stop-color="#ffffff" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#ffffff" stop-opacity="0.02"/>
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.08"/>
+      <stop offset="50%" stop-color="#DC2626" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.1"/>
     </linearGradient>
+
+    <!-- Outer Glow Gradient -->
+    <radialGradient id="outerGlow" cx="16" cy="16" r="14" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#DC2626" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#DC2626" stop-opacity="0"/>
+    </radialGradient>
+    
+    <!-- Inner Glow Gradient -->
+    <radialGradient id="innerGlow" cx="16" cy="16" r="10" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#DC2626" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#DC2626" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Drop Shadow for the eye/core -->
+    <filter id="drop-shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="0" stdDeviation="1.5" flood-color="#DC2626" flood-opacity="0.8"/>
+    </filter>
   </defs>
 </svg>

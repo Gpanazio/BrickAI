@@ -17,7 +17,7 @@ An API key was committed to the repository history. The key has been revoked, an
 **Option A: Using BFG Repo-Cleaner (Recommended)**
 ```bash
 # Define the exposed key to be removed
-EXPOSED_KEY="AIzaSyCWn4BVy7kXczs-2GRfc3GYfsYXMcpaEUE"
+EXPOSED_KEY="***REMOVED***"
 
 # Install BFG
 brew install bfg  # macOS
@@ -42,7 +42,7 @@ git push --force
 **Option B: Using git-filter-repo**
 ```bash
 # Define the exposed key to be removed
-EXPOSED_KEY="AIzaSyCWn4BVy7kXczs-2GRfc3GYfsYXMcpaEUE"
+EXPOSED_KEY="***REMOVED***"
 
 # Install git-filter-repo
 pip install git-filter-repo

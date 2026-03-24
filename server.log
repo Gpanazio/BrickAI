@@ -1,0 +1,7 @@
+--------------------------------------------------
+>> BOOT: Brick AI Platform v1.1
+>> NODE_ENV: development
+>> DATABASE_URL: MISSING
+>> JWT_SECRET: MISSING (Using Default)
+>> GEMINI_API_KEY: PRESENT
+--------------------------------------------------

@@ -4,12 +4,18 @@
 
 @layer base {
   body {
-    background-color: #050505;
+    background-color: var(--brick-black, #050505);
     margin: 0;
   }
 
   #root {
-    background-color: #050505;
+    background-color: var(--brick-black, #050505);
     min-height: 100vh;
+  }
+
+  /* Performance: defer rendering of off-screen sections */
+  .content-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 800px;
   }
 }

@@ -8,6 +8,7 @@ import 'dotenv/config';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const UPLOADS_DIR = path.join(__dirname, 'uploads');
+const PROD_BASE_URL = process.env.PRODUCTION_UPLOADS_BASE_URL || 'https://brickai-production.up.railway.app';
 
 if (!fs.existsSync(UPLOADS_DIR)) {
     fs.mkdirSync(UPLOADS_DIR, { recursive: true });
@@ -35,34 +36,34 @@ const downloadFile = (url, filepath) => {
     });
 };
 
-async function syncUploads() {
-    try {
-        const { rows } = await pool.query('SELECT data FROM works');
-        let count = 0;
-        
-        for (const row of rows) {
-            const work = row.data;
-            // Arrays com chaves que possivelmente guardam URLs de imagem no JSON
-            const imageKeys = ['imageHome', 'imageInner', 'video']; 
-            
-            for (const key of imageKeys) {
-                if (work[key] && work[key].startsWith('/uploads/')) {
-                    const filename = path.basename(work[key]);
-                    const localPath = path.join(UPLOADS_DIR, filename);
-                    // Como a gente não sabe de cor a URL de prod agora, vou usar a da Brick.
-                    // Caso falhe, pelo menos temos os nomes dos arquivos.
-                    const prodUrl = `https://brickai-production.up.railway.app/uploads/${filename}`; 
-                    
-                    try {
-                        await downloadFile(prodUrl, localPath);
-                        console.log(`[+] Downloaded: ${filename}`);
-                        count++;
-                    } catch (e) {
-                        console.log(`[-] Failed: ${filename} (Maybe deleted in production)`);
-                    }
+async function syncImagesFromTable(tableName, imageKeys) {
+    let count = 0;
+    const { rows } = await pool.query(`SELECT data FROM ${tableName}`);
+    for (const row of rows) {
+        const item = row.data;
+        for (const key of imageKeys) {
+            if (item[key] && item[key].startsWith('/uploads/')) {
+                const filename = path.basename(item[key]);
+                const localPath = path.join(UPLOADS_DIR, filename);
+                const prodUrl = `${PROD_BASE_URL}/uploads/${filename}`;
+                try {
+                    await downloadFile(prodUrl, localPath);
+                    console.log(`[+] Downloaded (${tableName}): ${filename}`);
+                    count++;
+                } catch (e) {
+                    console.log(`[-] Failed: ${filename}. Error: ${e.message}`);
                 }
             }
         }
+    }
+    return count;
+}
+
+async function syncUploads() {
+    try {
+        let count = 0;
+        count += await syncImagesFromTable('works', ['imageHome', 'imageWorks', 'imageInner', 'video']);
+        count += await syncImagesFromTable('transmissions', ['thumbnail', 'image']);
         console.log(`\nDONE. Downloaded ${count} files.`);
     } catch (e) {
         console.error("Error:", e.message);
