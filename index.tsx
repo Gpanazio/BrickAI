@@ -2420,7 +2420,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
 
                     {/* System Status + Title — always visible, outside scroll */}
                     <div className="flex-shrink-0 px-4 pt-4 pb-3 md:px-8 md:pt-5 md:pb-4">
-                        <div className="flex items-center justify-between mb-3 md:mb-8 pt-1">
+                        <div className="flex items-center justify-between pt-1">
                             <span className="font-mono text-[9px] tracking-[0.4em] uppercase"><span className="text-brick-red">&gt;&gt; </span><span className="text-white/40"> ACCESSING_DATA</span><span className="text-brick-red animate-blink tracking-normal">_</span></span>
                             <button
                                 onClick={onClose}
@@ -2435,7 +2435,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                         {/* Title */}
                         <div className="relative">
                             <h2
-                                className="font-brick text-white uppercase"
+                                className="font-brick text-white uppercase my-4 md:my-8"
                                 style={{
                                     fontSize: 'clamp(1.6rem, 3vw, 2rem)',
                                     lineHeight: '0.9',
@@ -2444,7 +2444,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                             >
                                 {project.titleFull || project.title}
                             </h2>
-                            <div className="flex items-center gap-4 mt-4">
+                            <div className="flex items-center gap-4">
                                 <div className="h-px w-6 bg-white/20"></div>
                                 <span className="font-mono text-[9px] text-white/40 tracking-[0.3em] uppercase">{project.subtitle}</span>
                             </div>
@@ -2531,7 +2531,7 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
                     <span className="font-mono text-[9px] tracking-widest text-brick-red">{(index + 1).toString().padStart(3, '0')}</span>
                 </div>
                 <div className="transform translate-y-1 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    <h3 className="text-sm font-brick text-white leading-tight mb-1.5 tracking-tight group-hover:text-brick-red transition-colors line-clamp-2">{work.title}</h3>
+                    <h3 className="text-sm font-brick text-white leading-tight my-1.5 tracking-tight group-hover:text-brick-red transition-colors line-clamp-2">{work.title}</h3>
                     <p className="text-[9px] text-white font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-1">{work.desc}</p>
                 </div>
             </div>
@@ -2646,7 +2646,7 @@ const BlogPostPage = ({ post }: { post: Post }) => {
 
                         <header className="px-7 md:px-14 pt-12 md:pt-16 pb-12 border-b border-white/10">
                             <div className="max-w-3xl mx-auto">
-                                <div className="flex flex-wrap justify-start gap-3 md:gap-4 items-center mb-7 text-[10px] font-mono uppercase tracking-widest md:-ml-8">
+                                <div className="flex flex-wrap justify-start gap-3 md:gap-4 items-center text-[10px] font-mono uppercase tracking-widest md:-ml-8">
                                     <span className="text-brick-red">LOG_ID: {post.id}</span>
                                     <span className="text-brick-gray">DATE: {post.date}</span>
                                     {post.tags.map((tag: string) => (
@@ -2654,7 +2654,7 @@ const BlogPostPage = ({ post }: { post: Post }) => {
                                     ))}
                                 </div>
 
-                                <h1 className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-tight md:leading-[1.2] tracking-tight mb-8 text-center">
+                                <h1 className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-tight md:leading-[1.2] tracking-tight my-7 md:my-8 text-center">
                                     {postTitle}
                                 </h1>
 
