@@ -506,35 +506,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
             },
         ];
 
-        const generatedTransmissions: Post[] = [
-            {
-                id: "log_001",
-                date: "2025.01.15",
-                title: { pt: t('transmissions.log_001.title'), en: t('transmissions.log_001.title') },
-                excerpt: { pt: t('transmissions.log_001.excerpt'), en: t('transmissions.log_001.excerpt') },
-                tags: ["MANIFESTO", "IA", "AUTORIA"],
-                url: "log_001",
-                content: t('transmissions.log_001.content_p1')
-            },
-            {
-                id: "log_002",
-                date: "2025.02.10",
-                title: { pt: t('transmissions.log_002.title'), en: t('transmissions.log_002.title') },
-                excerpt: { pt: t('transmissions.log_002.excerpt'), en: t('transmissions.log_002.excerpt') },
-                tags: ["PRODUÇÃO", "DIREÇÃO", "CINEMA"],
-                url: "log_002",
-                content: t('transmissions.log_002.content_p1')
-            },
-            {
-                id: "log_003",
-                date: "2025.03.05",
-                title: { pt: t('transmissions.log_003.title'), en: t('transmissions.log_003.title') },
-                excerpt: { pt: t('transmissions.log_003.excerpt'), en: t('transmissions.log_003.excerpt') },
-                tags: ["EVOLUÇÃO", "VANGUARDA", "TECNOLOGIA"],
-                url: "log_003",
-                content: t('transmissions.log_003.content_p1')
-            },
-        ];
+        const generatedTransmissions: Post[] = [];
 
         const syncData = async () => {
             let finalWorks = [...generatedWorks];
@@ -2679,12 +2651,7 @@ const BlogPostPage = ({ post }: { post: Post }) => {
                                 </div>
 
                                 <h1 className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-tight md:leading-[1.2] tracking-tight mb-8 text-center">
-                                    {postTitle.toUpperCase() === 'A MÁQUINA NÃO TEM ALMA. NÓS TEMOS.' ? (
-                                        <>
-                                            A MÁQUINA NÃO TEM ALMA.{' '}
-                                            <span className="text-brick-red drop-shadow-[0_0_15px_rgba(var(--brick-red-rgb),0.45)]">NÓS TEMOS.</span>
-                                        </>
-                                    ) : postTitle}
+                                    {postTitle}
                                 </h1>
 
                                 <p className="text-base md:text-xl text-[#b8bcc4] font-light leading-relaxed text-center">
