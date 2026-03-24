@@ -228,47 +228,21 @@ const GlobalStyles = () => (
             animation: hero-fade-in 1.2s ease-out forwards;
         }
 
-        /* MODULE POWER-ON — Works Grid Card Activation */
-        @keyframes module-power-on {
-            0% {
-                opacity: 0;
-                filter: brightness(1) saturate(0);
-            }
-            8% {
-                opacity: 1;
-                filter: brightness(1.6) saturate(0);
-                border-color: rgba(255,255,255,0.7);
-                box-shadow: inset 0 0 30px rgba(255,255,255,0.1), 0 0 15px rgba(255,255,255,0.05);
-            }
-            16% {
-                filter: brightness(1) saturate(0.3);
-                border-color: rgba(255,255,255,0.2);
-                box-shadow: none;
-            }
-            100% {
-                opacity: 1;
-                filter: brightness(1) saturate(1);
-                border-color: rgba(255,255,255,0.1);
-            }
-        }
-        @keyframes static-dissolve {
-            0% { opacity: 0.15; }
-            100% { opacity: 0; }
-        }
+        /* MODULE POWER-ON — Works Grid Card Activation (GPU-friendly, opacity only) */
         .work-card-poweron {
             opacity: 0;
-            filter: brightness(1) saturate(0);
+            will-change: opacity;
         }
         .work-card-poweron.active {
-            animation: module-power-on 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+            animation: fadeIn 0.5s ease-out both;
             animation-delay: var(--poweron-delay, 0ms);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         .work-card-poweron .static-noise {
-            opacity: 0;
-        }
-        .work-card-poweron.active .static-noise {
-            animation: static-dissolve 0.8s ease-out forwards;
-            animation-delay: var(--poweron-delay, 0ms);
+            display: none;
         }
         @media (prefers-reduced-motion: reduce) {
             .work-card-poweron.active {
@@ -657,6 +631,52 @@ const TypewriterText = ({ text, className, delay = 0, onComplete }: { text: stri
     );
 };
 
+// Character-by-character reveal for MASON chat responses
+const MasonTypewriter = ({ text, onComplete, speed = 18 }: { text: string; onComplete?: () => void; speed?: number }) => {
+    const [displayed, setDisplayed] = useState('');
+    const [done, setDone] = useState(false);
+    const indexRef = useRef(0);
+    const rafRef = useRef<number | null>(null);
+    const lastTimeRef = useRef(0);
+
+    useEffect(() => {
+        indexRef.current = 0;
+        setDisplayed('');
+        setDone(false);
+        lastTimeRef.current = 0;
+
+        const step = (timestamp: number) => {
+            if (!lastTimeRef.current) lastTimeRef.current = timestamp;
+            const elapsed = timestamp - lastTimeRef.current;
+
+            if (elapsed >= speed) {
+                // Reveal 1-3 chars per tick for natural pacing
+                const charsToAdd = elapsed >= speed * 3 ? 3 : elapsed >= speed * 2 ? 2 : 1;
+                indexRef.current = Math.min(indexRef.current + charsToAdd, text.length);
+                setDisplayed(text.slice(0, indexRef.current));
+                lastTimeRef.current = timestamp;
+
+                if (indexRef.current >= text.length) {
+                    setDone(true);
+                    onComplete?.();
+                    return;
+                }
+            }
+            rafRef.current = requestAnimationFrame(step);
+        };
+
+        rafRef.current = requestAnimationFrame(step);
+        return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+    }, [text, speed, onComplete]);
+
+    return (
+        <>
+            {displayed}
+            {!done && <span className="inline-block w-1.5 h-4 bg-brick-red animate-blink ml-0.5 align-middle"></span>}
+        </>
+    );
+};
+
 const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*";
 
 const ScrambleText = React.memo(({ text, className, hoverTrigger = false, triggerOnReveal = false, delay = 0 }: { text: string, className?: string, hoverTrigger?: boolean, triggerOnReveal?: boolean, delay?: number }) => {
@@ -873,6 +893,26 @@ const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
     const onAbout = useCallback(goAbout, [goAbout]);
     const { t, i18n } = useTranslation();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [headerHidden, setHeaderHidden] = useState(false);
+    const [headerSolid, setHeaderSolid] = useState(false);
+    const lastScrollY = useRef(0);
+
+    useEffect(() => {
+        const onScroll = () => {
+            const y = window.scrollY;
+            // Auto-hide on scroll down, show on scroll up (only after 100px)
+            if (y > 100) {
+                setHeaderHidden(y > lastScrollY.current && y - lastScrollY.current > 5);
+            } else {
+                setHeaderHidden(false);
+            }
+            // Background solidifies after hero (~400px)
+            setHeaderSolid(y > 400);
+            lastScrollY.current = y;
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
 
     const toggleLanguage = () => {
         const newLang = i18n.language === 'en' ? 'pt' : 'en';
@@ -886,7 +926,7 @@ const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
 
     return (
         <React.Fragment>
-            <header role="banner" className="fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none transition-all duration-300 bg-gradient-to-b from-brick-black/70 from-[45%] to-transparent">
+            <header role="banner" className={`fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none transition-all duration-300 ${headerHidden && !mobileMenuOpen ? '-translate-y-full' : 'translate-y-0'} ${headerSolid ? 'bg-brick-black/95 backdrop-blur-sm' : 'bg-gradient-to-b from-brick-black/70 from-[45%] to-transparent'}`}>
                 <a href="/" onClick={(e) => { e.preventDefault(); onHome(); }} role="link" aria-label="Brick AI — Go to homepage" tabIndex={0} className="pointer-events-auto flex items-baseline group cursor-pointer select-none z-50 relative">
                     <img src="/01.png" alt="BRICK" className="h-6 md:h-8 w-auto object-contain mr-1" />
                     <span className="text-brick-red font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[2px]">_</span>
@@ -2416,7 +2456,7 @@ const UnifiedEnding = () => {
                     <div className="w-full px-6 md:px-12 lg:px-24 pb-6 flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="flex gap-6">
                             {['LinkedIn', 'Instagram'].map((social) => (
-                                <a key={social} href={social === 'Instagram' ? 'https://www.instagram.com/brick.mov' : 'https://www.linkedin.com/company/brick-mov/'} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white/50 hover:text-brick-red tracking-widest uppercase transition-colors duration-500">{social}</a>
+                                <a key={social} href={social === 'Instagram' ? 'https://www.instagram.com/brick.mov' : 'https://www.linkedin.com/company/brick-mov/'} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white/50 hover:text-brick-red tracking-widest uppercase transition-colors duration-500"><ScrambleText text={social} hoverTrigger={true} /></a>
                             ))}
                         </div>
                         <div className="text-[9px] uppercase tracking-[0.2em] text-brick-gray/30 font-bold text-center md:text-right flex flex-col items-center md:items-end gap-1">
@@ -2939,7 +2979,7 @@ const Footer = () => {
             <div className="mt-8 border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-start gap-4 reveal">
                 <div className="flex gap-6">
                     {['LinkedIn', 'Instagram'].map((social) => (
-                        <a key={social} href={social === 'Instagram' ? 'https://www.instagram.com/brick.mov' : 'https://www.linkedin.com/company/brick-mov/'} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-brick-red tracking-widest uppercase transition-colors">{social}</a>
+                        <a key={social} href={social === 'Instagram' ? 'https://www.instagram.com/brick.mov' : 'https://www.linkedin.com/company/brick-mov/'} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-brick-red tracking-widest uppercase transition-colors"><ScrambleText text={social} hoverTrigger={true} /></a>
                     ))}
                 </div>
                 <div className="text-[9px] uppercase tracking-[0.2em] text-brick-gray/40 font-bold text-right">
@@ -2960,10 +3000,13 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
     ]);
     const [input, setInput] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
+    const [typingIndex, setTypingIndex] = useState(-1); // index of message currently being typed
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const SUGGESTIONS = [
         t('chat.suggestions.philosophy'),
         t('chat.suggestions.synthesis'),
+        t('chat.suggestions.services'),
+        t('chat.suggestions.process'),
         t('chat.suggestions.humans')
     ];
 
@@ -2978,6 +3021,13 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
         if (isFirstRender.current) { isFirstRender.current = false; return; }
         scrollToBottom();
     }, [messages]);
+
+    // Keep scrolling during typewriter reveal
+    useEffect(() => {
+        if (typingIndex < 0) return;
+        const interval = setInterval(scrollToBottom, 300);
+        return () => clearInterval(interval);
+    }, [typingIndex]);
 
     useEffect(() => {
         if (isLangFirstRender.current) { isLangFirstRender.current = false; return; }
@@ -2998,7 +3048,10 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
 
         const response = await chatWithMono(messages, messageToSend);
 
-        setMessages(prev => [...prev, { role: 'mono', content: response }]);
+        setMessages(prev => {
+            setTypingIndex(prev.length); // the new message index
+            return [...prev, { role: 'mono', content: response }];
+        });
         setIsProcessing(false);
     };
 
@@ -3051,7 +3104,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                                     { name: 'LinkedIn', url: 'https://www.linkedin.com/company/brick-mov/' },
                                     { name: 'Instagram', url: 'https://www.instagram.com/brick.mov' }
                                 ].map(social => (
-                                    <a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-brick-gray hover:text-white uppercase tracking-wider underline decoration-white/20 hover:decoration-white">{social.name}</a>
+                                    <a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-brick-gray hover:text-white uppercase tracking-wider underline decoration-white/20 hover:decoration-white"><ScrambleText text={social.name} hoverTrigger={true} /></a>
                                 ))}
                             </div>
                         </div>
@@ -3117,7 +3170,10 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                                             ? 'bg-white/5 text-white/90 border-r-2 border-white/20'
                                             : 'text-brick-red bg-brick-red/5 border-l-2 border-brick-red/40'
                                             }`} style={{ fontFamily: "'Share Tech Mono', 'IBM Plex Mono', monospace" }}>
-                                            {msg.content}
+                                            {msg.role === 'mono' && i === typingIndex
+                                                ? <MasonTypewriter text={msg.content} onComplete={() => setTypingIndex(-1)} />
+                                                : msg.content
+                                            }
                                         </div>
                                     </div>
                                 ))}
@@ -3135,19 +3191,36 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             {/* Input */}
                             <div className="p-6 bg-brick-black border-t border-white/10">
                                 {!isProcessing && messages.length < 4 && (
-                                    <div className="flex flex-wrap gap-2 mb-4">
-                                        {SUGGESTIONS.map((query, i) => (
-                                            <button
-                                                key={i}
-                                                onClick={() => handleSend(query)}
-                                                className="text-[8px] font-mono uppercase tracking-widest text-brick-gray border border-white/10 bg-white/[0.02] px-3 py-1.5 hover:bg-brick-red hover:text-white hover:border-brick-red transition-all"
-                                            >
-                                                {query}
-                                            </button>
-                                        ))}
+                                    <div className="flex flex-col gap-2 mb-4">
+                                        {/* Row 1: 2 buttons */}
+                                        <div className="grid grid-cols-2 gap-2">
+                                            {SUGGESTIONS.slice(0, 2).map((query, i) => (
+                                                <button
+                                                    key={i}
+                                                    onClick={() => handleSend(query)}
+                                                    className="text-[8px] font-mono uppercase tracking-widest text-brick-gray border border-white/10 bg-white/[0.02] px-3 py-1.5 hover:bg-brick-red hover:text-white hover:border-brick-red transition-all animate-fade-in-up opacity-0 whitespace-nowrap text-center"
+                                                    style={{ animationDelay: `${i * 120}ms`, animationFillMode: 'forwards' }}
+                                                >
+                                                    {query}
+                                                </button>
+                                            ))}
+                                        </div>
+                                        {/* Row 2: 3 buttons */}
+                                        <div className="grid grid-cols-3 gap-2">
+                                            {SUGGESTIONS.slice(2).map((query, i) => (
+                                                <button
+                                                    key={i + 2}
+                                                    onClick={() => handleSend(query)}
+                                                    className="text-[7px] font-mono uppercase tracking-wider text-brick-gray border border-white/10 bg-white/[0.02] px-2 py-1.5 hover:bg-brick-red hover:text-white hover:border-brick-red transition-all animate-fade-in-up opacity-0 text-center"
+                                                    style={{ animationDelay: `${(i + 2) * 120}ms`, animationFillMode: 'forwards' }}
+                                                >
+                                                    {query}
+                                                </button>
+                                            ))}
+                                        </div>
                                     </div>
                                 )}
-                                <form onSubmit={handleSend} className="flex items-center gap-4">
+                                <form onSubmit={handleSend} className="flex items-center gap-4 rounded-sm transition-shadow duration-300 focus-within:shadow-[0_0_20px_rgba(220,38,38,0.15)]">
                                     <div className="w-2 h-2 bg-brick-red animate-pulse shrink-0 rounded-full"></div>
                                     <input
                                         type="text"

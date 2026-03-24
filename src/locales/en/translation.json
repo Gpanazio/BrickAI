@@ -206,7 +206,9 @@
         "suggestions": {
             "philosophy": "How much does a project cost?",
             "synthesis": "What's the average timeline?",
-            "humans": "Talk to the team"
+            "humans": "Talk to the team",
+            "services": "What do you produce?",
+            "process": "How does the process work?"
         }
     },
     "works_page": {

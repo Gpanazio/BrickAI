@@ -206,7 +206,9 @@
         "suggestions": {
             "philosophy": "Quanto custa um projeto?",
             "synthesis": "Qual o prazo médio?",
-            "humans": "Falar com a equipe"
+            "humans": "Falar com a equipe",
+            "services": "O que vocês produzem?",
+            "process": "Como funciona o processo?"
         }
     },
     "works_page": {
