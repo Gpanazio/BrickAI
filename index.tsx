@@ -228,6 +228,60 @@ const GlobalStyles = () => (
             animation: hero-fade-in 1.2s ease-out forwards;
         }
 
+        /* MODULE POWER-ON — Works Grid Card Activation */
+        @keyframes module-power-on {
+            0% {
+                opacity: 0;
+                filter: brightness(1) saturate(0);
+            }
+            8% {
+                opacity: 1;
+                filter: brightness(1.6) saturate(0);
+                border-color: rgba(255,255,255,0.7);
+                box-shadow: inset 0 0 30px rgba(255,255,255,0.1), 0 0 15px rgba(255,255,255,0.05);
+            }
+            16% {
+                filter: brightness(1) saturate(0.3);
+                border-color: rgba(255,255,255,0.2);
+                box-shadow: none;
+            }
+            100% {
+                opacity: 1;
+                filter: brightness(1) saturate(1);
+                border-color: rgba(255,255,255,0.1);
+            }
+        }
+        @keyframes static-dissolve {
+            0% { opacity: 0.15; }
+            100% { opacity: 0; }
+        }
+        .work-card-poweron {
+            opacity: 0;
+            filter: brightness(1) saturate(0);
+        }
+        .work-card-poweron.active {
+            animation: module-power-on 1s cubic-bezier(0.16, 1, 0.3, 1) both;
+            animation-delay: var(--poweron-delay, 0ms);
+        }
+        .work-card-poweron .static-noise {
+            opacity: 0;
+        }
+        .work-card-poweron.active .static-noise {
+            animation: static-dissolve 0.8s ease-out forwards;
+            animation-delay: var(--poweron-delay, 0ms);
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .work-card-poweron.active {
+                animation: none;
+                opacity: 1;
+                filter: none;
+            }
+            .work-card-poweron.active .static-noise {
+                animation: none;
+                opacity: 0;
+            }
+        }
+
         @keyframes crt-glitch-text {
             0% { text-shadow: 2px 0 0 rgba(var(--brick-red-rgb),0.8), -2px 0 0 rgba(0,255,255,0.5), 0 0 10px rgba(var(--brick-red-rgb),0.6); }
             20% { text-shadow: -2px 0 0 rgba(var(--brick-red-rgb),0.8), 2px 0 0 rgba(0,255,255,0.5), 0 0 15px rgba(var(--brick-red-rgb),0.6); }
@@ -714,15 +768,17 @@ const useScrollReveal = (view: string) => {
             });
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
 
+        const selectors = '.reveal, .work-card-poweron';
+
         const observeRevealNode = (node: Element) => {
-            if (node.matches('.reveal')) {
+            if (node.matches(selectors)) {
                 observer.observe(node);
             }
-            node.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            node.querySelectorAll(selectors).forEach(el => observer.observe(el));
         };
 
         const observeReveals = () => {
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            document.querySelectorAll(selectors).forEach(el => observer.observe(el));
         };
 
         const timeoutId = window.setTimeout(observeReveals, 100);
@@ -1278,7 +1334,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             onClick={() => work.hasDetail && onOpen(work)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={`reveal relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-brick-red transition-colors duration-300 bg-brick-black group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
+            className={`work-card-poweron relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-brick-red bg-brick-black group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
             role={work.hasDetail ? 'button' : undefined}
             tabIndex={work.hasDetail ? 0 : undefined}
             aria-label={`View project: ${work.title}`}
@@ -1289,8 +1345,12 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 flexShrink: 0,
                 willChange: 'flex-grow',
                 transition: 'flex-grow 1.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms ease',
-            }}
+                '--poweron-delay': `${index * 80}ms`,
+            } as React.CSSProperties}
         >
+            {/* STATIC NOISE OVERLAY (dissolves on power-on) */}
+            <div className="static-noise absolute inset-0 z-50 pointer-events-none mix-blend-overlay bg-noise-svg" />
+
             {/* BACKGROUND IMAGE */}
             <div
                 className="absolute inset-0 z-10"
