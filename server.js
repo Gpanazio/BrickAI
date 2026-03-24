@@ -133,7 +133,7 @@ app.use((req, res, next) => {
         "img-src 'self' data: blob: https:",
         "media-src 'self' https:",
         "connect-src 'self' https://www.google-analytics.com",
-        "frame-src 'self' https://player.vimeo.com https://www.youtube.com"
+        "frame-src 'self' https://player.vimeo.com https://www.youtube.com https://review.brick.mov"
     ].join('; '));
     next();
 });
