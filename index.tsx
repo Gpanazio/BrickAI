@@ -32,7 +32,6 @@ declare global { interface Window { gtag?: (...args: [string, ...unknown[]]) => 
 // --- STYLES & CONFIG ---
 const GlobalStyles = () => (
     <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@100;200;300&display=swap');
         .font-editorial {
             font-family: 'Barlow', sans-serif;
             font-style: normal;
@@ -325,7 +324,16 @@ const GlobalStyles = () => (
             color: transparent;
         }
 
-        /* LEGACY SECTION UTILS */
+        /* GLOBAL NOISE OVERLAY */
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.03;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
 
         /* DEEP SPACE NOISE OVERLAY */
         .modal-video-noise::after {
@@ -340,9 +348,6 @@ const GlobalStyles = () => (
         }
     `}</style>
 );
-
-// --- CONFIG ---
-const _AI_NAME = "MASON";
 
 // --- TYPES ---
 interface Work {
@@ -390,8 +395,6 @@ const getLocalizedField = (field: string | Record<string, string>, lang: string,
 };
 
 // --- DATA IS NOW GENERATED INSIDE DATA PROVIDER FOR I18N ---
-
-const _CLIENTS = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO", "L'ORÉAL"];
 
 // --- CONTEXT & DATA MANAGEMENT ---
 const DataContext = React.createContext<{
@@ -468,7 +471,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 imageWorks: "/slopai.jpg",
                 imageSettingsHome: { x: 50, y: 50, scale: 1.0 },
                 imageSettingsWorks: { x: 50, y: 50, scale: 1.0 },
-                videoUrl: "https://review.brick.mov/portfolio/player/12",
+                videoUrl: "https://review.brick.mov/portfolio/embed/12",
                 hasDetail: true
             },
             {
@@ -595,59 +598,6 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 // --- UTILS COMPONENTS ---
-const _GlitchText = React.memo(({ text, className }: { text: string, className?: string }) => {
-    const glitchChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_#@!";
-    const [displayed, setDisplayed] = useState('');
-    const [ready, setReady] = useState(false);
-    const [chars, setChars] = useState<{ char: string; glitched: boolean }[]>([]);
-
-    // Phase 1: typewriter
-    useEffect(() => {
-        let i = 0;
-        const interval = setInterval(() => {
-            i++;
-            setDisplayed(text.slice(0, i));
-            if (i >= text.length) {
-                clearInterval(interval);
-                setChars(text.split('').map(c => ({ char: c, glitched: false })));
-                setTimeout(() => setReady(true), 200);
-            }
-        }, 80);
-        return () => clearInterval(interval);
-    }, [text]);
-
-    // Phase 2: glitch after typewriter done
-    useEffect(() => {
-        if (!ready) return;
-        const positions = text.split('').reduce((acc: number[], c, i) => c !== ' ' ? [...acc, i] : acc, []);
-        let timeout: ReturnType<typeof setTimeout>;
-
-        const glitch = () => {
-            const count = 2 + Math.floor(Math.random() * 2);
-            const picked = [...positions].sort(() => Math.random() - 0.5).slice(0, count);
-            setChars(text.split('').map((c, i) => ({
-                char: picked.includes(i) ? glitchChars[Math.floor(Math.random() * glitchChars.length)] : c,
-                glitched: picked.includes(i),
-            })));
-            setTimeout(() => setChars(text.split('').map(c => ({ char: c, glitched: false }))), 150);
-            timeout = setTimeout(glitch, 600 + Math.random() * 600);
-        };
-
-        timeout = setTimeout(glitch, 600);
-        return () => clearTimeout(timeout);
-    }, [ready, text]);
-
-    return (
-        <span className={className}>
-            {ready
-                ? chars.map(({ char, glitched }, i) => (
-                    <span key={i} style={glitched ? { color: 'var(--brick-red)' } : undefined}>{char}</span>
-                ))
-                : displayed}
-        </span>
-    );
-});
-
 const TypewriterText = ({ text, className, delay = 0, onComplete }: { text: string, className?: string, delay?: number, onComplete?: () => void }) => {
     const [displayed, setDisplayed] = useState('');
     const [done, setDone] = useState(false);
@@ -886,14 +836,6 @@ const chatWithMono = async (history: { role: string; content: string }[], messag
 
 
 // --- COMPONENTS: SECTIONS ---
-const _BrickLogo = ({ className }: { className?: string }) => (
-    <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 10H90V90H10V10Z" fill="currentColor" fillOpacity="0.1" />
-        <path d="M20 20H80V80H20V20Z" stroke="currentColor" strokeWidth="4" />
-        <rect x="35" y="35" width="30" height="30" fill="var(--brick-red)" />
-    </svg>
-);
-
 const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
     const { goHome, goWorks, goTransmissions, goChat, goAbout } = useAppNav();
     const onHome = useCallback(goHome, [goHome]);
@@ -996,8 +938,8 @@ const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
                     <button onClick={() => handleNav(onTransmissions)} className="text-2xl font-brick text-white hover:text-brick-red transition-colors w-full text-center border-b border-white/10 pb-4">
                         {t('header.transmissions')}
                     </button>
-                    <button onClick={() => handleNav(onChat)} className="text-2xl font-brick text-brick-red hover:text-white transition-colors w-full text-center pb-4 animate-pulse">
-                        {t('header.talk_to_us')} _
+                    <button onClick={() => handleNav(onChat)} className="text-2xl font-brick text-white hover:text-brick-red transition-colors w-full text-center pb-4">
+                        {t('header.talk_to_us')} <span className="text-brick-red animate-blink">_</span>
                     </button>
 
                     <button
@@ -1348,15 +1290,6 @@ const PhilosophyItem = ({ title, text, titleSize = 'text-4xl md:text-6xl', index
     </motion.div>
 );
 
-// --- COMPONENTE DE DATA CHIP ---
-// Um pequeno elemento decorativo de "dado" que processa
-const _DataChip = ({ label, value }: { label: string, value: string }) => (
-    <div className="flex flex-col gap-1">
-        <span className="text-[8px] font-mono text-brick-gray/60 tracking-widest uppercase">{label}</span>
-        <span className="text-[10px] font-mono text-white/90 tracking-widest uppercase border-b border-white/10 pb-0.5">{value}</span>
-    </div>
-);
-
 const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: (work: Work) => void }) => {
     const containerRef = useRef<HTMLDivElement>(null);
     const bgRef = useRef<HTMLDivElement>(null);
@@ -1384,7 +1317,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
         >
             {/* BACKGROUND IMAGE */}
             <div
-                className="absolute inset-0 z-10 animate-float-parallax"
+                className="absolute inset-0 z-10"
                 style={{ animationDelay: `${index * -4}s` }}
             >
                 <div
@@ -1959,7 +1892,7 @@ const monolithAnimations = {
 };
 
 const UnifiedEnding = () => {
-    const { goChat, goAdmin: _goAdmin } = useAppNav();
+    const { goChat } = useAppNav();
     const ref = useRef<HTMLElement>(null);
     const { t } = useTranslation();
     const clients = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO"];
@@ -1971,7 +1904,6 @@ const UnifiedEnding = () => {
             ? { animate: staticFromAnim(anim.animate), transition: { duration: 0 } }
             : { animate: anim.animate, transition: { ...anim.transition, ease: anim.transition.ease as Easing } };
 
-    const _planetX = useTransform(smoothProgress, [0, 1], ["-96%", "-92%"]);
     const textY = useTransform(smoothProgress, [0, 1], ["30px", "0px"]);
 
     return (
@@ -2731,8 +2663,8 @@ const BlogPostPage = ({ post }: { post: Post }) => {
             <button onClick={onBack} aria-label="Return to transmissions" className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_index')}
             </button>
-            <main id="main-content" className="pt-32 md:pt-40 min-h-screen flex flex-col bg-brick-black pb-32 md:pb-40 px-4 md:px-8" onClick={onBack}>
-                <article className="w-full max-w-5xl mx-auto mt-12 md:mt-16 animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
+            <main id="main-content" className="pt-32 md:pt-40 min-h-screen flex flex-col bg-brick-black pb-32 md:pb-40 px-4 md:px-8">
+                <article className="w-full max-w-5xl mx-auto mt-12 md:mt-16 animate-fade-in-up">
                     <div className="relative border border-white/10 bg-brick-surface backdrop-blur-sm overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brick-red to-transparent opacity-80"></div>
 
@@ -3108,28 +3040,6 @@ const InfoCard = ({ number, title, desc }: { number: string, title: string, desc
         </div>
         {/* Tech Decor */}
         <div className="scanline-effect opacity-10 group-hover:opacity-20 transition-opacity"></div>
-    </div>
-);
-
-const _StatBlock = ({ label, value, sub }: { label: string, value: string, sub: string }) => (
-    <div className="flex flex-col border-l border-white/10 pl-6 py-2 group hover:border-brick-red transition-colors">
-        <span className="font-mono text-[9px] text-brick-gray uppercase tracking-widest mb-1">{label}</span>
-        <span className="font-brick text-3xl md:text-4xl text-white mb-1 group-hover:text-brick-red transition-colors">{value}</span>
-        <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">{sub}</span>
-    </div>
-);
-
-const _LogItem = ({ year, title, desc, highlight = false }: { year: string, title: string, desc: string, highlight?: boolean }) => (
-    <div className={`relative pl-8 md:pl-12 group ${highlight ? 'opacity-100' : 'opacity-60 hover:opacity-100'} transition-opacity duration-300`}>
-        {/* Dot */}
-        <div className={`absolute left-[-4px] top-1.5 w-2 h-2 rounded-full border-2 border-brick-black z-10 ${highlight ? 'bg-brick-red' : 'bg-[#333] group-hover:bg-white'} transition-colors`}></div>
-
-        <div className="flex flex-col md:flex-row md:items-baseline gap-2 mb-1">
-            <span className={`font-mono text-sm font-bold ${highlight ? 'text-brick-red' : 'text-white'}`}>{year}</span>
-            <span className="hidden md:inline text-white/20">//</span>
-            <h4 className="font-brick text-lg text-white uppercase tracking-wide">{title}</h4>
-        </div>
-        <p className="text-xs md:text-sm text-brick-gray font-light leading-relaxed max-w-lg">{desc}</p>
     </div>
 );
 

@@ -18,4 +18,38 @@
     content-visibility: auto;
     contain-intrinsic-size: auto 800px;
   }
+
+  /* Keyboard focus indicators — visible only when navigating with keyboard */
+  *:focus-visible {
+    outline: 2px solid var(--brick-red, #DC2626);
+    outline-offset: 2px;
+  }
+
+  /* Remove default focus ring for mouse users */
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+/* Reduced motion: disable/simplify ALL animations for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+
+  .reveal.active {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
