@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useContext, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Eye, Fingerprint, Globe, Menu, X } from 'lucide-react';
 import {
@@ -4215,12 +4215,12 @@ export default App;
 // Mount the React app (HMR-safe: reuse existing root)
 const container = document.getElementById('root');
 if (container) {
-    const existingRoot = (container as any).__reactRoot;
+    const existingRoot = (container as unknown as { __reactRoot?: ReturnType<typeof createRoot> }).__reactRoot;
     if (existingRoot) {
         existingRoot.render(<App />);
     } else {
         const root = createRoot(container);
-        (container as any).__reactRoot = root;
+        (container as unknown as { __reactRoot?: ReturnType<typeof createRoot> }).__reactRoot = root;
         root.render(<App />);
     }
 }
