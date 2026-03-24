@@ -2616,7 +2616,7 @@ const WorksPage = ({ onSelectProject }: {
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
             <main id="main-content" className="pt-32 md:pt-40 min-h-screen flex flex-col">
-                <section className="w-full px-6 md:px-12 lg:px-24 mb-16 reveal">
+                <section className="w-full px-6 md:px-12 lg:px-24 mb-8 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('works_page.archive_index').split('_').slice(0, -1).join('_')}_<span className="text-brick-red">{t('works_page.archive_index').split('_').slice(-1)[0]}</span></h1>
