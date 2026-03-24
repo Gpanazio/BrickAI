@@ -58,8 +58,8 @@ export const WORKS_SCHEMA = [
         slug: 'slop-ai',
         name: { en: 'Slop AI', pt: 'Slop AI' },
         description: {
-            en: 'Brand campaign exploring the aesthetic of AI-generated content culture.',
-            pt: 'Campanha de marca explorando a estética da cultura de conteúdo gerado por IA.'
+            en: 'In a multiverse collapsed by mediocrity, AI characters try to survive the worst nightmare imaginable: the incompetence of their own creator gods.',
+            pt: 'No multiverso colapsado pela mediocridade, personagens de IA tentam sobreviver ao pior pesadelo possível: a incompetência de seus próprios deuses criadores.'
         },
         thumbnailUrl: 'https://ai.brick.mov/slopai.jpg',
         contentUrl: 'https://ai.brick.mov/works/slop-ai',
