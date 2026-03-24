@@ -921,7 +921,7 @@ const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
                     <button
                         onClick={toggleLanguage}
                         aria-label={i18n.language === 'en' ? 'Switch to Portuguese' : 'Switch to English'}
-                        className="mt-8 text-sm font-mono text-brick-gray hover:text-white transition-colors flex items-center gap-2 uppercase tracking-widest border border-white/20 px-6 py-2 rounded-full"
+                        className="mt-8 text-sm font-mono text-brick-gray hover:text-white transition-colors flex items-center gap-2 uppercase tracking-widest px-6 py-2"
                     >
                         <Globe size={14} aria-hidden="true" /> {i18n.language === 'en' ? 'SWITCH TO PORTUGUESE' : 'SWITCH TO ENGLISH'}
                     </button>
@@ -1041,7 +1041,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                                 }}
                             ></div>
                         </div>
-                        <div className="absolute inset-0 border border-white/10 opacity-50 pointer-events-none z-10 rounded-[2px]"></div>
+                        <div className="absolute inset-0 border border-white/10 opacity-50 pointer-events-none z-10 rounded-[2px] hidden md:block"></div>
                     </div>
                     <div
                         className="absolute inset-0 z-20 cursor-none"
@@ -1360,7 +1360,7 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
                 </span>
                 <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] uppercase leading-none">{t('works_page.title')}</span>
             </motion.div>
-            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] px-6 md:px-12 lg:px-24">
+            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] px-0 md:px-12 lg:px-24">
                 <DataContext.Consumer>
                     {(data) => data ? data.works.slice(0, 5).map((work, idx) => (
                         <WorkCard key={work.id} work={work} index={idx} onOpen={onSelectProject} />
@@ -2389,6 +2389,19 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                     </div>
                 </div>
 
+                {/* ─── MOBILE CLOSE BUTTON (visible when panel is hidden) ───── */}
+                {panelHidden && (
+                    <button
+                        onClick={onClose}
+                        aria-label="Close project modal"
+                        className="absolute z-30 top-4 right-4 md:hidden flex items-center justify-center
+                            border border-white/20 bg-brick-black/80 backdrop-blur-sm hover:bg-white/10 hover:border-white/40
+                            w-10 h-10 rounded-sm transition-all duration-300"
+                    >
+                        <span className="font-mono text-[11px] text-white/50 hover:text-white/80 transition-colors">✕</span>
+                    </button>
+                )}
+
                 {/* ─── INFO PANEL PULL-BACK TAB (só quando escondido) ───── */}
                 {panelHidden && (
                     <button
@@ -2826,7 +2839,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
 
                 {/* 1. CONTACT SECTION (Humans) */}
                 <section className="w-full animate-fade-in-up">
-                    <div className="flex flex-col md:flex-row justify-between items-end mb-12">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12">
                         <div>
                             <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">REACH_<span className="text-brick-red">HUMANS</span></h1>
                             <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input"><span className="text-brick-red">&gt;&gt; </span> <span className="text-brick-gray">{t('chat.manual_override')}</span></p>
@@ -3137,7 +3150,7 @@ const AboutPage = () => {
                             <h2 className="text-xs md:text-sm font-mono text-brick-gray uppercase tracking-[0.2em]">{t('about.team.title')}</h2>
                         </div>
 
-                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             <TeamMember name="FRAN CAMPARONI" role={t('about.team.roles.fran')} id="001" />
                             <TeamMember name="GABRIEL PANAZIO" role={t('about.team.roles.gabriel')} id="002" />
                             <TeamMember name="LUFE BERTO" role={t('about.team.roles.lufe')} id="003" />
