@@ -27,7 +27,7 @@ const useAppNav = () => {
 };
 
 // Extend Window for gtag (GA4)
-declare global { interface Window { gtag?: (...args: [string, ...any[]]) => void; } }
+declare global { interface Window { gtag?: (...args: [string, ...unknown[]]) => void; } }
 
 // --- STYLES & CONFIG ---
 const GlobalStyles = () => (
@@ -342,7 +342,7 @@ const GlobalStyles = () => (
 );
 
 // --- CONFIG ---
-const AI_NAME = "MASON";
+const _AI_NAME = "MASON";
 
 // --- TYPES ---
 interface Work {
@@ -391,7 +391,7 @@ const getLocalizedField = (field: string | Record<string, string>, lang: string,
 
 // --- DATA IS NOW GENERATED INSIDE DATA PROVIDER FOR I18N ---
 
-const CLIENTS = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO", "L'ORÉAL"];
+const _CLIENTS = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO", "L'ORÉAL"];
 
 // --- CONTEXT & DATA MANAGEMENT ---
 const DataContext = React.createContext<{
@@ -595,7 +595,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 // --- UTILS COMPONENTS ---
-const GlitchText = React.memo(({ text, className }: { text: string, className?: string }) => {
+const _GlitchText = React.memo(({ text, className }: { text: string, className?: string }) => {
     const glitchChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_#@!";
     const [displayed, setDisplayed] = useState('');
     const [ready, setReady] = useState(false);
@@ -681,19 +681,21 @@ const TypewriterText = ({ text, className, delay = 0, onComplete }: { text: stri
     );
 };
 
+const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*";
+
 const ScrambleText = React.memo(({ text, className, hoverTrigger = false, triggerOnReveal = false, delay = 0 }: { text: string, className?: string, hoverTrigger?: boolean, triggerOnReveal?: boolean, delay?: number }) => {
     const [displayText, setDisplayText] = useState(text);
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*";
-    const intervalRef = useRef<any>(null);
+    const chars = SCRAMBLE_CHARS;
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const containerRef = useRef<HTMLSpanElement>(null);
     const [hasBeenRevealed, setHasBeenRevealed] = useState(false);
 
-    const scramble = () => {
+    const scramble = useCallback(() => {
         let iteration = 0;
-        clearInterval(intervalRef.current);
+        clearInterval(intervalRef.current!);
 
         intervalRef.current = setInterval(() => {
-            setDisplayText(prev =>
+            setDisplayText(() =>
                 text
                     .split("")
                     .map((letter, index) => {
@@ -705,12 +707,12 @@ const ScrambleText = React.memo(({ text, className, hoverTrigger = false, trigge
             );
 
             if (iteration >= text.length) {
-                clearInterval(intervalRef.current);
+                clearInterval(intervalRef.current!);
             }
 
             iteration += 1 / 3;
         }, 30);
-    };
+    }, [text, chars]);
 
     useEffect(() => {
         if (!triggerOnReveal) {
@@ -724,7 +726,7 @@ const ScrambleText = React.memo(({ text, className, hoverTrigger = false, trigge
                 scramble();
             }
         }
-    }, [text, triggerOnReveal, delay]);
+    }, [text, triggerOnReveal, delay, scramble, chars]);
 
     useEffect(() => {
         if (triggerOnReveal) {
@@ -738,7 +740,7 @@ const ScrambleText = React.memo(({ text, className, hoverTrigger = false, trigge
             if (containerRef.current) observer.observe(containerRef.current);
             return () => observer.disconnect();
         }
-    }, [triggerOnReveal, hasBeenRevealed, delay]);
+    }, [triggerOnReveal, hasBeenRevealed, delay, scramble]);
 
     return (
         <span
@@ -877,14 +879,14 @@ const chatWithMono = async (history: { role: string; content: string }[], messag
 
         return data.response;
 
-    } catch (err) {
+    } catch {
         return "SYSTEM_FAILURE: Unable to establish neural link.";
     }
 };
 
 
 // --- COMPONENTS: SECTIONS ---
-const BrickLogo = ({ className }: { className?: string }) => (
+const _BrickLogo = ({ className }: { className?: string }) => (
     <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
         <path d="M10 10H90V90H10V10Z" fill="currentColor" fillOpacity="0.1" />
         <path d="M20 20H80V80H20V20Z" stroke="currentColor" strokeWidth="4" />
@@ -1269,6 +1271,7 @@ const ParticleBackground = ({ reactToMouse = true }: { reactToMouse?: boolean })
 const GlobalParticleBackground = () =>
     <ParticleScene fixed={true} reactToMouse={true} />;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TwinkleStars = ({ count = 200 }: { count?: number }) => {
     const stars = useMemo(() => Array.from({ length: count }).map(() => ({
         top: `${Math.random() * 100}%`,
@@ -1277,7 +1280,7 @@ const TwinkleStars = ({ count = 200 }: { count?: number }) => {
         opacity: Math.random() * 0.8 + 0.2,
         duration: `${Math.random() * 3 + 2}s`,
         delay: `${Math.random() * 4}s`,
-    })), []);
+    })), [count]);
     return (
         <div className="absolute inset-0 z-0 pointer-events-none">
             {stars.map((star, i) => (
@@ -1292,6 +1295,7 @@ const TwinkleStars = ({ count = 200 }: { count?: number }) => {
     );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Philosophy = () => {
     const { t } = useTranslation();
 
@@ -1346,7 +1350,7 @@ const PhilosophyItem = ({ title, text, titleSize = 'text-4xl md:text-6xl', index
 
 // --- COMPONENTE DE DATA CHIP ---
 // Um pequeno elemento decorativo de "dado" que processa
-const DataChip = ({ label, value }: { label: string, value: string }) => (
+const _DataChip = ({ label, value }: { label: string, value: string }) => (
     <div className="flex flex-col gap-1">
         <span className="text-[8px] font-mono text-brick-gray/60 tracking-widest uppercase">{label}</span>
         <span className="text-[10px] font-mono text-white/90 tracking-widest uppercase border-b border-white/10 pb-0.5">{value}</span>
@@ -1458,6 +1462,7 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
     );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TunnelBackground = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -1584,6 +1589,7 @@ const TunnelBackground = () => {
     return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0" />;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StarGateBackground = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -1700,6 +1706,7 @@ const StarGateBackground = () => {
     return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0" />;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MassiveTunnelBackground = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -1808,6 +1815,7 @@ const MassiveTunnelBackground = () => {
     );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StarchildBackground = () => {
     return (
         <div className="absolute inset-0 pointer-events-none z-[1] bg-[#000000] overflow-hidden flex items-center justify-center">
@@ -1951,7 +1959,7 @@ const monolithAnimations = {
 };
 
 const UnifiedEnding = () => {
-    const { goChat, goAdmin } = useAppNav();
+    const { goChat, goAdmin: _goAdmin } = useAppNav();
     const ref = useRef<HTMLElement>(null);
     const { t } = useTranslation();
     const clients = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO"];
@@ -1963,7 +1971,7 @@ const UnifiedEnding = () => {
             ? { animate: staticFromAnim(anim.animate), transition: { duration: 0 } }
             : { animate: anim.animate, transition: { ...anim.transition, ease: anim.transition.ease as Easing } };
 
-    const planetX = useTransform(smoothProgress, [0, 1], ["-96%", "-92%"]);
+    const _planetX = useTransform(smoothProgress, [0, 1], ["-96%", "-92%"]);
     const textY = useTransform(smoothProgress, [0, 1], ["30px", "0px"]);
 
     return (
@@ -2363,11 +2371,11 @@ const addAutoplayToUrl = (url: string): string => {
 };
 
 const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onClose: () => void, onPrev?: () => void, onNext?: () => void }) => {
-    const { t } = useTranslation();
+    const { t: _t } = useTranslation();
     const [isPlaying, setIsPlaying] = useState(false);
     const [panelHidden, setPanelHidden] = useState(false);
-    const [videoWasHovered, setVideoWasHovered] = useState(false);
-    const iframeRef = useRef<HTMLIFrameElement>(null);
+    const [_videoWasHovered, _setVideoWasHovered] = useState(false);
+    const _iframeRef = useRef<HTMLIFrameElement>(null);
 
     const handlePlay = () => {
         setIsPlaying(true);
@@ -2401,7 +2409,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
     const isHorizontal = project.orientation === 'horizontal';
     const vimeoId = project.videoUrl ? getVimeoId(project.videoUrl) : null;
     const youtubeId = project.videoUrl ? getYoutubeId(project.videoUrl) : null;
-    const isVideoFile = project.videoUrl ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(project.videoUrl) : false;
+    const _isVideoFile = project.videoUrl ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(project.videoUrl) : false;
 
     return (
         <div role="dialog" aria-modal="true" aria-label={`Project: ${project.title}`} className="fixed inset-0 z-[110] flex items-center justify-center p-4">
@@ -2623,6 +2631,7 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
     );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const WorksFilter = ({ categories, activeCategory, onSelect }: { categories: string[], activeCategory: string, onSelect: (c: string) => void }) => {
     const { t } = useTranslation();
     return (
@@ -2646,10 +2655,10 @@ const WorksPage = ({ onSelectProject }: {
 }) => {
     const { goHome } = useAppNav();
     const { t } = useTranslation();
-    const [activeCategory, setActiveCategory] = useState("ALL");
+    const [activeCategory, _setActiveCategory] = useState("ALL");
     const { works } = useContext(DataContext)!;
 
-    const categories = useMemo(() => {
+    const _categories = useMemo(() => {
         const cats = new Set(works.map(w => w.category));
         return ["ALL", ...Array.from(cats)];
     }, [works]);
@@ -3100,7 +3109,7 @@ const InfoCard = ({ number, title, desc }: { number: string, title: string, desc
     </div>
 );
 
-const StatBlock = ({ label, value, sub }: { label: string, value: string, sub: string }) => (
+const _StatBlock = ({ label, value, sub }: { label: string, value: string, sub: string }) => (
     <div className="flex flex-col border-l border-white/10 pl-6 py-2 group hover:border-brick-red transition-colors">
         <span className="font-mono text-[9px] text-brick-gray uppercase tracking-widest mb-1">{label}</span>
         <span className="font-brick text-3xl md:text-4xl text-white mb-1 group-hover:text-brick-red transition-colors">{value}</span>
@@ -3108,7 +3117,7 @@ const StatBlock = ({ label, value, sub }: { label: string, value: string, sub: s
     </div>
 );
 
-const LogItem = ({ year, title, desc, highlight = false }: { year: string, title: string, desc: string, highlight?: boolean }) => (
+const _LogItem = ({ year, title, desc, highlight = false }: { year: string, title: string, desc: string, highlight?: boolean }) => (
     <div className={`relative pl-8 md:pl-12 group ${highlight ? 'opacity-100' : 'opacity-60 hover:opacity-100'} transition-opacity duration-300`}>
         {/* Dot */}
         <div className={`absolute left-[-4px] top-1.5 w-2 h-2 rounded-full border-2 border-brick-black z-10 ${highlight ? 'bg-brick-red' : 'bg-[#333] group-hover:bg-white'} transition-colors`}></div>
@@ -3266,7 +3275,7 @@ const AboutPage = () => {
 const AdminPage = () => {
     const { goHome } = useAppNav();
     const onHome = goHome;
-    const { t, i18n } = useTranslation();
+    const { t: _t, i18n } = useTranslation();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
     const [loginError, setLoginError] = useState('');
@@ -3274,7 +3283,7 @@ const AdminPage = () => {
     const [password, setPassword] = useState('');
     const [activeTab, setActiveTab] = useState<'works' | 'transmissions'>('works');
     const { works, setWorks, transmissions, setTransmissions } = useContext(DataContext)!;
-    const [editingItem, setEditingItem] = useState<any>(null);
+    const [editingItem, setEditingItem] = useState<unknown>(null);
 
     // Check authentication on mount
     useEffect(() => {
@@ -3970,7 +3979,7 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
             });
         }
 
-    }, [view, lang, selectedPost]);
+    }, [view, lang, selectedPost, data.description, data.ogDescription, data.ogTitle, data.title]);
 
     return null;
 };
@@ -4118,11 +4127,11 @@ const BlogPostRoute = () => {
     const { id } = useParams<{ id: string }>();
     const { transmissions } = useContext(DataContext)!;
     const { goTransmissions } = useAppNav();
-    const post = transmissions.find(t => t.id === id);
+    const post = transmissions.find(_t => _t.id === id);
 
     useEffect(() => {
         if (transmissions.length > 0 && !post) goTransmissions();
-    }, [transmissions, post]);
+    }, [transmissions, post, goTransmissions]);
 
     if (!post) return null;
     return <BlogPostPage post={post} />;
