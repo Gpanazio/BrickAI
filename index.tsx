@@ -41,17 +41,15 @@ const GlobalStyles = () => (
             text-transform: uppercase;
         }
         .climax-title {
-            background: linear-gradient(to bottom, #ffffff, var(--brick-gray));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            padding-top: 0.25em;
-            padding-bottom: 0.15em;
-            line-height: 1.2;
+            color: #ffffff;
+            line-height: 1.15;
+            display: block;
+            padding-top: 0.5em;
+            padding-bottom: 0.2em;
+            overflow: visible;
         }
         .climax-title:hover {
-            -webkit-text-fill-color: var(--brick-red);
-            background: none;
+            color: var(--brick-red);
             filter: drop-shadow(0 0 100px rgba(var(--brick-red-rgb),0.95));
         }
         /* COLORS & UTILS */
@@ -161,12 +159,14 @@ const GlobalStyles = () => (
         }
         
         @keyframes system-type-in {
-            from { clip-path: inset(0 100% 0 0); }
-            to { clip-path: inset(0 0% 0 0); }
+            from { max-width: 0; }
+            to { max-width: 100vw; }
         }
         .animate-system-input {
-            animation: system-type-in 0.5s steps(30, end) 0.2s forwards;
-            clip-path: inset(0 100% 0 0);
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 0;
+            animation: system-type-in 0.5s steps(50, end) 0.2s forwards;
         }
         .animate-blink { animation: terminal-blink 1s step-end infinite; }
         .animate-breathe { animation: atmos-breathe 6s ease-in-out infinite; }
@@ -1407,7 +1407,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             <div className={`absolute inset-x-0 bottom-0 z-40 p-4 md:p-6 flex flex-col justify-end transition-all duration-500 pointer-events-none ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
                 <div className="w-12 h-[2px] bg-brick-red mb-4 shadow-[0_0_8px_#DC2626]" />
                 <h3
-                    className="font-brick text-white leading-[0.9] drop-shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-2"
+                    className="font-brick text-white leading-tight drop-shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-2"
                     style={{ fontSize: 'clamp(0.75rem, 7cqw, 3rem)' }}
                 >
                     {work.title}
@@ -2286,9 +2286,11 @@ const UnifiedEnding = () => {
             </section>
 
             {/* PART 3: FOOTER CTA (The Climax) */}
-            <section className="relative w-full bg-transparent flex flex-col items-center pt-16 md:pt-20 pb-0 overflow-x-hidden">
-                {/* Colossal Red Aura emanating from the CTA to set the mood */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] md:w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_at_center,rgba(var(--brick-red-rgb),0.12)_0%,transparent_50%)] pointer-events-none z-0 blur-[100px]"></div>
+            <section className="relative w-full bg-transparent flex flex-col items-center pt-16 md:pt-20 pb-0">
+                {/* Colossal Red Aura — isolated in its own overflow wrapper so it never clips siblings */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] md:w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_at_center,rgba(var(--brick-red-rgb),0.12)_0%,transparent_50%)] blur-[100px]"></div>
+                </div>
 
                 <div className="flex flex-col items-center text-center reveal relative z-30 w-full mb-32 md:mb-36 px-6 md:px-12 gap-10 md:gap-12">
 
@@ -2417,7 +2419,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
 
             {/* NAV PREV */}
             {onPrev && (
-                <button onClick={onPrev} aria-label="Previous project" className="hidden md:flex items-center justify-center z-[115] text-red-500/60 nav-btn-crt transition-all duration-300 hover:scale-125 hover:-translate-x-1 px-4 active:scale-90 shrink-0"
+                <button onClick={onPrev} aria-label="Previous project" className="hidden md:flex items-center justify-center z-[115] text-brick-red/60 nav-btn-crt transition-all duration-300 hover:scale-125 hover:-translate-x-1 px-4 active:scale-90 shrink-0"
                     style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '36px' }}>
                     &lt;
                 </button>
@@ -2508,41 +2510,41 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                            ${panelHidden ? 'translate-y-full' : 'translate-y-0'}`
                     }`}>
 
-                    <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative">
-                        <div className="px-4 pt-4 pb-3 md:px-8 md:pt-5 md:pb-6 flex-shrink-0">
-                            {/* System Status */}
-                            <div className="flex items-center justify-between mb-3 md:mb-8 animate-system-input pt-px">
-                                <span className="font-mono text-[9px] tracking-[0.4em] uppercase"><span className="text-red-500">&gt;&gt; </span><span className="text-white/40"> ACCESSING_DATA</span><span className="text-red-500 animate-blink tracking-normal">_</span></span>
-                                <button
-                                    onClick={onClose}
-                                    aria-label="Close project modal"
-                                    className="text-white/20 hover:text-white transition-all p-1 active:scale-95 flex-shrink-0"
-                                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', letterSpacing: '0.2em' }}
-                                >
-                                    [ESC]
-                                </button>
-                            </div>
-
-                            {/* Title */}
-                            <div className="relative">
-                                <h2
-                                    className="font-brick text-white uppercase break-words overflow-wrap-anywhere"
-                                    style={{
-                                        fontSize: 'clamp(1.6rem, 3vw, 2.8rem)',
-                                        lineHeight: '0.85',
-                                        letterSpacing: '-0.03em',
-                                    }}
-                                >
-                                    {project.titleFull || project.title}
-                                </h2>
-                                <div className="flex items-center gap-4 mt-4">
-                                    <div className="h-px w-6 bg-white/20"></div>
-                                    <span className="font-mono text-[9px] text-white/40 tracking-[0.3em] uppercase">{project.subtitle}</span>
-                                </div>
-                            </div>
+                    {/* System Status + Title — always visible, outside scroll */}
+                    <div className="flex-shrink-0 px-4 pt-4 pb-3 md:px-8 md:pt-5 md:pb-4">
+                        <div className="flex items-center justify-between mb-3 md:mb-8 pt-1">
+                            <span className="font-mono text-[9px] tracking-[0.4em] uppercase"><span className="text-brick-red">&gt;&gt; </span><span className="text-white/40"> ACCESSING_DATA</span><span className="text-brick-red animate-blink tracking-normal">_</span></span>
+                            <button
+                                onClick={onClose}
+                                aria-label="Close project modal"
+                                className="text-white/20 hover:text-white transition-all py-1 px-2 active:scale-95 flex-shrink-0"
+                                style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', letterSpacing: '0.2em' }}
+                            >
+                                [ESC]
+                            </button>
                         </div>
 
-                        <div className="px-8 py-4 mb-8">
+                        {/* Title */}
+                        <div className="relative">
+                            <h2
+                                className="font-brick text-white uppercase"
+                                style={{
+                                    fontSize: 'clamp(1.6rem, 3vw, 2rem)',
+                                    lineHeight: '0.9',
+                                    letterSpacing: '-0.03em',
+                                }}
+                            >
+                                {project.titleFull || project.title}
+                            </h2>
+                            <div className="flex items-center gap-4 mt-4">
+                                <div className="h-px w-6 bg-white/20"></div>
+                                <span className="font-mono text-[9px] text-white/40 tracking-[0.3em] uppercase">{project.subtitle}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative">
+                        <div className="px-4 md:px-8 pt-0 pb-4 mb-8">
                             <div className="font-mono text-[8px] text-white/20 mb-4 tracking-[0.4em]">// SYSTEM_LOG</div>
                             <p className="text-white text-[12px] leading-[1.7] tracking-[0.04em] max-w-md font-mono border-l border-white/10 pl-5">
                                 {project.longDesc || project.desc}
@@ -2576,7 +2578,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
 
             {/* NAV NEXT */}
             {onNext && (
-                <button onClick={onNext} aria-label="Next project" className="hidden md:flex items-center justify-center z-[115] text-red-500/60 nav-btn-crt transition-all duration-300 hover:scale-125 hover:translate-x-1 px-4 active:scale-90 shrink-0"
+                <button onClick={onNext} aria-label="Next project" className="hidden md:flex items-center justify-center z-[115] text-brick-red/60 nav-btn-crt transition-all duration-300 hover:scale-125 hover:translate-x-1 px-4 active:scale-90 shrink-0"
                     style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '36px' }}>
                     &gt;
                 </button>
@@ -2697,7 +2699,7 @@ const WorksPage = ({ onSelectProject }: {
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('works_page.archive_index').split('_').slice(0, -1).join('_')}_<span className="text-brick-red">{t('works_page.archive_index').split('_').slice(-1)[0]}</span></h1>
-                            <p className="font-mono text-[10px] md:text-xs tracking-widest max-w-xl animate-system-input"><span className="text-brick-red">&gt;&gt; </span> <span className="text-brick-gray">{t('works_page.accessing')} <span className="text-white">{works.length}</span> {t('works_page.entries_found')}</span></p>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input"><span className="text-brick-red">&gt;&gt; </span> <span className="text-brick-gray">{t('works_page.accessing')} <span className="text-white">{works.length}</span> {t('works_page.entries_found')}</span></p>
                         </div>
                     </div>
                 </section>
@@ -2744,7 +2746,7 @@ const BlogPostPage = ({ post }: { post: Post }) => {
                                     ))}
                                 </div>
 
-                                <h1 className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-[0.95] tracking-tight mb-8 text-center">
+                                <h1 className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-tight md:leading-[1.2] tracking-tight mb-8 text-center">
                                     {postTitle.toUpperCase() === 'A MÁQUINA NÃO TEM ALMA. NÓS TEMOS.' ? (
                                         <>
                                             A MÁQUINA NÃO TEM ALMA.{' '}
@@ -2928,31 +2930,31 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
+                    <div className="grid grid-cols-1 md:grid-cols-3 border border-white/10">
                         {/* EMAIL */}
-                        <a href="mailto:brick@brick.mov" className="group block bg-brick-dark border border-white/10 p-8 md:p-10 hover:border-brick-red transition-colors duration-300">
+                        <a href="mailto:brick@brick.mov" className="group block bg-brick-dark p-8 md:p-10 hover:bg-white/[0.03] transition-colors duration-300 border-b md:border-b-0 md:border-r border-white/10">
                             <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
-                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">Channel_01</span>
+                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">CHANNEL_01</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-brick-red transition-colors">{t('chat.email_streams')}</h3>
+                            <h3 className="text-2xl font-brick text-white mb-2 group-hover:text-brick-red transition-colors">{t('chat.email_streams')}</h3>
                             <p className="text-brick-gray text-xs font-mono tracking-widest">BRICK@BRICK.MOV</p>
                         </a>
 
                         {/* WHATSAPP */}
-                        <a href="https://wa.me/5521998324335" target="_blank" rel="noopener noreferrer" className="group block bg-brick-dark border border-white/10 p-8 md:p-10 hover:border-brick-red transition-colors duration-300">
+                        <a href="https://wa.me/5521998324335" target="_blank" rel="noopener noreferrer" className="group block bg-brick-dark p-8 md:p-10 hover:bg-white/[0.03] transition-colors duration-300 border-b md:border-b-0 md:border-r border-white/10">
                             <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
-                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">Channel_02</span>
+                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">CHANNEL_02</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-brick-red transition-colors">{t('chat.direct_message')}</h3>
+                            <h3 className="text-2xl font-brick text-white mb-2 group-hover:text-brick-red transition-colors">{t('chat.direct_message')}</h3>
                             <p className="text-brick-gray text-xs font-mono tracking-widest">WHATSAPP</p>
                         </a>
 
                         {/* SOCIAL */}
-                        <div className="group block bg-brick-dark border border-white/10 p-8 md:p-10 hover:border-brick-red transition-colors duration-300">
+                        <div className="group block bg-brick-dark p-8 md:p-10 hover:bg-white/[0.03] transition-colors duration-300">
                             <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
-                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">Channel_03</span>
+                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">CHANNEL_03</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-4 group-hover:text-brick-red transition-colors">{t('chat.network_nodes')}</h3>
+                            <h3 className="text-2xl font-brick text-white mb-2 group-hover:text-brick-red transition-colors">{t('chat.network_nodes')}</h3>
                             <div className="flex flex-wrap gap-4">
                                 {[
                                     { name: 'LinkedIn', url: 'https://www.linkedin.com/company/brick-mov/' },
@@ -2969,7 +2971,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                 <section className="w-full flex flex-col md:flex-row gap-0 items-start animate-fade-in-up border-t border-white/10 pt-12" style={{ animationDelay: '0.2s' }}>
 
                     {/* LEFT: THE AVATAR (Static Monolith) */}
-                    <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-12 border-r border-white/10 relative bg-brick-black">
+                    <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-12 relative bg-brick-black">
                         <div className="relative w-[120px] h-[240px] md:w-[150px] md:h-[300px]">
                             {/* The Monolith Shape - Identical to Hero but no mouse interaction */}
                             <div
@@ -2982,7 +2984,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                                 <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(var(--brick-red-rgb),0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
 
                                 {/* Core Glow / Eye - Pulses on Thinking/Talking */}
-                                <div className={`centered-layer core-atmos pointer-events-none shadow-[0_0_40px_rgba(var(--brick-red-rgb),1)] transition-all duration-200 ${isProcessing ? 'animate-talking scale-150 opacity-100' : 'animate-thinking opacity-80'}`}></div>
+                                <div className={`centered-layer core-atmos pointer-events-none shadow-[0_0_40px_rgba(var(--brick-red-rgb),1)] transition-all duration-200 ${isProcessing ? 'animate-talking scale-150 opacity-100' : 'animate-breathe opacity-80'}`}></div>
 
                                 {/* Glass Reflection */}
                                 <div className="absolute inset-0 border border-white/10 opacity-30 pointer-events-none z-10 rounded-[2px]"></div>
@@ -4039,7 +4041,7 @@ const NotFoundPage = () => {
                     <section className="w-full flex flex-col md:flex-row gap-0 items-start animate-fade-in-up border-t border-white/10 pt-12" style={{ animationDelay: '0.2s' }}>
                         
                         {/* LEFT: THE AVATAR (Static Monolith) - Identical to SystemChat */}
-                        <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-12 border-r border-white/10 relative bg-brick-black">
+                        <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-12 relative bg-brick-black">
                             <div className="relative w-[120px] h-[240px] md:w-[150px] md:h-[300px]">
                                 <div className="monolith-structure w-full h-full rounded-[2px] relative z-10 shadow-2xl transition-all duration-300">
                                     <div className="absolute inset-0 monolith-texture opacity-80 mix-blend-overlay pointer-events-none rounded-[2px] overflow-hidden"></div>
@@ -4119,8 +4121,10 @@ const NotFoundPage = () => {
 // --- SCROLL-TO-TOP ON ROUTE CHANGE ---
 const ScrollToTop = () => {
     const { pathname } = useLocation();
-    useLayoutEffect(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
     }, [pathname]);
     return null;
 };
@@ -4208,11 +4212,17 @@ const App = () => (
 
 export default App;
 
-// Mount the React app
+// Mount the React app (HMR-safe: reuse existing root)
 const container = document.getElementById('root');
 if (container) {
-    const root = createRoot(container);
-    root.render(<App />);
+    const existingRoot = (container as any).__reactRoot;
+    if (existingRoot) {
+        existingRoot.render(<App />);
+    } else {
+        const root = createRoot(container);
+        (container as any).__reactRoot = root;
+        root.render(<App />);
+    }
 }
 
 // Core Web Vitals → GA4
