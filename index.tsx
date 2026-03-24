@@ -468,7 +468,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 imageWorks: "/slopai.jpg",
                 imageSettingsHome: { x: 50, y: 50, scale: 1.0 },
                 imageSettingsWorks: { x: 50, y: 50, scale: 1.0 },
-                videoUrl: "https://review.brick.mov/portfolio/embed/11",
+                videoUrl: "https://review.brick.mov/portfolio/player/12",
                 hasDetail: true
             },
             {
