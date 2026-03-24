@@ -870,10 +870,12 @@ const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
                                 {t('header.works')}
                             </MagneticButton>
 
+                            {/* HIDDEN: Transmissions nav — re-enable later
                             <MagneticButton onClick={onTransmissions} className="group text-xs md:text-sm font-ai text-brick-gray hover:text-brick-red transition-colors duration-300">
                                 <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
                                 {t('header.transmissions')}
                             </MagneticButton>
+                            */}
 
                             {/* CTA STYLE: Subtle Blinking Underscore */}
                             <MagneticButton onClick={onChat} className="group text-xs md:text-sm font-ai text-white hover:text-brick-red transition-colors duration-300">
@@ -907,9 +909,11 @@ const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
                     <button onClick={() => handleNav(onWorks)} className="text-2xl font-brick text-white hover:text-brick-red transition-colors w-full text-center border-b border-white/10 pb-4">
                         {t('header.works')}
                     </button>
+                    {/* HIDDEN: Transmissions mobile nav — re-enable later
                     <button onClick={() => handleNav(onTransmissions)} className="text-2xl font-brick text-white hover:text-brick-red transition-colors w-full text-center border-b border-white/10 pb-4">
                         {t('header.transmissions')}
                     </button>
+                    */}
                     <button onClick={() => handleNav(onChat)} className="text-2xl font-brick text-white hover:text-brick-red transition-colors w-full text-center pb-4">
                         {t('header.talk_to_us')} <span className="text-brick-red animate-blink">_</span>
                     </button>
@@ -4067,8 +4071,10 @@ const AppShell = () => {
                 } />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/works" element={<WorksPage onSelectProject={setSelectedProject} />} />
+                {/* HIDDEN: Transmissions routes — re-enable later
                 <Route path="/transmissions" element={<TransmissionsPage />} />
                 <Route path="/transmissions/:id" element={<BlogPostRoute />} />
+                */}
                 <Route path="/chat" element={
                     <><Header isChatView={false} /><SystemChat onBack={() => window.history.back()} /></>
                 } />
