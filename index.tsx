@@ -2241,7 +2241,7 @@ const UnifiedEnding = () => {
                     <div className="w-full px-6 md:px-12 lg:px-24 pb-6 flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="flex gap-6">
                             {['LinkedIn', 'Instagram'].map((social) => (
-                                <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white/50 hover:text-brick-red tracking-widest uppercase transition-colors duration-500">{social}</a>
+                                <a key={social} href={social === 'Instagram' ? 'https://www.instagram.com/brick.mov' : `https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white/50 hover:text-brick-red tracking-widest uppercase transition-colors duration-500">{social}</a>
                             ))}
                         </div>
                         <div className="text-[9px] uppercase tracking-[0.2em] text-brick-gray/30 font-bold text-center md:text-right flex flex-col items-center md:items-end gap-1">
@@ -2751,7 +2751,7 @@ const Footer = () => {
             <div className="mt-8 border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-start gap-4 reveal">
                 <div className="flex gap-6">
                     {['LinkedIn', 'Instagram'].map((social) => (
-                        <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-brick-red tracking-widest uppercase transition-colors">{social}</a>
+                        <a key={social} href={social === 'Instagram' ? 'https://www.instagram.com/brick.mov' : `https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-brick-red tracking-widest uppercase transition-colors">{social}</a>
                     ))}
                 </div>
                 <div className="text-[9px] uppercase tracking-[0.2em] text-brick-gray/40 font-bold text-right">
@@ -3052,15 +3052,14 @@ const AboutPage = () => {
                 {/* HERO: ORIGIN STORY */}
                 <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
                     {/* Compact header — same pattern as Works/Transmissions */}
-                    <div className="mb-10">
-                        <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">
-                            {t('about.origin').split('_').slice(0, -1).join('_')}
-                            <span className="text-brick-red">_{t('about.origin').split('_').slice(-1)[0]}</span>
-                        </h1>
-                        <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input">
-                            <span className="text-brick-red">&gt;&gt; </span>
-                            <span className="text-brick-gray">{t('about.est')}</span>
-                        </p>
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                        <div>
+                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">
+                                {t('about.origin').split('_').slice(0, -1).join('_')}
+                                <span className="text-brick-red">_{t('about.origin').split('_').slice(-1)[0]}</span>
+                            </h1>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input"><span className="text-brick-red">&gt;&gt; </span><span className="text-brick-gray">{t('about.est')}</span></p>
+                        </div>
                     </div>
 
                     {/* CENTERED: MONOLITH + TITLE + DESC */}
