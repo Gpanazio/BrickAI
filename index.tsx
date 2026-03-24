@@ -3283,7 +3283,8 @@ const AdminPage = () => {
     const [password, setPassword] = useState('');
     const [activeTab, setActiveTab] = useState<'works' | 'transmissions'>('works');
     const { works, setWorks, transmissions, setTransmissions } = useContext(DataContext)!;
-    const [editingItem, setEditingItem] = useState<unknown>(null);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [editingItem, setEditingItem] = useState<Record<string, any> | null>(null);
 
     // Check authentication on mount
     useEffect(() => {
@@ -3348,23 +3349,25 @@ const AdminPage = () => {
         });
         if (activeTab === 'works') {
             setWorks(prev => {
-                const idx = prev.findIndex(w => w.id === editingItem.id);
+                const item = editingItem as Work;
+                const idx = prev.findIndex(w => w.id === item.id);
                 if (idx >= 0) {
                     const updated = [...prev];
-                    updated[idx] = editingItem;
+                    updated[idx] = item;
                     return updated;
                 }
-                return [...prev, editingItem];
+                return [...prev, item];
             });
         } else {
             setTransmissions(prev => {
-                const idx = prev.findIndex(t => t.id === editingItem.id);
+                const item = editingItem as Post;
+                const idx = prev.findIndex(t => t.id === item.id);
                 if (idx >= 0) {
                     const updated = [...prev];
-                    updated[idx] = editingItem;
+                    updated[idx] = item;
                     return updated;
                 }
-                return [...prev, editingItem];
+                return [...prev, item];
             });
         }
         setEditingItem(null);
