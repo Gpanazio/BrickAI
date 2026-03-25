@@ -1577,7 +1577,7 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
                 </span>
                 <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] uppercase leading-none">{t('works_page.title')}</span>
             </motion.div>
-            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] px-0 md:px-12 lg:px-24">
+            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] xl:h-[75vh] px-0 md:px-12 lg:px-24">
                 <DataContext.Consumer>
                     {(data) => data ? data.works.slice(0, 5).map((work, idx) => (
                         <WorkCard key={work.id} work={work} index={idx} onOpen={onSelectProject} />
@@ -2553,8 +2553,8 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
             <div
                 className={`relative ${isHorizontal ? 'aspect-video' : 'aspect-[9/16]'} flex bg-black border border-white/20 shadow-[0_0_80px_rgba(0,0,0,0.9)] animate-fade-in-up overflow-hidden modal-container`}
                 style={isHorizontal
-                    ? { width: 'min(calc(100vw - 4rem), calc((100vh - 4rem) * 16 / 9), 1200px)' }
-                    : { height: 'min(calc(100vh - 4rem), calc((100vw - 4rem) * 16 / 9), 860px)' }
+                    ? { width: 'min(calc(100vw - 4rem), calc((100vh - 4rem) * 16 / 9), 1600px)' }
+                    : { height: 'min(calc(100vh - 4rem), calc((100vw - 4rem) * 16 / 9), 1000px)' }
                 }
             >
 
@@ -2642,7 +2642,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                 <div className={`absolute z-20 flex flex-col overflow-hidden transition-all duration-700
                     ${isHorizontal
                         ? `bottom-0 left-0 right-0 h-[55%] border-t border-white/10 bg-brick-black/95 backdrop-blur-xl
-                           md:bottom-0 md:left-auto md:right-0 md:top-0 md:h-full md:w-[380px] md:border-t-0 md:border-l md:bg-brick-black/80
+                           md:bottom-0 md:left-auto md:right-0 md:top-0 md:h-full md:w-[380px] xl:w-[440px] md:border-t-0 md:border-l md:bg-brick-black/80
                            ${panelHidden ? 'translate-y-full md:translate-y-0 md:translate-x-full' : 'translate-y-0 md:translate-x-0'}`
                         : `bottom-0 left-0 right-0 h-[55%] border-t border-white/10 bg-brick-black/95 backdrop-blur-xl
                            ${panelHidden ? 'translate-y-full' : 'translate-y-0'}`
@@ -2667,7 +2667,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                             <h1
                                 className="font-brick text-white uppercase my-4 md:my-8"
                                 style={{
-                                    fontSize: 'clamp(1.6rem, 3vw, 2rem)',
+                                    fontSize: 'clamp(1.6rem, 3vw, 2.5rem)',
                                     lineHeight: '0.9',
                                     letterSpacing: '-0.03em',
                                 }}
@@ -2684,7 +2684,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                     <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative">
                         <div className="px-4 md:px-8 pt-0 pb-4 mb-8">
                             <div className="font-mono text-[8px] text-white/20 mb-4 tracking-[0.4em]">// SYSTEM_LOG</div>
-                            <p className="text-white/90 text-[13px] md:text-[14px] leading-[1.8] tracking-[0.02em] max-w-md border-l border-white/10 pl-5" style={{ fontFamily: "'Share Tech', sans-serif", fontWeight: 400 }}>
+                            <p className="text-white/90 text-[13px] md:text-[14px] xl:text-[16px] leading-[1.8] xl:leading-[1.9] tracking-[0.02em] max-w-md xl:max-w-lg border-l border-white/10 pl-5" style={{ fontFamily: "'Share Tech', sans-serif", fontWeight: 400 }}>
                                 {project.longDesc || project.desc}
                             </p>
                         </div>
