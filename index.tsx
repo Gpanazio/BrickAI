@@ -1414,7 +1414,6 @@ const GlitchDecode = ({ text, delay = 0 }: { text: string, delay?: number }) => 
         }, { threshold: 0.5, rootMargin: '0px 0px -100px 0px' });
         observer.observe(el);
         return () => observer.disconnect();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [text, delay]);
 
     return <span ref={ref}>{display}</span>;
@@ -3029,12 +3028,31 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
     const isFirstRender = useRef(true);
     const isLangFirstRender = useRef(true);
 
+    const messagesContainerRef = useRef<HTMLDivElement>(null);
+    const userScrolledUp = useRef(false);
+
+    const isNearBottom = () => {
+        const el = messagesContainerRef.current;
+        if (!el) return true;
+        return el.scrollHeight - el.scrollTop - el.clientHeight < 120;
+    };
+
     const scrollToBottom = () => {
+        if (userScrolledUp.current) return;
         messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    };
+
+    const handleMessagesScroll = () => {
+        userScrolledUp.current = !isNearBottom();
     };
 
     useEffect(() => {
         if (isFirstRender.current) { isFirstRender.current = false; return; }
+        // Always scroll for user's own messages, respect preference for others
+        const lastMsg = messages[messages.length - 1];
+        if (lastMsg?.role === 'user') {
+            userScrolledUp.current = false;
+        }
         scrollToBottom();
     }, [messages]);
 
@@ -3177,7 +3195,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             </div>
 
                             {/* Messages */}
-                            <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 scrollbar-hide">
+                            <div ref={messagesContainerRef} onScroll={handleMessagesScroll} className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 scrollbar-hide">
                                 {messages.map((msg, i) => (
                                     <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} animate-fade-in-up`}>
                                         <div className="flex items-center gap-2 mb-2 opacity-50">
