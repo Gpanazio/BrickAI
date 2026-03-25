@@ -7,6 +7,7 @@ DIFFS.txt
 
 # Uploads de usuário (em produção ficam no volume do Railway)
 uploads/
+!public/uploads/
 
 # Exports (frames PNG, MP4s renderizados)
 exports/
