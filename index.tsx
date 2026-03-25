@@ -3039,7 +3039,8 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
 
     const scrollToBottom = () => {
         if (userScrolledUp.current) return;
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        const el = messagesContainerRef.current;
+        if (el) el.scrollTop = el.scrollHeight;
     };
 
     const handleMessagesScroll = () => {
