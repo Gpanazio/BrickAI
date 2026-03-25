@@ -1,4 +1,10 @@
 /** Structured data for Works projects — used by SSR for VideoObject + CreativeWork schemas */
+const BRICK_CREATOR = {
+    '@type': 'Organization',
+    name: 'Brick AI',
+    url: 'https://ai.brick.mov'
+};
+
 export const WORKS_SCHEMA = [
     {
         slug: 'inheritance',
@@ -11,6 +17,8 @@ export const WORKS_SCHEMA = [
         contentUrl: 'https://ai.brick.mov/works/inheritance',
         duration: 'PT3M',
         dateCreated: '2025-01-01',
+        uploadDate: '2025-01-15',
+        creator: BRICK_CREATOR,
         award: 'Gramado Film Festival 2025 — Official Selection (one of first 4 AI films ever selected)',
         genre: 'Short Film'
     },
@@ -25,6 +33,8 @@ export const WORKS_SCHEMA = [
         contentUrl: 'https://ai.brick.mov/works/vendemos-qualquer-coisa',
         duration: 'PT2M',
         dateCreated: '2024-06-01',
+        uploadDate: '2024-06-15',
+        creator: BRICK_CREATOR,
         award: 'Genero Challenge — Finalist',
         genre: 'Commercial'
     },
@@ -39,6 +49,8 @@ export const WORKS_SCHEMA = [
         contentUrl: 'https://ai.brick.mov/works/autobol',
         duration: 'PT2M',
         dateCreated: '2024-10-01',
+        uploadDate: '2024-10-15',
+        creator: BRICK_CREATOR,
         genre: 'Sport Documentary'
     },
     {
@@ -52,6 +64,8 @@ export const WORKS_SCHEMA = [
         contentUrl: 'https://ai.brick.mov/works/factory',
         duration: 'PT2M',
         dateCreated: '2024-09-01',
+        uploadDate: '2024-09-15',
+        creator: BRICK_CREATOR,
         genre: 'Visual Art'
     },
     {
@@ -65,6 +79,8 @@ export const WORKS_SCHEMA = [
         contentUrl: 'https://ai.brick.mov/works/slop-ai',
         duration: 'PT1M30S',
         dateCreated: '2024-11-01',
+        uploadDate: '2024-11-15',
+        creator: BRICK_CREATOR,
         genre: 'Brand Campaign'
     },
     {
@@ -78,6 +94,8 @@ export const WORKS_SCHEMA = [
         contentUrl: 'https://ai.brick.mov/works/dog-day-afternoon',
         duration: 'PT2M',
         dateCreated: '2024-08-01',
+        uploadDate: '2024-08-15',
+        creator: BRICK_CREATOR,
         genre: 'Comedy'
     }
 ];

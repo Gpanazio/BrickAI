@@ -4,7 +4,7 @@ import pg from 'pg';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
-import { randomUUID } from 'crypto';
+import { randomUUID, randomBytes } from 'crypto';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import multer from 'multer';
@@ -120,20 +120,28 @@ setInterval(() => {
 
 // Security headers (SEO quality signal + protection)
 app.use((req, res, next) => {
+    // Generate a unique nonce per request for inline scripts
+    const nonce = randomBytes(16).toString('base64');
+    res.locals.cspNonce = nonce;
+
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'SAMEORIGIN');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-    // Content-Security-Policy — whitelist sources to mitigate XSS
+    // Content-Security-Policy — nonce-based script protection, strict directives
     res.setHeader('Content-Security-Policy', [
         "default-src 'self'",
-        "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
+        `script-src 'self' 'nonce-${nonce}' https://www.googletagmanager.com https://www.google-analytics.com`,
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
         "font-src 'self' https://fonts.gstatic.com",
         "img-src 'self' data: blob: https:",
         "media-src 'self' https:",
         "connect-src 'self' https://www.google-analytics.com",
-        "frame-src 'self' https://player.vimeo.com https://www.youtube.com https://review.brick.mov"
+        "frame-src 'self' https://player.vimeo.com https://www.youtube.com https://review.brick.mov",
+        "base-uri 'self'",
+        "form-action 'self'",
+        "object-src 'none'",
+        "upgrade-insecure-requests"
     ].join('; '));
     next();
 });
@@ -895,7 +903,8 @@ app.get('*', async (req, res) => {
             .replace(/__HREFLANG_EN__/g, `${BASE_URL}/?lang=en`)
             .replace(/__GOOGLE_VERIFICATION__/g, process.env.GOOGLE_SITE_VERIFICATION || '')
             .replace(/__BING_VERIFICATION__/g, process.env.BING_VERIFICATION || '')
-            .replace(/<!--__JSON_LD__-->/g, '');
+            .replace(/<!--__JSON_LD__-->/g, '')
+            .replace(/__CSP_NONCE__/g, res.locals.cspNonce);
         return res.status(404).send(html404);
     }
 
@@ -1061,9 +1070,10 @@ app.get('*', async (req, res) => {
                 "description": isEn ? w.description.en : w.description.pt,
                 "thumbnailUrl": w.thumbnailUrl,
                 "contentUrl": w.contentUrl,
-                "uploadDate": w.dateCreated,
+                "uploadDate": w.uploadDate || w.dateCreated,
                 "duration": w.duration,
-                "productionCompany": { "@id": `${BASE_URL}/#organization` }
+                "productionCompany": { "@id": `${BASE_URL}/#organization` },
+                ...(w.creator ? { "creator": w.creator } : {})
             },
             {
                 "@type": "CreativeWork",
@@ -1093,9 +1103,10 @@ app.get('*', async (req, res) => {
                     "description": isEn ? postData.description.en : postData.description.pt,
                     "thumbnailUrl": postData.thumbnailUrl,
                     "contentUrl": postData.contentUrl,
-                    "uploadDate": postData.dateCreated,
+                    "uploadDate": postData.uploadDate || postData.dateCreated,
                     "duration": postData.duration,
                     "productionCompany": { "@id": `${BASE_URL}/#organization` },
+                    ...(postData.creator ? { "creator": postData.creator } : {}),
                     ...(postData.award ? { "award": postData.award } : {})
                 },
                 {
@@ -1196,7 +1207,8 @@ app.get('*', async (req, res) => {
         .replace(/__HREFLANG_EN__/g, `${BASE_URL}/${canonicalPath}?lang=en`)
         .replace(/<!--__JSON_LD__-->/g, jsonLdScripts.join('\n    '))
         .replace(/__GOOGLE_VERIFICATION__/g, process.env.GOOGLE_SITE_VERIFICATION || '')
-        .replace(/__BING_VERIFICATION__/g, process.env.BING_VERIFICATION || '');
+        .replace(/__BING_VERIFICATION__/g, process.env.BING_VERIFICATION || '')
+        .replace(/__CSP_NONCE__/g, res.locals.cspNonce);
 
     res.send(html);
 });
