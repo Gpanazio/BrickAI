@@ -228,21 +228,47 @@ const GlobalStyles = () => (
             animation: hero-fade-in 1.2s ease-out forwards;
         }
 
-        /* MODULE POWER-ON — Works Grid Card Activation (GPU-friendly, opacity only) */
+        /* MODULE POWER-ON — Works Grid Card Activation */
+        @keyframes module-power-on {
+            0% {
+                opacity: 0;
+                filter: brightness(1) saturate(0);
+            }
+            8% {
+                opacity: 1;
+                filter: brightness(1.6) saturate(0);
+                border-color: rgba(255,255,255,0.7);
+                box-shadow: inset 0 0 30px rgba(255,255,255,0.1), 0 0 15px rgba(255,255,255,0.05);
+            }
+            16% {
+                filter: brightness(1) saturate(0.3);
+                border-color: rgba(255,255,255,0.2);
+                box-shadow: none;
+            }
+            100% {
+                opacity: 1;
+                filter: brightness(1) saturate(1);
+                border-color: rgba(255,255,255,0.1);
+            }
+        }
+        @keyframes static-dissolve {
+            0% { opacity: 0.15; }
+            100% { opacity: 0; }
+        }
         .work-card-poweron {
             opacity: 0;
-            will-change: opacity;
+            filter: brightness(1) saturate(0);
         }
         .work-card-poweron.active {
-            animation: fadeIn 0.5s ease-out both;
+            animation: module-power-on 1s cubic-bezier(0.16, 1, 0.3, 1) both;
             animation-delay: var(--poweron-delay, 0ms);
         }
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
         .work-card-poweron .static-noise {
-            display: none;
+            opacity: 0;
+        }
+        .work-card-poweron.active .static-noise {
+            animation: static-dissolve 0.8s ease-out forwards;
+            animation-delay: var(--poweron-delay, 0ms);
         }
         @media (prefers-reduced-motion: reduce) {
             .work-card-poweron.active {
@@ -397,6 +423,7 @@ interface Work {
         x: number;
         y: number;
         scale: number;
+        saturate?: number;
     };
     imageSettingsWorks?: {
         x: number;
@@ -466,6 +493,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 credits: [],
                 gradient: "from-neutral-900 via-brick-red/10 to-neutral-900",
                 imageHome: "/uploads/synapsesheet.webp?v=2",
+                imageSettingsHome: { x: 50, y: 45, scale: 1.2, saturate: 0.6 },
                 imageWorks: "/uploads/synapsesheet.webp?v=2",
                 videoUrl: "https://review.brick.mov/portfolio/embed/9",
                 hasDetail: true
@@ -1489,7 +1517,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             onClick={() => work.hasDetail && onOpen(work)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={`work-card-poweron relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-brick-red bg-brick-black group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
+            className={`work-card-poweron relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-brick-red/80 bg-brick-black group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
             role={work.hasDetail ? 'button' : undefined}
             tabIndex={work.hasDetail ? 0 : undefined}
             aria-label={`View project: ${work.title}`}
@@ -1499,7 +1527,8 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 flexGrow: isHovered ? 1.6 : 1,
                 flexShrink: 0,
                 willChange: 'flex-grow',
-                transition: 'flex-grow 1.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms ease',
+                transition: 'flex-grow 1.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 500ms ease, box-shadow 700ms ease',
+                boxShadow: isHovered ? 'inset 0 0 40px rgba(220,38,38,0.06), 0 0 20px rgba(220,38,38,0.08)' : 'none',
                 '--poweron-delay': `${index * 80}ms`,
             } as React.CSSProperties}
         >
@@ -1515,12 +1544,14 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                     ref={bgRef}
                     role="img"
                     aria-label={`${work.title} — ${work.subtitle || work.desc}`}
-                    className="absolute inset-0 sharp-image saturate-[0.8] group-hover:saturate-100 contrast-[1.05] group-hover:brightness-[1.1] transition-[filter] duration-700 ease-out"
+                    className={`absolute inset-0 sharp-image contrast-[1.05] transition-[filter,transform] duration-700 ease-out ${!settings.saturate ? 'saturate-[0.8] group-hover:saturate-100 group-hover:brightness-[1.1]' : ''}`}
                     style={{
                         backgroundImage: `url('${work.imageHome}')`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center center',
-                        transform: `scale(${settings.scale}) translate(${(settings.x - 50) * 2}%, ${(settings.y - 50) * 2}%) translateZ(0)`,
+                        transform: `scale(${isHovered ? settings.scale * 1.04 : settings.scale}) translate(${(settings.x - 50) * 2}%, ${(settings.y - 50) * 2}%) translateZ(0)`,
+                        transition: 'filter 700ms ease-out, transform 1.2s cubic-bezier(0.22, 1, 0.36, 1)',
+                        ...(settings.saturate ? { filter: `saturate(${isHovered ? Math.min(settings.saturate + 0.2, 1) : settings.saturate}) contrast(1.05) brightness(${isHovered ? 1.1 : 1})` } : {}),
                     }}
                 />
             </div>
@@ -1530,21 +1561,27 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             <div className={`absolute inset-0 z-30 pointer-events-none shadow-[inset_0_0_100px_rgba(0,0,0,0.8)] transition-opacity duration-700 ${isHovered ? 'opacity-40' : 'opacity-60'}`} />
 
             {/* CONTENT */}
-            <div className={`absolute inset-x-0 bottom-0 z-40 p-4 md:p-6 flex flex-col justify-end transition-all duration-500 pointer-events-none ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
-                <div className="w-12 h-[2px] bg-brick-red mb-4 shadow-[0_0_8px_#DC2626]" />
+            <div className={`absolute inset-x-0 bottom-0 z-40 p-4 md:p-6 flex flex-col justify-end pointer-events-none transition-[transform,opacity] duration-500 ease-out ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-6 opacity-0'}`}>
+                <div
+                    className="h-[2px] bg-brick-red mb-4 shadow-[0_0_8px_#DC2626] origin-left transition-[width] duration-700 ease-out"
+                    style={{ width: isHovered ? '3rem' : '0' }}
+                />
                 <h2
-                    className="font-brick text-white leading-tight drop-shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-2"
-                    style={{ fontSize: 'clamp(0.75rem, 7cqw, 3rem)' }}
+                    className={`font-brick text-white leading-tight drop-shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-2 transition-[transform,opacity] duration-500 ease-out ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'}`}
+                    style={{ fontSize: 'clamp(0.75rem, 7cqw, 3rem)', transitionDelay: isHovered ? '80ms' : '0ms' }}
                 >
                     {work.title}
                 </h2>
-                <p className="text-white/40 text-[10px] font-mono tracking-widest uppercase mt-2">
+                <p
+                    className={`text-white/40 text-[10px] font-mono tracking-widest uppercase mt-2 transition-[transform,opacity] duration-500 ease-out ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-3 opacity-0'}`}
+                    style={{ transitionDelay: isHovered ? '150ms' : '0ms' }}
+                >
                     {work.subtitle}
                 </p>
             </div>
 
             {/* ID TAG */}
-            <div className={`absolute top-4 left-4 md:top-6 md:left-6 transition-all duration-500 ${isHovered ? 'opacity-0 -translate-y-2' : 'opacity-100 translate-y-0'}`}>
+            <div className={`absolute top-4 left-4 md:top-6 md:left-6 transition-[transform,opacity] duration-500 ease-out ${isHovered ? 'opacity-0 -translate-y-3 scale-95' : 'opacity-100 translate-y-0 scale-100'}`}>
                 <span className="font-mono text-[10px] text-white/40 tracking-widest border border-white/10 px-2 py-1">
                     {work.id.toUpperCase()}
                 </span>
