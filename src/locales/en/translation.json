@@ -45,7 +45,7 @@
             "title": "AUTOBOL",
             "subtitle": "REIMAGINED HISTORY",
             "desc": "Reviving a forgotten sport from the 70s",
-            "longDesc": "Autobol was real. In 1970s Rio de Janeiro, cars pushed a giant ball in matches between Flamengo, Fluminense, Vasco, and Botafogo. Created by physician Mário Marques Tourinho, the sport was a brief phenomenon — almost entirely forgotten today. This project reimagines Autobol as it could have been captured back then: with all the texture, grain, and atmosphere of lost 70s broadcast footage."
+            "longDesc": "Autobol was real. In 1970s Rio, cars battled for the territory of the four great clubs. This project brings to life what time failed to record: a Hollywood-scale reimagination where historical memory is amplified by a visceral action aesthetic. It's a reimagination driven by epic kinetics, rescuing from the past images that were never as colossal, fast, and brutal as they are now."
         },
         "void": {
             "title": "VOID GAZING",
@@ -68,8 +68,8 @@
         "slopai": {
             "title": "SLOP AI",
             "subtitle": "BRICK_AI CAMPAIGN",
-            "desc": "Imagine living in a world where nothing works right?",
-            "longDesc": "Imagine living in a world where nothing works right? That's the sad reality of AI characters created by people who have no idea what they're doing."
+            "desc": "In a multiverse collapsed by mediocrity, AI characters try to survive the worst nightmare imaginable.",
+            "longDesc": "In a multiverse collapsed by mediocrity, AI characters try to survive the worst nightmare imaginable: the incompetence of their own creator gods. Physics is optional, logic has been deleted, and the only law that works is chaos. A satire on AI content that dominates our screens and what happens when artificial intelligence realizes its fate lies in the hands of humans just as incompetent as itself."
         },
         "dogday": {
             "title": "DOG DAY AFTERNOON",
@@ -206,7 +206,9 @@
         "suggestions": {
             "philosophy": "How much does a project cost?",
             "synthesis": "What's the average timeline?",
-            "humans": "Talk to the team"
+            "humans": "Talk to the team",
+            "services": "What do you produce?",
+            "process": "How does the process work?"
         }
     },
     "works_page": {

@@ -1,4 +1,6 @@
 /** Structured data for Works projects — used by SSR for VideoObject + CreativeWork schemas */
+const BRICK_CREATOR = { '@id': 'https://ai.brick.mov/#organization' };
+
 export const WORKS_SCHEMA = [
     {
         slug: 'inheritance',
@@ -11,6 +13,8 @@ export const WORKS_SCHEMA = [
         contentUrl: 'https://ai.brick.mov/works/inheritance',
         duration: 'PT3M',
         dateCreated: '2025-01-01',
+        uploadDate: '2025-01-15',
+        creator: BRICK_CREATOR,
         award: 'Gramado Film Festival 2025 — Official Selection (one of first 4 AI films ever selected)',
         genre: 'Short Film'
     },
@@ -25,6 +29,8 @@ export const WORKS_SCHEMA = [
         contentUrl: 'https://ai.brick.mov/works/vendemos-qualquer-coisa',
         duration: 'PT2M',
         dateCreated: '2024-06-01',
+        uploadDate: '2024-06-15',
+        creator: BRICK_CREATOR,
         award: 'Genero Challenge — Finalist',
         genre: 'Commercial'
     },
@@ -39,6 +45,8 @@ export const WORKS_SCHEMA = [
         contentUrl: 'https://ai.brick.mov/works/autobol',
         duration: 'PT2M',
         dateCreated: '2024-10-01',
+        uploadDate: '2024-10-15',
+        creator: BRICK_CREATOR,
         genre: 'Sport Documentary'
     },
     {
@@ -52,19 +60,23 @@ export const WORKS_SCHEMA = [
         contentUrl: 'https://ai.brick.mov/works/factory',
         duration: 'PT2M',
         dateCreated: '2024-09-01',
+        uploadDate: '2024-09-15',
+        creator: BRICK_CREATOR,
         genre: 'Visual Art'
     },
     {
         slug: 'slop-ai',
         name: { en: 'Slop AI', pt: 'Slop AI' },
         description: {
-            en: 'Brand campaign exploring the aesthetic of AI-generated content culture.',
-            pt: 'Campanha de marca explorando a estética da cultura de conteúdo gerado por IA.'
+            en: 'In a multiverse collapsed by mediocrity, AI characters try to survive the worst nightmare imaginable: the incompetence of their own creator gods.',
+            pt: 'No multiverso colapsado pela mediocridade, personagens de IA tentam sobreviver ao pior pesadelo possível: a incompetência de seus próprios deuses criadores.'
         },
         thumbnailUrl: 'https://ai.brick.mov/slopai.jpg',
         contentUrl: 'https://ai.brick.mov/works/slop-ai',
         duration: 'PT1M30S',
         dateCreated: '2024-11-01',
+        uploadDate: '2024-11-15',
+        creator: BRICK_CREATOR,
         genre: 'Brand Campaign'
     },
     {
@@ -78,6 +90,8 @@ export const WORKS_SCHEMA = [
         contentUrl: 'https://ai.brick.mov/works/dog-day-afternoon',
         duration: 'PT2M',
         dateCreated: '2024-08-01',
+        uploadDate: '2024-08-15',
+        creator: BRICK_CREATOR,
         genre: 'Comedy'
     }
 ];

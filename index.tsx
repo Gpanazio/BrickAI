@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useLayoutEffect, useRef, useMemo, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useMemo, useContext, useCallback } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Eye, Fingerprint, Globe, Menu, X } from 'lucide-react';
 import {
@@ -27,12 +27,11 @@ const useAppNav = () => {
 };
 
 // Extend Window for gtag (GA4)
-declare global { interface Window { gtag?: (...args: [string, ...any[]]) => void; } }
+declare global { interface Window { gtag?: (...args: [string, ...unknown[]]) => void; } }
 
 // --- STYLES & CONFIG ---
 const GlobalStyles = () => (
     <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@100;200;300&display=swap');
         .font-editorial {
             font-family: 'Barlow', sans-serif;
             font-style: normal;
@@ -41,17 +40,15 @@ const GlobalStyles = () => (
             text-transform: uppercase;
         }
         .climax-title {
-            background: linear-gradient(to bottom, #ffffff, var(--brick-gray));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            padding-top: 0.25em;
-            padding-bottom: 0.15em;
-            line-height: 1.2;
+            color: #ffffff;
+            line-height: 1.15;
+            display: block;
+            padding-top: 0.5em;
+            padding-bottom: 0.2em;
+            overflow: visible;
         }
         .climax-title:hover {
-            -webkit-text-fill-color: var(--brick-red);
-            background: none;
+            color: var(--brick-red);
             filter: drop-shadow(0 0 100px rgba(var(--brick-red-rgb),0.95));
         }
         /* COLORS & UTILS */
@@ -161,12 +158,14 @@ const GlobalStyles = () => (
         }
         
         @keyframes system-type-in {
-            from { clip-path: inset(0 100% 0 0); }
-            to { clip-path: inset(0 0% 0 0); }
+            from { max-width: 0; }
+            to { max-width: 100vw; }
         }
         .animate-system-input {
-            animation: system-type-in 0.5s steps(30, end) 0.2s forwards;
-            clip-path: inset(0 100% 0 0);
+            overflow: hidden;
+            white-space: nowrap;
+            max-width: 0;
+            animation: system-type-in 0.5s steps(50, end) 0.2s forwards;
         }
         .animate-blink { animation: terminal-blink 1s step-end infinite; }
         .animate-breathe { animation: atmos-breathe 6s ease-in-out infinite; }
@@ -227,6 +226,34 @@ const GlobalStyles = () => (
         .hero-fade-entry {
             display: inline-block;
             animation: hero-fade-in 1.2s ease-out forwards;
+        }
+
+        /* MODULE POWER-ON — Works Grid Card Activation (GPU-friendly, opacity only) */
+        .work-card-poweron {
+            opacity: 0;
+            will-change: opacity;
+        }
+        .work-card-poweron.active {
+            animation: fadeIn 0.5s ease-out both;
+            animation-delay: var(--poweron-delay, 0ms);
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .work-card-poweron .static-noise {
+            display: none;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .work-card-poweron.active {
+                animation: none;
+                opacity: 1;
+                filter: none;
+            }
+            .work-card-poweron.active .static-noise {
+                animation: none;
+                opacity: 0;
+            }
         }
 
         @keyframes crt-glitch-text {
@@ -325,7 +352,16 @@ const GlobalStyles = () => (
             color: transparent;
         }
 
-        /* LEGACY SECTION UTILS */
+        /* GLOBAL NOISE OVERLAY */
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            pointer-events: none;
+            opacity: 0.03;
+            mix-blend-mode: overlay;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+        }
 
         /* DEEP SPACE NOISE OVERLAY */
         .modal-video-noise::after {
@@ -340,9 +376,6 @@ const GlobalStyles = () => (
         }
     `}</style>
 );
-
-// --- CONFIG ---
-const AI_NAME = "MASON";
 
 // --- TYPES ---
 interface Work {
@@ -390,8 +423,6 @@ const getLocalizedField = (field: string | Record<string, string>, lang: string,
 };
 
 // --- DATA IS NOW GENERATED INSIDE DATA PROVIDER FOR I18N ---
-
-const CLIENTS = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO", "L'ORÉAL"];
 
 // --- CONTEXT & DATA MANAGEMENT ---
 const DataContext = React.createContext<{
@@ -468,7 +499,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 imageWorks: "/slopai.jpg",
                 imageSettingsHome: { x: 50, y: 50, scale: 1.0 },
                 imageSettingsWorks: { x: 50, y: 50, scale: 1.0 },
-                videoUrl: "https://review.brick.mov/portfolio/embed/11",
+                videoUrl: "https://review.brick.mov/portfolio/embed/12",
                 hasDetail: true
             },
             {
@@ -503,35 +534,7 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
             },
         ];
 
-        const generatedTransmissions: Post[] = [
-            {
-                id: "log_001",
-                date: "2025.01.15",
-                title: { pt: t('transmissions.log_001.title'), en: t('transmissions.log_001.title') },
-                excerpt: { pt: t('transmissions.log_001.excerpt'), en: t('transmissions.log_001.excerpt') },
-                tags: ["MANIFESTO", "IA", "AUTORIA"],
-                url: "log_001",
-                content: t('transmissions.log_001.content_p1')
-            },
-            {
-                id: "log_002",
-                date: "2025.02.10",
-                title: { pt: t('transmissions.log_002.title'), en: t('transmissions.log_002.title') },
-                excerpt: { pt: t('transmissions.log_002.excerpt'), en: t('transmissions.log_002.excerpt') },
-                tags: ["PRODUÇÃO", "DIREÇÃO", "CINEMA"],
-                url: "log_002",
-                content: t('transmissions.log_002.content_p1')
-            },
-            {
-                id: "log_003",
-                date: "2025.03.05",
-                title: { pt: t('transmissions.log_003.title'), en: t('transmissions.log_003.title') },
-                excerpt: { pt: t('transmissions.log_003.excerpt'), en: t('transmissions.log_003.excerpt') },
-                tags: ["EVOLUÇÃO", "VANGUARDA", "TECNOLOGIA"],
-                url: "log_003",
-                content: t('transmissions.log_003.content_p1')
-            },
-        ];
+        const generatedTransmissions: Post[] = [];
 
         const syncData = async () => {
             let finalWorks = [...generatedWorks];
@@ -595,59 +598,6 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
 };
 
 // --- UTILS COMPONENTS ---
-const GlitchText = React.memo(({ text, className }: { text: string, className?: string }) => {
-    const glitchChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_#@!";
-    const [displayed, setDisplayed] = useState('');
-    const [ready, setReady] = useState(false);
-    const [chars, setChars] = useState<{ char: string; glitched: boolean }[]>([]);
-
-    // Phase 1: typewriter
-    useEffect(() => {
-        let i = 0;
-        const interval = setInterval(() => {
-            i++;
-            setDisplayed(text.slice(0, i));
-            if (i >= text.length) {
-                clearInterval(interval);
-                setChars(text.split('').map(c => ({ char: c, glitched: false })));
-                setTimeout(() => setReady(true), 200);
-            }
-        }, 80);
-        return () => clearInterval(interval);
-    }, [text]);
-
-    // Phase 2: glitch after typewriter done
-    useEffect(() => {
-        if (!ready) return;
-        const positions = text.split('').reduce((acc: number[], c, i) => c !== ' ' ? [...acc, i] : acc, []);
-        let timeout: ReturnType<typeof setTimeout>;
-
-        const glitch = () => {
-            const count = 2 + Math.floor(Math.random() * 2);
-            const picked = [...positions].sort(() => Math.random() - 0.5).slice(0, count);
-            setChars(text.split('').map((c, i) => ({
-                char: picked.includes(i) ? glitchChars[Math.floor(Math.random() * glitchChars.length)] : c,
-                glitched: picked.includes(i),
-            })));
-            setTimeout(() => setChars(text.split('').map(c => ({ char: c, glitched: false }))), 150);
-            timeout = setTimeout(glitch, 600 + Math.random() * 600);
-        };
-
-        timeout = setTimeout(glitch, 600);
-        return () => clearTimeout(timeout);
-    }, [ready, text]);
-
-    return (
-        <span className={className}>
-            {ready
-                ? chars.map(({ char, glitched }, i) => (
-                    <span key={i} style={glitched ? { color: 'var(--brick-red)' } : undefined}>{char}</span>
-                ))
-                : displayed}
-        </span>
-    );
-});
-
 const TypewriterText = ({ text, className, delay = 0, onComplete }: { text: string, className?: string, delay?: number, onComplete?: () => void }) => {
     const [displayed, setDisplayed] = useState('');
     const [done, setDone] = useState(false);
@@ -681,19 +631,67 @@ const TypewriterText = ({ text, className, delay = 0, onComplete }: { text: stri
     );
 };
 
+// Character-by-character reveal for MASON chat responses
+const MasonTypewriter = ({ text, onComplete, speed = 18 }: { text: string; onComplete?: () => void; speed?: number }) => {
+    const [displayed, setDisplayed] = useState('');
+    const [done, setDone] = useState(false);
+    const indexRef = useRef(0);
+    const rafRef = useRef<number | null>(null);
+    const lastTimeRef = useRef(0);
+
+    useEffect(() => {
+        indexRef.current = 0;
+        setDisplayed('');
+        setDone(false);
+        lastTimeRef.current = 0;
+
+        const step = (timestamp: number) => {
+            if (!lastTimeRef.current) lastTimeRef.current = timestamp;
+            const elapsed = timestamp - lastTimeRef.current;
+
+            if (elapsed >= speed) {
+                // Reveal 1-3 chars per tick for natural pacing
+                const charsToAdd = elapsed >= speed * 3 ? 3 : elapsed >= speed * 2 ? 2 : 1;
+                indexRef.current = Math.min(indexRef.current + charsToAdd, text.length);
+                setDisplayed(text.slice(0, indexRef.current));
+                lastTimeRef.current = timestamp;
+
+                if (indexRef.current >= text.length) {
+                    setDone(true);
+                    onComplete?.();
+                    return;
+                }
+            }
+            rafRef.current = requestAnimationFrame(step);
+        };
+
+        rafRef.current = requestAnimationFrame(step);
+        return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
+    }, [text, speed, onComplete]);
+
+    return (
+        <>
+            {displayed}
+            {!done && <span className="inline-block w-1.5 h-4 bg-brick-red animate-blink ml-0.5 align-middle"></span>}
+        </>
+    );
+};
+
+const SCRAMBLE_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*";
+
 const ScrambleText = React.memo(({ text, className, hoverTrigger = false, triggerOnReveal = false, delay = 0 }: { text: string, className?: string, hoverTrigger?: boolean, triggerOnReveal?: boolean, delay?: number }) => {
     const [displayText, setDisplayText] = useState(text);
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_!@#$%^&*";
-    const intervalRef = useRef<any>(null);
+    const chars = SCRAMBLE_CHARS;
+    const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
     const containerRef = useRef<HTMLSpanElement>(null);
     const [hasBeenRevealed, setHasBeenRevealed] = useState(false);
 
-    const scramble = () => {
+    const scramble = useCallback(() => {
         let iteration = 0;
-        clearInterval(intervalRef.current);
+        clearInterval(intervalRef.current!);
 
         intervalRef.current = setInterval(() => {
-            setDisplayText(prev =>
+            setDisplayText(() =>
                 text
                     .split("")
                     .map((letter, index) => {
@@ -705,12 +703,12 @@ const ScrambleText = React.memo(({ text, className, hoverTrigger = false, trigge
             );
 
             if (iteration >= text.length) {
-                clearInterval(intervalRef.current);
+                clearInterval(intervalRef.current!);
             }
 
             iteration += 1 / 3;
         }, 30);
-    };
+    }, [text, chars]);
 
     useEffect(() => {
         if (!triggerOnReveal) {
@@ -724,7 +722,7 @@ const ScrambleText = React.memo(({ text, className, hoverTrigger = false, trigge
                 scramble();
             }
         }
-    }, [text, triggerOnReveal, delay]);
+    }, [text, triggerOnReveal, delay, scramble, chars]);
 
     useEffect(() => {
         if (triggerOnReveal) {
@@ -738,7 +736,7 @@ const ScrambleText = React.memo(({ text, className, hoverTrigger = false, trigge
             if (containerRef.current) observer.observe(containerRef.current);
             return () => observer.disconnect();
         }
-    }, [triggerOnReveal, hasBeenRevealed, delay]);
+    }, [triggerOnReveal, hasBeenRevealed, delay, scramble]);
 
     return (
         <span
@@ -790,15 +788,17 @@ const useScrollReveal = (view: string) => {
             });
         }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
 
+        const selectors = '.reveal, .work-card-poweron';
+
         const observeRevealNode = (node: Element) => {
-            if (node.matches('.reveal')) {
+            if (node.matches(selectors)) {
                 observer.observe(node);
             }
-            node.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            node.querySelectorAll(selectors).forEach(el => observer.observe(el));
         };
 
         const observeReveals = () => {
-            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            document.querySelectorAll(selectors).forEach(el => observer.observe(el));
         };
 
         const timeoutId = window.setTimeout(observeReveals, 100);
@@ -877,30 +877,42 @@ const chatWithMono = async (history: { role: string; content: string }[], messag
 
         return data.response;
 
-    } catch (err) {
+    } catch {
         return "SYSTEM_FAILURE: Unable to establish neural link.";
     }
 };
 
 
 // --- COMPONENTS: SECTIONS ---
-const BrickLogo = ({ className }: { className?: string }) => (
-    <svg viewBox="0 0 100 100" className={className} fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M10 10H90V90H10V10Z" fill="currentColor" fillOpacity="0.1" />
-        <path d="M20 20H80V80H20V20Z" stroke="currentColor" strokeWidth="4" />
-        <rect x="35" y="35" width="30" height="30" fill="var(--brick-red)" />
-    </svg>
-);
-
 const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
     const { goHome, goWorks, goTransmissions, goChat, goAbout } = useAppNav();
     const onHome = useCallback(goHome, [goHome]);
     const onWorks = useCallback(goWorks, [goWorks]);
-    const onTransmissions = useCallback(goTransmissions, [goTransmissions]);
+    const _onTransmissions = useCallback(goTransmissions, [goTransmissions]);
     const onChat = useCallback(goChat, [goChat]);
     const onAbout = useCallback(goAbout, [goAbout]);
     const { t, i18n } = useTranslation();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+    const [headerHidden, setHeaderHidden] = useState(false);
+    const [headerSolid, setHeaderSolid] = useState(false);
+    const lastScrollY = useRef(0);
+
+    useEffect(() => {
+        const onScroll = () => {
+            const y = window.scrollY;
+            // Auto-hide on scroll down, show on scroll up (only after 100px)
+            if (y > 100) {
+                setHeaderHidden(y > lastScrollY.current && y - lastScrollY.current > 5);
+            } else {
+                setHeaderHidden(false);
+            }
+            // Background solidifies after hero (~400px)
+            setHeaderSolid(y > 400);
+            lastScrollY.current = y;
+        };
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, []);
 
     const toggleLanguage = () => {
         const newLang = i18n.language === 'en' ? 'pt' : 'en';
@@ -914,7 +926,7 @@ const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
 
     return (
         <React.Fragment>
-            <header role="banner" className="fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none transition-all duration-300 bg-gradient-to-b from-brick-black/70 from-[45%] to-transparent">
+            <header role="banner" className={`fixed top-0 left-0 w-full z-50 px-6 pt-8 pb-6 md:px-12 flex justify-between items-baseline pointer-events-none transition-all duration-300 ${headerHidden && !mobileMenuOpen ? '-translate-y-full' : 'translate-y-0'} ${headerSolid ? 'bg-brick-black/95 backdrop-blur-sm' : 'bg-gradient-to-b from-brick-black/70 from-[45%] to-transparent'}`}>
                 <a href="/" onClick={(e) => { e.preventDefault(); onHome(); }} role="link" aria-label="Brick AI — Go to homepage" tabIndex={0} className="pointer-events-auto flex items-baseline group cursor-pointer select-none z-50 relative">
                     <img src="/01.png" alt="BRICK" className="h-6 md:h-8 w-auto object-contain mr-1" />
                     <span className="text-brick-red font-light text-3xl md:text-4xl animate-blink mx-2 translate-y-[2px]">_</span>
@@ -954,10 +966,12 @@ const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
                                 {t('header.works')}
                             </MagneticButton>
 
+                            {/* HIDDEN: Transmissions nav — re-enable later
                             <MagneticButton onClick={onTransmissions} className="group text-xs md:text-sm font-ai text-brick-gray hover:text-brick-red transition-colors duration-300">
                                 <span className="opacity-0 group-hover:opacity-100 transition-opacity mr-2 duration-300">&gt;</span>
                                 {t('header.transmissions')}
                             </MagneticButton>
+                            */}
 
                             {/* CTA STYLE: Subtle Blinking Underscore */}
                             <MagneticButton onClick={onChat} className="group text-xs md:text-sm font-ai text-white hover:text-brick-red transition-colors duration-300">
@@ -991,17 +1005,19 @@ const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
                     <button onClick={() => handleNav(onWorks)} className="text-2xl font-brick text-white hover:text-brick-red transition-colors w-full text-center border-b border-white/10 pb-4">
                         {t('header.works')}
                     </button>
+                    {/* HIDDEN: Transmissions mobile nav — re-enable later
                     <button onClick={() => handleNav(onTransmissions)} className="text-2xl font-brick text-white hover:text-brick-red transition-colors w-full text-center border-b border-white/10 pb-4">
                         {t('header.transmissions')}
                     </button>
-                    <button onClick={() => handleNav(onChat)} className="text-2xl font-brick text-brick-red hover:text-white transition-colors w-full text-center pb-4 animate-pulse">
-                        {t('header.talk_to_us')} _
+                    */}
+                    <button onClick={() => handleNav(onChat)} className="text-2xl font-brick text-white hover:text-brick-red transition-colors w-full text-center pb-4">
+                        {t('header.talk_to_us')} <span className="text-brick-red animate-blink">_</span>
                     </button>
 
                     <button
                         onClick={toggleLanguage}
                         aria-label={i18n.language === 'en' ? 'Switch to Portuguese' : 'Switch to English'}
-                        className="mt-8 text-sm font-mono text-brick-gray hover:text-white transition-colors flex items-center gap-2 uppercase tracking-widest border border-white/20 px-6 py-2 rounded-full"
+                        className="mt-8 text-sm font-mono text-brick-gray hover:text-white transition-colors flex items-center gap-2 uppercase tracking-widest px-6 py-2"
                     >
                         <Globe size={14} aria-hidden="true" /> {i18n.language === 'en' ? 'SWITCH TO PORTUGUESE' : 'SWITCH TO ENGLISH'}
                     </button>
@@ -1078,7 +1094,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
             <div className="reveal relative z-10 w-full flex justify-center mb-10 md:mb-16">
                 <div className="relative">
                     <div
-                        className={`monolith-structure w-[120px] h-[240px] md:w-[150px] md:h-[300px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative transition-transform duration-1000 ease-out pointer-events-none ${monolithHover ? 'scale-[1.02]' : 'scale-100'}`}
+                        className={`monolith-structure w-[120px] h-[270px] md:w-[150px] md:h-[338px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative transition-transform duration-1000 ease-out pointer-events-none ${monolithHover ? 'scale-[1.02]' : 'scale-100'}`}
                         style={{ transform: 'translateZ(0)' }}
                     >
                         <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
@@ -1107,7 +1123,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
 
                             <div
                                 ref={radiationRef}
-                                className="absolute w-[600px] h-[600px] -ml-[300px] -mt-[300px] top-1/2 left-1/2 pointer-events-none transition-opacity duration-700 ease-out"
+                                className="absolute w-[80vw] h-[80vw] md:w-[600px] md:h-[600px] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 pointer-events-none transition-opacity duration-700 ease-out"
                                 style={{
                                     background: 'radial-gradient(circle, rgba(var(--brick-red-rgb),0.25) 0%, rgba(var(--brick-red-rgb),0.05) 50%, transparent 80%)',
                                     filter: 'blur(60px)',
@@ -1135,11 +1151,11 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                 <p className="reveal delay-2000 text-base md:text-xl lg:text-2xl font-mono text-white drop-shadow-2xl">
                     <TypewriterText text={t('hero.scramble') as string} delay={2000} onComplete={() => setTypewriterDone(true)} />
                 </p>
-                <h2 className="text-2xl md:text-4xl lg:text-5xl font-brick text-brick-red drop-shadow-[0_0_15px_rgba(var(--brick-red-rgb),0.5)] min-h-[50px] flex items-center justify-center">
+                <h1 className="text-2xl md:text-4xl lg:text-5xl font-brick text-brick-red drop-shadow-[0_0_15px_rgba(var(--brick-red-rgb),0.5)] min-h-[50px] flex items-center justify-center">
                     {typewriterDone && <FadeEntryText text={t('hero.subtitle') as string} delay={900} />}
-                </h2>
+                </h1>
             </div>
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-brick-red/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[90vw] h-[90vw] md:w-[800px] md:h-[800px] bg-brick-red/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
         </section>
     );
 };
@@ -1269,6 +1285,7 @@ const ParticleBackground = ({ reactToMouse = true }: { reactToMouse?: boolean })
 const GlobalParticleBackground = () =>
     <ParticleScene fixed={true} reactToMouse={true} />;
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TwinkleStars = ({ count = 200 }: { count?: number }) => {
     const stars = useMemo(() => Array.from({ length: count }).map(() => ({
         top: `${Math.random() * 100}%`,
@@ -1277,7 +1294,7 @@ const TwinkleStars = ({ count = 200 }: { count?: number }) => {
         opacity: Math.random() * 0.8 + 0.2,
         duration: `${Math.random() * 3 + 2}s`,
         delay: `${Math.random() * 4}s`,
-    })), []);
+    })), [count]);
     return (
         <div className="absolute inset-0 z-0 pointer-events-none">
             {stars.map((star, i) => (
@@ -1292,6 +1309,7 @@ const TwinkleStars = ({ count = 200 }: { count?: number }) => {
     );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Philosophy = () => {
     const { t } = useTranslation();
 
@@ -1339,19 +1357,125 @@ const PhilosophyItem = ({ title, text, titleSize = 'text-4xl md:text-6xl', index
         transition={{ duration: 2.2, delay: index * 0.4, ease: "easeOut" }}
         className="flex flex-col items-center group cursor-default"
     >
-        <h2 className={`${titleSize} font-brick text-white mb-4 transition-colors duration-500 group-hover:text-brick-red`}>{title}</h2>
+        <h3 className={`${titleSize} font-brick text-white mb-4 transition-colors duration-500 group-hover:text-brick-red`}>{title}</h3>
         <p className="text-base md:text-lg text-white font-light max-w-lg leading-relaxed transition-colors duration-300">{text}</p>
     </motion.div>
 );
 
-// --- COMPONENTE DE DATA CHIP ---
-// Um pequeno elemento decorativo de "dado" que processa
-const DataChip = ({ label, value }: { label: string, value: string }) => (
-    <div className="flex flex-col gap-1">
-        <span className="text-[8px] font-mono text-brick-gray/60 tracking-widest uppercase">{label}</span>
-        <span className="text-[10px] font-mono text-white/90 tracking-widest uppercase border-b border-white/10 pb-0.5">{value}</span>
-    </div>
-);
+const GlitchDecode = ({ text, delay = 0 }: { text: string, delay?: number }) => {
+    const [display, setDisplay] = useState(text);
+    const ref = useRef<HTMLSpanElement>(null);
+    const hasTriggered = useRef(false);
+    const glyphPool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789#$@!&%_/\\|{}[]<>+=';
+
+    useEffect(() => {
+        if (!ref.current) return;
+        const el = ref.current;
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting && !hasTriggered.current) {
+                // Only trigger if the parent section has the 'active' class (reveal completed)
+                const section = el.closest('.reveal');
+                if (section && !section.classList.contains('active')) return;
+
+                hasTriggered.current = true;
+                // Start with scrambled text
+                const scrambled = text.split('').map(c =>
+                    c === ' ' || c === '/' || c === '_' ? c : glyphPool[Math.floor(Math.random() * glyphPool.length)]
+                ).join('');
+                setDisplay(scrambled);
+
+                const totalDuration = 800; // ms
+                const iterations = 12;
+                const stepTime = totalDuration / iterations;
+                let step = 0;
+
+                setTimeout(() => {
+                    const interval = setInterval(() => {
+                        step++;
+                        const progress = step / iterations;
+                        const result = text.split('').map((char, i) => {
+                            if (char === ' ' || char === '/' || char === '_') return char;
+                            const charThreshold = (i / text.length) * 0.7;
+                            if (progress > charThreshold + 0.3) return char;
+                            if (progress > charThreshold) {
+                                return Math.random() > 0.5 ? char : glyphPool[Math.floor(Math.random() * glyphPool.length)];
+                            }
+                            return glyphPool[Math.floor(Math.random() * glyphPool.length)];
+                        }).join('');
+                        setDisplay(result);
+
+                        if (step >= iterations) {
+                            clearInterval(interval);
+                            setDisplay(text);
+                        }
+                    }, stepTime);
+                }, delay);
+            }
+        }, { threshold: 0.5, rootMargin: '0px 0px -100px 0px' });
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, [text, delay]);
+
+    return <span ref={ref}>{display}</span>;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ModuleStatus = ({ delay = 0 }: { delay?: number }) => {
+    const [phase, setPhase] = useState<'idle' | 'offline' | 'booting' | 'installed'>('idle');
+    const [displayText, setDisplayText] = useState('');
+    const ref = useRef<HTMLDivElement>(null);
+    const hasTriggered = useRef(false);
+
+    const typeText = useCallback((text: string, onDone?: () => void) => {
+        let i = 0;
+        setDisplayText('');
+        const interval = setInterval(() => {
+            i++;
+            setDisplayText(text.slice(0, i));
+            if (i >= text.length) {
+                clearInterval(interval);
+                onDone?.();
+            }
+        }, 40);
+        return () => clearInterval(interval);
+    }, []);
+
+    useEffect(() => {
+        if (!ref.current) return;
+        const observer = new IntersectionObserver(([entry]) => {
+            if (entry.isIntersecting && !hasTriggered.current) {
+                hasTriggered.current = true;
+                // Start sequence after card power-on delay
+                setTimeout(() => {
+                    setPhase('offline');
+                    typeText('OFFLINE', () => {
+                        setTimeout(() => {
+                            setPhase('booting');
+                            typeText('BOOTING...', () => {
+                                setTimeout(() => {
+                                    setPhase('installed');
+                                    typeText('INSTALLED');
+                                }, 600);
+                            });
+                        }, 400);
+                    });
+                }, delay + 300); // wait for power-on animation + stagger
+            }
+        }, { threshold: 0.1 });
+        observer.observe(ref.current);
+        return () => observer.disconnect();
+    }, [delay, typeText]);
+
+    const color = phase === 'installed' ? 'text-white/60' : phase === 'booting' ? 'text-brick-red/70' : 'text-white/30';
+    const dotColor = phase === 'installed' ? 'bg-white/60' : phase === 'booting' ? 'bg-brick-red/70 animate-blink' : 'bg-white/20';
+
+    return (
+        <div ref={ref} className={`flex items-center gap-1.5 font-mono text-[8px] tracking-[0.15em] ${color} transition-colors duration-300`}>
+            <span className={`block w-1 h-1 rounded-full ${dotColor} transition-colors duration-300`} />
+            <span>{displayText}<span className="animate-blink">_</span></span>
+        </div>
+    );
+};
 
 const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: (work: Work) => void }) => {
     const containerRef = useRef<HTMLDivElement>(null);
@@ -1365,7 +1489,7 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             onClick={() => work.hasDetail && onOpen(work)}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className={`reveal relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-brick-red transition-colors duration-300 bg-brick-black group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
+            className={`work-card-poweron relative h-[500px] md:h-full overflow-hidden border border-white/10 hover:border-brick-red bg-brick-black group md:basis-0 ${work.hasDetail ? 'cursor-pointer' : 'cursor-default'}`}
             role={work.hasDetail ? 'button' : undefined}
             tabIndex={work.hasDetail ? 0 : undefined}
             aria-label={`View project: ${work.title}`}
@@ -1376,15 +1500,21 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
                 flexShrink: 0,
                 willChange: 'flex-grow',
                 transition: 'flex-grow 1.4s cubic-bezier(0.22, 1, 0.36, 1), border-color 300ms ease',
-            }}
+                '--poweron-delay': `${index * 80}ms`,
+            } as React.CSSProperties}
         >
+            {/* STATIC NOISE OVERLAY (dissolves on power-on) */}
+            <div className="static-noise absolute inset-0 z-50 pointer-events-none mix-blend-overlay bg-noise-svg" />
+
             {/* BACKGROUND IMAGE */}
             <div
-                className="absolute inset-0 z-10 animate-float-parallax"
+                className="absolute inset-0 z-10"
                 style={{ animationDelay: `${index * -4}s` }}
             >
                 <div
                     ref={bgRef}
+                    role="img"
+                    aria-label={`${work.title} — ${work.subtitle || work.desc}`}
                     className="absolute inset-0 sharp-image saturate-[0.8] group-hover:saturate-100 contrast-[1.05] group-hover:brightness-[1.1] transition-[filter] duration-700 ease-out"
                     style={{
                         backgroundImage: `url('${work.imageHome}')`,
@@ -1402,12 +1532,12 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             {/* CONTENT */}
             <div className={`absolute inset-x-0 bottom-0 z-40 p-4 md:p-6 flex flex-col justify-end transition-all duration-500 pointer-events-none ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
                 <div className="w-12 h-[2px] bg-brick-red mb-4 shadow-[0_0_8px_#DC2626]" />
-                <h3
-                    className="font-brick text-white leading-[0.9] drop-shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-2"
+                <h2
+                    className="font-brick text-white leading-tight drop-shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-2"
                     style={{ fontSize: 'clamp(0.75rem, 7cqw, 3rem)' }}
                 >
                     {work.title}
-                </h3>
+                </h2>
                 <p className="text-white/40 text-[10px] font-mono tracking-widest uppercase mt-2">
                     {work.subtitle}
                 </p>
@@ -1447,7 +1577,7 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
                 </span>
                 <span className="font-mono text-[9px] md:text-[10px] text-white/40 tracking-[0.6em] uppercase leading-none">{t('works_page.title')}</span>
             </motion.div>
-            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] px-6 md:px-12 lg:px-24">
+            <div className="flex flex-col md:flex-row w-full h-auto md:h-[65vh] xl:h-[75vh] px-0 md:px-12 lg:px-24">
                 <DataContext.Consumer>
                     {(data) => data ? data.works.slice(0, 5).map((work, idx) => (
                         <WorkCard key={work.id} work={work} index={idx} onOpen={onSelectProject} />
@@ -1458,6 +1588,7 @@ const SelectedWorks = ({ onSelectProject }: { onSelectProject: (work: Work) => v
     );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TunnelBackground = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -1584,6 +1715,7 @@ const TunnelBackground = () => {
     return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0" />;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StarGateBackground = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -1700,6 +1832,7 @@ const StarGateBackground = () => {
     return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0" />;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const MassiveTunnelBackground = () => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -1808,6 +1941,7 @@ const MassiveTunnelBackground = () => {
     );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const StarchildBackground = () => {
     return (
         <div className="absolute inset-0 pointer-events-none z-[1] bg-[#000000] overflow-hidden flex items-center justify-center">
@@ -1951,10 +2085,10 @@ const monolithAnimations = {
 };
 
 const UnifiedEnding = () => {
-    const { goChat, goAdmin } = useAppNav();
+    const { goChat } = useAppNav();
     const ref = useRef<HTMLElement>(null);
     const { t } = useTranslation();
-    const clients = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "FACEBOOK", "O BOTICÁRIO"];
+    const clients = ["BBC", "RECORD TV", "STONE", "ALIEXPRESS", "KEETA", "VISA", "META", "O BOTICÁRIO", "VTEX", "REGREEN", "WEWORK"];
     const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] });
     const smoothProgress = useSpring(scrollYProgress, { stiffness: 40, damping: 15, mass: 0.5 });
     const shouldReduceMotion = useReducedMotion();
@@ -1963,7 +2097,6 @@ const UnifiedEnding = () => {
             ? { animate: staticFromAnim(anim.animate), transition: { duration: 0 } }
             : { animate: anim.animate, transition: { ...anim.transition, ease: anim.transition.ease as Easing } };
 
-    const planetX = useTransform(smoothProgress, [0, 1], ["-96%", "-92%"]);
     const textY = useTransform(smoothProgress, [0, 1], ["30px", "0px"]);
 
     return (
@@ -1985,7 +2118,7 @@ const UnifiedEnding = () => {
                                 {t('stages.one')} &bull; {t('stages.origin')}
                             </span>
 
-                            <h2 className="font-brick text-[40px] md:text-[60px] lg:text-[80px] text-white tracking-[0.1em] leading-[1.1] uppercase drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                            <h2 className="font-brick text-[40px] md:text-[60px] lg:text-[80px] text-white tracking-[0.1em] leading-[1.1] uppercase drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]" aria-label="Born on set">
                                 {t('legacy.title_part1')} <br />
                                 <span className="text-brick-red">{t('legacy.title_part2')}</span>
                             </h2>
@@ -2008,7 +2141,7 @@ const UnifiedEnding = () => {
                                 initial={{ y: "78%" }}
                                 whileInView={{ y: "0%" }}
                                 viewport={{ once: true, amount: 0.01 }}
-                                transition={{ duration: 4.2, ease: [0.16, 1, 0.3, 1] }}
+                                transition={{ duration: 8.5, ease: [0.16, 1, 0.3, 1] }}
                                 className="absolute inset-0"
                                 style={{ willChange: "transform" }}
                             >
@@ -2278,9 +2411,11 @@ const UnifiedEnding = () => {
             </section>
 
             {/* PART 3: FOOTER CTA (The Climax) */}
-            <section className="relative w-full bg-transparent flex flex-col items-center pt-16 md:pt-20 pb-0 overflow-x-hidden">
-                {/* Colossal Red Aura emanating from the CTA to set the mood */}
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] md:w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_at_center,rgba(var(--brick-red-rgb),0.12)_0%,transparent_50%)] pointer-events-none z-0 blur-[100px]"></div>
+            <section className="relative w-full bg-transparent flex flex-col items-center pt-16 md:pt-20 pb-0">
+                {/* Colossal Red Aura — isolated in its own overflow wrapper so it never clips siblings */}
+                <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150vw] md:w-[100vw] h-[100vh] bg-[radial-gradient(ellipse_at_center,rgba(var(--brick-red-rgb),0.12)_0%,transparent_50%)] blur-[100px]"></div>
+                </div>
 
                 <div className="flex flex-col items-center text-center reveal relative z-30 w-full mb-32 md:mb-36 px-6 md:px-12 gap-10 md:gap-12">
 
@@ -2291,16 +2426,16 @@ const UnifiedEnding = () => {
                     {/* Subtitle with Scramble Effect & Lasers */}
                     <div className="flex items-center gap-4 md:gap-6">
                         <div className="w-8 md:w-16 h-[1px] bg-gradient-to-r from-transparent to-brick-red"></div>
-                        <h2 className="text-[10px] md:text-xs font-ai text-brick-red uppercase tracking-[0.3em] md:tracking-[0.5em] drop-shadow-[0_0_10px_rgba(var(--brick-red-rgb),0.8)]">
+                        <span className="text-[10px] md:text-xs font-ai text-brick-red uppercase tracking-[0.3em] md:tracking-[0.5em] drop-shadow-[0_0_10px_rgba(var(--brick-red-rgb),0.8)]">
                             <ScrambleText text={t('footer.complex_problem')} hoverTrigger={true} triggerOnReveal={true} delay={500} />
-                        </h2>
+                        </span>
                         <div className="w-8 md:w-16 h-[1px] bg-gradient-to-l from-transparent to-brick-red"></div>
                     </div>
 
                     {/* Massive Climax Typography */}
-                    <h1 className="climax-title text-5xl md:text-7xl lg:text-[110px] font-brick max-w-6xl cursor-default px-4">
+                    <h2 className="climax-title text-5xl md:text-7xl lg:text-[110px] font-brick max-w-6xl cursor-default px-4">
                         {t('footer.we_have_intelligence')}
-                    </h1>
+                    </h2>
 
                     {/* Highly polished, weighty contact button */}
                     <MagneticButton onClick={goChat} className="group relative overflow-hidden border border-white/10 hover:border-brick-red hover:bg-brick-red/5 hover:shadow-[0_0_40px_rgba(var(--brick-red-rgb),0.2)] transition-all duration-700 px-10 py-5 md:px-16 md:py-6 backdrop-blur-sm">
@@ -2323,7 +2458,7 @@ const UnifiedEnding = () => {
                     <div className="w-full px-6 md:px-12 lg:px-24 pb-6 flex flex-col md:flex-row justify-between items-center gap-6">
                         <div className="flex gap-6">
                             {['LinkedIn', 'Instagram'].map((social) => (
-                                <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white/50 hover:text-brick-red tracking-widest uppercase transition-colors duration-500">{social}</a>
+                                <a key={social} href={social === 'Instagram' ? 'https://www.instagram.com/brick.mov' : 'https://www.linkedin.com/company/brick-mov/'} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white/50 hover:text-brick-red tracking-widest uppercase transition-colors duration-500"><ScrambleText text={social} hoverTrigger={true} /></a>
                             ))}
                         </div>
                         <div className="text-[9px] uppercase tracking-[0.2em] text-brick-gray/30 font-bold text-center md:text-right flex flex-col items-center md:items-end gap-1">
@@ -2363,11 +2498,11 @@ const addAutoplayToUrl = (url: string): string => {
 };
 
 const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onClose: () => void, onPrev?: () => void, onNext?: () => void }) => {
-    const { t } = useTranslation();
+    const { t: _t } = useTranslation();
     const [isPlaying, setIsPlaying] = useState(false);
     const [panelHidden, setPanelHidden] = useState(false);
-    const [videoWasHovered, setVideoWasHovered] = useState(false);
-    const iframeRef = useRef<HTMLIFrameElement>(null);
+    const [_videoWasHovered, _setVideoWasHovered] = useState(false);
+    const _iframeRef = useRef<HTMLIFrameElement>(null);
 
     const handlePlay = () => {
         setIsPlaying(true);
@@ -2401,7 +2536,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
     const isHorizontal = project.orientation === 'horizontal';
     const vimeoId = project.videoUrl ? getVimeoId(project.videoUrl) : null;
     const youtubeId = project.videoUrl ? getYoutubeId(project.videoUrl) : null;
-    const isVideoFile = project.videoUrl ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(project.videoUrl) : false;
+    const _isVideoFile = project.videoUrl ? /\.(mp4|webm|ogg|mov)(\?.*)?$/i.test(project.videoUrl) : false;
 
     return (
         <div role="dialog" aria-modal="true" aria-label={`Project: ${project.title}`} className="fixed inset-0 z-[110] flex items-center justify-center p-4">
@@ -2409,7 +2544,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
 
             {/* NAV PREV */}
             {onPrev && (
-                <button onClick={onPrev} aria-label="Previous project" className="hidden md:flex items-center justify-center z-[115] text-red-500/60 nav-btn-crt transition-all duration-300 hover:scale-125 hover:-translate-x-1 px-4 active:scale-90 shrink-0"
+                <button onClick={onPrev} aria-label="Previous project" className="hidden md:flex items-center justify-center z-[115] text-brick-red/60 nav-btn-crt transition-all duration-300 hover:scale-125 hover:-translate-x-1 px-4 active:scale-90 shrink-0"
                     style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '36px' }}>
                     &lt;
                 </button>
@@ -2418,8 +2553,8 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
             <div
                 className={`relative ${isHorizontal ? 'aspect-video' : 'aspect-[9/16]'} flex bg-black border border-white/20 shadow-[0_0_80px_rgba(0,0,0,0.9)] animate-fade-in-up overflow-hidden modal-container`}
                 style={isHorizontal
-                    ? { width: 'min(calc(100vw - 4rem), calc((100vh - 4rem) * 16 / 9), 1200px)' }
-                    : { height: 'min(calc(100vh - 4rem), calc((100vw - 4rem) * 16 / 9), 860px)' }
+                    ? { width: 'min(calc(100vw - 4rem), calc((100vh - 4rem) * 16 / 9), 1600px)' }
+                    : { height: 'min(calc(100vh - 4rem), calc((100vw - 4rem) * 16 / 9), 1000px)' }
                 }
             >
 
@@ -2443,7 +2578,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                         {(!isPlaying || !project.videoUrl) && (
                             <div className="w-full h-full relative cursor-pointer group" onClick={handlePlay}>
                                 {/* Thumbnail */}
-                                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[5000ms] group-hover:scale-103" style={{ backgroundImage: `url('${project.imageHome}')` }}></div>
+                                <div role="img" aria-label={`${project.title} — ${project.subtitle || project.desc}`} className="absolute inset-0 bg-cover bg-center transition-transform duration-[5000ms] group-hover:scale-103" style={{ backgroundImage: `url('${project.imageHome}')` }}></div>
                                 {/* Dark vignette */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
 
@@ -2471,6 +2606,19 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                     </div>
                 </div>
 
+                {/* ─── MOBILE CLOSE BUTTON (visible when panel is hidden) ───── */}
+                {panelHidden && (
+                    <button
+                        onClick={onClose}
+                        aria-label="Close project modal"
+                        className="absolute z-30 top-4 right-4 md:hidden flex items-center justify-center
+                            border border-white/20 bg-brick-black/80 backdrop-blur-sm hover:bg-white/10 hover:border-white/40
+                            w-10 h-10 rounded-sm transition-all duration-300"
+                    >
+                        <span className="font-mono text-[11px] text-white/50 hover:text-white/80 transition-colors">✕</span>
+                    </button>
+                )}
+
                 {/* ─── INFO PANEL PULL-BACK TAB (só quando escondido) ───── */}
                 {panelHidden && (
                     <button
@@ -2494,49 +2642,49 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                 <div className={`absolute z-20 flex flex-col overflow-hidden transition-all duration-700
                     ${isHorizontal
                         ? `bottom-0 left-0 right-0 h-[55%] border-t border-white/10 bg-brick-black/95 backdrop-blur-xl
-                           md:bottom-0 md:left-auto md:right-0 md:top-0 md:h-full md:w-[380px] md:border-t-0 md:border-l md:bg-brick-black/80
+                           md:bottom-0 md:left-auto md:right-0 md:top-0 md:h-full md:w-[380px] xl:w-[440px] md:border-t-0 md:border-l md:bg-brick-black/80
                            ${panelHidden ? 'translate-y-full md:translate-y-0 md:translate-x-full' : 'translate-y-0 md:translate-x-0'}`
                         : `bottom-0 left-0 right-0 h-[55%] border-t border-white/10 bg-brick-black/95 backdrop-blur-xl
                            ${panelHidden ? 'translate-y-full' : 'translate-y-0'}`
                     }`}>
 
-                    <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative">
-                        <div className="px-4 pt-4 pb-3 md:px-8 md:pt-5 md:pb-6 flex-shrink-0">
-                            {/* System Status */}
-                            <div className="flex items-center justify-between mb-3 md:mb-8 animate-system-input pt-px">
-                                <span className="font-mono text-[9px] tracking-[0.4em] uppercase"><span className="text-red-500">&gt;&gt; </span><span className="text-white/40"> ACCESSING_DATA</span><span className="text-red-500 animate-blink tracking-normal">_</span></span>
-                                <button
-                                    onClick={onClose}
-                                    aria-label="Close project modal"
-                                    className="text-white/20 hover:text-white transition-all p-1 active:scale-95 flex-shrink-0"
-                                    style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', letterSpacing: '0.2em' }}
-                                >
-                                    [ESC]
-                                </button>
-                            </div>
-
-                            {/* Title */}
-                            <div className="relative">
-                                <h2
-                                    className="font-brick text-white uppercase break-words overflow-wrap-anywhere"
-                                    style={{
-                                        fontSize: 'clamp(1.6rem, 3vw, 2.8rem)',
-                                        lineHeight: '0.85',
-                                        letterSpacing: '-0.03em',
-                                    }}
-                                >
-                                    {project.titleFull || project.title}
-                                </h2>
-                                <div className="flex items-center gap-4 mt-4">
-                                    <div className="h-px w-6 bg-white/20"></div>
-                                    <span className="font-mono text-[9px] text-white/40 tracking-[0.3em] uppercase">{project.subtitle}</span>
-                                </div>
-                            </div>
+                    {/* System Status + Title — always visible, outside scroll */}
+                    <div className="flex-shrink-0 px-4 pt-4 pb-3 md:px-8 md:pt-5 md:pb-4">
+                        <div className="flex items-center justify-between pt-1">
+                            <span className="font-mono text-[9px] tracking-[0.4em] uppercase"><span className="text-brick-red">&gt;&gt; </span><span className="text-white/40"> ACCESSING_DATA</span><span className="text-brick-red animate-blink tracking-normal">_</span></span>
+                            <button
+                                onClick={onClose}
+                                aria-label="Close project modal"
+                                className="text-white/20 hover:text-white transition-all py-1 px-2 active:scale-95 flex-shrink-0"
+                                style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '10px', letterSpacing: '0.2em' }}
+                            >
+                                [ESC]
+                            </button>
                         </div>
 
-                        <div className="px-8 py-4 mb-8">
+                        {/* Title */}
+                        <div className="relative">
+                            <h1
+                                className="font-brick text-white uppercase my-4 md:my-8"
+                                style={{
+                                    fontSize: 'clamp(1.6rem, 3vw, 2.5rem)',
+                                    lineHeight: '0.9',
+                                    letterSpacing: '-0.03em',
+                                }}
+                            >
+                                {project.titleFull || project.title}
+                            </h1>
+                            <div className="flex items-center gap-4">
+                                <div className="h-px w-6 bg-white/20"></div>
+                                <span className="font-mono text-[9px] text-white/40 tracking-[0.3em] uppercase">{project.subtitle}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative">
+                        <div className="px-4 md:px-8 pt-0 pb-4 mb-8">
                             <div className="font-mono text-[8px] text-white/20 mb-4 tracking-[0.4em]">// SYSTEM_LOG</div>
-                            <p className="text-white text-[12px] leading-[1.7] tracking-[0.04em] max-w-md font-mono border-l border-white/10 pl-5">
+                            <p className="text-white/90 text-[13px] md:text-[14px] xl:text-[16px] leading-[1.8] xl:leading-[1.9] tracking-[0.02em] max-w-md xl:max-w-lg border-l border-white/10 pl-5" style={{ fontFamily: "'Share Tech', sans-serif", fontWeight: 400 }}>
                                 {project.longDesc || project.desc}
                             </p>
                         </div>
@@ -2568,7 +2716,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
 
             {/* NAV NEXT */}
             {onNext && (
-                <button onClick={onNext} aria-label="Next project" className="hidden md:flex items-center justify-center z-[115] text-red-500/60 nav-btn-crt transition-all duration-300 hover:scale-125 hover:translate-x-1 px-4 active:scale-90 shrink-0"
+                <button onClick={onNext} aria-label="Next project" className="hidden md:flex items-center justify-center z-[115] text-brick-red/60 nav-btn-crt transition-all duration-300 hover:scale-125 hover:translate-x-1 px-4 active:scale-90 shrink-0"
                     style={{ fontFamily: "'IBM Plex Mono', monospace", fontSize: '36px' }}>
                     &gt;
                 </button>
@@ -2592,6 +2740,8 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
         >
             {/* UPDATED FILTERS FOR VISIBILITY */}
             <div
+                role="img"
+                aria-label={`${work.title} — ${work.subtitle || work.desc}`}
                 className="absolute inset-0 opacity-100 sharp-image saturate-[0.9] group-hover:saturate-110 brightness-95 group-hover:brightness-105 transition-[filter] duration-700"
                 style={{
                     backgroundImage: `url('${work.imageWorks || work.imageHome}')`,
@@ -2613,7 +2763,7 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
                     <span className="font-mono text-[9px] tracking-widest text-brick-red">{(index + 1).toString().padStart(3, '0')}</span>
                 </div>
                 <div className="transform translate-y-1 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    <h3 className="text-sm font-brick text-white leading-tight mb-1.5 tracking-tight group-hover:text-brick-red transition-colors line-clamp-2">{work.title}</h3>
+                    <h2 className="text-sm font-brick text-white leading-tight my-1.5 tracking-tight group-hover:text-brick-red transition-colors line-clamp-2">{work.title}</h2>
                     <p className="text-[9px] text-white font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-1">{work.desc}</p>
                 </div>
             </div>
@@ -2623,6 +2773,7 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
     );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const WorksFilter = ({ categories, activeCategory, onSelect }: { categories: string[], activeCategory: string, onSelect: (c: string) => void }) => {
     const { t } = useTranslation();
     return (
@@ -2646,10 +2797,10 @@ const WorksPage = ({ onSelectProject }: {
 }) => {
     const { goHome } = useAppNav();
     const { t } = useTranslation();
-    const [activeCategory, setActiveCategory] = useState("ALL");
+    const [activeCategory, _setActiveCategory] = useState("ALL");
     const { works } = useContext(DataContext)!;
 
-    const categories = useMemo(() => {
+    const _categories = useMemo(() => {
         const cats = new Set(works.map(w => w.category));
         return ["ALL", ...Array.from(cats)];
     }, [works]);
@@ -2684,11 +2835,11 @@ const WorksPage = ({ onSelectProject }: {
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
             <main id="main-content" className="pt-32 md:pt-40 min-h-screen flex flex-col">
-                <section className="w-full px-6 md:px-12 lg:px-24 mb-16 reveal">
+                <section className="w-full px-6 md:px-12 lg:px-24 mb-8 reveal">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
                             <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">{t('works_page.archive_index').split('_').slice(0, -1).join('_')}_<span className="text-brick-red">{t('works_page.archive_index').split('_').slice(-1)[0]}</span></h1>
-                            <p className="font-mono text-[10px] md:text-xs tracking-widest max-w-xl animate-system-input"><span className="text-brick-red">&gt;&gt; </span> <span className="text-brick-gray">{t('works_page.accessing')} <span className="text-white">{works.length}</span> {t('works_page.entries_found')}</span></p>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input"><span className="text-brick-red">&gt;&gt; </span> <span className="text-brick-gray">{t('works_page.accessing')} <span className="text-white">{works.length}</span> {t('works_page.entries_found')}</span></p>
                         </div>
                     </div>
                 </section>
@@ -2720,14 +2871,14 @@ const BlogPostPage = ({ post }: { post: Post }) => {
             <button onClick={onBack} aria-label="Return to transmissions" className="fixed top-24 left-6 md:left-12 font-mono text-brick-gray hover:text-white text-xs md:text-sm tracking-widest uppercase transition-colors z-40 flex items-center gap-2 group mix-blend-difference">
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_index')}
             </button>
-            <main id="main-content" className="pt-32 md:pt-40 min-h-screen flex flex-col bg-brick-black pb-32 md:pb-40 px-4 md:px-8" onClick={onBack}>
-                <article className="w-full max-w-5xl mx-auto mt-12 md:mt-16 animate-fade-in-up" onClick={(e) => e.stopPropagation()}>
+            <main id="main-content" className="pt-32 md:pt-40 min-h-screen flex flex-col bg-brick-black pb-32 md:pb-40 px-4 md:px-8">
+                <article className="w-full max-w-5xl mx-auto mt-12 md:mt-16 animate-fade-in-up">
                     <div className="relative border border-white/10 bg-brick-surface backdrop-blur-sm overflow-hidden">
                         <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-brick-red to-transparent opacity-80"></div>
 
                         <header className="px-7 md:px-14 pt-12 md:pt-16 pb-12 border-b border-white/10">
                             <div className="max-w-3xl mx-auto">
-                                <div className="flex flex-wrap justify-start gap-3 md:gap-4 items-center mb-7 text-[10px] font-mono uppercase tracking-widest md:-ml-8">
+                                <div className="flex flex-wrap justify-start gap-3 md:gap-4 items-center text-[10px] font-mono uppercase tracking-widest md:-ml-8">
                                     <span className="text-brick-red">LOG_ID: {post.id}</span>
                                     <span className="text-brick-gray">DATE: {post.date}</span>
                                     {post.tags.map((tag: string) => (
@@ -2735,13 +2886,8 @@ const BlogPostPage = ({ post }: { post: Post }) => {
                                     ))}
                                 </div>
 
-                                <h1 className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-[0.95] tracking-tight mb-8 text-center">
-                                    {postTitle.toUpperCase() === 'A MÁQUINA NÃO TEM ALMA. NÓS TEMOS.' ? (
-                                        <>
-                                            A MÁQUINA NÃO TEM ALMA.{' '}
-                                            <span className="text-brick-red drop-shadow-[0_0_15px_rgba(var(--brick-red-rgb),0.45)]">NÓS TEMOS.</span>
-                                        </>
-                                    ) : postTitle}
+                                <h1 className="text-3xl md:text-5xl lg:text-6xl font-brick text-white leading-tight md:leading-[1.2] tracking-tight my-7 md:my-8 text-center">
+                                    {postTitle}
                                 </h1>
 
                                 <p className="text-base md:text-xl text-[#b8bcc4] font-light leading-relaxed text-center">
@@ -2771,6 +2917,7 @@ const BlogPostPage = ({ post }: { post: Post }) => {
     );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TransmissionsPage = () => {
     const { goHome, goPost } = useAppNav();
     const { t, i18n } = useTranslation();
@@ -2795,9 +2942,9 @@ const TransmissionsPage = () => {
                         {transmissions.map((post) => (
                             <div key={post.id} onClick={() => goPost(post.id)} role="button" tabIndex={0} aria-label={`Read: ${getLocalizedField(post.title, i18n.language, 'UNTITLED')}`} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goPost(post.id); } }} className="block group bg-brick-black hover:bg-brick-dark transition-colors p-8 md:p-10 border border-white/10 cursor-pointer">
                                 <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-4">
-                                    <h3 className="text-xl md:text-2xl font-brick text-white tracking-tight group-hover:text-brick-red transition-colors">
+                                    <h2 className="text-xl md:text-2xl font-brick text-white tracking-tight group-hover:text-brick-red transition-colors">
                                         {getLocalizedField(post.title, i18n.language, 'UNTITLED')}
-                                    </h3>
+                                    </h2>
                                     <span className="font-mono text-[10px] text-brick-red tracking-widest whitespace-nowrap">{post.date}</span>
                                 </div>
                                 <p className="text-brick-gray text-sm md:text-base font-light max-w-3xl mb-6 leading-relaxed">
@@ -2828,7 +2975,7 @@ const Footer = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-brick-black via-transparent to-transparent pointer-events-none z-[1]"></div>
 
             <div className="flex flex-col items-center text-center gap-8 reveal relative z-10">
-                <h2 className="text-xs md:text-sm font-ai text-brick-gray uppercase tracking-[0.2em]">{t('footer.complex_problem')}</h2>
+                <span className="text-xs md:text-sm font-ai text-brick-gray uppercase tracking-[0.2em] block">{t('footer.complex_problem')}</span>
                 <p className="text-3xl md:text-5xl lg:text-6xl font-brick text-brick-red leading-none max-w-5xl drop-shadow-[0_0_15px_rgba(var(--brick-red-rgb),0.5)]">{t('footer.we_have_intelligence')}</p>
                 <MagneticButton onClick={onChat} className="mt-6 text-base md:text-lg font-ai font-bold text-white hover:text-brick-red group">
                     {t('footer.talk_to_us')} <span className="text-brick-red animate-blink group-hover:text-white">_</span>
@@ -2837,7 +2984,7 @@ const Footer = () => {
             <div className="mt-8 border-t border-white/10 pt-6 flex flex-col md:flex-row justify-between items-start gap-4 reveal">
                 <div className="flex gap-6">
                     {['LinkedIn', 'Instagram'].map((social) => (
-                        <a key={social} href={`https://${social.toLowerCase()}.com/brickai`} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-brick-red tracking-widest uppercase transition-colors">{social}</a>
+                        <a key={social} href={social === 'Instagram' ? 'https://www.instagram.com/brick.mov' : 'https://www.linkedin.com/company/brick-mov/'} target="_blank" rel="noopener noreferrer" className="text-xs font-bold text-white hover:text-brick-red tracking-widest uppercase transition-colors"><ScrambleText text={social} hoverTrigger={true} /></a>
                     ))}
                 </div>
                 <div className="text-[9px] uppercase tracking-[0.2em] text-brick-gray/40 font-bold text-right">
@@ -2858,24 +3005,64 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
     ]);
     const [input, setInput] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
+    const userMessageCount = messages.filter(m => m.role === 'user').length;
+    const masonState = isProcessing
+        ? 'PROCESSING'
+        : userMessageCount === 0
+            ? 'IDLE'
+            : userMessageCount === 1
+                ? 'CONNECTED'
+                : userMessageCount <= 3
+                    ? 'ENGAGED'
+                    : 'DEEP_LINK';
+    const [typingIndex, setTypingIndex] = useState(-1); // index of message currently being typed
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const SUGGESTIONS = [
         t('chat.suggestions.philosophy'),
         t('chat.suggestions.synthesis'),
+        t('chat.suggestions.services'),
+        t('chat.suggestions.process'),
         t('chat.suggestions.humans')
     ];
 
     const isFirstRender = useRef(true);
     const isLangFirstRender = useRef(true);
 
+    const messagesContainerRef = useRef<HTMLDivElement>(null);
+    const userScrolledUp = useRef(false);
+
+    const isNearBottom = () => {
+        const el = messagesContainerRef.current;
+        if (!el) return true;
+        return el.scrollHeight - el.scrollTop - el.clientHeight < 120;
+    };
+
     const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+        if (userScrolledUp.current) return;
+        const el = messagesContainerRef.current;
+        if (el) el.scrollTop = el.scrollHeight;
+    };
+
+    const handleMessagesScroll = () => {
+        userScrolledUp.current = !isNearBottom();
     };
 
     useEffect(() => {
         if (isFirstRender.current) { isFirstRender.current = false; return; }
+        // Always scroll for user's own messages, respect preference for others
+        const lastMsg = messages[messages.length - 1];
+        if (lastMsg?.role === 'user') {
+            userScrolledUp.current = false;
+        }
         scrollToBottom();
     }, [messages]);
+
+    // Keep scrolling during typewriter reveal
+    useEffect(() => {
+        if (typingIndex < 0) return;
+        const interval = setInterval(scrollToBottom, 300);
+        return () => clearInterval(interval);
+    }, [typingIndex]);
 
     useEffect(() => {
         if (isLangFirstRender.current) { isLangFirstRender.current = false; return; }
@@ -2896,7 +3083,10 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
 
         const response = await chatWithMono(messages, messageToSend);
 
-        setMessages(prev => [...prev, { role: 'mono', content: response }]);
+        setMessages(prev => {
+            setTypingIndex(prev.length); // the new message index
+            return [...prev, { role: 'mono', content: response }];
+        });
         setIsProcessing(false);
     };
 
@@ -2908,48 +3098,48 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
-            <main className="w-full px-6 md:px-12 lg:px-24 relative z-10 flex flex-col gap-24">
+            <main id="main-content" className="w-full px-6 md:px-12 lg:px-24 relative z-10 flex flex-col gap-12 md:gap-16">
 
                 {/* 1. CONTACT SECTION (Humans) */}
                 <section className="w-full animate-fade-in-up">
-                    <div className="flex flex-col md:flex-row justify-between items-end mb-12">
+                    <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-8">
                         <div>
                             <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">REACH_<span className="text-brick-red">HUMANS</span></h1>
                             <p className="font-mono text-[10px] md:text-xs tracking-widest uppercase animate-system-input"><span className="text-brick-red">&gt;&gt; </span> <span className="text-brick-gray">{t('chat.manual_override')}</span></p>
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-1">
+                    <div className="grid grid-cols-1 md:grid-cols-3 border border-white/10">
                         {/* EMAIL */}
-                        <a href="mailto:brick@brick.mov" className="group block bg-brick-dark border border-white/10 p-8 md:p-10 hover:border-brick-red transition-colors duration-300">
+                        <a href="mailto:brick@brick.mov" className="group block bg-brick-dark p-5 md:p-6 hover:bg-white/[0.03] transition-colors duration-300 border-b md:border-b-0 md:border-r border-white/10">
                             <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
-                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">Channel_01</span>
+                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">CHANNEL_01</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-brick-red transition-colors">{t('chat.email_streams')}</h3>
+                            <h2 className="text-2xl font-brick text-white mb-2 group-hover:text-brick-red transition-colors">{t('chat.email_streams')}</h2>
                             <p className="text-brick-gray text-xs font-mono tracking-widest">BRICK@BRICK.MOV</p>
                         </a>
 
                         {/* WHATSAPP */}
-                        <a href="https://wa.me/5521998324335" target="_blank" rel="noopener noreferrer" className="group block bg-brick-dark border border-white/10 p-8 md:p-10 hover:border-brick-red transition-colors duration-300">
+                        <a href="https://wa.me/5521998324335" target="_blank" rel="noopener noreferrer" className="group block bg-brick-dark p-5 md:p-6 hover:bg-white/[0.03] transition-colors duration-300 border-b md:border-b-0 md:border-r border-white/10">
                             <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
-                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">Channel_02</span>
+                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">CHANNEL_02</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-1 group-hover:text-brick-red transition-colors">{t('chat.direct_message')}</h3>
+                            <h2 className="text-2xl font-brick text-white mb-2 group-hover:text-brick-red transition-colors">{t('chat.direct_message')}</h2>
                             <p className="text-brick-gray text-xs font-mono tracking-widest">WHATSAPP</p>
                         </a>
 
                         {/* SOCIAL */}
-                        <div className="group block bg-brick-dark border border-white/10 p-8 md:p-10 hover:border-brick-red transition-colors duration-300">
+                        <div className="group block bg-brick-dark p-5 md:p-6 hover:bg-white/[0.03] transition-colors duration-300">
                             <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
-                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">Channel_03</span>
+                                <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">CHANNEL_03</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-4 group-hover:text-brick-red transition-colors">{t('chat.network_nodes')}</h3>
+                            <h2 className="text-2xl font-brick text-white mb-2 group-hover:text-brick-red transition-colors">{t('chat.network_nodes')}</h2>
                             <div className="flex flex-wrap gap-4">
                                 {[
                                     { name: 'LinkedIn', url: 'https://www.linkedin.com/company/brick-mov/' },
                                     { name: 'Instagram', url: 'https://www.instagram.com/brick.mov' }
                                 ].map(social => (
-                                    <a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-brick-gray hover:text-white uppercase tracking-wider underline decoration-white/20 hover:decoration-white">{social.name}</a>
+                                    <a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer" className="text-xs font-mono text-brick-gray hover:text-white uppercase tracking-wider underline decoration-white/20 hover:decoration-white"><ScrambleText text={social.name} hoverTrigger={true} /></a>
                                 ))}
                             </div>
                         </div>
@@ -2957,11 +3147,11 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                 </section>
 
                 {/* 2. MASON INTELLIGENCE - SYMMETRICAL LAYOUT */}
-                <section className="w-full flex flex-col md:flex-row gap-0 items-start animate-fade-in-up border-t border-white/10 pt-12" style={{ animationDelay: '0.2s' }}>
+                <section className="w-full flex flex-col md:flex-row gap-0 items-start animate-fade-in-up border-t border-white/10 pt-8" style={{ animationDelay: '0.2s' }}>
 
                     {/* LEFT: THE AVATAR (Static Monolith) */}
-                    <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-12 border-r border-white/10 relative bg-brick-black">
-                        <div className="relative w-[120px] h-[240px] md:w-[150px] md:h-[300px]">
+                    <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-8 relative bg-brick-black">
+                        <div className="relative w-[120px] h-[270px] md:w-[150px] md:h-[338px]">
                             {/* The Monolith Shape - Identical to Hero but no mouse interaction */}
                             <div
                                 className={`monolith-structure w-full h-full rounded-[2px] relative z-10 shadow-2xl transition-all duration-300 ${isProcessing ? 'shadow-[0_0_60px_rgba(var(--brick-red-rgb),0.3)]' : ''}`}
@@ -2973,7 +3163,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                                 <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(var(--brick-red-rgb),0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
 
                                 {/* Core Glow / Eye - Pulses on Thinking/Talking */}
-                                <div className={`centered-layer core-atmos pointer-events-none shadow-[0_0_40px_rgba(var(--brick-red-rgb),1)] transition-all duration-200 ${isProcessing ? 'animate-talking scale-150 opacity-100' : 'animate-thinking opacity-80'}`}></div>
+                                <div className={`centered-layer core-atmos pointer-events-none shadow-[0_0_40px_rgba(var(--brick-red-rgb),1)] transition-all duration-200 ${isProcessing ? 'animate-talking scale-150 opacity-100' : 'animate-breathe opacity-80'}`}></div>
 
                                 {/* Glass Reflection */}
                                 <div className="absolute inset-0 border border-white/10 opacity-30 pointer-events-none z-10 rounded-[2px]"></div>
@@ -2981,10 +3171,13 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             </div>
                         </div>
 
-                        <div className="mt-12 text-center">
+                        <div className="mt-8 text-center">
                             <h2 className="text-4xl font-brick text-white mb-2">{t('chat.mason_intro') ? t('chat.mason_intro').toUpperCase() : "I AM MASON"}</h2>
                             <p className="text-[10px] text-brick-gray font-mono tracking-widest max-w-[200px] mx-auto uppercase">
-                                {t('chat.generative_core')}<br />{t('chat.state')} {isProcessing ? t('chat.active') : t('chat.idle')}
+                                {t('chat.generative_core')}<br />
+                                <span className={`transition-all duration-500 ${isProcessing ? 'text-brick-red animate-pulse' : userMessageCount > 3 ? 'text-brick-red/80' : 'text-brick-gray'}`}>
+                                    State: {masonState}
+                                </span>
                             </p>
                         </div>
                     </div>
@@ -2996,14 +3189,14 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/[0.02]">
                                 <div className="flex items-center gap-3">
                                     <div className={`w-2 h-2 rounded-full ${isProcessing ? 'bg-brick-red animate-pulse' : 'bg-brick-red'}`}></div>
-                                    <span className="text-[9px] font-mono text-white/50 tracking-[0.2em] uppercase font-bold">
+                                    <span className="text-[9px] text-white/50 tracking-[0.2em] uppercase font-bold" style={{ fontFamily: "'Share Tech Mono', 'IBM Plex Mono', monospace" }}>
                                         /USR/BIN/MASON_CHAT // v3.2
                                     </span>
                                 </div>
                             </div>
 
                             {/* Messages */}
-                            <div className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 scrollbar-hide">
+                            <div ref={messagesContainerRef} onScroll={handleMessagesScroll} className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 scrollbar-hide">
                                 {messages.map((msg, i) => (
                                     <div key={i} className={`flex flex-col ${msg.role === 'user' ? 'items-end' : 'items-start'} animate-fade-in-up`}>
                                         <div className="flex items-center gap-2 mb-2 opacity-50">
@@ -3011,11 +3204,14 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                                                 {msg.role === 'user' ? 'YOU' : 'MASON'}
                                             </span>
                                         </div>
-                                        <div className={`max-w-[90%] p-5 text-sm font-mono leading-relaxed tracking-wide ${msg.role === 'user'
+                                        <div className={`max-w-[90%] p-5 text-sm leading-relaxed tracking-wide ${msg.role === 'user'
                                             ? 'bg-white/5 text-white/90 border-r-2 border-white/20'
                                             : 'text-brick-red bg-brick-red/5 border-l-2 border-brick-red/40'
-                                            }`}>
-                                            {msg.content}
+                                            }`} style={{ fontFamily: "'Share Tech Mono', 'IBM Plex Mono', monospace" }}>
+                                            {msg.role === 'mono' && i === typingIndex
+                                                ? <MasonTypewriter text={msg.content} onComplete={() => setTypingIndex(-1)} />
+                                                : msg.content
+                                            }
                                         </div>
                                     </div>
                                 ))}
@@ -3033,27 +3229,58 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             {/* Input */}
                             <div className="p-6 bg-brick-black border-t border-white/10">
                                 {!isProcessing && messages.length < 4 && (
-                                    <div className="flex flex-wrap gap-2 mb-4">
-                                        {SUGGESTIONS.map((query, i) => (
-                                            <button
-                                                key={i}
-                                                onClick={() => handleSend(query)}
-                                                className="text-[8px] font-mono uppercase tracking-widest text-brick-gray border border-white/10 bg-white/[0.02] px-3 py-1.5 hover:bg-brick-red hover:text-white hover:border-brick-red transition-all"
-                                            >
-                                                {query}
-                                            </button>
-                                        ))}
-                                    </div>
+                                    <>
+                                        {/* Mobile: horizontal scroll */}
+                                        <div className="flex gap-2 mb-4 overflow-x-auto scrollbar-hide pb-1 -mx-2 px-2 snap-x snap-mandatory md:hidden">
+                                            {SUGGESTIONS.map((query, i) => (
+                                                <button
+                                                    key={i}
+                                                    onClick={() => handleSend(query)}
+                                                    className="text-[11px] font-mono uppercase tracking-wider text-brick-gray border border-white/10 bg-white/[0.02] px-3 py-2 hover:bg-brick-red hover:text-white hover:border-brick-red transition-all animate-fade-in-up opacity-0 whitespace-nowrap shrink-0 snap-start"
+                                                    style={{ animationDelay: `${i * 100}ms`, animationFillMode: 'forwards' }}
+                                                >
+                                                    {query}
+                                                </button>
+                                            ))}
+                                        </div>
+                                        {/* Desktop: 2+3 centered grid */}
+                                        <div className="hidden md:flex flex-col gap-2 mb-4 items-center">
+                                            <div className="grid grid-cols-2 gap-2 w-full">
+                                                {SUGGESTIONS.slice(0, 2).map((query, i) => (
+                                                    <button
+                                                        key={i}
+                                                        onClick={() => handleSend(query)}
+                                                        className="text-[11px] font-mono uppercase tracking-wider text-brick-gray border border-white/10 bg-white/[0.02] px-3 py-2 hover:bg-brick-red hover:text-white hover:border-brick-red transition-all animate-fade-in-up opacity-0 text-center"
+                                                        style={{ animationDelay: `${i * 100}ms`, animationFillMode: 'forwards' }}
+                                                    >
+                                                        {query}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                            <div className="grid grid-cols-3 gap-2 w-full">
+                                                {SUGGESTIONS.slice(2).map((query, i) => (
+                                                    <button
+                                                        key={i + 2}
+                                                        onClick={() => handleSend(query)}
+                                                        className="text-[11px] font-mono uppercase tracking-wider text-brick-gray border border-white/10 bg-white/[0.02] px-3 py-2 hover:bg-brick-red hover:text-white hover:border-brick-red transition-all animate-fade-in-up opacity-0 text-center"
+                                                        style={{ animationDelay: `${(i + 2) * 100}ms`, animationFillMode: 'forwards' }}
+                                                    >
+                                                        {query}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </>
                                 )}
-                                <form onSubmit={handleSend} className="flex items-center gap-4">
-                                    <div className="w-2 h-2 bg-brick-red animate-pulse shrink-0"></div>
+                                <form onSubmit={handleSend} className="flex items-center gap-4 rounded-sm transition-shadow duration-300 focus-within:shadow-[0_0_20px_rgba(220,38,38,0.15)]">
+                                    <div className="w-2 h-2 bg-brick-red animate-pulse shrink-0 rounded-full"></div>
                                     <input
                                         type="text"
                                         value={input}
                                         onChange={(e) => setInput(e.target.value)}
                                         placeholder={t('chat.placeholder')}
                                         aria-label="Type your message to Mason"
-                                        className="w-full bg-transparent py-2 text-white font-mono text-sm focus:outline-none placeholder:text-white/20 placeholder:tracking-[0.1em]"
+                                        className="w-full bg-transparent py-2 text-white text-sm focus:outline-none placeholder:text-white/20 placeholder:tracking-[0.1em]" style={{ fontFamily: "'Share Tech Mono', 'IBM Plex Mono', monospace" }}
                                         autoFocus
                                     />
                                     <button type="submit" aria-label="Send message" className="text-[10px] font-brick text-white/50 hover:text-white uppercase tracking-[0.2em] transition-colors">
@@ -3100,28 +3327,6 @@ const InfoCard = ({ number, title, desc }: { number: string, title: string, desc
     </div>
 );
 
-const StatBlock = ({ label, value, sub }: { label: string, value: string, sub: string }) => (
-    <div className="flex flex-col border-l border-white/10 pl-6 py-2 group hover:border-brick-red transition-colors">
-        <span className="font-mono text-[9px] text-brick-gray uppercase tracking-widest mb-1">{label}</span>
-        <span className="font-brick text-3xl md:text-4xl text-white mb-1 group-hover:text-brick-red transition-colors">{value}</span>
-        <span className="font-mono text-[9px] text-white/40 uppercase tracking-widest">{sub}</span>
-    </div>
-);
-
-const LogItem = ({ year, title, desc, highlight = false }: { year: string, title: string, desc: string, highlight?: boolean }) => (
-    <div className={`relative pl-8 md:pl-12 group ${highlight ? 'opacity-100' : 'opacity-60 hover:opacity-100'} transition-opacity duration-300`}>
-        {/* Dot */}
-        <div className={`absolute left-[-4px] top-1.5 w-2 h-2 rounded-full border-2 border-brick-black z-10 ${highlight ? 'bg-brick-red' : 'bg-[#333] group-hover:bg-white'} transition-colors`}></div>
-
-        <div className="flex flex-col md:flex-row md:items-baseline gap-2 mb-1">
-            <span className={`font-mono text-sm font-bold ${highlight ? 'text-brick-red' : 'text-white'}`}>{year}</span>
-            <span className="hidden md:inline text-white/20">//</span>
-            <h4 className="font-brick text-lg text-white uppercase tracking-wide">{title}</h4>
-        </div>
-        <p className="text-xs md:text-sm text-brick-gray font-light leading-relaxed max-w-lg">{desc}</p>
-    </div>
-);
-
 const TeamMember = ({ name, role, id }: { name: string, role: string, id: string }) => (
     <div className="group relative bg-brick-black border border-white/10 p-8 md:p-10 hover:border-white/20 transition-all duration-300">
         <div className="flex justify-between items-start mb-6">
@@ -3130,13 +3335,13 @@ const TeamMember = ({ name, role, id }: { name: string, role: string, id: string
             </div>
             <div className="flex flex-col items-end">
                 <span className="font-mono text-[9px] text-brick-red uppercase tracking-widest mb-1">ID_{id}</span>
-                <div className="flex gap-0.5">
-                    {[...Array(3)].map((_, i) => <div key={i} className="w-1 h-1 bg-white/20 rounded-full"></div>)}
+                <div className="flex gap-1">
+                    {[...Array(3)].map((_, i) => <div key={i} className="w-1 h-1 bg-white/30 rounded-full animate-pulse" style={{ animationDelay: `${i * 300}ms`, animationDuration: '1.5s' }}></div>)}
                 </div>
             </div>
         </div>
         <div>
-            <h4 className="text-lg font-brick text-white group-hover:text-brick-white transition-colors">{name}</h4>
+            <h3 className="text-lg font-brick text-white group-hover:text-brick-white transition-colors">{name}</h3>
             <span className="block text-[10px] font-mono text-brick-gray uppercase tracking-widest mt-1 border-t border-white/10 pt-2 inline-block w-full">{role}</span>
         </div>
     </div>
@@ -3158,24 +3363,23 @@ const AboutPage = () => {
                 <div className="scanline-effect fixed inset-0 z-0 pointer-events-none opacity-20"></div>
 
                 {/* HERO: ORIGIN STORY */}
-                <section className="w-full px-6 md:px-12 lg:px-24 mb-12 reveal">
+                <section className="w-full px-6 md:px-12 lg:px-24 mb-16 md:mb-20 reveal">
                     {/* Compact header — same pattern as Works/Transmissions */}
-                    <div className="mb-10">
-                        <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">
-                            {t('about.origin').split('_').slice(0, -1).join('_')}
-                            <span className="text-brick-red">_{t('about.origin').split('_').slice(-1)[0]}</span>
-                        </h1>
-                        <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input">
-                            <span className="text-brick-red">&gt;&gt; </span>
-                            <span className="text-brick-gray">{t('about.est')}</span>
-                        </p>
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10">
+                        <div>
+                            <h1 className="text-3xl md:text-5xl font-brick text-white mb-4">
+                                {t('about.origin').split('_').slice(0, -1).join('_')}
+                                <span className="text-brick-red">_{t('about.origin').split('_').slice(-1)[0]}</span>
+                            </h1>
+                            <p className="font-mono text-[10px] md:text-xs tracking-widest animate-system-input"><span className="text-brick-red">&gt;&gt; </span><span className="text-brick-gray">{t('about.est')}</span></p>
+                        </div>
                     </div>
 
                     {/* CENTERED: MONOLITH + TITLE + DESC */}
                     <div className="flex flex-col items-center text-center gap-10 pb-8">
                         {/* MONOLITH */}
                         <div className="relative">
-                            <div className="monolith-structure w-[120px] h-[240px] md:w-[150px] md:h-[300px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
+                            <div className="monolith-structure w-[120px] h-[270px] md:w-[150px] md:h-[338px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
                                 <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
                                 <div className="centered-layer aura-atmos pointer-events-none opacity-60" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
                                 <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '500px', height: '500px', background: 'radial-gradient(circle at center, rgba(var(--brick-red-rgb),0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
@@ -3199,9 +3403,9 @@ const AboutPage = () => {
                                 <span className="font-mono text-[9px] text-brick-red border border-brick-red px-1 tracking-widest">SEC_00</span>
                             </div>
                             <div className="mb-6 relative z-10">
-                                <h3 className="font-brick text-2xl md:text-3xl text-white mb-4 group-hover:text-brick-red transition-colors duration-300 uppercase leading-none">
+                                <h2 className="font-brick text-2xl md:text-3xl text-white mb-4 group-hover:text-brick-red transition-colors duration-300 uppercase leading-none">
                                     {t('about.description').split('\n\n')[0]}
-                                </h3>
+                                </h2>
                                 <p className="text-xs md:text-sm font-mono text-brick-gray leading-relaxed opacity-80">
                                     {t('about.description').split('\n\n')[1]}
                                 </p>
@@ -3212,11 +3416,11 @@ const AboutPage = () => {
                 </section>
 
                     {/* THE INFRASTRUCTURE (DIFFERENTIATORS) */}
-                    <section className="w-full px-6 md:px-12 lg:px-24 mb-32 reveal">
+                    <section className="w-full px-6 md:px-12 lg:px-24 mb-16 md:mb-20 reveal">
                         <div>
                         <div className="flex items-center gap-3 mb-8 border-b border-white/10 pb-4">
                             <Eye className="w-4 h-4 text-brick-red" />
-                            <h2 className="text-xs md:text-sm font-mono text-brick-gray uppercase tracking-[0.2em]">{t('about.manifesto.title')} // {t('about.manifesto.subtitle')}</h2>
+                            <h2 className="text-xs md:text-sm font-mono text-brick-gray uppercase tracking-[0.2em]"><GlitchDecode text={`${t('about.manifesto.title')} // ${t('about.manifesto.subtitle')}`} /></h2>
                         </div>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-stretch">
                             <InfoCard
@@ -3239,14 +3443,14 @@ const AboutPage = () => {
                     </section>
 
                     {/* LEADERSHIP (REAL ROLES) */}
-                    <section className="w-full px-6 md:px-12 lg:px-24 pb-32 md:pb-40 reveal">
+                    <section className="w-full px-6 md:px-12 lg:px-24 pb-16 md:pb-24 reveal">
                         <div>
                         <div className="flex items-center gap-3 mb-12 border-b border-white/10 pb-4">
                             <Fingerprint className="w-4 h-4 text-brick-red" />
-                            <h2 className="text-xs md:text-sm font-mono text-brick-gray uppercase tracking-[0.2em]">{t('about.team.title')}</h2>
+                            <h2 className="text-xs md:text-sm font-mono text-brick-gray uppercase tracking-[0.2em]"><GlitchDecode text={t('about.team.title')} delay={200} /></h2>
                         </div>
 
-                        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                             <TeamMember name="FRAN CAMPARONI" role={t('about.team.roles.fran')} id="001" />
                             <TeamMember name="GABRIEL PANAZIO" role={t('about.team.roles.gabriel')} id="002" />
                             <TeamMember name="LUFE BERTO" role={t('about.team.roles.lufe')} id="003" />
@@ -3266,7 +3470,7 @@ const AboutPage = () => {
 const AdminPage = () => {
     const { goHome } = useAppNav();
     const onHome = goHome;
-    const { t, i18n } = useTranslation();
+    const { t: _t, i18n } = useTranslation();
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [loading, setLoading] = useState(true);
     const [loginError, setLoginError] = useState('');
@@ -3274,7 +3478,8 @@ const AdminPage = () => {
     const [password, setPassword] = useState('');
     const [activeTab, setActiveTab] = useState<'works' | 'transmissions'>('works');
     const { works, setWorks, transmissions, setTransmissions } = useContext(DataContext)!;
-    const [editingItem, setEditingItem] = useState<any>(null);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [editingItem, setEditingItem] = useState<Record<string, any> | null>(null);
 
     // Check authentication on mount
     useEffect(() => {
@@ -3339,23 +3544,25 @@ const AdminPage = () => {
         });
         if (activeTab === 'works') {
             setWorks(prev => {
-                const idx = prev.findIndex(w => w.id === editingItem.id);
+                const item = editingItem as Work;
+                const idx = prev.findIndex(w => w.id === item.id);
                 if (idx >= 0) {
                     const updated = [...prev];
-                    updated[idx] = editingItem;
+                    updated[idx] = item;
                     return updated;
                 }
-                return [...prev, editingItem];
+                return [...prev, item];
             });
         } else {
             setTransmissions(prev => {
-                const idx = prev.findIndex(t => t.id === editingItem.id);
+                const item = editingItem as Post;
+                const idx = prev.findIndex(t => t.id === item.id);
                 if (idx >= 0) {
                     const updated = [...prev];
-                    updated[idx] = editingItem;
+                    updated[idx] = item;
                     return updated;
                 }
-                return [...prev, editingItem];
+                return [...prev, item];
             });
         }
         setEditingItem(null);
@@ -3970,7 +4177,7 @@ const SEO = ({ view, selectedPost }: { view: string, selectedPost: Post | null }
             });
         }
 
-    }, [view, lang, selectedPost]);
+    }, [view, lang, selectedPost, data.description, data.ogDescription, data.ogTitle, data.title]);
 
     return null;
 };
@@ -4010,7 +4217,7 @@ const NotFoundPage = () => {
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
             
-            <main className="min-h-screen pt-32 md:pt-40 flex flex-col items-center justify-start font-mono relative bg-brick-black overflow-x-hidden">
+            <main id="main-content" className="min-h-screen pt-32 md:pt-40 flex flex-col items-center justify-start font-mono relative bg-brick-black overflow-x-hidden">
                 <div className="w-full px-6 md:px-12 lg:px-24 mb-6 reveal active mt-12 md:mt-20">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>
@@ -4027,8 +4234,8 @@ const NotFoundPage = () => {
                     <section className="w-full flex flex-col md:flex-row gap-0 items-start animate-fade-in-up border-t border-white/10 pt-12" style={{ animationDelay: '0.2s' }}>
                         
                         {/* LEFT: THE AVATAR (Static Monolith) - Identical to SystemChat */}
-                        <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-12 border-r border-white/10 relative bg-brick-black">
-                            <div className="relative w-[120px] h-[240px] md:w-[150px] md:h-[300px]">
+                        <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-12 relative bg-brick-black">
+                            <div className="relative w-[120px] h-[270px] md:w-[150px] md:h-[338px]">
                                 <div className="monolith-structure w-full h-full rounded-[2px] relative z-10 shadow-2xl transition-all duration-300">
                                     <div className="absolute inset-0 monolith-texture opacity-80 mix-blend-overlay pointer-events-none rounded-[2px] overflow-hidden"></div>
                                     <div className="centered-layer aura-atmos pointer-events-none opacity-40" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
@@ -4107,22 +4314,25 @@ const NotFoundPage = () => {
 // --- SCROLL-TO-TOP ON ROUTE CHANGE ---
 const ScrollToTop = () => {
     const { pathname } = useLocation();
-    useLayoutEffect(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' as ScrollBehavior });
+    useEffect(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
     }, [pathname]);
     return null;
 };
 
 // --- BLOG POST WRAPPER (reads :id from URL) ---
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const BlogPostRoute = () => {
     const { id } = useParams<{ id: string }>();
     const { transmissions } = useContext(DataContext)!;
     const { goTransmissions } = useAppNav();
-    const post = transmissions.find(t => t.id === id);
+    const post = transmissions.find(_t => _t.id === id);
 
     useEffect(() => {
         if (transmissions.length > 0 && !post) goTransmissions();
-    }, [transmissions, post]);
+    }, [transmissions, post, goTransmissions]);
 
     if (!post) return null;
     return <BlogPostPage post={post} />;
@@ -4174,10 +4384,12 @@ const AppShell = () => {
                 } />
                 <Route path="/about" element={<AboutPage />} />
                 <Route path="/works" element={<WorksPage onSelectProject={setSelectedProject} />} />
+                {/* HIDDEN: Transmissions routes — re-enable later
                 <Route path="/transmissions" element={<TransmissionsPage />} />
                 <Route path="/transmissions/:id" element={<BlogPostRoute />} />
+                */}
                 <Route path="/chat" element={
-                    <><Header isChatView={false} /><SystemChat onBack={() => window.history.back()} /></>
+                    <><Header isChatView={false} /><SystemChat onBack={() => window.history.back()} /><Footer /></>
                 } />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="*" element={<NotFoundPage />} />
@@ -4196,11 +4408,17 @@ const App = () => (
 
 export default App;
 
-// Mount the React app
+// Mount the React app (HMR-safe: reuse existing root)
 const container = document.getElementById('root');
 if (container) {
-    const root = createRoot(container);
-    root.render(<App />);
+    const existingRoot = (container as unknown as { __reactRoot?: ReturnType<typeof createRoot> }).__reactRoot;
+    if (existingRoot) {
+        existingRoot.render(<App />);
+    } else {
+        const root = createRoot(container);
+        (container as unknown as { __reactRoot?: ReturnType<typeof createRoot> }).__reactRoot = root;
+        root.render(<App />);
+    }
 }
 
 // Core Web Vitals → GA4

@@ -148,3 +148,60 @@ BrickAI/
 ├── tailwind.config.js
 └── package.json
 ```
+
+## Audit Report — 2026-03-25 (Pre-Launch)
+
+Issues identified but **not yet fixed**. Sorted by priority.
+
+### Medium — Performance
+
+| # | Location | Description | Fix command |
+|---|----------|-------------|-------------|
+| M1 | `index.tsx` (20+ spots) | Excessive GPU blur effects (`blur-[150px]`, `backdrop-blur-xl`) — heavy on mobile | `/simplifica` |
+| M2 | `index.tsx:1170+,1600+,1710+` | 3 simultaneous canvas animations (Three.js + star field + waveform) | `/optimize` |
+| M3 | `index.tsx:1602-1607` | `canvas.offsetWidth/Height` read in animation loop — triggers layout reflow per frame | `/optimize` |
+| M4 | `index.tsx:1499-1502` | `flex-grow` animated via CSS transition instead of transform | `/optimize` |
+| M5 | `index.tsx:931` | Logo `<img>` missing `loading="lazy"` | `/optimize` |
+| M6 | `index.html:61` | 6 Google Fonts in single request — large blocking payload | `/optimize` |
+
+### Medium — Theming
+
+| # | Location | Description | Fix command |
+|---|----------|-------------|-------------|
+| M7 | `tailwind.config.js` | No dark mode config; no semantic colors (success, warning, error) | `/normalize` |
+| M8 | `index.tsx` (30+ spots) | Hard-coded `rgba()`/hex in inline styles instead of CSS variables | `/normalize` |
+
+### ~~Medium — Responsive~~ (RESOLVED)
+
+| # | Location | Description | Status |
+|---|----------|-------------|--------|
+| ~~M9~~ | `index.tsx:1126` | ~~`w-[600px] h-[600px]` hard-coded — overflows mobile~~ | Fixed: `w-[80vw] h-[80vw] md:w-[600px] md:h-[600px]` |
+| ~~M10~~ | `index.tsx:1158` | ~~`w-[800px] h-[800px]` hard-coded — overflows mobile~~ | Fixed: `w-[90vw] h-[90vw] md:w-[800px] md:h-[800px]` |
+
+### Medium — Security
+
+| # | Location | Description | Fix command |
+|---|----------|-------------|-------------|
+| M11 | `server.js:60` | `rejectUnauthorized: false` for Railway proxy DB SSL | `/harden` |
+| M12 | `server.js:125-130` | In-memory rate limiter `Map` grows unbounded under sustained attack | `/harden` |
+
+### Low — Anti-patterns / i18n
+
+| # | Location | Description |
+|---|----------|-------------|
+| L1 | `index.tsx:260-265` | CRT glitch uses cyan `rgba(0,255,255,0.5)` — AI color tell |
+| L2 | `index.tsx:82` | Inter as body font — overused/generic |
+| L3 | `src/locales` | PT translation of Inheritance `longDesc` oversimplifies vs EN |
+| L4 | `src/locales` | System keys (`REACH_HUMANS`, `MANUAL_OVERRIDE`) left untranslated in PT |
+| L5 | `robots.txt` | Missing `Crawl-delay` directive |
+| L6 | `server.js:122` | Nonce generated on static asset requests (unnecessary CPU/entropy) |
+
+### Positive Findings (Keep)
+
+- Strong brand identity: dark brutalist/editorial aesthetic, brick-red on black
+- Comprehensive `prefers-reduced-motion` support
+- `focus-visible` keyboard indicators
+- Skip-to-content link (CSS-only, CSP-safe)
+- SSR SEO: JSON-LD, hreflang, breadcrumbs, dynamic OG images
+- AI crawler strategy: `robots.txt` + `llms.txt` + `llms-full.txt`
+- Vite manual chunk splitting for vendor bundles

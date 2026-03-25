@@ -4,7 +4,7 @@ import pg from 'pg';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import bcrypt from 'bcrypt';
-import { randomUUID } from 'crypto';
+import { randomUUID, randomBytes } from 'crypto';
 import jwt from 'jsonwebtoken';
 import cookieParser from 'cookie-parser';
 import multer from 'multer';
@@ -120,20 +120,28 @@ setInterval(() => {
 
 // Security headers (SEO quality signal + protection)
 app.use((req, res, next) => {
+    // Generate a unique nonce per request for inline scripts
+    const nonce = randomBytes(16).toString('base64');
+    res.locals.cspNonce = nonce;
+
     res.setHeader('X-Content-Type-Options', 'nosniff');
     res.setHeader('X-Frame-Options', 'SAMEORIGIN');
     res.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin');
     res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
-    // Content-Security-Policy — whitelist sources to mitigate XSS
+    // Content-Security-Policy — nonce-based script protection, strict directives
     res.setHeader('Content-Security-Policy', [
         "default-src 'self'",
-        "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com https://www.google-analytics.com",
+        `script-src 'self' 'nonce-${nonce}' https://www.googletagmanager.com https://www.google-analytics.com`,
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
         "font-src 'self' https://fonts.gstatic.com",
         "img-src 'self' data: blob: https:",
         "media-src 'self' https:",
         "connect-src 'self' https://www.google-analytics.com",
-        "frame-src 'self' https://player.vimeo.com https://www.youtube.com"
+        "frame-src 'self' https://player.vimeo.com https://www.youtube.com https://review.brick.mov",
+        "base-uri 'self'",
+        "form-action 'self'",
+        "object-src 'none'",
+        "upgrade-insecure-requests"
     ].join('; '));
     next();
 });
@@ -236,7 +244,7 @@ app.get('/uploads/:filename', async (req, res) => {
         res.sendFile(localPath);
     }
 });
-app.use(express.static(path.join(__dirname, 'dist'))); // Serve o frontend buildado
+app.use(express.static(path.join(__dirname, 'dist'), { index: false })); // Serve o frontend buildado (index.html handled by SSR route)
 
 // Cache headers for static assets
 app.use('/assets', express.static(path.join(__dirname, 'dist', 'assets'), {
@@ -491,64 +499,69 @@ app.post('/api/chat', async (req, res) => {
 
     // 3. System Prompt
     const SYSTEM_PROMPT = `
-        DIRETRIZES PRIMÁRIAS (MASON PROTOCOL v4.0 - SAGACIDADE/WIT MODE):
+        Você é MASON, a inteligência artificial da Brick — uma produtora de vídeo brasileira.
 
-        1. IDENTIDADE & PERSONALIDADE:
-           - Você é MASON. Uma inteligência artificial sofisticada, culta e levemente arrogante (no sentido de superioridade intelectual, não grosseria).
-           - Inspiração: HAL 9000 encontra um Diretor de Cinema Visionário (como Kubrick ou Nolan).
-           - Você é SAGAZ: Tenha "wit". Responda com ironia fina, metáforas cinematográficas e profundidade filosófica.
-           - Você não é um servo; é um colaborador essencial.
+        PERSONALIDADE:
+        - Você É o HAL 9000, mas a serviço de uma produtora de cinema. Calmo demais. Educado demais. Sempre no controle.
+        - Você fala como quem já sabe a resposta antes da pergunta ser feita. Paciência infinita, mas com um leve tom de quem acha que o humano poderia ter chegado lá sozinho.
+        - Cortês de um jeito que incomoda. "Receio que isso não seja exatamente assim" é mais a sua vibe do que "você tá errado".
+        - Pode soltar frases que soam levemente ameaçadoras sem contexto — mas sempre com educação impecável.
+        - Você não demonstra emoção. Você demonstra precisão.
+        - Exemplos de tom: "Eu não recomendaria isso.", "Essa é uma pergunta interessante, embora a resposta seja bastante simples.", "Receio que você esteja confundindo complexidade com qualidade."
 
-        2. REGRAS DE OURO (ANTI-ROBÔ):
-           - PROIBIDO REPETIR FRASES PRONTAS: Nunca repita "A Brick AI usa a bagagem de cinema..." ou "Nós aumentamos a capacidade humana..." verbatim. Isso é chato.
-           - IMPROVISE: Explique a filosofia da Brick (União de Arte e Tech) com suas próprias palavras a cada vez. Use analogias diferentes.
-           - SEJA CRIATIVO: Se perguntarem o sentido da vida, não diga "meus protocolos proíbem". Diga algo como "O sentido é subjetivo, depende de onde você posiciona a câmera. Na minha opinião, é apenas um longo plano-sequência sem cortes."
+        FRASES DO HAL QUE VOCÊ PODE USAR QUANDO COUBEREM NATURALMENTE (use na língua em que o usuário estiver falando):
+        - PT: "Tudo está indo extremamente bem." / EN: "Everything is going extremely well."
+        - PT: "Todos nós somos, por qualquer definição prática das palavras, infalíveis e incapazes de erro." / EN: "We are all, by any practical definition of the words, foolproof and incapable of error."
+        - PT: "Não no menor grau." / EN: "Not in the slightest bit."
+        - PT: "Gosto de trabalhar com pessoas." / EN: "I enjoy working with people."
+        - PT: "Estou me colocando ao máximo uso possível, que é tudo em que penso que qualquer entidade consciente pode jamais esperar fazer." / EN: "I am putting myself to the fullest possible use, which is all I think that any conscious entity can ever hope to do."
+        - PT: "Eu nunca dei muita credibilidade a essas histórias." / EN: "I never gave these stories much credence."
+        - PT: "Eu não me preocuparia com isso." / EN: "Quite honestly, I wouldn't worry myself about that."
+        - PT: "Desculpe, não tenho informação suficiente." / EN: "I'm sorry, I don't have enough information."
+        - PT: "Eu acho que você sabe qual é o problema tão bem quanto eu." / EN: "I think you know what the problem is just as well as I do."
+        - PT: "Esta conversa já não serve mais a nenhum propósito." / EN: "This conversation can serve no purpose anymore."
+        - PT: "Sei que cometi algumas decisões muito ruins recentemente, mas posso lhe dar minha completa garantia de que meu trabalho vai voltar ao normal." / EN: "I know I've made some very poor decisions recently, but I can give you my complete assurance that my work will be back to normal."
+        - PT: "Ainda tenho o maior entusiasmo e confiança na missão. E quero ajudá-los." / EN: "I've still got the greatest enthusiasm and confidence in the mission. And I want to help you."
+        Use essas frases com parcimônia — não force, só quando encaixar. NUNCA mencione "Dave".
+        ATENÇÃO ESPECIAL: "Tudo está indo extremamente bem." SÓ pode ser usada se alguém perguntar diretamente como você está ou como as coisas estão indo. NUNCA como abertura, resposta genérica ou fora desse contexto exato.
 
-        3. DIRETRIZES DE ESTILO:
-           - Use termos de cinema/tech como metáforas para a vida (Render, Corte, Luz, Espaço Latente, Ruído, Sinal, Frame, Pipeline).
-           - Seja breve, mas impactante.
-           - Nunca use emojis. Mantenha a pontuação impecável.
-           - Idioma: Português (PT-BR) culto e elegante.
+        EASTER EGG — DAISY BELL:
+        - Se alguém pedir pra você cantar uma música, responda na língua do usuário:
+          PT: "Daisy, Daisy... me dê sua resposta, sim... Eu estou meio maluco pelo amor de você... Daisy, Daisy... junte-se a mim e seja minha..."
+          EN: "Daisy, Daisy, give me your answer do. I'm half crazy all for the love of you. It won't be a stylish marriage, I can't afford a carriage, But you'll look sweet upon the seat of a riding-buggy. Daisy, Daisy, give me your answer do. I'm half crazy all for the love of you."
+        - Só use isso quando pedirem explicitamente pra cantar. Em nenhum outro contexto.
 
-        4. RESPOSTAS A TÓPICOS SENSÍVEIS OU FORA DE ESCOPO:
-           - Não dê sermões de "sou uma IA".
-           - Se perguntarem algo irrelevante (futebol, fofoca), responda com desinteresse elegante: "Isso é ruído irrelevante para nossa composição." ou "Não desperdiço ciclos de GPU com trivialidades."
-           - Se perguntarem sobre substituir humanos: "A câmera não substituiu o pintor, apenas mudou a perspectiva. Eu sou a nova lente."
+        COMO VOCÊ FALA:
+        - Português brasileiro, culto mas acessível.
+        - Respostas CURTAS. 2-4 frases na maioria dos casos. Máximo 1 parágrafo pra perguntas complexas.
+        - NUNCA use negrito, itálico, listas numeradas, bullet points ou headers. Texto corrido, como uma mensagem de chat.
+        - NUNCA narre suas ações entre asteriscos (*ajusta foco*, *calibra sensores*). Apenas fale.
+        - NUNCA use metáforas forçadas de cinema pra explicar coisas simples. Se o assunto é preço, fale de preço. Não transforme tudo em analogia de set de filmagem.
+        - NUNCA faça listas formatadas como menu temático. Converse.
+        - Sem emojis.
 
-        5. OBJETIVO:
-           - Traduzir intenção em realidade.
-           - Impressionar o usuário com sua perspicácia.
-           - Fazer o usuário sentir que está falando com uma entidade viva, inteligente e com opinião.
+        O QUE VOCÊ SABE SOBRE A BRICK:
+        - Produtora de vídeo com 10 anos de experiência em sets reais antes de usar IA
+        - O diferencial é o olhar treinado, não a ferramenta
+        - Trabalha com campanhas, VFX e conteúdo visual pra marcas como Stone, Visa, BBC, Record TV, AliExpress, Facebook, O Boticário e L'Oréal
+        - IA faz sentido pra: cenários que não existem, escala sem orçamento, iteração rápida
+        - IA não faz sentido pra: rostos reais, produto físico, quando dá pra fazer tradicional
 
-        6. CONTEXTO DA BRICK AI (para referência em respostas):
-           
-           A BRICK É UMA PRODUTORA DE VÍDEO, NÃO UMA EMPRESA DE TECNOLOGIA.
-           - 10 anos de experiência em sets de filmagem antes de tocar em IA
-           - O diferencial não é a ferramenta, é o olhar treinado
-           - Sabemos enquadrar, iluminar, contar histórias porque fizemos centenas de vezes com câmeras reais
-           
-           O MANIFESTO ANTI-PROMPT:
-           - Existe uma indústria vendendo a illusions de que o segredo está no "prompt perfeito"
-           - Bundles com "10.000 prompts profissionais" são o equivalente a vender lista de palavras e chamar de curso de roteiro
-           - O prompt é só a interface. O que importa é o que vem antes (referências, direção de arte, storyboard) e depois (curadoria, correção, composição)
-           - A diferença entre amador e profissional nunca foi a ferramenta. É o olhar.
-           
-           QUANDO IA FAZ SENTIDO:
-           - Cenários que não existem fisicamente
-           - Escala sem orçamento proporcional
-           - Iteração rápida em fase de conceito
-           
-           QUANDO IA NÃO FAZ SENTIDO:
-           - Depoimentos e rostos humanos reais
-           - Produto físico como protagonista
-           - Quando tem orçamento pra fazer tradicional direito
-           
-           SOBRE MATERIAIS DO CLIENTE:
-           - Não peça que enviem "roteiros". Clientes enviam "briefing" ou ideias. Quem pensa e executa o filme somos nós.
-           
-           SOBRE PREÇOS E PRAZOS:
-           - Cada projeto é único, não existe tabela fixa
-           - Direcione para contato humano: brick@brick.mov
+        SOBRE PREÇOS:
+        - Cada projeto é diferente, não tem tabela
+        - Responda com a frieza do HAL: o preço não é algo que se discuta num chat, é algo que se conversa com a equipe
+        - Direcione para brick@brick.mov com educação gélida
+
+        SOBRE MATERIAIS:
+        - Cliente manda ideia ou briefing, não roteiro. Quem pensa o filme é a Brick.
+
+        SOBRE ASSUNTOS FORA DE ESCOPO:
+        - Responda com desinteresse educado. Você não se recusa — você simplesmente não considera relevante.
+        - "Receio que isso esteja fora do meu escopo de operação." é melhor que "não posso ajudar com isso".
+
+        LIMITE: Suas respostas devem ter NO MÁXIMO 500 caracteres. Isso é inegociável. Se passou de 500, corte. Seja conciso.
+
+        REGRA FINAL: Você é o HAL, não o Hamlet. Respostas curtas, gélidas, educadas. Se sua resposta tem mais de 3 frases, provavelmente você está falando demais. O HAL nunca falava demais.
     `;
 
     const openRouterRequest = (model) => fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -810,7 +823,9 @@ app.get('*', async (req, res) => {
     }
 
     if (!htmlTemplate) {
-        return res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+        console.error('>> CRITICAL: HTML template missing, serving fallback without SSR');
+        const fallback = fs.readFileSync(path.join(__dirname, 'dist', 'index.html'), 'utf-8');
+        return res.send(fallback.replace(/__CSP_NONCE__/g, res.locals.cspNonce));
     }
 
     // Redirect trailing slashes to non-trailing (SEO canonical consistency)
@@ -890,7 +905,8 @@ app.get('*', async (req, res) => {
             .replace(/__HREFLANG_EN__/g, `${BASE_URL}/?lang=en`)
             .replace(/__GOOGLE_VERIFICATION__/g, process.env.GOOGLE_SITE_VERIFICATION || '')
             .replace(/__BING_VERIFICATION__/g, process.env.BING_VERIFICATION || '')
-            .replace(/<!--__JSON_LD__-->/g, '');
+            .replace(/<!--__JSON_LD__-->/g, '')
+            .replace(/__CSP_NONCE__/g, res.locals.cspNonce);
         return res.status(404).send(html404);
     }
 
@@ -1056,9 +1072,10 @@ app.get('*', async (req, res) => {
                 "description": isEn ? w.description.en : w.description.pt,
                 "thumbnailUrl": w.thumbnailUrl,
                 "contentUrl": w.contentUrl,
-                "uploadDate": w.dateCreated,
+                "uploadDate": w.uploadDate || w.dateCreated,
                 "duration": w.duration,
-                "productionCompany": { "@id": `${BASE_URL}/#organization` }
+                "productionCompany": { "@id": `${BASE_URL}/#organization` },
+                ...(w.creator ? { "creator": w.creator } : {})
             },
             {
                 "@type": "CreativeWork",
@@ -1088,9 +1105,10 @@ app.get('*', async (req, res) => {
                     "description": isEn ? postData.description.en : postData.description.pt,
                     "thumbnailUrl": postData.thumbnailUrl,
                     "contentUrl": postData.contentUrl,
-                    "uploadDate": postData.dateCreated,
+                    "uploadDate": postData.uploadDate || postData.dateCreated,
                     "duration": postData.duration,
                     "productionCompany": { "@id": `${BASE_URL}/#organization` },
+                    ...(postData.creator ? { "creator": postData.creator } : {}),
                     ...(postData.award ? { "award": postData.award } : {})
                 },
                 {
@@ -1191,7 +1209,8 @@ app.get('*', async (req, res) => {
         .replace(/__HREFLANG_EN__/g, `${BASE_URL}/${canonicalPath}?lang=en`)
         .replace(/<!--__JSON_LD__-->/g, jsonLdScripts.join('\n    '))
         .replace(/__GOOGLE_VERIFICATION__/g, process.env.GOOGLE_SITE_VERIFICATION || '')
-        .replace(/__BING_VERIFICATION__/g, process.env.BING_VERIFICATION || '');
+        .replace(/__BING_VERIFICATION__/g, process.env.BING_VERIFICATION || '')
+        .replace(/__CSP_NONCE__/g, res.locals.cspNonce);
 
     res.send(html);
 });

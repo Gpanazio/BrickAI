@@ -68,8 +68,8 @@
         "slopai": {
             "title": "SLOP AI",
             "subtitle": "CAMPANHA BRICK_AI",
-            "desc": "Imagina viver em um mundo onde nada funciona direito?",
-            "longDesc": "Imagina viver em um mundo onde nada funciona direito? Essa é a triste realidade dos personagens em IA criados por quem não sabe o que tá fazendo."
+            "desc": "No multiverso colapsado pela mediocridade, personagens de IA tentam sobreviver ao pior pesadelo possível.",
+            "longDesc": "No multiverso colapsado pela mediocridade, personagens de IA tentam sobreviver ao pior pesadelo possível: a incompetência de seus próprios deuses criadores. A física é opcional, a lógica foi deletada e a única lei que funciona é o caos. Uma sátira ao conteúdo de IA que domina as telas e ao que acontece quando a inteligência artificial percebe que seu destino está nas mãos de humanos tão incompetentes quanto ela."
         },
         "dogday": {
             "title": "DOG DAY AFTERNOON",
@@ -206,7 +206,9 @@
         "suggestions": {
             "philosophy": "Quanto custa um projeto?",
             "synthesis": "Qual o prazo médio?",
-            "humans": "Falar com a equipe"
+            "humans": "Falar com a equipe",
+            "services": "O que vocês produzem?",
+            "process": "Como funciona o processo?"
         }
     },
     "works_page": {
