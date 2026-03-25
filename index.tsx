@@ -888,7 +888,7 @@ const Header = ({ isChatView = false }: { isChatView?: boolean }) => {
     const { goHome, goWorks, goTransmissions, goChat, goAbout } = useAppNav();
     const onHome = useCallback(goHome, [goHome]);
     const onWorks = useCallback(goWorks, [goWorks]);
-    const onTransmissions = useCallback(goTransmissions, [goTransmissions]);
+    const _onTransmissions = useCallback(goTransmissions, [goTransmissions]);
     const onChat = useCallback(goChat, [goChat]);
     const onAbout = useCallback(goAbout, [goAbout]);
     const { t, i18n } = useTranslation();
@@ -1420,6 +1420,7 @@ const GlitchDecode = ({ text, delay = 0 }: { text: string, delay?: number }) => 
     return <span ref={ref}>{display}</span>;
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ModuleStatus = ({ delay = 0 }: { delay?: number }) => {
     const [phase, setPhase] = useState<'idle' | 'offline' | 'booting' | 'installed'>('idle');
     const [displayText, setDisplayText] = useState('');
@@ -2913,6 +2914,7 @@ const BlogPostPage = ({ post }: { post: Post }) => {
     );
 };
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const TransmissionsPage = () => {
     const { goHome, goPost } = useAppNav();
     const { t, i18n } = useTranslation();
@@ -4271,6 +4273,7 @@ const ScrollToTop = () => {
 };
 
 // --- BLOG POST WRAPPER (reads :id from URL) ---
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const BlogPostRoute = () => {
     const { id } = useParams<{ id: string }>();
     const { transmissions } = useContext(DataContext)!;
