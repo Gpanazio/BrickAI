@@ -1123,7 +1123,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
 
                             <div
                                 ref={radiationRef}
-                                className="absolute w-[600px] h-[600px] -ml-[300px] -mt-[300px] top-1/2 left-1/2 pointer-events-none transition-opacity duration-700 ease-out"
+                                className="absolute w-[80vw] h-[80vw] md:w-[600px] md:h-[600px] -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 pointer-events-none transition-opacity duration-700 ease-out"
                                 style={{
                                     background: 'radial-gradient(circle, rgba(var(--brick-red-rgb),0.25) 0%, rgba(var(--brick-red-rgb),0.05) 50%, transparent 80%)',
                                     filter: 'blur(60px)',
@@ -1155,7 +1155,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                     {typewriterDone && <FadeEntryText text={t('hero.subtitle') as string} delay={900} />}
                 </h1>
             </div>
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-brick-red/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[90vw] h-[90vw] md:w-[800px] md:h-[800px] bg-brick-red/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
         </section>
     );
 };

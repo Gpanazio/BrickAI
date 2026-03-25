@@ -171,12 +171,12 @@ Issues identified but **not yet fixed**. Sorted by priority.
 | M7 | `tailwind.config.js` | No dark mode config; no semantic colors (success, warning, error) | `/normalize` |
 | M8 | `index.tsx` (30+ spots) | Hard-coded `rgba()`/hex in inline styles instead of CSS variables | `/normalize` |
 
-### Medium — Responsive
+### ~~Medium — Responsive~~ (RESOLVED)
 
-| # | Location | Description | Fix command |
-|---|----------|-------------|-------------|
-| M9 | `index.tsx:1126` | `w-[600px] h-[600px]` hard-coded — overflows mobile | `/responsivo` |
-| M10 | `index.tsx:1158` | `w-[800px] h-[800px]` hard-coded — overflows mobile | `/responsivo` |
+| # | Location | Description | Status |
+|---|----------|-------------|--------|
+| ~~M9~~ | `index.tsx:1126` | ~~`w-[600px] h-[600px]` hard-coded — overflows mobile~~ | Fixed: `w-[80vw] h-[80vw] md:w-[600px] md:h-[600px]` |
+| ~~M10~~ | `index.tsx:1158` | ~~`w-[800px] h-[800px]` hard-coded — overflows mobile~~ | Fixed: `w-[90vw] h-[90vw] md:w-[800px] md:h-[800px]` |
 
 ### Medium — Security
 
