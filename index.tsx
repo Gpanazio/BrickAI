@@ -465,8 +465,8 @@ const DataProvider = ({ children }: { children: React.ReactNode }) => {
                 longDesc: t('works.shift.longDesc'),
                 credits: [],
                 gradient: "from-neutral-900 via-brick-red/10 to-neutral-900",
-                imageHome: "/uploads/synapsesheet.webp",
-                imageWorks: "/uploads/synapsesheet.webp",
+                imageHome: "/uploads/synapsesheet.webp?v=2",
+                imageWorks: "/uploads/synapsesheet.webp?v=2",
                 videoUrl: "https://review.brick.mov/portfolio/embed/9",
                 hasDetail: true
             },

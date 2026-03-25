@@ -202,7 +202,7 @@ app.get('/uploads/:filename', async (req, res) => {
     if (localPath.startsWith(path.join(__dirname, 'dist'))) {
         const mimeTypes = { '.webp': 'image/webp', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.gif': 'image/gif' };
         res.set('Content-Type', mimeTypes[ext] || 'application/octet-stream');
-        res.set('Cache-Control', 'public, max-age=31536000, immutable');
+        res.set('Cache-Control', 'public, max-age=86400, must-revalidate');
         return res.sendFile(localPath);
     }
 
@@ -215,14 +215,15 @@ app.get('/uploads/:filename', async (req, res) => {
     const width = parseInt(req.query.w) || 1920; // Max width, default 1920
     const quality = parseInt(req.query.q) || 80;
 
-    // Cache key based on filename + dimensions + format
-    const cacheKey = `${path.basename(filename, ext)}_w${width}_q${quality}${targetExt}`;
+    // Cache key based on filename + dimensions + format + version
+    const version = req.query.v || '1';
+    const cacheKey = `${path.basename(filename, ext)}_w${width}_q${quality}_v${version}${targetExt}`;
     const cachePath = path.join(CACHE_DIR, cacheKey);
 
     // Serve from cache if available
     if (fs.existsSync(cachePath)) {
         res.set('Content-Type', supportsWebp ? 'image/webp' : 'image/jpeg');
-        res.set('Cache-Control', 'public, max-age=31536000, immutable');
+        res.set('Cache-Control', 'public, max-age=86400, must-revalidate');
         return res.sendFile(cachePath);
     }
 
