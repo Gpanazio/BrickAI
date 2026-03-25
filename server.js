@@ -176,13 +176,9 @@ app.get('/uploads/:filename', async (req, res) => {
     const { filename } = req.params;
     const ext = path.extname(filename).toLowerCase();
     const isImage = ['.jpg', '.jpeg', '.png', '.webp', '.gif'].includes(ext);
-    let localPath = path.join(UPLOADS_DIR, filename);
-
-    // Also check dist/uploads (files from public/uploads via Vite build)
-    if (!fs.existsSync(localPath)) {
-        const distPath = path.join(__dirname, 'dist', 'uploads', filename);
-        if (fs.existsSync(distPath)) localPath = distPath;
-    }
+    // Prefer dist/uploads (committed via public/uploads in Vite build) over uploads/ volume
+    const distPath = path.join(__dirname, 'dist', 'uploads', filename);
+    let localPath = fs.existsSync(distPath) ? distPath : path.join(UPLOADS_DIR, filename);
 
     // If file doesn't exist locally, try fetching from production
     if (!fs.existsSync(localPath)) {
