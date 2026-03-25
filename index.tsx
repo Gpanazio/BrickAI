@@ -1094,7 +1094,7 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
             <div className="reveal relative z-10 w-full flex justify-center mb-10 md:mb-16">
                 <div className="relative">
                     <div
-                        className={`monolith-structure w-[120px] h-[240px] md:w-[150px] md:h-[300px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative transition-transform duration-1000 ease-out pointer-events-none ${monolithHover ? 'scale-[1.02]' : 'scale-100'}`}
+                        className={`monolith-structure w-[120px] h-[270px] md:w-[150px] md:h-[338px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative transition-transform duration-1000 ease-out pointer-events-none ${monolithHover ? 'scale-[1.02]' : 'scale-100'}`}
                         style={{ transform: 'translateZ(0)' }}
                     >
                         <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
@@ -3116,7 +3116,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
 
                     {/* LEFT: THE AVATAR (Static Monolith) */}
                     <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-8 relative bg-brick-black">
-                        <div className="relative w-[120px] h-[240px] md:w-[150px] md:h-[300px]">
+                        <div className="relative w-[120px] h-[270px] md:w-[150px] md:h-[338px]">
                             {/* The Monolith Shape - Identical to Hero but no mouse interaction */}
                             <div
                                 className={`monolith-structure w-full h-full rounded-[2px] relative z-10 shadow-2xl transition-all duration-300 ${isProcessing ? 'shadow-[0_0_60px_rgba(var(--brick-red-rgb),0.3)]' : ''}`}
@@ -3327,7 +3327,7 @@ const AboutPage = () => {
                     <div className="flex flex-col items-center text-center gap-10 pb-8">
                         {/* MONOLITH */}
                         <div className="relative">
-                            <div className="monolith-structure w-[120px] h-[240px] md:w-[150px] md:h-[300px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
+                            <div className="monolith-structure w-[120px] h-[270px] md:w-[150px] md:h-[338px] rounded-[2px] flex items-center justify-center overflow-visible shadow-2xl relative">
                                 <div className="absolute inset-0 mix-blend-overlay monolith-texture bg-neutral-900 pointer-events-none rounded-[2px] overflow-hidden"></div>
                                 <div className="centered-layer aura-atmos pointer-events-none opacity-60" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
                                 <div className="centered-layer light-atmos animate-breathe pointer-events-none opacity-70 mix-blend-screen" style={{ width: '500px', height: '500px', background: 'radial-gradient(circle at center, rgba(var(--brick-red-rgb),0.6) 0%, rgba(153,0,0,0.1) 30%, transparent 50%)', filter: 'blur(20px)' }}></div>
@@ -4183,7 +4183,7 @@ const NotFoundPage = () => {
                         
                         {/* LEFT: THE AVATAR (Static Monolith) - Identical to SystemChat */}
                         <div className="w-full md:w-1/2 flex flex-col items-center justify-center p-12 relative bg-brick-black">
-                            <div className="relative w-[120px] h-[240px] md:w-[150px] md:h-[300px]">
+                            <div className="relative w-[120px] h-[270px] md:w-[150px] md:h-[338px]">
                                 <div className="monolith-structure w-full h-full rounded-[2px] relative z-10 shadow-2xl transition-all duration-300">
                                     <div className="absolute inset-0 monolith-texture opacity-80 mix-blend-overlay pointer-events-none rounded-[2px] overflow-hidden"></div>
                                     <div className="centered-layer aura-atmos pointer-events-none opacity-40" style={{ width: '400px', height: '400px', background: 'radial-gradient(circle at center, rgba(153,27,27,0.1) 0%, transparent 60%)', filter: 'blur(30px)' }}></div>
