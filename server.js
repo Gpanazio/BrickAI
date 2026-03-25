@@ -236,7 +236,7 @@ app.get('/uploads/:filename', async (req, res) => {
         res.sendFile(localPath);
     }
 });
-app.use(express.static(path.join(__dirname, 'dist'))); // Serve o frontend buildado
+app.use(express.static(path.join(__dirname, 'dist'), { index: false })); // Serve o frontend buildado (index.html handled by SSR route)
 
 // Cache headers for static assets
 app.use('/assets', express.static(path.join(__dirname, 'dist', 'assets'), {
