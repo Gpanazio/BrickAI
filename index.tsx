@@ -1514,6 +1514,8 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             >
                 <div
                     ref={bgRef}
+                    role="img"
+                    aria-label={`${work.title} — ${work.subtitle || work.desc}`}
                     className="absolute inset-0 sharp-image saturate-[0.8] group-hover:saturate-100 contrast-[1.05] group-hover:brightness-[1.1] transition-[filter] duration-700 ease-out"
                     style={{
                         backgroundImage: `url('${work.imageHome}')`,
@@ -2140,7 +2142,7 @@ const UnifiedEnding = () => {
                                 initial={{ y: "78%" }}
                                 whileInView={{ y: "0%" }}
                                 viewport={{ once: true, amount: 0.01 }}
-                                transition={{ duration: 4.2, ease: [0.16, 1, 0.3, 1] }}
+                                transition={{ duration: 8.5, ease: [0.16, 1, 0.3, 1] }}
                                 className="absolute inset-0"
                                 style={{ willChange: "transform" }}
                             >
@@ -2577,7 +2579,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                         {(!isPlaying || !project.videoUrl) && (
                             <div className="w-full h-full relative cursor-pointer group" onClick={handlePlay}>
                                 {/* Thumbnail */}
-                                <div className="absolute inset-0 bg-cover bg-center transition-transform duration-[5000ms] group-hover:scale-103" style={{ backgroundImage: `url('${project.imageHome}')` }}></div>
+                                <div role="img" aria-label={`${project.title} — ${project.subtitle || project.desc}`} className="absolute inset-0 bg-cover bg-center transition-transform duration-[5000ms] group-hover:scale-103" style={{ backgroundImage: `url('${project.imageHome}')` }}></div>
                                 {/* Dark vignette */}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
 
@@ -2683,7 +2685,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                     <div className="flex-1 flex flex-col overflow-y-auto scrollbar-hide relative">
                         <div className="px-4 md:px-8 pt-0 pb-4 mb-8">
                             <div className="font-mono text-[8px] text-white/20 mb-4 tracking-[0.4em]">// SYSTEM_LOG</div>
-                            <p className="text-white/90 text-[13px] leading-[1.8] tracking-[0.02em] max-w-md border-l border-white/10 pl-5" style={{ fontFamily: "'Share Tech', sans-serif", fontWeight: 400 }}>
+                            <p className="text-white/90 text-[13px] md:text-[14px] leading-[1.8] tracking-[0.02em] max-w-md border-l border-white/10 pl-5" style={{ fontFamily: "'Share Tech', sans-serif", fontWeight: 400 }}>
                                 {project.longDesc || project.desc}
                             </p>
                         </div>
@@ -2739,6 +2741,8 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
         >
             {/* UPDATED FILTERS FOR VISIBILITY */}
             <div
+                role="img"
+                aria-label={`${work.title} — ${work.subtitle || work.desc}`}
                 className="absolute inset-0 opacity-100 sharp-image saturate-[0.9] group-hover:saturate-110 brightness-95 group-hover:brightness-105 transition-[filter] duration-700"
                 style={{
                     backgroundImage: `url('${work.imageWorks || work.imageHome}')`,
@@ -3002,6 +3006,16 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
     ]);
     const [input, setInput] = useState("");
     const [isProcessing, setIsProcessing] = useState(false);
+    const userMessageCount = messages.filter(m => m.role === 'user').length;
+    const masonState = isProcessing
+        ? 'PROCESSING'
+        : userMessageCount === 0
+            ? 'IDLE'
+            : userMessageCount === 1
+                ? 'CONNECTED'
+                : userMessageCount <= 3
+                    ? 'ENGAGED'
+                    : 'DEEP_LINK';
     const [typingIndex, setTypingIndex] = useState(-1); // index of message currently being typed
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const SUGGESTIONS = [
@@ -3141,7 +3155,10 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                         <div className="mt-8 text-center">
                             <h2 className="text-4xl font-brick text-white mb-2">{t('chat.mason_intro') ? t('chat.mason_intro').toUpperCase() : "I AM MASON"}</h2>
                             <p className="text-[10px] text-brick-gray font-mono tracking-widest max-w-[200px] mx-auto uppercase">
-                                {t('chat.generative_core')}<br />{t('chat.state')} {isProcessing ? t('chat.active') : t('chat.idle')}
+                                {t('chat.generative_core')}<br />
+                                <span className={`transition-all duration-500 ${isProcessing ? 'text-brick-red animate-pulse' : userMessageCount > 3 ? 'text-brick-red/80' : 'text-brick-gray'}`}>
+                                    State: {masonState}
+                                </span>
                             </p>
                         </div>
                     </div>
@@ -3193,34 +3210,48 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             {/* Input */}
                             <div className="p-6 bg-brick-black border-t border-white/10">
                                 {!isProcessing && messages.length < 4 && (
-                                    <div className="flex flex-col gap-2 mb-4">
-                                        {/* Row 1: 2 buttons */}
-                                        <div className="grid grid-cols-2 gap-2">
-                                            {SUGGESTIONS.slice(0, 2).map((query, i) => (
+                                    <>
+                                        {/* Mobile: horizontal scroll */}
+                                        <div className="flex gap-2 mb-4 overflow-x-auto scrollbar-hide pb-1 -mx-2 px-2 snap-x snap-mandatory md:hidden">
+                                            {SUGGESTIONS.map((query, i) => (
                                                 <button
                                                     key={i}
                                                     onClick={() => handleSend(query)}
-                                                    className="text-[8px] font-mono uppercase tracking-widest text-brick-gray border border-white/10 bg-white/[0.02] px-3 py-1.5 hover:bg-brick-red hover:text-white hover:border-brick-red transition-all animate-fade-in-up opacity-0 whitespace-nowrap text-center"
-                                                    style={{ animationDelay: `${i * 120}ms`, animationFillMode: 'forwards' }}
+                                                    className="text-[11px] font-mono uppercase tracking-wider text-brick-gray border border-white/10 bg-white/[0.02] px-3 py-2 hover:bg-brick-red hover:text-white hover:border-brick-red transition-all animate-fade-in-up opacity-0 whitespace-nowrap shrink-0 snap-start"
+                                                    style={{ animationDelay: `${i * 100}ms`, animationFillMode: 'forwards' }}
                                                 >
                                                     {query}
                                                 </button>
                                             ))}
                                         </div>
-                                        {/* Row 2: 3 buttons */}
-                                        <div className="grid grid-cols-3 gap-2">
-                                            {SUGGESTIONS.slice(2).map((query, i) => (
-                                                <button
-                                                    key={i + 2}
-                                                    onClick={() => handleSend(query)}
-                                                    className="text-[7px] font-mono uppercase tracking-wider text-brick-gray border border-white/10 bg-white/[0.02] px-2 py-1.5 hover:bg-brick-red hover:text-white hover:border-brick-red transition-all animate-fade-in-up opacity-0 text-center"
-                                                    style={{ animationDelay: `${(i + 2) * 120}ms`, animationFillMode: 'forwards' }}
-                                                >
-                                                    {query}
-                                                </button>
-                                            ))}
+                                        {/* Desktop: 2+3 centered grid */}
+                                        <div className="hidden md:flex flex-col gap-2 mb-4 items-center">
+                                            <div className="grid grid-cols-2 gap-2 w-full">
+                                                {SUGGESTIONS.slice(0, 2).map((query, i) => (
+                                                    <button
+                                                        key={i}
+                                                        onClick={() => handleSend(query)}
+                                                        className="text-[11px] font-mono uppercase tracking-wider text-brick-gray border border-white/10 bg-white/[0.02] px-3 py-2 hover:bg-brick-red hover:text-white hover:border-brick-red transition-all animate-fade-in-up opacity-0 text-center"
+                                                        style={{ animationDelay: `${i * 100}ms`, animationFillMode: 'forwards' }}
+                                                    >
+                                                        {query}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                            <div className="grid grid-cols-3 gap-2 w-full">
+                                                {SUGGESTIONS.slice(2).map((query, i) => (
+                                                    <button
+                                                        key={i + 2}
+                                                        onClick={() => handleSend(query)}
+                                                        className="text-[11px] font-mono uppercase tracking-wider text-brick-gray border border-white/10 bg-white/[0.02] px-3 py-2 hover:bg-brick-red hover:text-white hover:border-brick-red transition-all animate-fade-in-up opacity-0 text-center"
+                                                        style={{ animationDelay: `${(i + 2) * 100}ms`, animationFillMode: 'forwards' }}
+                                                    >
+                                                        {query}
+                                                    </button>
+                                                ))}
+                                            </div>
                                         </div>
-                                    </div>
+                                    </>
                                 )}
                                 <form onSubmit={handleSend} className="flex items-center gap-4 rounded-sm transition-shadow duration-300 focus-within:shadow-[0_0_20px_rgba(220,38,38,0.15)]">
                                     <div className="w-2 h-2 bg-brick-red animate-pulse shrink-0 rounded-full"></div>
@@ -4339,7 +4370,7 @@ const AppShell = () => {
                 <Route path="/transmissions/:id" element={<BlogPostRoute />} />
                 */}
                 <Route path="/chat" element={
-                    <><Header isChatView={false} /><SystemChat onBack={() => window.history.back()} /></>
+                    <><Header isChatView={false} /><SystemChat onBack={() => window.history.back()} /><Footer /></>
                 } />
                 <Route path="/admin" element={<AdminPage />} />
                 <Route path="*" element={<NotFoundPage />} />

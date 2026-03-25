@@ -25,9 +25,9 @@ export const SEO_DATA = {
             ogDescription: "Insights sobre produção de vídeo generativo."
         },
         chat: {
-            title: "Contato | Brick AI - Fale com a Equipe",
+            title: "Fale com MASON — Brick AI",
             description: "Entre em contato com a Brick AI. Fale com Mason, nossa IA, ou diretamente com a equipe por email, telefone ou redes sociais.",
-            ogTitle: "Contato | Brick AI",
+            ogTitle: "Fale com MASON — Brick AI",
             ogDescription: "Fale com a equipe da Brick AI por email, telefone ou redes sociais."
         }
     },
@@ -57,9 +57,9 @@ export const SEO_DATA = {
             ogDescription: "Expert insights on AI video production from a team with 10+ years on real film sets."
         },
         chat: {
-            title: "Contact | Brick AI — Start Your AI Video Project",
+            title: "Talk to MASON — Brick AI",
             description: "Get in touch with Brick AI to discuss your next AI video project. Talk to our team directly via email, phone or social media. We work with brands worldwide.",
-            ogTitle: "Contact | Brick AI",
+            ogTitle: "Talk to MASON — Brick AI",
             ogDescription: "Start your AI video project. We work with brands worldwide."
         }
     }
