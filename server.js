@@ -823,7 +823,9 @@ app.get('*', async (req, res) => {
     }
 
     if (!htmlTemplate) {
-        return res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+        console.error('>> CRITICAL: HTML template missing, serving fallback without SSR');
+        const fallback = fs.readFileSync(path.join(__dirname, 'dist', 'index.html'), 'utf-8');
+        return res.send(fallback.replace(/__CSP_NONCE__/g, res.locals.cspNonce));
     }
 
     // Redirect trailing slashes to non-trailing (SEO canonical consistency)

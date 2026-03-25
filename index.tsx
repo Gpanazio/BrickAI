@@ -1532,12 +1532,12 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             {/* CONTENT */}
             <div className={`absolute inset-x-0 bottom-0 z-40 p-4 md:p-6 flex flex-col justify-end transition-all duration-500 pointer-events-none ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
                 <div className="w-12 h-[2px] bg-brick-red mb-4 shadow-[0_0_8px_#DC2626]" />
-                <h3
+                <h2
                     className="font-brick text-white leading-tight drop-shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-2"
                     style={{ fontSize: 'clamp(0.75rem, 7cqw, 3rem)' }}
                 >
                     {work.title}
-                </h3>
+                </h2>
                 <p className="text-white/40 text-[10px] font-mono tracking-widest uppercase mt-2">
                     {work.subtitle}
                 </p>
@@ -2426,7 +2426,7 @@ const UnifiedEnding = () => {
                     {/* Subtitle with Scramble Effect & Lasers */}
                     <div className="flex items-center gap-4 md:gap-6">
                         <div className="w-8 md:w-16 h-[1px] bg-gradient-to-r from-transparent to-brick-red"></div>
-                        <span className="text-[10px] md:text-xs font-ai text-brick-red uppercase tracking-[0.3em] md:tracking-[0.5em] drop-shadow-[0_0_10px_rgba(var(--brick-red-rgb),0.8)]" role="doc-subtitle">
+                        <span className="text-[10px] md:text-xs font-ai text-brick-red uppercase tracking-[0.3em] md:tracking-[0.5em] drop-shadow-[0_0_10px_rgba(var(--brick-red-rgb),0.8)]">
                             <ScrambleText text={t('footer.complex_problem')} hoverTrigger={true} triggerOnReveal={true} delay={500} />
                         </span>
                         <div className="w-8 md:w-16 h-[1px] bg-gradient-to-l from-transparent to-brick-red"></div>
@@ -2763,7 +2763,7 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
                     <span className="font-mono text-[9px] tracking-widest text-brick-red">{(index + 1).toString().padStart(3, '0')}</span>
                 </div>
                 <div className="transform translate-y-1 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    <h3 className="text-sm font-brick text-white leading-tight my-1.5 tracking-tight group-hover:text-brick-red transition-colors line-clamp-2">{work.title}</h3>
+                    <h2 className="text-sm font-brick text-white leading-tight my-1.5 tracking-tight group-hover:text-brick-red transition-colors line-clamp-2">{work.title}</h2>
                     <p className="text-[9px] text-white font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-1">{work.desc}</p>
                 </div>
             </div>
@@ -2942,9 +2942,9 @@ const TransmissionsPage = () => {
                         {transmissions.map((post) => (
                             <div key={post.id} onClick={() => goPost(post.id)} role="button" tabIndex={0} aria-label={`Read: ${getLocalizedField(post.title, i18n.language, 'UNTITLED')}`} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goPost(post.id); } }} className="block group bg-brick-black hover:bg-brick-dark transition-colors p-8 md:p-10 border border-white/10 cursor-pointer">
                                 <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-4">
-                                    <h3 className="text-xl md:text-2xl font-brick text-white tracking-tight group-hover:text-brick-red transition-colors">
+                                    <h2 className="text-xl md:text-2xl font-brick text-white tracking-tight group-hover:text-brick-red transition-colors">
                                         {getLocalizedField(post.title, i18n.language, 'UNTITLED')}
-                                    </h3>
+                                    </h2>
                                     <span className="font-mono text-[10px] text-brick-red tracking-widest whitespace-nowrap">{post.date}</span>
                                 </div>
                                 <p className="text-brick-gray text-sm md:text-base font-light max-w-3xl mb-6 leading-relaxed">

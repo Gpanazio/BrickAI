@@ -1,9 +1,5 @@
 /** Structured data for Works projects — used by SSR for VideoObject + CreativeWork schemas */
-const BRICK_CREATOR = {
-    '@type': 'Organization',
-    name: 'Brick AI',
-    url: 'https://ai.brick.mov'
-};
+const BRICK_CREATOR = { '@id': 'https://ai.brick.mov/#organization' };
 
 export const WORKS_SCHEMA = [
     {
