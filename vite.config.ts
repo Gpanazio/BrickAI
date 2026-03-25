@@ -15,7 +15,8 @@ export default defineConfig({
       configureServer(server) {
         // Serve images from local uploads/ folder in dev (before proxy)
         server.middlewares.use('/uploads', (req, res, next) => {
-          const filePath = path.join(__dirname, 'uploads', decodeURIComponent(req.url || ''))
+          const urlPath = (req.url || '').split('?')[0]
+          const filePath = path.join(__dirname, 'uploads', decodeURIComponent(urlPath))
           if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
             const ext = path.extname(filePath).toLowerCase()
             const mimeTypes: Record<string, string> = { '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.webp': 'image/webp', '.gif': 'image/gif', '.svg': 'image/svg+xml' }
