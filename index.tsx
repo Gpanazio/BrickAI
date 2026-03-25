@@ -1151,9 +1151,9 @@ const Hero = ({ setMonolithHover, monolithHover }: { setMonolithHover: (v: boole
                 <p className="reveal delay-2000 text-base md:text-xl lg:text-2xl font-mono text-white drop-shadow-2xl">
                     <TypewriterText text={t('hero.scramble') as string} delay={2000} onComplete={() => setTypewriterDone(true)} />
                 </p>
-                <h2 className="text-2xl md:text-4xl lg:text-5xl font-brick text-brick-red drop-shadow-[0_0_15px_rgba(var(--brick-red-rgb),0.5)] min-h-[50px] flex items-center justify-center">
+                <h1 className="text-2xl md:text-4xl lg:text-5xl font-brick text-brick-red drop-shadow-[0_0_15px_rgba(var(--brick-red-rgb),0.5)] min-h-[50px] flex items-center justify-center">
                     {typewriterDone && <FadeEntryText text={t('hero.subtitle') as string} delay={900} />}
-                </h2>
+                </h1>
             </div>
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-brick-red/5 rounded-full blur-[120px] pointer-events-none z-0"></div>
         </section>
@@ -1357,7 +1357,7 @@ const PhilosophyItem = ({ title, text, titleSize = 'text-4xl md:text-6xl', index
         transition={{ duration: 2.2, delay: index * 0.4, ease: "easeOut" }}
         className="flex flex-col items-center group cursor-default"
     >
-        <h2 className={`${titleSize} font-brick text-white mb-4 transition-colors duration-500 group-hover:text-brick-red`}>{title}</h2>
+        <h3 className={`${titleSize} font-brick text-white mb-4 transition-colors duration-500 group-hover:text-brick-red`}>{title}</h3>
         <p className="text-base md:text-lg text-white font-light max-w-lg leading-relaxed transition-colors duration-300">{text}</p>
     </motion.div>
 );
@@ -1532,12 +1532,12 @@ const WorkCard = ({ work, index, onOpen }: { work: Work, index: number, onOpen: 
             {/* CONTENT */}
             <div className={`absolute inset-x-0 bottom-0 z-40 p-4 md:p-6 flex flex-col justify-end transition-all duration-500 pointer-events-none ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-4 opacity-0'}`}>
                 <div className="w-12 h-[2px] bg-brick-red mb-4 shadow-[0_0_8px_#DC2626]" />
-                <h3
+                <h2
                     className="font-brick text-white leading-tight drop-shadow-[0_0_30px_rgba(0,0,0,0.5)] mb-2"
                     style={{ fontSize: 'clamp(0.75rem, 7cqw, 3rem)' }}
                 >
                     {work.title}
-                </h3>
+                </h2>
                 <p className="text-white/40 text-[10px] font-mono tracking-widest uppercase mt-2">
                     {work.subtitle}
                 </p>
@@ -2118,7 +2118,7 @@ const UnifiedEnding = () => {
                                 {t('stages.one')} &bull; {t('stages.origin')}
                             </span>
 
-                            <h2 className="font-brick text-[40px] md:text-[60px] lg:text-[80px] text-white tracking-[0.1em] leading-[1.1] uppercase drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]">
+                            <h2 className="font-brick text-[40px] md:text-[60px] lg:text-[80px] text-white tracking-[0.1em] leading-[1.1] uppercase drop-shadow-[0_0_30px_rgba(255,255,255,0.1)]" aria-label="Born on set">
                                 {t('legacy.title_part1')} <br />
                                 <span className="text-brick-red">{t('legacy.title_part2')}</span>
                             </h2>
@@ -2426,16 +2426,16 @@ const UnifiedEnding = () => {
                     {/* Subtitle with Scramble Effect & Lasers */}
                     <div className="flex items-center gap-4 md:gap-6">
                         <div className="w-8 md:w-16 h-[1px] bg-gradient-to-r from-transparent to-brick-red"></div>
-                        <h2 className="text-[10px] md:text-xs font-ai text-brick-red uppercase tracking-[0.3em] md:tracking-[0.5em] drop-shadow-[0_0_10px_rgba(var(--brick-red-rgb),0.8)]">
+                        <span className="text-[10px] md:text-xs font-ai text-brick-red uppercase tracking-[0.3em] md:tracking-[0.5em] drop-shadow-[0_0_10px_rgba(var(--brick-red-rgb),0.8)]">
                             <ScrambleText text={t('footer.complex_problem')} hoverTrigger={true} triggerOnReveal={true} delay={500} />
-                        </h2>
+                        </span>
                         <div className="w-8 md:w-16 h-[1px] bg-gradient-to-l from-transparent to-brick-red"></div>
                     </div>
 
                     {/* Massive Climax Typography */}
-                    <h1 className="climax-title text-5xl md:text-7xl lg:text-[110px] font-brick max-w-6xl cursor-default px-4">
+                    <h2 className="climax-title text-5xl md:text-7xl lg:text-[110px] font-brick max-w-6xl cursor-default px-4">
                         {t('footer.we_have_intelligence')}
-                    </h1>
+                    </h2>
 
                     {/* Highly polished, weighty contact button */}
                     <MagneticButton onClick={goChat} className="group relative overflow-hidden border border-white/10 hover:border-brick-red hover:bg-brick-red/5 hover:shadow-[0_0_40px_rgba(var(--brick-red-rgb),0.2)] transition-all duration-700 px-10 py-5 md:px-16 md:py-6 backdrop-blur-sm">
@@ -2664,7 +2664,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
 
                         {/* Title */}
                         <div className="relative">
-                            <h2
+                            <h1
                                 className="font-brick text-white uppercase my-4 md:my-8"
                                 style={{
                                     fontSize: 'clamp(1.6rem, 3vw, 2rem)',
@@ -2673,7 +2673,7 @@ const ProjectModal = ({ project, onClose, onPrev, onNext }: { project: Work, onC
                                 }}
                             >
                                 {project.titleFull || project.title}
-                            </h2>
+                            </h1>
                             <div className="flex items-center gap-4">
                                 <div className="h-px w-6 bg-white/20"></div>
                                 <span className="font-mono text-[9px] text-white/40 tracking-[0.3em] uppercase">{project.subtitle}</span>
@@ -2763,7 +2763,7 @@ const WorksGridItem = ({ work, index, onOpen }: { work: Work, index: number, onO
                     <span className="font-mono text-[9px] tracking-widest text-brick-red">{(index + 1).toString().padStart(3, '0')}</span>
                 </div>
                 <div className="transform translate-y-1 group-hover:translate-y-0 transition-transform duration-500 ease-out">
-                    <h3 className="text-sm font-brick text-white leading-tight my-1.5 tracking-tight group-hover:text-brick-red transition-colors line-clamp-2">{work.title}</h3>
+                    <h2 className="text-sm font-brick text-white leading-tight my-1.5 tracking-tight group-hover:text-brick-red transition-colors line-clamp-2">{work.title}</h2>
                     <p className="text-[9px] text-white font-mono tracking-wide opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 line-clamp-1">{work.desc}</p>
                 </div>
             </div>
@@ -2942,9 +2942,9 @@ const TransmissionsPage = () => {
                         {transmissions.map((post) => (
                             <div key={post.id} onClick={() => goPost(post.id)} role="button" tabIndex={0} aria-label={`Read: ${getLocalizedField(post.title, i18n.language, 'UNTITLED')}`} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); goPost(post.id); } }} className="block group bg-brick-black hover:bg-brick-dark transition-colors p-8 md:p-10 border border-white/10 cursor-pointer">
                                 <div className="flex flex-col md:flex-row md:items-baseline justify-between gap-4 mb-4">
-                                    <h3 className="text-xl md:text-2xl font-brick text-white tracking-tight group-hover:text-brick-red transition-colors">
+                                    <h2 className="text-xl md:text-2xl font-brick text-white tracking-tight group-hover:text-brick-red transition-colors">
                                         {getLocalizedField(post.title, i18n.language, 'UNTITLED')}
-                                    </h3>
+                                    </h2>
                                     <span className="font-mono text-[10px] text-brick-red tracking-widest whitespace-nowrap">{post.date}</span>
                                 </div>
                                 <p className="text-brick-gray text-sm md:text-base font-light max-w-3xl mb-6 leading-relaxed">
@@ -2975,7 +2975,7 @@ const Footer = () => {
             <div className="absolute inset-0 bg-gradient-to-t from-brick-black via-transparent to-transparent pointer-events-none z-[1]"></div>
 
             <div className="flex flex-col items-center text-center gap-8 reveal relative z-10">
-                <h2 className="text-xs md:text-sm font-ai text-brick-gray uppercase tracking-[0.2em]">{t('footer.complex_problem')}</h2>
+                <span className="text-xs md:text-sm font-ai text-brick-gray uppercase tracking-[0.2em] block">{t('footer.complex_problem')}</span>
                 <p className="text-3xl md:text-5xl lg:text-6xl font-brick text-brick-red leading-none max-w-5xl drop-shadow-[0_0_15px_rgba(var(--brick-red-rgb),0.5)]">{t('footer.we_have_intelligence')}</p>
                 <MagneticButton onClick={onChat} className="mt-6 text-base md:text-lg font-ai font-bold text-white hover:text-brick-red group">
                     {t('footer.talk_to_us')} <span className="text-brick-red animate-blink group-hover:text-white">_</span>
@@ -3097,7 +3097,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
 
-            <main className="w-full px-6 md:px-12 lg:px-24 relative z-10 flex flex-col gap-12 md:gap-16">
+            <main id="main-content" className="w-full px-6 md:px-12 lg:px-24 relative z-10 flex flex-col gap-12 md:gap-16">
 
                 {/* 1. CONTACT SECTION (Humans) */}
                 <section className="w-full animate-fade-in-up">
@@ -3114,7 +3114,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
                                 <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">CHANNEL_01</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-2 group-hover:text-brick-red transition-colors">{t('chat.email_streams')}</h3>
+                            <h2 className="text-2xl font-brick text-white mb-2 group-hover:text-brick-red transition-colors">{t('chat.email_streams')}</h2>
                             <p className="text-brick-gray text-xs font-mono tracking-widest">BRICK@BRICK.MOV</p>
                         </a>
 
@@ -3123,7 +3123,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
                                 <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">CHANNEL_02</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-2 group-hover:text-brick-red transition-colors">{t('chat.direct_message')}</h3>
+                            <h2 className="text-2xl font-brick text-white mb-2 group-hover:text-brick-red transition-colors">{t('chat.direct_message')}</h2>
                             <p className="text-brick-gray text-xs font-mono tracking-widest">WHATSAPP</p>
                         </a>
 
@@ -3132,7 +3132,7 @@ const SystemChat = ({ onBack }: { onBack: () => void }) => {
                             <div className="mb-4 text-brick-red opacity-50 group-hover:opacity-100 transition-opacity">
                                 <span className="text-[10px] uppercase tracking-widest border border-brick-red px-2 py-1">CHANNEL_03</span>
                             </div>
-                            <h3 className="text-2xl font-brick text-white mb-2 group-hover:text-brick-red transition-colors">{t('chat.network_nodes')}</h3>
+                            <h2 className="text-2xl font-brick text-white mb-2 group-hover:text-brick-red transition-colors">{t('chat.network_nodes')}</h2>
                             <div className="flex flex-wrap gap-4">
                                 {[
                                     { name: 'LinkedIn', url: 'https://www.linkedin.com/company/brick-mov/' },
@@ -3340,7 +3340,7 @@ const TeamMember = ({ name, role, id }: { name: string, role: string, id: string
             </div>
         </div>
         <div>
-            <h4 className="text-lg font-brick text-white group-hover:text-brick-white transition-colors">{name}</h4>
+            <h3 className="text-lg font-brick text-white group-hover:text-brick-white transition-colors">{name}</h3>
             <span className="block text-[10px] font-mono text-brick-gray uppercase tracking-widest mt-1 border-t border-white/10 pt-2 inline-block w-full">{role}</span>
         </div>
     </div>
@@ -3402,9 +3402,9 @@ const AboutPage = () => {
                                 <span className="font-mono text-[9px] text-brick-red border border-brick-red px-1 tracking-widest">SEC_00</span>
                             </div>
                             <div className="mb-6 relative z-10">
-                                <h3 className="font-brick text-2xl md:text-3xl text-white mb-4 group-hover:text-brick-red transition-colors duration-300 uppercase leading-none">
+                                <h2 className="font-brick text-2xl md:text-3xl text-white mb-4 group-hover:text-brick-red transition-colors duration-300 uppercase leading-none">
                                     {t('about.description').split('\n\n')[0]}
-                                </h3>
+                                </h2>
                                 <p className="text-xs md:text-sm font-mono text-brick-gray leading-relaxed opacity-80">
                                     {t('about.description').split('\n\n')[1]}
                                 </p>
@@ -4216,7 +4216,7 @@ const NotFoundPage = () => {
                 <span className="text-brick-red group-hover:-translate-x-1 transition-transform">&lt;</span> {t('common.return_surface')}
             </button>
             
-            <main className="min-h-screen pt-32 md:pt-40 flex flex-col items-center justify-start font-mono relative bg-brick-black overflow-x-hidden">
+            <main id="main-content" className="min-h-screen pt-32 md:pt-40 flex flex-col items-center justify-start font-mono relative bg-brick-black overflow-x-hidden">
                 <div className="w-full px-6 md:px-12 lg:px-24 mb-6 reveal active mt-12 md:mt-20">
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                         <div>

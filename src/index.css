@@ -29,6 +29,32 @@
     contain-intrinsic-size: auto 800px;
   }
 
+  /* Skip-to-content link — accessible, CSP-safe (no inline handlers) */
+  .skip-link {
+    position: absolute;
+    left: -9999px;
+    top: auto;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    z-index: 10000;
+    padding: 8px 16px;
+    background: var(--brick-red, #DC2626);
+    color: #fff;
+    font-family: monospace;
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  .skip-link:focus {
+    position: fixed;
+    left: 16px;
+    top: 16px;
+    width: auto;
+    height: auto;
+    overflow: visible;
+  }
+
   /* Keyboard focus indicators — visible only when navigating with keyboard */
   *:focus-visible {
     outline: 2px solid var(--brick-red, #DC2626);
