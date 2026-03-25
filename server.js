@@ -198,6 +198,14 @@ app.get('/uploads/:filename', async (req, res) => {
     // Non-image files: serve directly
     if (!isImage) return res.sendFile(localPath);
 
+    // Files from dist/uploads are already optimized — serve directly, skip sharp
+    if (localPath.startsWith(path.join(__dirname, 'dist'))) {
+        const mimeTypes = { '.webp': 'image/webp', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.png': 'image/png', '.gif': 'image/gif' };
+        res.set('Content-Type', mimeTypes[ext] || 'application/octet-stream');
+        res.set('Cache-Control', 'public, max-age=31536000, immutable');
+        return res.sendFile(localPath);
+    }
+
     // Check Accept header for WebP support
     const supportsWebp = (req.headers.accept || '').includes('image/webp');
     const targetFormat = supportsWebp ? 'webp' : 'jpeg';
